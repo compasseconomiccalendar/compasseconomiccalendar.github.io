@@ -1,0 +1,10 @@
+{
+  "name": "compass-economic-calendar-extension",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Marks the extension sources as ES modules for node --test. There is no build step and no dependencies; Chrome loads src/ and popup/ directly.",
+  "scripts": {
+    "test": "node --test 'test/*.test.js'"
+  }
+}

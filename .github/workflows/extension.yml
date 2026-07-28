@@ -1,0 +1,51 @@
+name: Extension tests
+
+on:
+  push:
+    paths:
+      - "extension/**"
+      - ".github/workflows/extension.yml"
+  pull_request:
+    paths:
+      - "extension/**"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: extension
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # No dependencies and no build step -- Chrome loads src/ and popup/
+      # directly, and the tests run on node's built-in runner.
+      - name: Run tests
+        run: node --test 'test/*.test.js'
+
+      - name: Check the manifest parses and matches the checked-in version
+        run: |
+          node --input-type=module -e '
+            import { readFileSync } from "node:fs";
+            const manifest = JSON.parse(readFileSync("manifest.json", "utf8"));
+            const pkg = JSON.parse(readFileSync("package.json", "utf8"));
+            if (manifest.manifest_version !== 3) {
+              throw new Error("manifest_version must be 3");
+            }
+            if (manifest.version !== pkg.version) {
+              throw new Error(
+                `version drift: manifest ${manifest.version} vs package ${pkg.version}`,
+              );
+            }
+            for (const path of Object.values(manifest.icons)) {
+              readFileSync(path);
+            }
+            readFileSync(manifest.background.service_worker);
+            readFileSync(manifest.action.default_popup);
+            console.log(`manifest ok (v${manifest.version})`);
+          '

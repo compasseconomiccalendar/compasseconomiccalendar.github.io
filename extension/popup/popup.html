@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="popup.css">
+<title>Compass Economic Calendar</title>
+</head>
+<body>
+  <header>
+    <h1>Compass</h1>
+    <div class="controls">
+      <label class="sr-only" for="impact">Minimum impact</label>
+      <select id="impact">
+        <option value="low">All events</option>
+        <option value="medium">Medium &amp; high</option>
+        <option value="high">High only</option>
+      </select>
+      <button id="refresh" title="Refresh feed" aria-label="Refresh feed">↻</button>
+    </div>
+  </header>
+
+  <div id="banner" class="banner" hidden></div>
+  <ul id="events" class="events"></ul>
+  <p id="empty" class="empty" hidden></p>
+
+  <footer>
+    <p id="status" class="status"></p>
+    <p class="legal">
+      For informational and educational purposes only. Not investment advice.
+      Verify times against official sources before trading.
+    </p>
+    <p class="legal">
+      This product uses the FRED® API but is not endorsed or certified by the
+      Federal Reserve Bank of St. Louis.
+    </p>
+  </footer>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
