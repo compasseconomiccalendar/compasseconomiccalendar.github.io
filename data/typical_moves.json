@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at_utc": "2026-07-28T22:06:04Z",
+  "generated_at_utc": "2026-07-28T22:17:50Z",
   "sample_period": {
     "start": "2016-07-28",
     "end": "2026-07-28"
@@ -30,7 +30,14 @@
       "share_up": 0.565
     }
   },
+  "vix_baseline": {
+    "n": 2544,
+    "median_pct": -0.654,
+    "mean_pct": 0.343,
+    "share_falling": 0.545
+  },
   "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
+  "vix_source": "Cboe daily VIX history (cboe.com), used for the vol-crush measure.",
   "by_event_type": {
     "fomc_statement": {
       "SPX": {
@@ -52,6 +59,14 @@
         "share_up": 0.591,
         "ratio_to_baseline": 1.35,
         "ratio_median_to_baseline": 1.47
+      },
+      "VIX": {
+        "n": 44,
+        "median_pct": -3.52,
+        "mean_pct": 0.811,
+        "share_falling": 0.591,
+        "baseline_median_pct": -0.654,
+        "excess_pct": -2.866
       }
     },
     "macro_release_cpi": {
@@ -74,6 +89,14 @@
         "share_up": 0.605,
         "ratio_to_baseline": 1.04,
         "ratio_median_to_baseline": 1.01
+      },
+      "VIX": {
+        "n": 124,
+        "median_pct": -1.805,
+        "mean_pct": -1.209,
+        "share_falling": 0.645,
+        "baseline_median_pct": -0.654,
+        "excess_pct": -1.151
       }
     },
     "macro_release_employment_situation": {
@@ -96,6 +119,14 @@
         "share_up": 0.576,
         "ratio_to_baseline": 1.21,
         "ratio_median_to_baseline": 1.5
+      },
+      "VIX": {
+        "n": 118,
+        "median_pct": -2.982,
+        "mean_pct": -0.877,
+        "share_falling": 0.669,
+        "baseline_median_pct": -0.654,
+        "excess_pct": -2.328
       }
     },
     "macro_release_factory_orders": {
@@ -118,6 +149,14 @@
         "share_up": 0.618,
         "ratio_to_baseline": 1.08,
         "ratio_median_to_baseline": 1.21
+      },
+      "VIX": {
+        "n": 246,
+        "median_pct": -1.042,
+        "mean_pct": 0.432,
+        "share_falling": 0.561,
+        "baseline_median_pct": -0.654,
+        "excess_pct": -0.388
       }
     },
     "macro_release_gdp": {
@@ -140,6 +179,14 @@
         "share_up": 0.619,
         "ratio_to_baseline": 1.03,
         "ratio_median_to_baseline": 0.95
+      },
+      "VIX": {
+        "n": 134,
+        "median_pct": -1.818,
+        "mean_pct": -0.762,
+        "share_falling": 0.604,
+        "baseline_median_pct": -0.654,
+        "excess_pct": -1.164
       }
     },
     "macro_release_jobless_claims": {
@@ -162,6 +209,14 @@
         "share_up": 0.538,
         "ratio_to_baseline": 1.03,
         "ratio_median_to_baseline": 1.02
+      },
+      "VIX": {
+        "n": 520,
+        "median_pct": -0.681,
+        "mean_pct": 0.637,
+        "share_falling": 0.563,
+        "baseline_median_pct": -0.654,
+        "excess_pct": -0.027
       }
     },
     "macro_release_jolts": {
@@ -184,6 +239,14 @@
         "share_up": 0.588,
         "ratio_to_baseline": 0.91,
         "ratio_median_to_baseline": 0.88
+      },
+      "VIX": {
+        "n": 119,
+        "median_pct": -0.704,
+        "mean_pct": -0.402,
+        "share_falling": 0.588,
+        "baseline_median_pct": -0.654,
+        "excess_pct": -0.05
       }
     },
     "macro_release_pce": {
@@ -206,6 +269,14 @@
         "share_up": 0.585,
         "ratio_to_baseline": 1.01,
         "ratio_median_to_baseline": 1.07
+      },
+      "VIX": {
+        "n": 118,
+        "median_pct": -0.63,
+        "mean_pct": 0.143,
+        "share_falling": 0.534,
+        "baseline_median_pct": -0.654,
+        "excess_pct": 0.024
       }
     },
     "macro_release_ppi": {
@@ -228,6 +299,14 @@
         "share_up": 0.563,
         "ratio_to_baseline": 0.99,
         "ratio_median_to_baseline": 0.97
+      },
+      "VIX": {
+        "n": 126,
+        "median_pct": -0.636,
+        "mean_pct": 0.845,
+        "share_falling": 0.532,
+        "baseline_median_pct": -0.654,
+        "excess_pct": 0.018
       }
     },
     "macro_release_retail_sales": {
@@ -250,6 +329,14 @@
         "share_up": 0.544,
         "ratio_to_baseline": 0.95,
         "ratio_median_to_baseline": 0.98
+      },
+      "VIX": {
+        "n": 125,
+        "median_pct": -0.728,
+        "mean_pct": -0.064,
+        "share_falling": 0.528,
+        "baseline_median_pct": -0.654,
+        "excess_pct": -0.074
       }
     },
     "monthly_opex": {
@@ -272,6 +359,14 @@
         "share_up": 0.475,
         "ratio_to_baseline": 0.79,
         "ratio_median_to_baseline": 0.82
+      },
+      "VIX": {
+        "n": 80,
+        "median_pct": -1.944,
+        "mean_pct": -1.395,
+        "share_falling": 0.662,
+        "baseline_median_pct": -0.654,
+        "excess_pct": -1.29
       }
     },
     "quad_witching": {
@@ -294,6 +389,14 @@
         "share_up": 0.308,
         "ratio_to_baseline": 0.85,
         "ratio_median_to_baseline": 0.79
+      },
+      "VIX": {
+        "n": 40,
+        "median_pct": -1.374,
+        "mean_pct": -0.815,
+        "share_falling": 0.625,
+        "baseline_median_pct": -0.654,
+        "excess_pct": -0.72
       }
     }
   },
@@ -320,6 +423,12 @@
         "share_up": 0.575
       }
     },
+    "vix_baseline": {
+      "n": 772,
+      "median_pct": -0.525,
+      "mean_pct": 0.362,
+      "share_falling": 0.548
+    },
     "by_event_type": {
       "fomc_statement": {
         "SPX": {
@@ -341,6 +450,14 @@
           "share_up": 0.609,
           "ratio_to_baseline": 1.17,
           "ratio_median_to_baseline": 1.41
+        },
+        "VIX": {
+          "n": 23,
+          "median_pct": -1.661,
+          "mean_pct": 2.57,
+          "share_falling": 0.522,
+          "baseline_median_pct": -0.525,
+          "excess_pct": -1.136
         }
       },
       "macro_release_cpi": {
@@ -363,6 +480,14 @@
           "share_up": 0.694,
           "ratio_to_baseline": 1.12,
           "ratio_median_to_baseline": 1.34
+        },
+        "VIX": {
+          "n": 36,
+          "median_pct": -2.465,
+          "mean_pct": -1.647,
+          "share_falling": 0.694,
+          "baseline_median_pct": -0.525,
+          "excess_pct": -1.94
         }
       },
       "macro_release_employment_situation": {
@@ -385,6 +510,14 @@
           "share_up": 0.6,
           "ratio_to_baseline": 1.55,
           "ratio_median_to_baseline": 1.74
+        },
+        "VIX": {
+          "n": 35,
+          "median_pct": -0.787,
+          "mean_pct": 3.489,
+          "share_falling": 0.629,
+          "baseline_median_pct": -0.525,
+          "excess_pct": -0.262
         }
       },
       "macro_release_factory_orders": {
@@ -407,6 +540,14 @@
           "share_up": 0.635,
           "ratio_to_baseline": 0.96,
           "ratio_median_to_baseline": 1.13
+        },
+        "VIX": {
+          "n": 74,
+          "median_pct": -0.313,
+          "mean_pct": 0.141,
+          "share_falling": 0.527,
+          "baseline_median_pct": -0.525,
+          "excess_pct": 0.212
         }
       },
       "macro_release_gdp": {
@@ -429,6 +570,14 @@
           "share_up": 0.583,
           "ratio_to_baseline": 0.72,
           "ratio_median_to_baseline": 0.84
+        },
+        "VIX": {
+          "n": 36,
+          "median_pct": -0.621,
+          "mean_pct": -1.354,
+          "share_falling": 0.611,
+          "baseline_median_pct": -0.525,
+          "excess_pct": -0.096
         }
       },
       "macro_release_jobless_claims": {
@@ -451,6 +600,14 @@
           "share_up": 0.497,
           "ratio_to_baseline": 1.0,
           "ratio_median_to_baseline": 0.94
+        },
+        "VIX": {
+          "n": 149,
+          "median_pct": -0.484,
+          "mean_pct": 0.52,
+          "share_falling": 0.57,
+          "baseline_median_pct": -0.525,
+          "excess_pct": 0.041
         }
       },
       "macro_release_jolts": {
@@ -473,6 +630,14 @@
           "share_up": 0.571,
           "ratio_to_baseline": 1.02,
           "ratio_median_to_baseline": 1.13
+        },
+        "VIX": {
+          "n": 35,
+          "median_pct": -0.366,
+          "mean_pct": 0.486,
+          "share_falling": 0.543,
+          "baseline_median_pct": -0.525,
+          "excess_pct": 0.159
         }
       },
       "macro_release_pce": {
@@ -495,6 +660,14 @@
           "share_up": 0.618,
           "ratio_to_baseline": 0.82,
           "ratio_median_to_baseline": 0.83
+        },
+        "VIX": {
+          "n": 34,
+          "median_pct": -1.92,
+          "mean_pct": -1.603,
+          "share_falling": 0.647,
+          "baseline_median_pct": -0.525,
+          "excess_pct": -1.395
         }
       },
       "macro_release_ppi": {
@@ -517,6 +690,14 @@
           "share_up": 0.639,
           "ratio_to_baseline": 0.95,
           "ratio_median_to_baseline": 0.97
+        },
+        "VIX": {
+          "n": 36,
+          "median_pct": -1.295,
+          "mean_pct": -1.569,
+          "share_falling": 0.583,
+          "baseline_median_pct": -0.525,
+          "excess_pct": -0.77
         }
       },
       "macro_release_retail_sales": {
@@ -539,6 +720,14 @@
           "share_up": 0.5,
           "ratio_to_baseline": 0.88,
           "ratio_median_to_baseline": 0.81
+        },
+        "VIX": {
+          "n": 38,
+          "median_pct": 2.066,
+          "mean_pct": 2.017,
+          "share_falling": 0.421,
+          "baseline_median_pct": -0.525,
+          "excess_pct": 2.591
         }
       },
       "monthly_opex": {
@@ -561,6 +750,24 @@
           "share_up": 0.458,
           "ratio_to_baseline": 1.0,
           "ratio_median_to_baseline": 1.17
+        },
+        "VIX": {
+          "n": 24,
+          "median_pct": -2.694,
+          "mean_pct": -0.768,
+          "share_falling": 0.583,
+          "baseline_median_pct": -0.525,
+          "excess_pct": -2.169
+        }
+      },
+      "quad_witching": {
+        "VIX": {
+          "n": 12,
+          "median_pct": -1.347,
+          "mean_pct": -2.389,
+          "share_falling": 0.667,
+          "baseline_median_pct": -0.525,
+          "excess_pct": -0.822
         }
       }
     }
