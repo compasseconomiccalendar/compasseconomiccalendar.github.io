@@ -193,16 +193,21 @@ FRED_RELEASES = [
         ),
     },
     {
-        "slug": "durable-goods",
-        "match": r"Durable Goods",
-        "title": "Durable Goods Orders",
-        "time_et": "08:30",
+        "slug": "factory-orders",
+        # FRED carries no release named "Durable Goods" -- the Census figures
+        # arrive under the M3 survey name, which is the full factory orders
+        # report. The advance durable goods report lands a couple of days
+        # earlier and is not separately scheduled on FRED.
+        "match": r"Manufacturers.{0,3}\s*Shipments, Inventories",
+        "title": "Factory Orders (M3)",
+        "time_et": "10:00",
         "market_impact": "medium",
         "primary_source": "https://www.census.gov/manufacturing/m3/index.html",
         "note": (
-            "Census Bureau report on new orders for long-lived manufactured "
-            "goods. Core capital goods orders are read as a proxy for business "
-            "investment intentions."
+            "Census Bureau M3 survey: shipments, inventories and new orders for "
+            "manufactured goods, released at 10:00am ET. Core capital goods "
+            "orders are read as a proxy for business investment intentions. The "
+            "advance durable goods report precedes this by a few days."
         ),
     },
     {
