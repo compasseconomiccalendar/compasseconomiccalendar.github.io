@@ -35,6 +35,16 @@ architecture research behind this design.
 
 ---
 
+## Published feed
+
+- Landing page: <https://compasseconomiccalendar.github.io/compasseconomiccalendar/>
+- JSON: <https://compasseconomiccalendar.github.io/compasseconomiccalendar/calendar.json>
+- ICS: <https://compasseconomiccalendar.github.io/compasseconomiccalendar/compass_calendar.ics>
+
+Subscribe to the ICS URL in Google Calendar, Apple Calendar or Outlook.
+
+---
+
 ## Setup
 
 ```bash
@@ -165,6 +175,12 @@ published artifacts so the feed stays versioned.
   conference once it is scheduled, which means the link is missing on future
   meetings. A presser has followed every meeting since 2019, so one is emitted
   for every meeting and flagged `"confirmed": false` until the Fed lists it.
+- **FRED only carries ~5 months of forward release dates.** Measured on
+  2026-07-28: FRED returned 5–6 scheduled dates per release, ending
+  2026-12-23, while the FOMC and futures events ran to 2027-08. BLS and BEA
+  publish their own schedules roughly a year out, so closing this gap means
+  reading `bls.gov/schedule` and `bea.gov/news/schedule` directly rather than
+  going through FRED. Worth doing before the extension ships.
 - **FRED release dates are upstream-reported.** FRED notes that release dates
   come from the data sources and don't necessarily reflect when data will be
   available. Cross-check FOMC and Treasury dates against the primary sites.
