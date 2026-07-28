@@ -129,6 +129,8 @@ Loaded unpacked 2026-07-28. The service worker logged
 fetch, both storage areas, `chrome.alarms.create`, and badge painting (it is
 awaited before that line). That load is also what surfaced the view/notify
 pref coupling, since 18 alarms is the `low` threshold rather than the default.
+After the split, the same profile reports 12 — the migration was verified on
+the real stored prefs, not just in tests.
 
 Still unexercised: popup, options and detail rendering, and whether a
 notification actually displays with its buttons.
