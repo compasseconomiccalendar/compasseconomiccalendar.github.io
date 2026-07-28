@@ -15,7 +15,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20260729T180000Z
 DTEND:20260729T183000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-statement-2026-07-29-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -33,7 +33,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20260729T183000Z
 DTEND:20260729T193000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-presser-2026-07-29-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -51,7 +51,7 @@ BEGIN:VEVENT
 SUMMARY:GDP (Advance Estimate)
 DTSTART:20260730T123000Z
 DTEND:20260730T130000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fred-gdp-2026-07-30-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_gdp,impact-high
 DESCRIPTION:First (advance) estimate of quarterly GDP from the BEA. The ad
@@ -70,7 +70,7 @@ BEGIN:VEVENT
 SUMMARY:Personal Income & Outlays (PCE)
 DTSTART:20260730T123000Z
 DTEND:20260730T130000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fred-pce-2026-07-30-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_pce,impact-high
 DESCRIPTION:BEA report containing core PCE\, the Fed's preferred inflation
@@ -89,7 +89,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Quarterly Refunding Announcement
 DTSTART:20260805T123000Z
 DTEND:20260805T130000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:treasury-refunding-2026-08-05-high@compasseconomiccalendar.github.io
 CATEGORIES:treasury_quarterly_refunding,impact-high
 DESCRIPTION:Treasury announces the size and composition of the coming quar
@@ -108,7 +108,7 @@ BEGIN:VEVENT
 SUMMARY:Employment Situation (Nonfarm Payrolls)
 DTSTART:20260807T123000Z
 DTEND:20260807T130000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fred-employment-situation-2026-08-07-high@compasseconomiccalendar.gith
  ub.io
 CATEGORIES:macro_release_employment_situation,impact-high
@@ -129,7 +129,7 @@ BEGIN:VEVENT
 SUMMARY:Consumer Price Index (CPI)
 DTSTART:20260812T123000Z
 DTEND:20260812T130000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fred-cpi-2026-08-12-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_cpi,impact-high
 DESCRIPTION:Headline and core consumer inflation from the BLS. The core mo
@@ -148,7 +148,7 @@ BEGIN:VEVENT
 SUMMARY:Personal Income & Outlays (PCE)
 DTSTART:20260826T123000Z
 DTEND:20260826T130000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fred-pce-2026-08-26-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_pce,impact-high
 DESCRIPTION:BEA report containing core PCE\, the Fed's preferred inflation
@@ -167,7 +167,7 @@ BEGIN:VEVENT
 SUMMARY:Employment Situation (Nonfarm Payrolls)
 DTSTART:20260904T123000Z
 DTEND:20260904T130000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fred-employment-situation-2026-09-04-high@compasseconomiccalendar.gith
  ub.io
 CATEGORIES:macro_release_employment_situation,impact-high
@@ -188,7 +188,7 @@ BEGIN:VEVENT
 SUMMARY:Consumer Price Index (CPI)
 DTSTART:20260911T123000Z
 DTEND:20260911T130000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fred-cpi-2026-09-11-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_cpi,impact-high
 DESCRIPTION:Headline and core consumer inflation from the BLS. The core mo
@@ -207,7 +207,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Summary of Economic Projections (Dot Plot)
 DTSTART:20260916T180000Z
 DTEND:20260916T183000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-sep-2026-09-16-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_sep,impact-high
 DESCRIPTION:Quarterly Summary of Economic Projections\, including the dot 
@@ -225,7 +225,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20260916T180000Z
 DTEND:20260916T183000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-statement-2026-09-16-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -244,7 +244,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20260916T183000Z
 DTEND:20260916T193000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-presser-2026-09-16-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -262,7 +262,7 @@ BEGIN:VEVENT
 SUMMARY:Quad Witching
 DTSTART:20260918T200000Z
 DTEND:20260918T203000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:quad-witching-2026-09-high@compasseconomiccalendar.github.io
 CATEGORIES:quad_witching,impact-high
 DESCRIPTION:Index futures\, index options\, single-stock options and singl
@@ -280,7 +280,7 @@ BEGIN:VEVENT
 SUMMARY:Personal Income & Outlays (PCE)
 DTSTART:20260930T123000Z
 DTEND:20260930T130000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fred-pce-2026-09-30-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_pce,impact-high
 DESCRIPTION:BEA report containing core PCE\, the Fed's preferred inflation
@@ -299,7 +299,7 @@ BEGIN:VEVENT
 SUMMARY:Employment Situation (Nonfarm Payrolls)
 DTSTART:20261002T123000Z
 DTEND:20261002T130000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fred-employment-situation-2026-10-02-high@compasseconomiccalendar.gith
  ub.io
 CATEGORIES:macro_release_employment_situation,impact-high
@@ -320,7 +320,7 @@ BEGIN:VEVENT
 SUMMARY:Consumer Price Index (CPI)
 DTSTART:20261014T123000Z
 DTEND:20261014T130000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fred-cpi-2026-10-14-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_cpi,impact-high
 DESCRIPTION:Headline and core consumer inflation from the BLS. The core mo
@@ -339,7 +339,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20261028T180000Z
 DTEND:20261028T183000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-statement-2026-10-28-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -357,7 +357,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20261028T183000Z
 DTEND:20261028T193000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-presser-2026-10-28-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -375,7 +375,7 @@ BEGIN:VEVENT
 SUMMARY:GDP (Advance Estimate)
 DTSTART:20261029T123000Z
 DTEND:20261029T130000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fred-gdp-2026-10-29-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_gdp,impact-high
 DESCRIPTION:First (advance) estimate of quarterly GDP from the BEA. The ad
@@ -394,7 +394,7 @@ BEGIN:VEVENT
 SUMMARY:Personal Income & Outlays (PCE)
 DTSTART:20261029T123000Z
 DTEND:20261029T130000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fred-pce-2026-10-29-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_pce,impact-high
 DESCRIPTION:BEA report containing core PCE\, the Fed's preferred inflation
@@ -413,7 +413,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Quarterly Refunding Announcement
 DTSTART:20261104T133000Z
 DTEND:20261104T140000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:treasury-refunding-2026-11-04-high@compasseconomiccalendar.github.io
 CATEGORIES:treasury_quarterly_refunding,impact-high
 DESCRIPTION:Treasury announces the size and composition of the coming quar
@@ -432,7 +432,7 @@ BEGIN:VEVENT
 SUMMARY:Employment Situation (Nonfarm Payrolls)
 DTSTART:20261106T133000Z
 DTEND:20261106T140000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fred-employment-situation-2026-11-06-high@compasseconomiccalendar.gith
  ub.io
 CATEGORIES:macro_release_employment_situation,impact-high
@@ -453,7 +453,7 @@ BEGIN:VEVENT
 SUMMARY:Consumer Price Index (CPI)
 DTSTART:20261110T133000Z
 DTEND:20261110T140000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fred-cpi-2026-11-10-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_cpi,impact-high
 DESCRIPTION:Headline and core consumer inflation from the BLS. The core mo
@@ -472,7 +472,7 @@ BEGIN:VEVENT
 SUMMARY:Personal Income & Outlays (PCE)
 DTSTART:20261125T133000Z
 DTEND:20261125T140000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fred-pce-2026-11-25-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_pce,impact-high
 DESCRIPTION:BEA report containing core PCE\, the Fed's preferred inflation
@@ -491,7 +491,7 @@ BEGIN:VEVENT
 SUMMARY:Employment Situation (Nonfarm Payrolls)
 DTSTART:20261204T133000Z
 DTEND:20261204T140000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fred-employment-situation-2026-12-04-high@compasseconomiccalendar.gith
  ub.io
 CATEGORIES:macro_release_employment_situation,impact-high
@@ -512,7 +512,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Summary of Economic Projections (Dot Plot)
 DTSTART:20261209T190000Z
 DTEND:20261209T193000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-sep-2026-12-09-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_sep,impact-high
 DESCRIPTION:Quarterly Summary of Economic Projections\, including the dot 
@@ -530,7 +530,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20261209T190000Z
 DTEND:20261209T193000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-statement-2026-12-09-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -549,7 +549,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20261209T193000Z
 DTEND:20261209T203000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-presser-2026-12-09-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -567,7 +567,7 @@ BEGIN:VEVENT
 SUMMARY:Consumer Price Index (CPI)
 DTSTART:20261210T133000Z
 DTEND:20261210T140000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fred-cpi-2026-12-10-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_cpi,impact-high
 DESCRIPTION:Headline and core consumer inflation from the BLS. The core mo
@@ -586,7 +586,7 @@ BEGIN:VEVENT
 SUMMARY:Quad Witching
 DTSTART:20261218T210000Z
 DTEND:20261218T213000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:quad-witching-2026-12-high@compasseconomiccalendar.github.io
 CATEGORIES:quad_witching,impact-high
 DESCRIPTION:Index futures\, index options\, single-stock options and singl
@@ -604,7 +604,7 @@ BEGIN:VEVENT
 SUMMARY:Personal Income & Outlays (PCE)
 DTSTART:20261223T133000Z
 DTEND:20261223T140000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fred-pce-2026-12-23-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_pce,impact-high
 DESCRIPTION:BEA report containing core PCE\, the Fed's preferred inflation
@@ -623,7 +623,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270127T190000Z
 DTEND:20270127T193000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-statement-2027-01-27-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -641,7 +641,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270127T193000Z
 DTEND:20270127T203000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-presser-2027-01-27-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -659,7 +659,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Quarterly Refunding Announcement
 DTSTART:20270203T133000Z
 DTEND:20270203T140000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:treasury-refunding-2027-02-03-high@compasseconomiccalendar.github.io
 CATEGORIES:treasury_quarterly_refunding,impact-high
 DESCRIPTION:Treasury announces the size and composition of the coming quar
@@ -678,7 +678,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Summary of Economic Projections (Dot Plot)
 DTSTART:20270317T180000Z
 DTEND:20270317T183000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-sep-2027-03-17-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_sep,impact-high
 DESCRIPTION:Quarterly Summary of Economic Projections\, including the dot 
@@ -696,7 +696,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270317T180000Z
 DTEND:20270317T183000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-statement-2027-03-17-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -715,7 +715,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270317T183000Z
 DTEND:20270317T193000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-presser-2027-03-17-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -733,7 +733,7 @@ BEGIN:VEVENT
 SUMMARY:Quad Witching
 DTSTART:20270319T200000Z
 DTEND:20270319T203000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:quad-witching-2027-03-high@compasseconomiccalendar.github.io
 CATEGORIES:quad_witching,impact-high
 DESCRIPTION:Index futures\, index options\, single-stock options and singl
@@ -751,7 +751,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270428T180000Z
 DTEND:20270428T183000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-statement-2027-04-28-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -769,7 +769,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270428T183000Z
 DTEND:20270428T193000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-presser-2027-04-28-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -787,7 +787,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Quarterly Refunding Announcement
 DTSTART:20270505T123000Z
 DTEND:20270505T130000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:treasury-refunding-2027-05-05-high@compasseconomiccalendar.github.io
 CATEGORIES:treasury_quarterly_refunding,impact-high
 DESCRIPTION:Treasury announces the size and composition of the coming quar
@@ -806,7 +806,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Summary of Economic Projections (Dot Plot)
 DTSTART:20270609T180000Z
 DTEND:20270609T183000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-sep-2027-06-09-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_sep,impact-high
 DESCRIPTION:Quarterly Summary of Economic Projections\, including the dot 
@@ -824,7 +824,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270609T180000Z
 DTEND:20270609T183000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-statement-2027-06-09-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -843,7 +843,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270609T183000Z
 DTEND:20270609T193000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-presser-2027-06-09-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -861,7 +861,7 @@ BEGIN:VEVENT
 SUMMARY:Quad Witching
 DTSTART:20270618T200000Z
 DTEND:20270618T203000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:quad-witching-2027-06-high@compasseconomiccalendar.github.io
 CATEGORIES:quad_witching,impact-high
 DESCRIPTION:Index futures\, index options\, single-stock options and singl
@@ -879,7 +879,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270728T180000Z
 DTEND:20270728T183000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-statement-2027-07-28-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -897,7 +897,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270728T183000Z
 DTEND:20270728T193000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:fomc-presser-2027-07-28-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -915,7 +915,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Quarterly Refunding Announcement
 DTSTART:20270804T123000Z
 DTEND:20270804T130000Z
-DTSTAMP:20260728T194347Z
+DTSTAMP:20260728T203645Z
 UID:treasury-refunding-2027-08-04-high@compasseconomiccalendar.github.io
 CATEGORIES:treasury_quarterly_refunding,impact-high
 DESCRIPTION:Treasury announces the size and composition of the coming quar
