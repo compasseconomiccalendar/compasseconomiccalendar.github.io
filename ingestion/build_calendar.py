@@ -166,7 +166,9 @@ FRED_RELEASES = [
     },
     {
         "slug": "jobless-claims",
-        "match": r"Unemployment Insurance Weekly Claims",
+        # Anchored: there is also a "State Unemployment Insurance Weekly Claims
+        # Report", and the national one is what moves markets.
+        "match": r"^Unemployment Insurance Weekly Claims Report$",
         "title": "Initial Jobless Claims",
         "time_et": "08:30",
         "market_impact": "medium",
@@ -192,7 +194,7 @@ FRED_RELEASES = [
     },
     {
         "slug": "durable-goods",
-        "match": r"Durable Goods Manufacturers.? Shipments",
+        "match": r"Durable Goods",
         "title": "Durable Goods Orders",
         "time_et": "08:30",
         "market_impact": "medium",
@@ -684,8 +686,20 @@ def resolve_fred_release_ids(
         ]
 
         if not matches:
+            # Suggest near misses so a wrong pattern is diagnosable from the
+            # failure alone, without another round trip.
+            words = {
+                word.lower()
+                for word in re.findall(r"[A-Za-z]{5,}", meta["match"])
+            }
+            near = [
+                entry["name"]
+                for entry in catalogue
+                if words & {w.lower() for w in re.findall(r"[A-Za-z]{5,}", entry.get("name", ""))}
+            ]
+            hint = f" -- did you mean: {'; '.join(repr(n) for n in near[:5])}" if near else ""
             problems.append(
-                f"{meta['slug']}: no FRED release matched /{meta['match']}/"
+                f"{meta['slug']}: no FRED release matched /{meta['match']}/{hint}"
             )
             continue
         if len(matches) > 1:
