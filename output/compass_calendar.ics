@@ -15,7 +15,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Meeting Begins (Day 1)
 DTSTART;VALUE=DATE:20260728
 DTEND;VALUE=DATE:20260729
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-meeting-day1-2026-07-28@compasseconomiccalendar.github.io
 CATEGORIES:fomc_meeting_day_1,impact-low
 DESCRIPTION:First day of the two-day FOMC meeting. No statement is release
@@ -32,7 +32,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Auction: 6-Week Bill
 DTSTART:20260728T153000Z
 DTEND:20260728T160000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:treasury-auction-912797UF2-2026-07-28@compasseconomiccalendar.github.i
  o
 CATEGORIES:treasury_auction,impact-low
@@ -51,7 +51,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Auction: 7-Year Note
 DTSTART:20260728T170000Z
 DTEND:20260728T173000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:treasury-auction-91282CRC7-2026-07-28@compasseconomiccalendar.github.i
  o
 CATEGORIES:treasury_auction,impact-medium
@@ -70,7 +70,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Auction: 17-Week Bill
 DTSTART:20260729T153000Z
 DTEND:20260729T160000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:treasury-auction-912797VZ7-2026-07-29@compasseconomiccalendar.github.i
  o
 CATEGORIES:treasury_auction,impact-low
@@ -89,7 +89,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Auction: 2-Year Note
 DTSTART:20260729T153000Z
 DTEND:20260729T160000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:treasury-auction-91282CRD5-2026-07-29@compasseconomiccalendar.github.i
  o
 CATEGORIES:treasury_auction,impact-medium
@@ -108,7 +108,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20260729T180000Z
 DTEND:20260729T183000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-statement-2026-07-29@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -126,7 +126,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20260729T183000Z
 DTEND:20260729T193000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-presser-2026-07-29@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -144,7 +144,7 @@ BEGIN:VEVENT
 SUMMARY:GDP (Advance Estimate)
 DTSTART:20260730T123000Z
 DTEND:20260730T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-gdp-2026-07-30@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_gdp,impact-high
 DESCRIPTION:First (advance) estimate of quarterly GDP from the BEA. The ad
@@ -163,7 +163,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20260730T123000Z
 DTEND:20260730T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-07-30@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -183,7 +183,7 @@ BEGIN:VEVENT
 SUMMARY:Personal Income & Outlays (PCE)
 DTSTART:20260730T123000Z
 DTEND:20260730T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-pce-2026-07-30@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_pce,impact-high
 DESCRIPTION:BEA report containing core PCE\, the Fed's preferred inflation
@@ -202,7 +202,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Auction: 4-Week Bill
 DTSTART:20260730T153000Z
 DTEND:20260730T160000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:treasury-auction-912797UW5-2026-07-30@compasseconomiccalendar.github.i
  o
 CATEGORIES:treasury_auction,impact-low
@@ -221,7 +221,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Auction: 8-Week Bill
 DTSTART:20260730T153000Z
 DTEND:20260730T160000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:treasury-auction-912797VE4-2026-07-30@compasseconomiccalendar.github.i
  o
 CATEGORIES:treasury_auction,impact-low
@@ -240,7 +240,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20260803T140000Z
 DTEND:20260803T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-manufacturing-pmi-2026-08-03@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -260,7 +260,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Auction: 13-Week Bill
 DTSTART:20260803T170000Z
 DTEND:20260803T173000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:treasury-auction-912797UM7-2026-08-03@compasseconomiccalendar.github.i
  o
 CATEGORIES:treasury_auction,impact-low
@@ -279,7 +279,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Auction: 26-Week Bill
 DTSTART:20260803T170000Z
 DTEND:20260803T173000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:treasury-auction-912797VV6-2026-08-03@compasseconomiccalendar.github.i
  o
 CATEGORIES:treasury_auction,impact-low
@@ -298,7 +298,7 @@ BEGIN:VEVENT
 SUMMARY:Factory Orders (M3)
 DTSTART:20260804T140000Z
 DTEND:20260804T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-factory-orders-2026-08-04@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_factory_orders,impact-medium
 DESCRIPTION:Census Bureau M3 survey: shipments\, inventories and new order
@@ -319,7 +319,7 @@ BEGIN:VEVENT
 SUMMARY:JOLTS Job Openings
 DTSTART:20260804T140000Z
 DTEND:20260804T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jolts-2026-08-04@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jolts,impact-medium
 DESCRIPTION:BLS survey of job openings\, hires and quits\, released at 10:
@@ -339,7 +339,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Auction: 6-Week Bill
 DTSTART:20260804T170000Z
 DTEND:20260804T173000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:treasury-auction-912797UG0-2026-08-04@compasseconomiccalendar.github.i
  o
 CATEGORIES:treasury_auction,impact-low
@@ -358,7 +358,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Auction: 52-Week Bill
 DTSTART:20260804T170000Z
 DTEND:20260804T173000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:treasury-auction-912797VR5-2026-08-04@compasseconomiccalendar.github.i
  o
 CATEGORIES:treasury_auction,impact-low
@@ -377,7 +377,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Quarterly Refunding Announcement
 DTSTART:20260805T123000Z
 DTEND:20260805T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:treasury-refunding-2026-08-05@compasseconomiccalendar.github.io
 CATEGORIES:treasury_quarterly_refunding,impact-high
 DESCRIPTION:Treasury announces the size and composition of the coming quar
@@ -396,7 +396,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20260805T140000Z
 DTEND:20260805T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-services-pmi-2026-08-05@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -417,7 +417,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20260806T123000Z
 DTEND:20260806T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-08-06@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -437,7 +437,7 @@ BEGIN:VEVENT
 SUMMARY:Employment Situation (Nonfarm Payrolls)
 DTSTART:20260807T123000Z
 DTEND:20260807T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-employment-situation-2026-08-07@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_employment_situation,impact-high
 DESCRIPTION:Monthly jobs report from the BLS: nonfarm payrolls\, unemploym
@@ -457,7 +457,7 @@ BEGIN:VEVENT
 SUMMARY:Consumer Price Index (CPI)
 DTSTART:20260812T123000Z
 DTEND:20260812T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-cpi-2026-08-12@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_cpi,impact-high
 DESCRIPTION:Headline and core consumer inflation from the BLS. The core mo
@@ -476,7 +476,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20260813T123000Z
 DTEND:20260813T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-08-13@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -496,7 +496,7 @@ BEGIN:VEVENT
 SUMMARY:Producer Price Index (PPI)
 DTSTART:20260813T123000Z
 DTEND:20260813T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-ppi-2026-08-13@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_ppi,impact-medium
 DESCRIPTION:Wholesale/producer inflation from the BLS. Watched as a lead-i
@@ -515,7 +515,7 @@ BEGIN:VEVENT
 SUMMARY:Retail Sales (Advance)
 DTSTART:20260814T123000Z
 DTEND:20260814T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-retail-sales-2026-08-14@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_retail_sales,impact-high
 DESCRIPTION:Census Bureau advance estimate of monthly retail and food serv
@@ -535,7 +535,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20260820T123000Z
 DTEND:20260820T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-08-20@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -555,7 +555,7 @@ BEGIN:VEVENT
 SUMMARY:Monthly Options Expiration (OPEX)
 DTSTART:20260821T200000Z
 DTEND:20260821T203000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:monthly-opex-2026-08@compasseconomiccalendar.github.io
 CATEGORIES:monthly_opex,impact-medium
 DESCRIPTION:Monthly equity and index options expire on the third Friday. D
@@ -572,7 +572,7 @@ BEGIN:VEVENT
 SUMMARY:GDP (Second Estimate)
 DTSTART:20260826T123000Z
 DTEND:20260826T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-gdp-2026-08-26@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_gdp,impact-medium
 DESCRIPTION:Second estimate of quarterly GDP\, incorporating more complete
@@ -591,7 +591,7 @@ BEGIN:VEVENT
 SUMMARY:Personal Income & Outlays (PCE)
 DTSTART:20260826T123000Z
 DTEND:20260826T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-pce-2026-08-26@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_pce,impact-high
 DESCRIPTION:BEA report containing core PCE\, the Fed's preferred inflation
@@ -610,7 +610,7 @@ BEGIN:VEVENT
 SUMMARY:Factory Orders (M3)
 DTSTART:20260826T140000Z
 DTEND:20260826T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-factory-orders-2026-08-26@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_factory_orders,impact-medium
 DESCRIPTION:Census Bureau M3 survey: shipments\, inventories and new order
@@ -631,7 +631,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20260827T123000Z
 DTEND:20260827T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-08-27@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -651,7 +651,7 @@ BEGIN:VEVENT
 SUMMARY:JOLTS Job Openings
 DTSTART:20260901T140000Z
 DTEND:20260901T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jolts-2026-09-01@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jolts,impact-medium
 DESCRIPTION:BLS survey of job openings\, hires and quits\, released at 10:
@@ -671,7 +671,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20260901T140000Z
 DTEND:20260901T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-manufacturing-pmi-2026-09-01@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -691,7 +691,7 @@ BEGIN:VEVENT
 SUMMARY:Factory Orders (M3)
 DTSTART:20260902T140000Z
 DTEND:20260902T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-factory-orders-2026-09-02@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_factory_orders,impact-medium
 DESCRIPTION:Census Bureau M3 survey: shipments\, inventories and new order
@@ -712,7 +712,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20260903T123000Z
 DTEND:20260903T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-09-03@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -732,7 +732,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20260903T140000Z
 DTEND:20260903T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-services-pmi-2026-09-03@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -753,7 +753,7 @@ BEGIN:VEVENT
 SUMMARY:Employment Situation (Nonfarm Payrolls)
 DTSTART:20260904T123000Z
 DTEND:20260904T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-employment-situation-2026-09-04@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_employment_situation,impact-high
 DESCRIPTION:Monthly jobs report from the BLS: nonfarm payrolls\, unemploym
@@ -773,7 +773,7 @@ BEGIN:VEVENT
 SUMMARY:Futures Liquidity Roll (/ES\, /NQ\, /MES\, /MNQ) → U6 back month
 DTSTART;VALUE=DATE:20260910
 DTEND;VALUE=DATE:20260911
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:futures-liquidity-roll-2026-09@compasseconomiccalendar.github.io
 CATEGORIES:futures_liquidity_roll,impact-medium
 DESCRIPTION:Volume and open interest migrate to the back-month contract ar
@@ -791,7 +791,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20260910T123000Z
 DTEND:20260910T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-09-10@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -811,7 +811,7 @@ BEGIN:VEVENT
 SUMMARY:Producer Price Index (PPI)
 DTSTART:20260910T123000Z
 DTEND:20260910T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-ppi-2026-09-10@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_ppi,impact-medium
 DESCRIPTION:Wholesale/producer inflation from the BLS. Watched as a lead-i
@@ -830,7 +830,7 @@ BEGIN:VEVENT
 SUMMARY:Consumer Price Index (CPI)
 DTSTART:20260911T123000Z
 DTEND:20260911T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-cpi-2026-09-11@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_cpi,impact-high
 DESCRIPTION:Headline and core consumer inflation from the BLS. The core mo
@@ -849,7 +849,7 @@ BEGIN:VEVENT
 SUMMARY:CME Official Roll Date (/ES\, /NQ\, /MES\, /MNQ)
 DTSTART;VALUE=DATE:20260914
 DTEND;VALUE=DATE:20260915
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:futures-official-roll-2026-09@compasseconomiccalendar.github.io
 CATEGORIES:futures_official_roll,impact-low
 DESCRIPTION:CME's stated roll date for equity index products: the Monday p
@@ -867,7 +867,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Meeting Begins (Day 1)
 DTSTART;VALUE=DATE:20260915
 DTEND;VALUE=DATE:20260916
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-meeting-day1-2026-09-15@compasseconomiccalendar.github.io
 CATEGORIES:fomc_meeting_day_1,impact-low
 DESCRIPTION:First day of the two-day FOMC meeting. No statement is release
@@ -884,7 +884,7 @@ BEGIN:VEVENT
 SUMMARY:Retail Sales (Advance)
 DTSTART:20260916T123000Z
 DTEND:20260916T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-retail-sales-2026-09-16@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_retail_sales,impact-high
 DESCRIPTION:Census Bureau advance estimate of monthly retail and food serv
@@ -904,7 +904,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Summary of Economic Projections (Dot Plot)
 DTSTART:20260916T180000Z
 DTEND:20260916T183000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-sep-2026-09-16@compasseconomiccalendar.github.io
 CATEGORIES:fomc_sep,impact-high
 DESCRIPTION:Quarterly Summary of Economic Projections\, including the dot 
@@ -922,7 +922,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20260916T180000Z
 DTEND:20260916T183000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-statement-2026-09-16@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -941,7 +941,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20260916T183000Z
 DTEND:20260916T193000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-presser-2026-09-16@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -959,7 +959,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20260917T123000Z
 DTEND:20260917T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-09-17@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -979,7 +979,7 @@ BEGIN:VEVENT
 SUMMARY:Futures Expiration (/ES\, /NQ\, /MES\, /MNQ) — U6
 DTSTART:20260918T133000Z
 DTEND:20260918T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:futures-expiration-2026-09@compasseconomiccalendar.github.io
 CATEGORIES:futures_expiration,impact-medium
 DESCRIPTION:Front-month contract expires\, settling to the Special Opening
@@ -996,7 +996,7 @@ BEGIN:VEVENT
 SUMMARY:Quad Witching
 DTSTART:20260918T200000Z
 DTEND:20260918T203000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:quad-witching-2026-09@compasseconomiccalendar.github.io
 CATEGORIES:quad_witching,impact-high
 DESCRIPTION:Index futures\, index options\, single-stock options and singl
@@ -1014,7 +1014,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20260924T123000Z
 DTEND:20260924T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-09-24@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -1034,7 +1034,7 @@ BEGIN:VEVENT
 SUMMARY:Factory Orders (M3)
 DTSTART:20260925T140000Z
 DTEND:20260925T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-factory-orders-2026-09-25@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_factory_orders,impact-medium
 DESCRIPTION:Census Bureau M3 survey: shipments\, inventories and new order
@@ -1055,7 +1055,7 @@ BEGIN:VEVENT
 SUMMARY:JOLTS Job Openings
 DTSTART:20260929T140000Z
 DTEND:20260929T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jolts-2026-09-29@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jolts,impact-medium
 DESCRIPTION:BLS survey of job openings\, hires and quits\, released at 10:
@@ -1075,7 +1075,7 @@ BEGIN:VEVENT
 SUMMARY:GDP (Third Estimate)
 DTSTART:20260930T123000Z
 DTEND:20260930T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-gdp-2026-09-30@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_gdp,impact-low
 DESCRIPTION:Third estimate of quarterly GDP. The quarter is three months s
@@ -1094,7 +1094,7 @@ BEGIN:VEVENT
 SUMMARY:Personal Income & Outlays (PCE)
 DTSTART:20260930T123000Z
 DTEND:20260930T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-pce-2026-09-30@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_pce,impact-high
 DESCRIPTION:BEA report containing core PCE\, the Fed's preferred inflation
@@ -1113,7 +1113,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261001T123000Z
 DTEND:20261001T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-10-01@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -1133,7 +1133,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20261001T140000Z
 DTEND:20261001T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-manufacturing-pmi-2026-10-01@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -1153,7 +1153,7 @@ BEGIN:VEVENT
 SUMMARY:Employment Situation (Nonfarm Payrolls)
 DTSTART:20261002T123000Z
 DTEND:20261002T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-employment-situation-2026-10-02@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_employment_situation,impact-high
 DESCRIPTION:Monthly jobs report from the BLS: nonfarm payrolls\, unemploym
@@ -1173,7 +1173,7 @@ BEGIN:VEVENT
 SUMMARY:Factory Orders (M3)
 DTSTART:20261002T140000Z
 DTEND:20261002T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-factory-orders-2026-10-02@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_factory_orders,impact-medium
 DESCRIPTION:Census Bureau M3 survey: shipments\, inventories and new order
@@ -1194,7 +1194,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20261005T140000Z
 DTEND:20261005T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-services-pmi-2026-10-05@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -1215,7 +1215,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261008T123000Z
 DTEND:20261008T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-10-08@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -1235,7 +1235,7 @@ BEGIN:VEVENT
 SUMMARY:Consumer Price Index (CPI)
 DTSTART:20261014T123000Z
 DTEND:20261014T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-cpi-2026-10-14@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_cpi,impact-high
 DESCRIPTION:Headline and core consumer inflation from the BLS. The core mo
@@ -1254,7 +1254,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261015T123000Z
 DTEND:20261015T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-10-15@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -1274,7 +1274,7 @@ BEGIN:VEVENT
 SUMMARY:Producer Price Index (PPI)
 DTSTART:20261015T123000Z
 DTEND:20261015T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-ppi-2026-10-15@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_ppi,impact-medium
 DESCRIPTION:Wholesale/producer inflation from the BLS. Watched as a lead-i
@@ -1293,7 +1293,7 @@ BEGIN:VEVENT
 SUMMARY:Retail Sales (Advance)
 DTSTART:20261015T123000Z
 DTEND:20261015T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-retail-sales-2026-10-15@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_retail_sales,impact-high
 DESCRIPTION:Census Bureau advance estimate of monthly retail and food serv
@@ -1313,7 +1313,7 @@ BEGIN:VEVENT
 SUMMARY:Monthly Options Expiration (OPEX)
 DTSTART:20261016T200000Z
 DTEND:20261016T203000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:monthly-opex-2026-10@compasseconomiccalendar.github.io
 CATEGORIES:monthly_opex,impact-medium
 DESCRIPTION:Monthly equity and index options expire on the third Friday. D
@@ -1330,7 +1330,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261022T123000Z
 DTEND:20261022T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-10-22@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -1350,7 +1350,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Meeting Begins (Day 1)
 DTSTART;VALUE=DATE:20261027
 DTEND;VALUE=DATE:20261028
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-meeting-day1-2026-10-27@compasseconomiccalendar.github.io
 CATEGORIES:fomc_meeting_day_1,impact-low
 DESCRIPTION:First day of the two-day FOMC meeting. No statement is release
@@ -1367,7 +1367,7 @@ BEGIN:VEVENT
 SUMMARY:Factory Orders (M3)
 DTSTART:20261027T140000Z
 DTEND:20261027T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-factory-orders-2026-10-27@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_factory_orders,impact-medium
 DESCRIPTION:Census Bureau M3 survey: shipments\, inventories and new order
@@ -1388,7 +1388,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20261028T180000Z
 DTEND:20261028T183000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-statement-2026-10-28@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -1406,7 +1406,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20261028T183000Z
 DTEND:20261028T193000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-presser-2026-10-28@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -1424,7 +1424,7 @@ BEGIN:VEVENT
 SUMMARY:GDP (Advance Estimate)
 DTSTART:20261029T123000Z
 DTEND:20261029T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-gdp-2026-10-29@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_gdp,impact-high
 DESCRIPTION:First (advance) estimate of quarterly GDP from the BEA. The ad
@@ -1443,7 +1443,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261029T123000Z
 DTEND:20261029T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-10-29@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -1463,7 +1463,7 @@ BEGIN:VEVENT
 SUMMARY:Personal Income & Outlays (PCE)
 DTSTART:20261029T123000Z
 DTEND:20261029T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-pce-2026-10-29@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_pce,impact-high
 DESCRIPTION:BEA report containing core PCE\, the Fed's preferred inflation
@@ -1482,7 +1482,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20261102T150000Z
 DTEND:20261102T153000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-manufacturing-pmi-2026-11-02@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -1502,7 +1502,7 @@ BEGIN:VEVENT
 SUMMARY:Factory Orders (M3)
 DTSTART:20261103T150000Z
 DTEND:20261103T153000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-factory-orders-2026-11-03@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_factory_orders,impact-medium
 DESCRIPTION:Census Bureau M3 survey: shipments\, inventories and new order
@@ -1523,7 +1523,7 @@ BEGIN:VEVENT
 SUMMARY:JOLTS Job Openings
 DTSTART:20261103T150000Z
 DTEND:20261103T153000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jolts-2026-11-03@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jolts,impact-medium
 DESCRIPTION:BLS survey of job openings\, hires and quits\, released at 10:
@@ -1543,7 +1543,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Quarterly Refunding Announcement
 DTSTART:20261104T133000Z
 DTEND:20261104T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:treasury-refunding-2026-11-04@compasseconomiccalendar.github.io
 CATEGORIES:treasury_quarterly_refunding,impact-high
 DESCRIPTION:Treasury announces the size and composition of the coming quar
@@ -1562,7 +1562,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20261104T150000Z
 DTEND:20261104T153000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-services-pmi-2026-11-04@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -1583,7 +1583,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261105T133000Z
 DTEND:20261105T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-11-05@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -1603,7 +1603,7 @@ BEGIN:VEVENT
 SUMMARY:Employment Situation (Nonfarm Payrolls)
 DTSTART:20261106T133000Z
 DTEND:20261106T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-employment-situation-2026-11-06@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_employment_situation,impact-high
 DESCRIPTION:Monthly jobs report from the BLS: nonfarm payrolls\, unemploym
@@ -1623,7 +1623,7 @@ BEGIN:VEVENT
 SUMMARY:Consumer Price Index (CPI)
 DTSTART:20261110T133000Z
 DTEND:20261110T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-cpi-2026-11-10@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_cpi,impact-high
 DESCRIPTION:Headline and core consumer inflation from the BLS. The core mo
@@ -1642,7 +1642,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261112T133000Z
 DTEND:20261112T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-11-12@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -1662,7 +1662,7 @@ BEGIN:VEVENT
 SUMMARY:Producer Price Index (PPI)
 DTSTART:20261113T133000Z
 DTEND:20261113T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-ppi-2026-11-13@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_ppi,impact-medium
 DESCRIPTION:Wholesale/producer inflation from the BLS. Watched as a lead-i
@@ -1681,7 +1681,7 @@ BEGIN:VEVENT
 SUMMARY:Retail Sales (Advance)
 DTSTART:20261117T133000Z
 DTEND:20261117T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-retail-sales-2026-11-17@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_retail_sales,impact-high
 DESCRIPTION:Census Bureau advance estimate of monthly retail and food serv
@@ -1701,7 +1701,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261119T133000Z
 DTEND:20261119T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-11-19@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -1721,7 +1721,7 @@ BEGIN:VEVENT
 SUMMARY:Monthly Options Expiration (OPEX)
 DTSTART:20261120T210000Z
 DTEND:20261120T213000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:monthly-opex-2026-11@compasseconomiccalendar.github.io
 CATEGORIES:monthly_opex,impact-medium
 DESCRIPTION:Monthly equity and index options expire on the third Friday. D
@@ -1738,7 +1738,7 @@ BEGIN:VEVENT
 SUMMARY:GDP (Second Estimate)
 DTSTART:20261125T133000Z
 DTEND:20261125T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-gdp-2026-11-25@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_gdp,impact-medium
 DESCRIPTION:Second estimate of quarterly GDP\, incorporating more complete
@@ -1757,7 +1757,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261125T133000Z
 DTEND:20261125T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-11-25@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -1777,7 +1777,7 @@ BEGIN:VEVENT
 SUMMARY:Personal Income & Outlays (PCE)
 DTSTART:20261125T133000Z
 DTEND:20261125T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-pce-2026-11-25@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_pce,impact-high
 DESCRIPTION:BEA report containing core PCE\, the Fed's preferred inflation
@@ -1796,7 +1796,7 @@ BEGIN:VEVENT
 SUMMARY:Factory Orders (M3)
 DTSTART:20261125T150000Z
 DTEND:20261125T153000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-factory-orders-2026-11-25@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_factory_orders,impact-medium
 DESCRIPTION:Census Bureau M3 survey: shipments\, inventories and new order
@@ -1817,7 +1817,7 @@ BEGIN:VEVENT
 SUMMARY:JOLTS Job Openings
 DTSTART:20261201T150000Z
 DTEND:20261201T153000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jolts-2026-12-01@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jolts,impact-medium
 DESCRIPTION:BLS survey of job openings\, hires and quits\, released at 10:
@@ -1837,7 +1837,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20261201T150000Z
 DTEND:20261201T153000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-manufacturing-pmi-2026-12-01@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -1857,7 +1857,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261203T133000Z
 DTEND:20261203T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-12-03@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -1877,7 +1877,7 @@ BEGIN:VEVENT
 SUMMARY:Factory Orders (M3)
 DTSTART:20261203T150000Z
 DTEND:20261203T153000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-factory-orders-2026-12-03@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_factory_orders,impact-medium
 DESCRIPTION:Census Bureau M3 survey: shipments\, inventories and new order
@@ -1898,7 +1898,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20261203T150000Z
 DTEND:20261203T153000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-services-pmi-2026-12-03@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -1919,7 +1919,7 @@ BEGIN:VEVENT
 SUMMARY:Employment Situation (Nonfarm Payrolls)
 DTSTART:20261204T133000Z
 DTEND:20261204T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-employment-situation-2026-12-04@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_employment_situation,impact-high
 DESCRIPTION:Monthly jobs report from the BLS: nonfarm payrolls\, unemploym
@@ -1939,7 +1939,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Meeting Begins (Day 1)
 DTSTART;VALUE=DATE:20261208
 DTEND;VALUE=DATE:20261209
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-meeting-day1-2026-12-08@compasseconomiccalendar.github.io
 CATEGORIES:fomc_meeting_day_1,impact-low
 DESCRIPTION:First day of the two-day FOMC meeting. No statement is release
@@ -1956,7 +1956,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Summary of Economic Projections (Dot Plot)
 DTSTART:20261209T190000Z
 DTEND:20261209T193000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-sep-2026-12-09@compasseconomiccalendar.github.io
 CATEGORIES:fomc_sep,impact-high
 DESCRIPTION:Quarterly Summary of Economic Projections\, including the dot 
@@ -1974,7 +1974,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20261209T190000Z
 DTEND:20261209T193000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-statement-2026-12-09@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -1993,7 +1993,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20261209T193000Z
 DTEND:20261209T203000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-presser-2026-12-09@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -2011,7 +2011,7 @@ BEGIN:VEVENT
 SUMMARY:Futures Liquidity Roll (/ES\, /NQ\, /MES\, /MNQ) → Z6 back month
 DTSTART;VALUE=DATE:20261210
 DTEND;VALUE=DATE:20261211
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:futures-liquidity-roll-2026-12@compasseconomiccalendar.github.io
 CATEGORIES:futures_liquidity_roll,impact-medium
 DESCRIPTION:Volume and open interest migrate to the back-month contract ar
@@ -2029,7 +2029,7 @@ BEGIN:VEVENT
 SUMMARY:Consumer Price Index (CPI)
 DTSTART:20261210T133000Z
 DTEND:20261210T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-cpi-2026-12-10@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_cpi,impact-high
 DESCRIPTION:Headline and core consumer inflation from the BLS. The core mo
@@ -2048,7 +2048,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261210T133000Z
 DTEND:20261210T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-12-10@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -2068,7 +2068,7 @@ BEGIN:VEVENT
 SUMMARY:CME Official Roll Date (/ES\, /NQ\, /MES\, /MNQ)
 DTSTART;VALUE=DATE:20261214
 DTEND;VALUE=DATE:20261215
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:futures-official-roll-2026-12@compasseconomiccalendar.github.io
 CATEGORIES:futures_official_roll,impact-low
 DESCRIPTION:CME's stated roll date for equity index products: the Monday p
@@ -2086,7 +2086,7 @@ BEGIN:VEVENT
 SUMMARY:Producer Price Index (PPI)
 DTSTART:20261215T133000Z
 DTEND:20261215T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-ppi-2026-12-15@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_ppi,impact-medium
 DESCRIPTION:Wholesale/producer inflation from the BLS. Watched as a lead-i
@@ -2105,7 +2105,7 @@ BEGIN:VEVENT
 SUMMARY:Retail Sales (Advance)
 DTSTART:20261216T133000Z
 DTEND:20261216T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-retail-sales-2026-12-16@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_retail_sales,impact-high
 DESCRIPTION:Census Bureau advance estimate of monthly retail and food serv
@@ -2125,7 +2125,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261217T133000Z
 DTEND:20261217T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-12-17@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -2145,7 +2145,7 @@ BEGIN:VEVENT
 SUMMARY:Futures Expiration (/ES\, /NQ\, /MES\, /MNQ) — Z6
 DTSTART:20261218T143000Z
 DTEND:20261218T150000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:futures-expiration-2026-12@compasseconomiccalendar.github.io
 CATEGORIES:futures_expiration,impact-medium
 DESCRIPTION:Front-month contract expires\, settling to the Special Opening
@@ -2162,7 +2162,7 @@ BEGIN:VEVENT
 SUMMARY:Quad Witching
 DTSTART:20261218T210000Z
 DTEND:20261218T213000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:quad-witching-2026-12@compasseconomiccalendar.github.io
 CATEGORIES:quad_witching,impact-high
 DESCRIPTION:Index futures\, index options\, single-stock options and singl
@@ -2180,7 +2180,7 @@ BEGIN:VEVENT
 SUMMARY:GDP (Third Estimate)
 DTSTART:20261223T133000Z
 DTEND:20261223T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-gdp-2026-12-23@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_gdp,impact-low
 DESCRIPTION:Third estimate of quarterly GDP. The quarter is three months s
@@ -2199,7 +2199,7 @@ BEGIN:VEVENT
 SUMMARY:Personal Income & Outlays (PCE)
 DTSTART:20261223T133000Z
 DTEND:20261223T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-pce-2026-12-23@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_pce,impact-high
 DESCRIPTION:BEA report containing core PCE\, the Fed's preferred inflation
@@ -2218,7 +2218,7 @@ BEGIN:VEVENT
 SUMMARY:Factory Orders (M3)
 DTSTART:20261223T150000Z
 DTEND:20261223T153000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-factory-orders-2026-12-23@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_factory_orders,impact-medium
 DESCRIPTION:Census Bureau M3 survey: shipments\, inventories and new order
@@ -2239,7 +2239,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261224T133000Z
 DTEND:20261224T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-12-24@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -2259,7 +2259,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261231T133000Z
 DTEND:20261231T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fred-jobless-claims-2026-12-31@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -2279,7 +2279,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270104T150000Z
 DTEND:20270104T153000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-manufacturing-pmi-2027-01-04@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -2299,7 +2299,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270106T150000Z
 DTEND:20270106T153000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-services-pmi-2027-01-06@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -2320,7 +2320,7 @@ BEGIN:VEVENT
 SUMMARY:Monthly Options Expiration (OPEX)
 DTSTART:20270115T210000Z
 DTEND:20270115T213000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:monthly-opex-2027-01@compasseconomiccalendar.github.io
 CATEGORIES:monthly_opex,impact-medium
 DESCRIPTION:Monthly equity and index options expire on the third Friday. D
@@ -2337,7 +2337,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Meeting Begins (Day 1)
 DTSTART;VALUE=DATE:20270126
 DTEND;VALUE=DATE:20270127
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-meeting-day1-2027-01-26@compasseconomiccalendar.github.io
 CATEGORIES:fomc_meeting_day_1,impact-low
 DESCRIPTION:First day of the two-day FOMC meeting. No statement is release
@@ -2354,7 +2354,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270127T190000Z
 DTEND:20270127T193000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-statement-2027-01-27@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -2372,7 +2372,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270127T193000Z
 DTEND:20270127T203000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-presser-2027-01-27@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -2390,7 +2390,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270201T150000Z
 DTEND:20270201T153000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-manufacturing-pmi-2027-02-01@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -2410,7 +2410,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Quarterly Refunding Announcement
 DTSTART:20270203T133000Z
 DTEND:20270203T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:treasury-refunding-2027-02-03@compasseconomiccalendar.github.io
 CATEGORIES:treasury_quarterly_refunding,impact-high
 DESCRIPTION:Treasury announces the size and composition of the coming quar
@@ -2429,7 +2429,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270203T150000Z
 DTEND:20270203T153000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-services-pmi-2027-02-03@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -2450,7 +2450,7 @@ BEGIN:VEVENT
 SUMMARY:Monthly Options Expiration (OPEX)
 DTSTART:20270219T210000Z
 DTEND:20270219T213000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:monthly-opex-2027-02@compasseconomiccalendar.github.io
 CATEGORIES:monthly_opex,impact-medium
 DESCRIPTION:Monthly equity and index options expire on the third Friday. D
@@ -2467,7 +2467,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270301T150000Z
 DTEND:20270301T153000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-manufacturing-pmi-2027-03-01@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -2487,7 +2487,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270303T150000Z
 DTEND:20270303T153000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-services-pmi-2027-03-03@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -2508,7 +2508,7 @@ BEGIN:VEVENT
 SUMMARY:Futures Liquidity Roll (/ES\, /NQ\, /MES\, /MNQ) → H7 back month
 DTSTART;VALUE=DATE:20270311
 DTEND;VALUE=DATE:20270312
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:futures-liquidity-roll-2027-03@compasseconomiccalendar.github.io
 CATEGORIES:futures_liquidity_roll,impact-medium
 DESCRIPTION:Volume and open interest migrate to the back-month contract ar
@@ -2526,7 +2526,7 @@ BEGIN:VEVENT
 SUMMARY:CME Official Roll Date (/ES\, /NQ\, /MES\, /MNQ)
 DTSTART;VALUE=DATE:20270315
 DTEND;VALUE=DATE:20270316
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:futures-official-roll-2027-03@compasseconomiccalendar.github.io
 CATEGORIES:futures_official_roll,impact-low
 DESCRIPTION:CME's stated roll date for equity index products: the Monday p
@@ -2544,7 +2544,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Meeting Begins (Day 1)
 DTSTART;VALUE=DATE:20270316
 DTEND;VALUE=DATE:20270317
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-meeting-day1-2027-03-16@compasseconomiccalendar.github.io
 CATEGORIES:fomc_meeting_day_1,impact-low
 DESCRIPTION:First day of the two-day FOMC meeting. No statement is release
@@ -2561,7 +2561,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Summary of Economic Projections (Dot Plot)
 DTSTART:20270317T180000Z
 DTEND:20270317T183000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-sep-2027-03-17@compasseconomiccalendar.github.io
 CATEGORIES:fomc_sep,impact-high
 DESCRIPTION:Quarterly Summary of Economic Projections\, including the dot 
@@ -2579,7 +2579,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270317T180000Z
 DTEND:20270317T183000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-statement-2027-03-17@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -2598,7 +2598,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270317T183000Z
 DTEND:20270317T193000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-presser-2027-03-17@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -2616,7 +2616,7 @@ BEGIN:VEVENT
 SUMMARY:Futures Expiration (/ES\, /NQ\, /MES\, /MNQ) — H7
 DTSTART:20270319T133000Z
 DTEND:20270319T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:futures-expiration-2027-03@compasseconomiccalendar.github.io
 CATEGORIES:futures_expiration,impact-medium
 DESCRIPTION:Front-month contract expires\, settling to the Special Opening
@@ -2633,7 +2633,7 @@ BEGIN:VEVENT
 SUMMARY:Quad Witching
 DTSTART:20270319T200000Z
 DTEND:20270319T203000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:quad-witching-2027-03@compasseconomiccalendar.github.io
 CATEGORIES:quad_witching,impact-high
 DESCRIPTION:Index futures\, index options\, single-stock options and singl
@@ -2651,7 +2651,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270401T140000Z
 DTEND:20270401T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-manufacturing-pmi-2027-04-01@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -2671,7 +2671,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270405T140000Z
 DTEND:20270405T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-services-pmi-2027-04-05@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -2692,7 +2692,7 @@ BEGIN:VEVENT
 SUMMARY:Monthly Options Expiration (OPEX)
 DTSTART:20270416T200000Z
 DTEND:20270416T203000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:monthly-opex-2027-04@compasseconomiccalendar.github.io
 CATEGORIES:monthly_opex,impact-medium
 DESCRIPTION:Monthly equity and index options expire on the third Friday. D
@@ -2709,7 +2709,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Meeting Begins (Day 1)
 DTSTART;VALUE=DATE:20270427
 DTEND;VALUE=DATE:20270428
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-meeting-day1-2027-04-27@compasseconomiccalendar.github.io
 CATEGORIES:fomc_meeting_day_1,impact-low
 DESCRIPTION:First day of the two-day FOMC meeting. No statement is release
@@ -2726,7 +2726,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270428T180000Z
 DTEND:20270428T183000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-statement-2027-04-28@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -2744,7 +2744,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270428T183000Z
 DTEND:20270428T193000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-presser-2027-04-28@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -2762,7 +2762,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270503T140000Z
 DTEND:20270503T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-manufacturing-pmi-2027-05-03@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -2782,7 +2782,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Quarterly Refunding Announcement
 DTSTART:20270505T123000Z
 DTEND:20270505T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:treasury-refunding-2027-05-05@compasseconomiccalendar.github.io
 CATEGORIES:treasury_quarterly_refunding,impact-high
 DESCRIPTION:Treasury announces the size and composition of the coming quar
@@ -2801,7 +2801,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270505T140000Z
 DTEND:20270505T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-services-pmi-2027-05-05@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -2822,7 +2822,7 @@ BEGIN:VEVENT
 SUMMARY:Monthly Options Expiration (OPEX)
 DTSTART:20270521T200000Z
 DTEND:20270521T203000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:monthly-opex-2027-05@compasseconomiccalendar.github.io
 CATEGORIES:monthly_opex,impact-medium
 DESCRIPTION:Monthly equity and index options expire on the third Friday. D
@@ -2839,7 +2839,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270601T140000Z
 DTEND:20270601T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-manufacturing-pmi-2027-06-01@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -2859,7 +2859,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270603T140000Z
 DTEND:20270603T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-services-pmi-2027-06-03@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -2880,7 +2880,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Meeting Begins (Day 1)
 DTSTART;VALUE=DATE:20270608
 DTEND;VALUE=DATE:20270609
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-meeting-day1-2027-06-08@compasseconomiccalendar.github.io
 CATEGORIES:fomc_meeting_day_1,impact-low
 DESCRIPTION:First day of the two-day FOMC meeting. No statement is release
@@ -2897,7 +2897,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Summary of Economic Projections (Dot Plot)
 DTSTART:20270609T180000Z
 DTEND:20270609T183000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-sep-2027-06-09@compasseconomiccalendar.github.io
 CATEGORIES:fomc_sep,impact-high
 DESCRIPTION:Quarterly Summary of Economic Projections\, including the dot 
@@ -2915,7 +2915,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270609T180000Z
 DTEND:20270609T183000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-statement-2027-06-09@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -2934,7 +2934,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270609T183000Z
 DTEND:20270609T193000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-presser-2027-06-09@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -2952,7 +2952,7 @@ BEGIN:VEVENT
 SUMMARY:Futures Liquidity Roll (/ES\, /NQ\, /MES\, /MNQ) → M7 back month
 DTSTART;VALUE=DATE:20270610
 DTEND;VALUE=DATE:20270611
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:futures-liquidity-roll-2027-06@compasseconomiccalendar.github.io
 CATEGORIES:futures_liquidity_roll,impact-medium
 DESCRIPTION:Volume and open interest migrate to the back-month contract ar
@@ -2970,7 +2970,7 @@ BEGIN:VEVENT
 SUMMARY:CME Official Roll Date (/ES\, /NQ\, /MES\, /MNQ)
 DTSTART;VALUE=DATE:20270614
 DTEND;VALUE=DATE:20270615
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:futures-official-roll-2027-06@compasseconomiccalendar.github.io
 CATEGORIES:futures_official_roll,impact-low
 DESCRIPTION:CME's stated roll date for equity index products: the Monday p
@@ -2988,7 +2988,7 @@ BEGIN:VEVENT
 SUMMARY:Futures Expiration (/ES\, /NQ\, /MES\, /MNQ) — M7
 DTSTART:20270618T133000Z
 DTEND:20270618T140000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:futures-expiration-2027-06@compasseconomiccalendar.github.io
 CATEGORIES:futures_expiration,impact-medium
 DESCRIPTION:Front-month contract expires\, settling to the Special Opening
@@ -3005,7 +3005,7 @@ BEGIN:VEVENT
 SUMMARY:Quad Witching
 DTSTART:20270618T200000Z
 DTEND:20270618T203000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:quad-witching-2027-06@compasseconomiccalendar.github.io
 CATEGORIES:quad_witching,impact-high
 DESCRIPTION:Index futures\, index options\, single-stock options and singl
@@ -3023,7 +3023,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270701T140000Z
 DTEND:20270701T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-manufacturing-pmi-2027-07-01@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -3043,7 +3043,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270706T140000Z
 DTEND:20270706T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-services-pmi-2027-07-06@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -3064,7 +3064,7 @@ BEGIN:VEVENT
 SUMMARY:Monthly Options Expiration (OPEX)
 DTSTART:20270716T200000Z
 DTEND:20270716T203000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:monthly-opex-2027-07@compasseconomiccalendar.github.io
 CATEGORIES:monthly_opex,impact-medium
 DESCRIPTION:Monthly equity and index options expire on the third Friday. D
@@ -3081,7 +3081,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Meeting Begins (Day 1)
 DTSTART;VALUE=DATE:20270727
 DTEND;VALUE=DATE:20270728
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-meeting-day1-2027-07-27@compasseconomiccalendar.github.io
 CATEGORIES:fomc_meeting_day_1,impact-low
 DESCRIPTION:First day of the two-day FOMC meeting. No statement is release
@@ -3098,7 +3098,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270728T180000Z
 DTEND:20270728T183000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-statement-2027-07-28@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -3116,7 +3116,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270728T183000Z
 DTEND:20270728T193000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:fomc-presser-2027-07-28@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -3134,7 +3134,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270802T140000Z
 DTEND:20270802T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-manufacturing-pmi-2027-08-02@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -3154,7 +3154,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Quarterly Refunding Announcement
 DTSTART:20270804T123000Z
 DTEND:20270804T130000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:treasury-refunding-2027-08-04@compasseconomiccalendar.github.io
 CATEGORIES:treasury_quarterly_refunding,impact-high
 DESCRIPTION:Treasury announces the size and composition of the coming quar
@@ -3173,7 +3173,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270804T140000Z
 DTEND:20270804T143000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:ism-services-pmi-2027-08-04@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -3194,7 +3194,7 @@ BEGIN:VEVENT
 SUMMARY:Monthly Options Expiration (OPEX)
 DTSTART:20270820T200000Z
 DTEND:20270820T203000Z
-DTSTAMP:20260728T220556Z
+DTSTAMP:20260728T221220Z
 UID:monthly-opex-2027-08@compasseconomiccalendar.github.io
 CATEGORIES:monthly_opex,impact-medium
 DESCRIPTION:Monthly equity and index options expire on the third Friday. D
