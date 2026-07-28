@@ -41,17 +41,33 @@ The Federal Reserve Bank of St. Louis FRED API is the best single free source fo
 - 120 requests/minute with a key
 - No documented per-day cap
 
-**Required release IDs:**
+**Release IDs (all verified against FRED's own names, 2026-07-28):**
 
-| Release | FRED ID |
-|---|---|
-| Employment Situation (jobs report) | 50 |
-| CPI | 10 |
-| PPI | 46 |
-| GDP | 53 |
-| Personal Income & Outlays (PCE) | 54 |
+| Release | FRED ID | Time ET |
+|---|---|---|
+| Employment Situation (jobs report) | 50 | 8:30 |
+| CPI | 10 | 8:30 |
+| PPI | 46 | 8:30 |
+| GDP | 53 | 8:30 |
+| Personal Income & Outlays (PCE) | 54 | 8:30 |
+| Unemployment Insurance Weekly Claims | 180 | 8:30 |
+| Advance Monthly Sales for Retail | 9 | 8:30 |
+| Manufacturer's Shipments, Inventories & Orders (M3) | 95 | 10:00 |
+| Job Openings and Labor Turnover (JOLTS) | 192 | 10:00 |
 
 > ⚠️ Do NOT confuse release ID 11 (Employment Cost Index) with the monthly jobs report (ID 50).
+
+**Resolve IDs by name, do not hardcode them.** `build_calendar.py` looks each
+release up in `fred/releases` and treats any configured id as an assertion,
+failing the build on a mismatch. This caught three real errors on first run:
+`Unemployment Insurance Weekly Claims` also matches a *state-level* report,
+FRED carries **no release containing "Durable"** (the Census figures arrive
+under the M3 survey name), and FRED spells it `Manufacturer's` — singular.
+
+> ⚠️ **Forward coverage is only ~5 months.** FRED carries what upstream reports
+> to it; measured 2026-07-28 it ran to 2026-12-31 while FOMC and futures ran to
+> 2027-08. Nothing scrapeable fixes this (BLS forbids it, BEA ends on the same
+> date). The only fix is annual hand-curation via `data/overrides.json`.
 
 **Licensing requirements for FRED data:**
 FRED's copyright restrictions apply only to certain third-party data *series* marked "Copyright" in their notes (e.g., S&P/Dow Jones indices). BLS/BEA release schedules are U.S. federal statistical products in the public domain.
@@ -77,7 +93,11 @@ Additional FRED ToS requirements:
 - **License:** Public domain
 
 #### BLS Employment Situation, CPI, PPI
-- **Source:** `bls.gov/schedule` + BLS Public Data API (JSON)
+- **Source:** FRED (see 1.2). **⚠️ bls.gov cannot be scraped** — every path
+  (`/schedule/`, the annual schedule pages, the RSS feed, `download.bls.gov`)
+  returns HTTP 403 with an explicit statement that automated retrieval is
+  prohibited by BLS usage policy. `api.bls.gov` responds but serves time-series
+  data only; it has **no release-schedule endpoint**. Verified 2026-07-28.
 - **FRED IDs:** 50 / 10 / 46
 - **Release time:** 8:30am ET
 - **License:** U.S. government work, public domain, no redistribution restriction
@@ -86,6 +106,10 @@ Additional FRED ToS requirements:
 - **Source:** `bea.gov/news/schedule` + BEA API (JSON)
 - **FRED IDs:** 53 / 54
 - **Note:** PCE is the Fed's preferred inflation gauge
+- **Useful:** `bea.gov/news/schedule` *is* scrapeable and permitted, and
+  distinguishes the GDP advance / second / third estimates that FRED reports
+  under one name. It adds **no forward coverage** — its last row is the same
+  date FRED's is — so it is used for impact precision only.
 - **Release time:** 8:30am ET
 - **License:** Public domain
 - **⚠️ Risk:** BEA rescheduled and cancelled releases around the 2025 government shutdown. Build a "schedule may have changed" fallback and a manual-override layer.
@@ -98,13 +122,19 @@ Additional FRED ToS requirements:
 - **Source:** ISM (private organization)
 - **License:** ⚠️ **RESTRICTED.** ISM ToS grants only "a limited, revocable, nonsublicensable license… solely for your personal, non-commercial use." You may show the *date* (a fact) but must NOT redistribute ISM's values commercially.
 - **Release pattern:** ~1st business day (Manufacturing), ~3rd business day (Services) of the month
+- **⚠️ No schedule to fetch.** ISM publishes nothing machine-readable and FRED
+  dropped the series over licensing, so dates are **computed** from the pattern
+  above (federal holidays excluded) and every one is flagged
+  `"approximate": true` in the feed. Only dates are published, never values.
 
 #### University of Michigan Sentiment & ADP Employment
 - **License:** ⚠️ Private sources — treat like ISM. Date is safe; values are licensed.
 - **Note:** ADP National Employment Report publishes two days before the BLS jobs report.
 
 #### Treasury Auctions + Quarterly Refunding Announcements
-- **Source:** TreasuryDirect XML feed + `data.gov` dataset
+- **Source:** TreasuryDirect web service (**JSON — the XML feed is gone**;
+  `?format=xml` and an XML `Accept` header both return HTTP 406. Verified
+  2026-07-28.)
 - **License:** Creative Commons CC0 (public domain, "intended for public access and use")
 - **Quarterly refunding:** First Wednesday of Feb/May/Aug/Nov
 - **TreasuryDirect API:** Available at `treasurydirect.gov/auctions/announcements-data-results/`
@@ -138,7 +168,7 @@ Additional FRED ToS requirements:
 | **FRED** | ✅ Free | 120 req/min (w/ key) | ❌ No | ✅ OK (with attribution) |
 | **BLS Public Data API** | ✅ Free | Generous | ❌ No | ✅ Public domain |
 | **BEA API** | ✅ Free | Generous | ❌ No | ✅ Public domain |
-| **TreasuryDirect XML** | ✅ Free | No cap | N/A | ✅ CC0 |
+| **TreasuryDirect JSON** | ✅ Free | No cap | N/A | ✅ CC0 |
 | **Finnhub** | Limited free | 60 calls/min | ⚠️ Gated to paid | ❓ Verify before distributing |
 | **Trading Economics** | `guest:guest` (testing only) | Very limited | ✅ Yes (best in class) | ⚠️ Distribution-based pricing |
 | **Forex Factory** | Unofficial JSON/ICS export | N/A | ✅ Yes | ❌ ToS does not authorize commercial redistribution |
@@ -153,19 +183,59 @@ Additional FRED ToS requirements:
 
 The deviation between forecast and actual — not the absolute number — drives the immediate move. For a free, redistributable product there are two honest approaches:
 
-### Option A — Static educational context (recommended for MVP)
-Skip live consensus. Show historically-computed typical move context:
+### Option A — Static educational context (recommended for MVP) — ✅ BUILT
 
-| Event | Avg absolute move (SPX) | Avg absolute move (NDX) |
+Skip live consensus. Show historically-computed typical move context.
+
+> **⚠️ The figures previously quoted in this section were wrong and have been
+> removed.** They cited CPI at ±0.64% SPX / ±0.98% NDX and FOMC at ±1.19% /
+> ±1.67%, from a single analyst over a ~12-event window, **with no baseline**.
+> Recomputed from ten years of primary data by
+> `ingestion/build_typical_moves.py` (2026-07-28), the picture is different.
+> Do not reintroduce the old numbers.
+
+**A typical SPX day moves 0.49% (median). Without that anchor, an absolute
+percentage says nothing.** The ratio to baseline is the number that matters.
+
+| Event | Realized move (trailing 3y) | Vol crush vs normal day (10y) |
 |---|---|---|
-| CPI day | ±0.64% | ±0.98% |
-| FOMC day | ±1.19% | ±1.67% |
+| Employment Situation | **1.69×** | −2.33% |
+| FOMC statement | **1.49×** | −2.87% |
+| Monthly OPEX | **1.40×** | −1.29% |
+| CPI | 1.20× | **−1.15%** |
+| GDP | 0.86× | **−1.16%** |
+| PPI / PCE / claims / JOLTS | ~1.0× | ~0 |
 
-*Source: Russell Rhoads, illustrative ~12-event window. Recompute from primary price data before publishing.*
+Three findings that shaped the build:
 
-Academic backing:
+1. **Only FOMC and the jobs report are clearly elevated on realized move.** CPI
+   is close to an ordinary day; quad witching and OPEX were *below* baseline
+   over ten years.
+2. **Use medians, not means.** Baseline mean absolute move is 0.73% against a
+   median of 0.49%, inflated by a few crisis sessions unrelated to any event,
+   which drags every ratio toward 1.
+3. **Close-to-close cannot see an 8:30am release that spikes pre-open and
+   mean-reverts by the close.** The academic backing below points at the fix:
+   measure the volatility the market priced in and gave up. GDP moves *less*
+   than a normal day yet has the 4th-deepest vol crush — invisible on realized
+   move alone. Events therefore qualify as notable on **either** measure.
+
+Academic backing (corroborated by our own computation):
 - VIX rises into FOMC/PPI/CPI events and drops afterward (ScienceDirect study)
 - NBER working paper w28306 on event-day options confirms elevated implied volatility pattern
+
+**Presentation rule:** show a number only at ≥1.25×, ≤0.85×, or a vol crush
+≥1.0% deeper than normal. Everything else says it moves about as much as a
+normal day. Publishing "1.02× normal" on every event is noise dressed as
+insight, which is what this exercise existed to prevent.
+
+**Data note.** SPX/NDX daily closes come from FRED and carry an S&P Dow Jones
+copyright notice (§1.2); VIX history is Cboe's, free and keyless. Only
+aggregates are ever published — never a price series. A true intraday-range
+measure needs OHLC, which no free permitted source provides: FRED is
+closes-only, Cboe serves SPX close-only and does not serve NDX, Yahoo's ToS
+forbids this use, Stooq is behind a bot challenge. That needs a commercial
+licence.
 
 This approach is fully redistributable and is the primary differentiator — no existing free calendar combines futures roll dates + macro releases + typical move context.
 
@@ -210,11 +280,13 @@ Manifest V3 constraints make a pure client-side extension fragile:
 │         Python Ingestion Job            │
 │  (GitHub Actions cron, daily/weekly)    │
 │                                         │
-│  • FRED releases/dates (IDs 50,10,46,  │
-│    53,54) w/ include_no_data=true       │
+│  • FRED release/dates × 9, resolved by  │
+│    name, w/ include_no_data=true        │
 │  • federalreserve.gov FOMC calendar     │
-│  • TreasuryDirect XML                   │
-│  • Computed CME roll/expiry dates       │
+│  • TreasuryDirect JSON                  │
+│  • bea.gov schedule (GDP estimate type) │
+│  • Computed CME roll/expiry + ISM dates │
+│  • Typical-move context (monthly job)   │
 │  • Normalize → UTC timestamps           │
 └──────────────────┬──────────────────────┘
                    │ publishes
@@ -330,20 +402,25 @@ Manifest V3 constraints make a pure client-side extension fragile:
 
 ## 8. Build Plan
 
-### Phase 0 — Core data asset (≈1 weekend)
+> **Status 2026-07-28: Phases 0–3 are built, tested and live.** The feed
+> publishes 167 events, both ICS variants are subscribable, and the MV3
+> extension is complete pending store submission (screenshots, $5 registration,
+> permission justifications). See the repo README and `extension/README.md`.
+
+### Phase 0 — Core data asset (≈1 weekend) — ✅ DONE
 Build the Python ingestion job that outputs a normalized JSON for the next 12 months:
 - FOMC meetings + SEP dates (hand-curated from federalreserve.gov, with scrape as check)
-- FRED `releases/dates` for IDs 50, 10, 46, 53, 54 (with `include_release_dates_with_no_data=true`)
-- TreasuryDirect XML for auction schedule and quarterly refunding dates
+- FRED `release/dates` for the nine releases in §1.2, resolved by name (with `include_release_dates_with_no_data=true`)
+- TreasuryDirect JSON for auction schedule; quarterly refunding dates computed
 - Computed CME NQ/ES/MNQ/MES roll dates, expiration dates, and quad-witching dates
 - All normalized to UTC timestamps with event metadata and generic impact tags
 
 **This JSON is the crown jewel.** Everything else is a consumer of it.
 
-### Phase 1 — ICS feed (≈1 additional day)
+### Phase 1 — ICS feed (≈1 additional day) — ✅ DONE
 Generate a `.ics` file from the normalized JSON using the Python `icalendar` library. Publish to GitHub Pages. Share the subscribe link to validate demand before investing in the extension.
 
-### Phase 2 — MV3 Chrome extension (≈2–3 weeks)
+### Phase 2 — MV3 Chrome extension (≈2–3 weeks) — ✅ BUILT, not yet submitted
 - React popup with upcoming events list, timezone selector, and event detail view
 - `chrome.alarms` + notification API for advance warnings (e.g., 30 min and 5 min before each event)
 - Fetch from GitHub Pages JSON; cache in `chrome.storage`
@@ -351,7 +428,7 @@ Generate a `.ics` file from the normalized JSON using the Python `icalendar` lib
 - Include disclaimer on every view
 - Submit to Chrome Web Store
 
-### Phase 3 — Expansion
+### Phase 3 — Expansion — ✅ typical-move context done; rest outstanding
 - Computed "typical move" educational context (from primary price data)
 - PWA/web dashboard from the same backend
 - Discord/Slack webhook alerts
@@ -374,11 +451,16 @@ Generate a `.ics` file from the normalized JSON using the Python `icalendar` lib
 
 ## 9. Caveats
 
-- The "typical move" statistics cited are from a single analyst's published analysis over a limited ~12-event window. Treat as illustrative; recompute from primary price data before publishing in-product.
+- ~~The "typical move" statistics cited are from a single analyst's published
+  analysis over a limited ~12-event window.~~ **Done 2026-07-28** — recomputed
+  from ten years of primary data; the original figures did not survive and were
+  removed from §2. Recomputed monthly by `.github/workflows/typical_moves.yml`.
 - Aggregator free-tier limits and redistribution terms change frequently — re-verify each provider's ToS at build time (especially Finnhub's economic-calendar gating and Trading Economics' distribution pricing).
 - FRED release-date coverage depends on upstream sources reporting to FRED. FRED notes that "release dates are published by data sources and do not necessarily represent when data will be available." Always cross-check FOMC and Treasury dates against primary government sites.
 - The publisher's-exclusion analysis is general information, not legal advice. If you monetize heavily or add anything resembling personalized signals, consult a securities attorney.
 
 ---
 
-*Last updated: July 2026. Research conducted for the Market Calendar Chrome Extension project.*
+*Originally researched July 2026. Corrected 2026-07-28 against what the
+implementation actually found — see the ⚠️ markers in §1.2, §1.3 and §2 for
+claims that did not survive contact with the live sources.*
