@@ -52,8 +52,9 @@ Icons are generated, not hand-drawn — regenerate with
 - Event detail view: click any event for the full note, source-specific
   metadata (contract code, CUSIP, GDP estimate, meeting span…) and the time in
   your zone, Eastern and UTC. Escape or ← returns to the list
-- Options page (⚙ in the popup): timezone override, minimum impact,
-  notification toggle and offsets, and per-event-type hiding
+- Options page (⚙ in the popup): timezone override, separate list and
+  notification impact thresholds, notification toggle and offsets, and
+  per-event-type hiding
 - Disclaimer and FRED attribution on both the popup and the options page
 
 ## Preferences
@@ -121,9 +122,16 @@ not bundled in the extension.
 - Screenshots (1280×800 or 640×400) — needs a human at a browser
 - $5 developer registration
 - Paste the permission justifications into the dashboard
-- **Nothing has run in a real browser yet.** Every test here covers pure
-  functions; no `chrome.*` call has executed. Load it unpacked and watch the
-  service worker console before submitting.
+### Verified in a real browser
+
+Loaded unpacked 2026-07-28. The service worker logged
+`[compass] refreshed; 18 notification(s) scheduled`, which confirms the feed
+fetch, both storage areas, `chrome.alarms.create`, and badge painting (it is
+awaited before that line). That load is also what surfaced the view/notify
+pref coupling, since 18 alarms is the `low` threshold rather than the default.
+
+Still unexercised: popup, options and detail rendering, and whether a
+notification actually displays with its buttons.
 
 **Vanilla JS is settled** — decided 2026-07-28, recorded in `docs/RESEARCH.md`
 §4.4, which originally specified React. Revisit only if the UI grows enough
