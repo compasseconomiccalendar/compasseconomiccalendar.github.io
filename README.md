@@ -171,6 +171,38 @@ reads as an unpublished schedule rather than missing data:
 **Consumers should read `coverage` before rendering a date range.** A month
 past a family's `confirmed_through` is not empty — it is unpublished.
 
+### Typical-move context
+
+`ingestion/build_typical_moves.py` computes, from ten years of FRED daily
+index history, how much SPX and NDX actually moved on each kind of event day.
+`data/typical_moves.json` is regenerated monthly by its own workflow, and
+`build_calendar.py` attaches a compact `typical_move` to each event.
+
+**The ratio to baseline is the number that matters**, not the raw percentage.
+A typical SPX day moves 0.49% (median), so "CPI day moves 0.51%" means CPI day
+is an ordinary day. Ratios are computed on medians because the baseline *mean*
+is inflated by a few crisis sessions unrelated to any event.
+
+Measured over the trailing 3-year window:
+
+| Event | Ratio | Shown? |
+|---|---|---|
+| Employment Situation | 1.69× | ✅ badge |
+| FOMC statement | 1.49× | ✅ badge |
+| Monthly OPEX | 1.40× | ✅ badge |
+| CPI | 1.20× | — |
+| GDP | 0.86× | — |
+
+A number is only surfaced at **≥1.25× or ≤0.85×**. Everything else says it
+moves about as much as a normal day, rather than presenting 1.02× as insight.
+Event types with fewer than `--min-sample` observations are dropped entirely.
+
+Only aggregates are published — means, medians, percentiles, counts. No price
+series is written out; the FRED index series carry an S&P Dow Jones copyright
+note (§1.2 of the research doc) restricting redistribution of the series, not
+of facts derived from it. A test asserts the output keys stay inside that
+allowlist.
+
 ### BEA enrichment
 
 FRED release 53 reports all three GDP estimates under one name, so the advance
