@@ -20,9 +20,22 @@
     </div>
   </header>
 
-  <div id="banner" class="banner" hidden></div>
-  <ul id="events" class="events"></ul>
-  <p id="empty" class="empty" hidden></p>
+  <div id="list-view">
+    <div id="banner" class="banner" hidden></div>
+    <ul id="events" class="events"></ul>
+    <p id="empty" class="empty" hidden></p>
+  </div>
+
+  <section id="detail-view" class="detail" hidden>
+    <button id="back" class="back">← All events</button>
+    <h2 id="detail-title"></h2>
+    <dl id="detail-times" class="times"></dl>
+    <p id="detail-note" class="detail-note"></p>
+    <dl id="detail-rows" class="rows"></dl>
+    <a id="detail-source" class="verify" target="_blank" rel="noreferrer"></a>
+    <a id="detail-primary" class="verify secondary" target="_blank" rel="noreferrer" hidden></a>
+    <p id="detail-attribution" class="legal" hidden></p>
+  </section>
 
   <footer>
     <p id="status" class="status"></p>

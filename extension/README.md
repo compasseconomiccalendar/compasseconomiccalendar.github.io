@@ -37,6 +37,9 @@ Icons are generated, not hand-drawn — regenerate with
   against the official source
 - Popup lists upcoming events with an impact filter, and surfaces the feed's
   `coverage` warnings so an unpublished date range does not read as an empty one
+- Event detail view: click any event for the full note, source-specific
+  metadata (contract code, CUSIP, GDP estimate, meeting span…) and the time in
+  your zone, Eastern and UTC. Escape or ← returns to the list
 - Options page (⚙ in the popup): timezone override, minimum impact,
   notification toggle and offsets, and per-event-type hiding
 - Disclaimer and FRED attribution on both the popup and the options page
@@ -69,7 +72,6 @@ calls and no clock reads — which is what makes it testable under plain node.
 
 ## Not done yet
 
-- Event detail view (the popup links out to `source_url` instead)
 - Store listing: privacy policy URL, screenshots, permission justifications
 
 **Vanilla JS is settled** — decided 2026-07-28, recorded in `docs/RESEARCH.md`
