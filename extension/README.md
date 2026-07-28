@@ -32,12 +32,29 @@ Icons are generated, not hand-drawn — regenerate with
 - Fetches and caches the feed in `chrome.storage.local`, using an ETag so an
   unchanged feed costs a 304
 - Refresh alarm every 12h, plus manual refresh from the popup
-- Advance notifications at 30 and 5 minutes; clicking one opens the event's
-  `source_url` so the time can be verified against the official source
-- Popup lists upcoming events in the viewer's local timezone with an impact
-  filter, and surfaces the feed's `coverage` warnings so an unpublished date
-  range does not read as an empty one
-- Disclaimer and FRED attribution on the popup
+- Advance notifications at configurable offsets (30 and 5 minutes by default);
+  clicking one opens the event's `source_url` so the time can be verified
+  against the official source
+- Popup lists upcoming events with an impact filter, and surfaces the feed's
+  `coverage` warnings so an unpublished date range does not read as an empty one
+- Options page (⚙ in the popup): timezone override, minimum impact,
+  notification toggle and offsets, and per-event-type hiding
+- Disclaimer and FRED attribution on both the popup and the options page
+
+## Preferences
+
+Stored in `chrome.storage.sync`, so they follow a signed-in Chrome profile.
+
+| Pref | Default | Notes |
+|---|---|---|
+| `timeZone` | `null` | `null` uses the browser zone; otherwise an IANA name such as `America/Denver` |
+| `minImpact` | `medium` | Applies to the popup list *and* to notifications |
+| `alarmOffsets` | `[30, 5]` | Minutes before the event, up to four |
+| `notificationsEnabled` | `true` | |
+| `hiddenTypes` | `[]` | Event types removed from the list and never notified |
+
+Saving from the options page messages the service worker to rebuild its alarm
+schedule immediately, rather than waiting for the next 12-hour refresh.
 
 ## Design notes
 
@@ -52,10 +69,9 @@ calls and no clock reads — which is what makes it testable under plain node.
 
 ## Not done yet
 
-- Options page (offsets, hidden event types, timezone override)
-- Timezone selector in the popup (currently always the browser's zone)
-- Event detail view
+- Event detail view (the popup links out to `source_url` instead)
 - Store listing: privacy policy URL, screenshots, permission justifications
-- Decide whether to keep vanilla JS or move the popup to React
-  (`docs/RESEARCH.md` §4.4 assumes React; there is currently no build step to
-  support it)
+
+**Vanilla JS is settled** — decided 2026-07-28, recorded in `docs/RESEARCH.md`
+§4.4, which originally specified React. Revisit only if the UI grows enough
+state to justify a build step.

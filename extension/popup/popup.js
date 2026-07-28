@@ -5,7 +5,7 @@
  * string is ever parsed as markup.
  */
 
-import { coverageGaps, upcomingEvents } from "../src/filters.js";
+import { coverageGaps, resolveTimeZone, upcomingEvents } from "../src/filters.js";
 import { getCached, getPrefs, setPrefs } from "../src/store.js";
 
 const VIEW_HORIZON_MS = 90 * 24 * 3600 * 1000;
@@ -18,18 +18,29 @@ const elements = {
   status: document.getElementById("status"),
   impact: document.getElementById("impact"),
   refresh: document.getElementById("refresh"),
+  options: document.getElementById("options"),
 };
 
-const dayFormat = new Intl.DateTimeFormat(undefined, {
-  weekday: "short",
-  month: "short",
-  day: "numeric",
-});
-const timeFormat = new Intl.DateTimeFormat(undefined, {
-  hour: "numeric",
-  minute: "2-digit",
-  timeZoneName: "short",
-});
+// Rebuilt on each render because the zone is a saved preference, not a
+// constant (RESEARCH.md section 4.3 calls for a timezone override).
+let dayFormat;
+let timeFormat;
+
+function buildFormatters(timeZonePref) {
+  const timeZone = resolveTimeZone(timeZonePref);
+  dayFormat = new Intl.DateTimeFormat(undefined, {
+    timeZone,
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  });
+  timeFormat = new Intl.DateTimeFormat(undefined, {
+    timeZone,
+    hour: "numeric",
+    minute: "2-digit",
+    timeZoneName: "short",
+  });
+}
 
 function relativeLabel(startMs, now) {
   const minutes = Math.round((startMs - now) / 60_000);
@@ -119,6 +130,7 @@ async function render() {
   ]);
 
   elements.impact.value = prefs.minImpact;
+  buildFormatters(prefs.timeZone);
   renderStatus(fetchedAt, lastError);
   elements.events.replaceChildren();
 
@@ -157,6 +169,10 @@ elements.impact.addEventListener("change", async (domEvent) => {
   await setPrefs({ minImpact: domEvent.target.value });
   await render();
   chrome.runtime.sendMessage({ type: "reschedule" });
+});
+
+elements.options.addEventListener("click", () => {
+  chrome.runtime.openOptionsPage();
 });
 
 elements.refresh.addEventListener("click", async () => {

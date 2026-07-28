@@ -12,7 +12,12 @@ import {
   REFRESH_PERIOD_MINUTES,
   SCHEDULE_HORIZON_HOURS,
 } from "./config.js";
-import { alarmName, parseAlarmName, plannedNotifications } from "./filters.js";
+import {
+  alarmName,
+  parseAlarmName,
+  plannedNotifications,
+  resolveTimeZone,
+} from "./filters.js";
 import { getCached, getPrefs, refreshFeed } from "./store.js";
 
 const HORIZON_MS = SCHEDULE_HORIZON_HOURS * 3600 * 1000;
@@ -66,10 +71,13 @@ async function showNotification(eventId, offsetMinutes) {
   const event = calendar?.events?.find((candidate) => candidate.id === eventId);
   if (!event) return;
 
-  const when = new Date(event.start_utc).toLocaleTimeString(undefined, {
+  const prefs = await getPrefs();
+  const when = new Intl.DateTimeFormat(undefined, {
+    timeZone: resolveTimeZone(prefs.timeZone),
     hour: "numeric",
     minute: "2-digit",
-  });
+    timeZoneName: "short",
+  }).format(new Date(event.start_utc));
 
   await chrome.notifications.create(`compass:${event.id}`, {
     type: "basic",

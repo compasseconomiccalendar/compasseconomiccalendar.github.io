@@ -259,12 +259,23 @@ Manifest V3 constraints make a pure client-side extension fragile:
 
 | Layer | Tech | Rationale |
 |---|---|---|
-| Ingestion job | Python + Pandas + `requests` | Nate's existing skills |
+| Ingestion job | Python + `requests` + `beautifulsoup4` | Nate's existing skills |
 | Static hosting | GitHub Pages or Cloudflare (free) | Zero cost, CORS-controllable |
 | ICS generation | Python `icalendar` library | Simple, no dependencies |
-| Extension popup | React (MV3 manifest) | Nate's existing skills |
+| Extension popup | **Vanilla JS, no build step** (MV3 manifest) | Decided 2026-07-28 — see below |
 | Background logic | `chrome.alarms` + service worker | MV3-compliant |
 | Scheduling | GitHub Actions cron | Free, version-controlled |
+
+> **Decision (2026-07-28): vanilla JS, not React.** This section originally
+> specified React. The built popup renders a filtered list with a couple of
+> controls, which React does not make meaningfully easier, while a bundler
+> would add npm, `node_modules` and a build step to a repo that otherwise has
+> zero JS dependencies. Without a build step, `chrome://extensions → Load
+> unpacked` runs the actual sources, and MV3's remote-code ban is satisfied
+> trivially. Revisit only if the UI grows enough state to justify it.
+>
+> Pandas was likewise dropped from the ingestion job — nothing in it needs a
+> dataframe.
 
 ---
 

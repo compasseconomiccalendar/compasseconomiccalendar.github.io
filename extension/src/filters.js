@@ -115,6 +115,42 @@ export function parseAlarmName(prefix, name) {
 }
 
 /**
+ * Validate a stored timezone preference.
+ *
+ * Returns the zone if usable, or undefined to mean "let the formatter use the
+ * browser's zone". A stored zone can stop being valid if the user's Chrome is
+ * older than the tzdata the name came from, so this never throws.
+ */
+export function resolveTimeZone(preference) {
+  if (!preference) return undefined;
+  try {
+    new Intl.DateTimeFormat(undefined, { timeZone: preference });
+    return preference;
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * Parse a user-entered list of warning offsets, e.g. "30, 5" -> [30, 5].
+ *
+ * Sorted furthest-out first, deduplicated, non-positive and non-numeric
+ * entries dropped. Returns null when nothing usable was entered, so callers
+ * can reject the input rather than silently saving an empty schedule.
+ */
+export function parseOffsets(text, max = 4) {
+  const values = String(text)
+    .split(/[,\s]+/)
+    .filter(Boolean)
+    .map(Number)
+    .filter((value) => Number.isFinite(value) && value > 0)
+    .map(Math.round);
+
+  const unique = [...new Set(values)].sort((a, b) => b - a).slice(0, max);
+  return unique.length ? unique : null;
+}
+
+/**
  * Whether a family's schedule is published far enough to cover `throughMs`.
  *
  * The feed's coverage block distinguishes computed families (complete by

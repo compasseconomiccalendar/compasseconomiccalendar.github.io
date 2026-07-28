@@ -47,5 +47,6 @@ jobs:
             }
             readFileSync(manifest.background.service_worker);
             readFileSync(manifest.action.default_popup);
+            readFileSync(manifest.options_ui.page);
             console.log(`manifest ok (v${manifest.version})`);
           '

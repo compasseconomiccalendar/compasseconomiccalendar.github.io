@@ -22,7 +22,12 @@ export const DEFAULT_PREFS = {
   alarmOffsets: [30, 5],
   notificationsEnabled: true,
   hiddenTypes: [],
+  // null means "use the browser's zone"; otherwise an IANA name such as
+  // "America/Denver" (RESEARCH.md section 4.3 calls for this override).
+  timeZone: null,
 };
+
+export const MAX_ALARM_OFFSETS = 4;
 
 export const REFRESH_ALARM = "compass:refresh";
 export const NOTIFY_PREFIX = "compass:notify:";

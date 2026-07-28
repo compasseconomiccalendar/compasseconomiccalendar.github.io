@@ -17,7 +17,9 @@ import {
   familyOf,
   meetsImpact,
   parseAlarmName,
+  parseOffsets,
   plannedNotifications,
+  resolveTimeZone,
   upcomingEvents,
 } from "../src/filters.js";
 
@@ -112,6 +114,48 @@ test("alarm names round-trip, including ids containing dashes", () => {
     offsetMinutes: 30,
   });
   assert.equal(parseAlarmName("compass:notify:", "compass:refresh"), null);
+});
+
+test("resolveTimeZone accepts valid zones and never throws on bad ones", () => {
+  assert.equal(resolveTimeZone("America/Denver"), "America/Denver");
+  assert.equal(resolveTimeZone("UTC"), "UTC");
+  // null/empty means "use the browser zone", which Intl expresses as undefined.
+  assert.equal(resolveTimeZone(null), undefined);
+  assert.equal(resolveTimeZone(""), undefined);
+  // A stored zone can stop being valid; that must degrade, not throw.
+  assert.equal(resolveTimeZone("Mars/Olympus_Mons"), undefined);
+});
+
+test("resolveTimeZone output actually drives the formatter", () => {
+  const noon = new Date("2026-07-28T18:00:00Z"); // 2pm ET / noon MT
+  const format = (pref) =>
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: resolveTimeZone(pref),
+      hour: "numeric",
+      minute: "2-digit",
+    }).format(noon);
+
+  assert.equal(format("America/Denver"), "12:00 PM");
+  assert.equal(format("America/New_York"), "2:00 PM");
+  assert.equal(format("UTC"), "6:00 PM");
+});
+
+test("parseOffsets normalises user input", () => {
+  assert.deepEqual(parseOffsets("30, 5"), [30, 5]);
+  assert.deepEqual(parseOffsets("5 30"), [30, 5]);
+  // Deduplicated, rounded, sorted furthest-out first.
+  assert.deepEqual(parseOffsets("5, 5, 10.4, 60"), [60, 10, 5]);
+  // Junk and non-positive values are dropped.
+  assert.deepEqual(parseOffsets("30, abc, -5, 0"), [30]);
+  assert.deepEqual(parseOffsets("120 90 60 30 15", 4), [120, 90, 60, 30]);
+});
+
+test("parseOffsets returns null when nothing usable was entered", () => {
+  // Callers must be able to reject rather than silently save an empty schedule.
+  assert.equal(parseOffsets(""), null);
+  assert.equal(parseOffsets("   "), null);
+  assert.equal(parseOffsets("abc"), null);
+  assert.equal(parseOffsets("-5"), null);
 });
 
 test("coverageGaps flags reported families but never computed ones", () => {

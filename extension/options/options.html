@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="options.css">
+<title>Compass Economic Calendar — Options</title>
+</head>
+<body>
+<main>
+  <h1>Compass Economic Calendar</h1>
+  <p class="lede">Settings apply to the popup and to advance notifications.</p>
+
+  <section>
+    <h2>Display</h2>
+
+    <div class="field">
+      <label for="timezone">Timezone</label>
+      <select id="timezone"></select>
+      <p class="hint" id="timezone-hint"></p>
+    </div>
+
+    <div class="field">
+      <label for="impact">Minimum impact</label>
+      <select id="impact">
+        <option value="low">All events</option>
+        <option value="medium">Medium &amp; high</option>
+        <option value="high">High only</option>
+      </select>
+      <p class="hint">Applies to both the popup list and notifications.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Notifications</h2>
+
+    <div class="field checkbox">
+      <input type="checkbox" id="notifications-enabled">
+      <label for="notifications-enabled">Show advance warnings</label>
+    </div>
+
+    <div class="field">
+      <label for="offsets">Warn me this many minutes before</label>
+      <input type="text" id="offsets" inputmode="numeric" placeholder="30, 5">
+      <p class="hint">
+        Comma separated, up to four. Only timed events are eligible — all-day
+        entries like futures roll dates never notify.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Hide event types</h2>
+    <p class="hint">
+      Unchecked types are removed from the popup and never notify. Counts come
+      from the cached feed.
+    </p>
+    <div id="types" class="types"></div>
+  </section>
+
+  <div class="actions">
+    <button id="save" class="primary">Save</button>
+    <button id="reset">Reset to defaults</button>
+    <span id="status" class="status" role="status"></span>
+  </div>
+
+  <footer>
+    <p>
+      For informational and educational purposes only. Not investment advice.
+      Times are subject to change; verify against official sources before
+      trading.
+    </p>
+    <p>
+      This product uses the FRED® API but is not endorsed or certified by the
+      Federal Reserve Bank of St. Louis.
+    </p>
+  </footer>
+</main>
+<script type="module" src="options.js"></script>
+</body>
+</html>
