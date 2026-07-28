@@ -198,7 +198,7 @@ FRED_RELEASES = [
         # arrive under the M3 survey name, which is the full factory orders
         # report. The advance durable goods report lands a couple of days
         # earlier and is not separately scheduled on FRED.
-        "match": r"Manufacturers.{0,3}\s*Shipments, Inventories",
+        "match": r"Shipments, Inventories, and Orders \(M3\)",
         "title": "Factory Orders (M3)",
         "time_et": "10:00",
         "market_impact": "medium",
