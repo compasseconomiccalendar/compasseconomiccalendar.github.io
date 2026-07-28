@@ -1279,7 +1279,14 @@ def typical_move_for(event_type: str, moves: Dict[str, Any]) -> Optional[Dict[st
     if not spx:
         return None
 
-    vix = source.get("VIX")
+    # Realized move uses the trailing window because move size is regime
+    # dependent. The vol measure deliberately does not: VIX percentage changes
+    # are far noisier, so a three-year median swings wildly (n is ~35 there
+    # against ~120 in the full sample), and whether the market prices
+    # uncertainty into a given event type is structural rather than regime
+    # driven. Taking crush from the short window produced an unstable ranking
+    # with retail sales appearing to *raise* VIX.
+    vix = (full or {}).get("VIX") if full else None
     vol = None
     if vix and vix.get("excess_pct") is not None:
         vol = {
@@ -1323,6 +1330,7 @@ def typical_move_for(event_type: str, moves: Dict[str, Any]) -> Optional[Dict[st
         "summary": summary,
         "window": window,
         "sample_start": (period or {}).get("start"),
+        "vol_window": "full",
         "spx": spx,
         "ndx": ndx,
         "vol_crush": vol,
