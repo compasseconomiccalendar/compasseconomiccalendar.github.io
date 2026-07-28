@@ -107,10 +107,16 @@ export function detailRows(event) {
  */
 export function typicalMoveBadge(event) {
   const move = event.typical_move;
-  if (!move?.notable || typeof move.ratio !== "number") return null;
-  return move.ratio >= 1
-    ? `${move.ratio.toFixed(1)}× normal`
-    : "quieter than normal";
+  if (!move?.notable) return null;
+  if (move.move_notable && typeof move.ratio === "number") {
+    return move.ratio >= 1
+      ? `${move.ratio.toFixed(1)}× normal`
+      : "quieter than normal";
+  }
+  // Realized move can be ordinary on a day the market genuinely braced for --
+  // an 8:30am release that spikes pre-open and mean-reverts by the close.
+  if (move.vol_notable) return "vol crush";
+  return null;
 }
 
 /**
@@ -131,6 +137,16 @@ export function typicalMoveDetail(event) {
     rows.push({
       label,
       value: `${stats.median_abs_pct.toFixed(2)}% median move (n=${stats.n})`,
+    });
+  }
+
+  if (move.vol_crush) {
+    const ordinary = move.vol_crush.median_pct - move.vol_crush.excess_pct;
+    rows.push({
+      label: "Implied vol",
+      value:
+        `VIX ${move.vol_crush.median_pct.toFixed(2)}% vs ` +
+        `${ordinary.toFixed(2)}% on an ordinary day (n=${move.vol_crush.n})`,
     });
   }
 

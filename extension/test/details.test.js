@@ -152,9 +152,18 @@ test("formatTimes tolerates an unparseable timestamp", () => {
 });
 
 test("typicalMoveBadge only fires for clearly unusual days", () => {
-  const notable = { ...base, typical_move: { ratio: 1.69, notable: true } };
-  const quiet = { ...base, typical_move: { ratio: 0.82, notable: true } };
-  const ordinary = { ...base, typical_move: { ratio: 1.04, notable: false } };
+  const notable = {
+    ...base,
+    typical_move: { ratio: 1.69, notable: true, move_notable: true },
+  };
+  const quiet = {
+    ...base,
+    typical_move: { ratio: 0.82, notable: true, move_notable: true },
+  };
+  const ordinary = {
+    ...base,
+    typical_move: { ratio: 1.04, notable: false, move_notable: false },
+  };
 
   assert.equal(typicalMoveBadge(notable), "1.7× normal");
   assert.equal(typicalMoveBadge(quiet), "quieter than normal");
@@ -167,7 +176,8 @@ test("typicalMoveDetail always reports sample size", () => {
   const event = {
     ...base,
     typical_move: {
-      ratio: 1.69, notable: true, window: "recent", sample_start: "2023-07-29",
+      ratio: 1.69, notable: true, move_notable: true,
+      window: "recent", sample_start: "2023-07-29",
       summary: "Historically moves about 1.7x as much as a normal day.",
       spx: { median_abs_pct: 0.65, ratio: 1.69, n: 34 },
       ndx: { median_abs_pct: 1.06, ratio: 1.74, n: 34 },
@@ -186,7 +196,8 @@ test("typicalMoveDetail handles a single index and the full-sample fallback", ()
   const event = {
     ...base,
     typical_move: {
-      ratio: 1.0, notable: false, window: "full", sample_start: "2016-07-28",
+      ratio: 1.0, notable: false, move_notable: false,
+      window: "full", sample_start: "2016-07-28",
       summary: "Historically moves about as much as a normal day.",
       spx: { median_abs_pct: 0.49, ratio: 1.0, n: 39 },
       ndx: null,
@@ -197,4 +208,49 @@ test("typicalMoveDetail handles a single index and the full-sample fallback", ()
   assert.equal(detail.notable, false);
   assert.match(detail.window, /Full sample since 2016-07-28/);
   assert.equal(typicalMoveDetail(base), null);
+});
+
+test("an event the market braces for is badged even if it closes quietly", () => {
+  // GDP: realized move below normal, but a clear vol crush. Close-to-close
+  // alone would have hidden it entirely.
+  const gdp = {
+    ...base,
+    typical_move: {
+      ratio: 0.86, notable: true, move_notable: false, vol_notable: true,
+      summary: "Historically moves about as much as a normal day.",
+      spx: { median_abs_pct: 0.50, ratio: 0.86, n: 36 },
+      vol_crush: { median_pct: -1.82, excess_pct: -1.16, n: 134 },
+    },
+  };
+  assert.equal(typicalMoveBadge(gdp), "vol crush");
+
+  const detail = typicalMoveDetail(gdp);
+  const vol = detail.rows.find((row) => row.label === "Implied vol");
+  // The comparison day is derived, so check the arithmetic lands right.
+  assert.match(vol.value, /VIX -1\.82% vs -0\.66% on an ordinary day \(n=134\)/);
+});
+
+test("the realized-move badge wins when both measures fire", () => {
+  const fomc = {
+    ...base,
+    typical_move: {
+      ratio: 1.49, notable: true, move_notable: true, vol_notable: true,
+      summary: "x", spx: { median_abs_pct: 0.8, ratio: 1.49, n: 23 },
+      vol_crush: { median_pct: -3.52, excess_pct: -2.87, n: 44 },
+    },
+  };
+  assert.equal(typicalMoveBadge(fomc), "1.5× normal");
+});
+
+test("no vol data means no implied-vol row", () => {
+  const event = {
+    ...base,
+    typical_move: {
+      ratio: 1.4, notable: true, move_notable: true, vol_notable: false,
+      summary: "x", spx: { median_abs_pct: 0.6, ratio: 1.4, n: 24 },
+      vol_crush: null,
+    },
+  };
+  const detail = typicalMoveDetail(event);
+  assert.ok(!detail.rows.some((row) => row.label === "Implied vol"));
 });

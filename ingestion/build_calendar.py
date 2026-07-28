@@ -1242,6 +1242,12 @@ TYPICAL_MOVES_PATH = REPO_ROOT / "data" / "typical_moves.json"
 NOTABLE_ABOVE = 1.25
 NOTABLE_BELOW = 0.85
 
+# How much more than a normal day's VIX drift counts as the market genuinely
+# pricing uncertainty into this event. Close-to-close return cannot see an
+# 8:30am release that moves the market pre-open and mean-reverts by the close;
+# this can, so an event qualifies as notable on either measure.
+VOL_CRUSH_NOTABLE = -1.0
+
 
 def _index_stats(entry: Dict[str, Any], index: str) -> Optional[Dict[str, Any]]:
     stats = entry.get(index)
@@ -1273,14 +1279,35 @@ def typical_move_for(event_type: str, moves: Dict[str, Any]) -> Optional[Dict[st
     if not spx:
         return None
 
+    vix = source.get("VIX")
+    vol = None
+    if vix and vix.get("excess_pct") is not None:
+        vol = {
+            "median_pct": vix["median_pct"],
+            "excess_pct": vix["excess_pct"],
+            "n": vix["n"],
+        }
+
     ratio = spx["ratio"]
-    notable = ratio >= NOTABLE_ABOVE or ratio <= NOTABLE_BELOW
+    move_notable = ratio >= NOTABLE_ABOVE or ratio <= NOTABLE_BELOW
+    vol_notable = bool(vol and vol["excess_pct"] <= VOL_CRUSH_NOTABLE)
+    notable = move_notable or vol_notable
+
     if ratio >= NOTABLE_ABOVE:
         summary = f"Historically moves about {ratio:.1f}x as much as a normal day."
     elif ratio <= NOTABLE_BELOW:
         summary = f"Historically moves less than a normal day ({ratio:.1f}x)."
     else:
         summary = "Historically moves about as much as a normal day."
+
+    # An event can be quiet in hindsight and still be one the market braced
+    # for. Saying only the first half would be misleading.
+    if vol_notable:
+        summary += (
+            f" Implied volatility usually drops into it "
+            f"({vol['median_pct']:.1f}% vs {vol['median_pct'] - vol['excess_pct']:.1f}% "
+            "on an ordinary day), so the market prices real uncertainty here."
+        )
 
     period = (
         moves.get("recent_window", {}).get("sample_period")
@@ -1291,11 +1318,14 @@ def typical_move_for(event_type: str, moves: Dict[str, Any]) -> Optional[Dict[st
     return {
         "ratio": ratio,
         "notable": notable,
+        "move_notable": move_notable,
+        "vol_notable": vol_notable,
         "summary": summary,
         "window": window,
         "sample_start": (period or {}).get("start"),
         "spx": spx,
         "ndx": ndx,
+        "vol_crush": vol,
     }
 
 
@@ -1338,6 +1368,8 @@ def attach_typical_moves(events: List[Dict[str, Any]]) -> Optional[Dict[str, Any
         "method": moves.get("method"),
         "caveat": moves.get("caveat"),
         "baseline": moves.get("baseline"),
+        "vix_baseline": moves.get("vix_baseline"),
+        "vix_source": moves.get("vix_source"),
         "generated_at_utc": moves.get("generated_at_utc"),
     }
 
