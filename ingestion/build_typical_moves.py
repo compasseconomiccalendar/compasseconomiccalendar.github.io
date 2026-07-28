@@ -227,6 +227,23 @@ def collect_event_dates(
     return by_type
 
 
+def restrict(
+    by_type: Dict[str, List[date]],
+    returns_by_index: Dict[str, Dict[date, float]],
+    since: date,
+) -> Tuple[Dict[str, List[date]], Dict[str, Dict[date, float]]]:
+    """Narrow both the events and the price history to a trailing window."""
+    trimmed_types = {
+        event_type: [day for day in days if day >= since]
+        for event_type, days in by_type.items()
+    }
+    trimmed_returns = {
+        index: {day: value for day, value in returns.items() if day >= since}
+        for index, returns in returns_by_index.items()
+    }
+    return trimmed_types, trimmed_returns
+
+
 def build_document(
     by_type: Dict[str, List[date]],
     returns_by_index: Dict[str, Dict[date, float]],
@@ -246,9 +263,17 @@ def build_document(
             # reading of noise.
             if not stats or stats["n"] < min_sample:
                 continue
-            base = baseline[index]["mean_abs_pct"]
+            base_mean = baseline[index]["mean_abs_pct"]
+            base_median = baseline[index]["median_abs_pct"]
             stats["ratio_to_baseline"] = (
-                round(stats["mean_abs_pct"] / base, 2) if base else None
+                round(stats["mean_abs_pct"] / base_mean, 2) if base_mean else None
+            )
+            # The median ratio is the honest headline. Mean absolute move is
+            # dominated by a handful of crisis sessions that had nothing to do
+            # with any scheduled event, which inflates the baseline and so
+            # flatters every event type's ratio downward.
+            stats["ratio_median_to_baseline"] = (
+                round(stats["median_abs_pct"] / base_median, 2) if base_median else None
             )
             entry[index] = stats
         if entry:
@@ -281,6 +306,10 @@ def main() -> int:
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
     parser.add_argument("--years", type=int, default=10, help="years of history")
     parser.add_argument(
+        "--recent-years", type=int, default=3,
+        help="also compute a trailing window of this many years (0 disables)",
+    )
+    parser.add_argument(
         "--min-sample", type=int, default=12,
         help="drop any event type with fewer observations than this",
     )
@@ -312,6 +341,21 @@ def main() -> int:
 
     document = build_document(by_type, returns_by_index, (start, end), args.min_sample)
 
+    # Which events move markets is regime-dependent -- CPI was decisive in 2022
+    # and background noise in 2017 -- so a decade-long average understates the
+    # present. A trailing window makes that visible instead of averaging it away.
+    if args.recent_years:
+        recent_start = end - timedelta(days=int(args.recent_years * 365.25))
+        recent_types, recent_returns = restrict(by_type, returns_by_index, recent_start)
+        recent = build_document(
+            recent_types, recent_returns, (recent_start, end), args.min_sample
+        )
+        document["recent_window"] = {
+            "sample_period": recent["sample_period"],
+            "baseline": recent["baseline"],
+            "by_event_type": recent["by_event_type"],
+        }
+
     args.out.parent.mkdir(parents=True, exist_ok=True)
     with args.out.open("w", encoding="utf-8") as handle:
         json.dump(document, handle, indent=2, ensure_ascii=False)
@@ -322,11 +366,19 @@ def main() -> int:
         base = document["baseline"][index]
         print(f"  baseline {index}: {base['mean_abs_pct']}% mean abs move (n={base['n']})")
     print()
+    recent = document.get("recent_window", {}).get("by_event_type", {})
+    print(f"  {'event':<34} {'idx':<4} {'median':>7} {'ratio':>6} {'recent':>7}  n")
     for event_type, entry in document["by_event_type"].items():
         for index, stats in entry.items():
+            recent_stats = recent.get(event_type, {}).get(index)
+            recent_ratio = (
+                f"{recent_stats['ratio_median_to_baseline']:.2f}x"
+                if recent_stats else "  --"
+            )
             print(
-                f"  {event_type:<34} {index}  {stats['mean_abs_pct']:>5.2f}%  "
-                f"{stats['ratio_to_baseline']:>4}x baseline  (n={stats['n']})"
+                f"  {event_type:<34} {index:<4} {stats['median_abs_pct']:>6.2f}% "
+                f"{stats['ratio_median_to_baseline']:>5.2f}x {recent_ratio:>7}  "
+                f"n={stats['n']}"
             )
     print(f"\n{FRED_ATTRIBUTION}")
     return 0

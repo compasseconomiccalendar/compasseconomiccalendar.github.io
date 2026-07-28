@@ -19,6 +19,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from build_typical_moves import (  # noqa: E402
     build_document,
+    restrict,
     daily_returns,
     moves_for_dates,
     percentile,
@@ -149,14 +150,33 @@ class TestBuildDocument(unittest.TestCase):
         serialised = __import__("json").dumps(document)
         for forbidden in ("observations", "closes", "series"):
             self.assertNotIn(forbidden, serialised)
+        # Deliberate allowlist: publishing only aggregates is what the
+        # licensing position rests on, so a new key must be added here on
+        # purpose rather than slipping through.
         allowed = {
             "n", "mean_abs_pct", "median_abs_pct", "p90_abs_pct",
             "max_abs_pct", "share_up", "ratio_to_baseline",
+            "ratio_median_to_baseline",
         }
         self.assertLessEqual(
             set(document["by_event_type"]["macro_release_cpi"]["SPX"]), allowed
         )
         self.assertLessEqual(set(document["baseline"]["SPX"]), allowed)
+
+
+class TestRestrict(unittest.TestCase):
+    def test_trailing_window_trims_events_and_prices(self):
+        days = [date(2020, 1, 1), date(2025, 1, 1), date(2026, 1, 1)]
+        returns = {day: 1.0 for day in days}
+        trimmed_types, trimmed_returns = restrict(
+            {"macro_release_cpi": days}, {"SPX": returns}, since=date(2024, 1, 1)
+        )
+        self.assertEqual(
+            trimmed_types["macro_release_cpi"], [date(2025, 1, 1), date(2026, 1, 1)]
+        )
+        self.assertEqual(sorted(trimmed_returns["SPX"]), [date(2025, 1, 1), date(2026, 1, 1)])
+        # The baseline must be recomputed from the same window, not carried over.
+        self.assertNotIn(date(2020, 1, 1), trimmed_returns["SPX"])
 
 
 if __name__ == "__main__":
