@@ -22,6 +22,7 @@ import {
   isInProgress,
   isStale,
   meetsImpact,
+  migratePrefs,
   nextBadgeEvent,
   parseAlarmName,
   parseOffsets,
@@ -344,4 +345,42 @@ test("snoozed events are dropped until their snooze expires", () => {
     horizonMs: 72 * HOUR,
   });
   assert.ok(after.some((item) => item.eventId === "a"));
+});
+
+test("prefs migration splits the old single threshold", () => {
+  // A permissive browsing filter must not become a notification threshold --
+  // that is the bug the split exists to fix.
+  const migrated = migratePrefs({ minImpact: "low" });
+  assert.equal(migrated.viewMinImpact, "low");
+  assert.equal(migrated.notifyMinImpact, "medium");
+  assert.equal(migrated.minImpact, undefined);
+});
+
+test("migration never makes notifications noisier than they were", () => {
+  // Someone who had set "high" kept a quiet inbox; do not downgrade them.
+  assert.equal(migratePrefs({ minImpact: "high" }).notifyMinImpact, "high");
+  assert.equal(migratePrefs({ minImpact: "medium" }).notifyMinImpact, "medium");
+  assert.equal(migratePrefs({ minImpact: "low" }).notifyMinImpact, "medium");
+});
+
+test("migration leaves already-split prefs alone", () => {
+  const already = { viewMinImpact: "low", notifyMinImpact: "high" };
+  const migrated = migratePrefs(already);
+  assert.equal(migrated.viewMinImpact, "low");
+  assert.equal(migrated.notifyMinImpact, "high");
+  // A stale legacy key alongside new ones must not override them.
+  const both = migratePrefs({ ...already, minImpact: "low" });
+  assert.equal(both.viewMinImpact, "low");
+  assert.equal(both.notifyMinImpact, "high");
+  assert.equal(both.minImpact, undefined);
+});
+
+test("migration fills defaults and preserves unrelated prefs", () => {
+  const migrated = migratePrefs({ timeZone: "America/Denver" });
+  assert.equal(migrated.viewMinImpact, "medium");
+  assert.equal(migrated.notifyMinImpact, "medium");
+  assert.equal(migrated.timeZone, "America/Denver");
+  assert.deepEqual(migrated.alarmOffsets, [30, 5]);
+  // An empty store yields the defaults untouched.
+  assert.deepEqual(migratePrefs({}), migratePrefs(undefined));
 });

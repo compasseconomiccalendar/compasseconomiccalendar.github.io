@@ -203,7 +203,7 @@ async function render() {
     getPrefs(),
   ]);
 
-  elements.impact.value = prefs.minImpact;
+  elements.impact.value = prefs.viewMinImpact;
   buildFormatters(prefs.timeZone);
   renderStatus(fetchedAt, lastError);
   renderChips();
@@ -226,7 +226,7 @@ async function render() {
 
   const query = {
     now,
-    minImpact: prefs.minImpact,
+    minImpact: prefs.viewMinImpact,
     hiddenTypes: prefs.hiddenTypes,
     horizonMs: VIEW_HORIZON_MS,
     graceMs: IN_PROGRESS_GRACE_MS,
@@ -347,10 +347,12 @@ elements.options.addEventListener("click", () => {
   chrome.runtime.openOptionsPage();
 });
 
+// View-only: this deliberately does not touch the notification threshold or
+// reschedule anything. Changing what you are looking at must not change what
+// interrupts you.
 elements.impact.addEventListener("change", async (domEvent) => {
-  await setPrefs({ minImpact: domEvent.target.value });
+  await setPrefs({ viewMinImpact: domEvent.target.value });
   await render();
-  chrome.runtime.sendMessage({ type: "reschedule" });
 });
 
 elements.refresh.addEventListener("click", async () => {

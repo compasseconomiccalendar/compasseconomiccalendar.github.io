@@ -21,6 +21,7 @@ const elements = {
   timezone: document.getElementById("timezone"),
   timezoneHint: document.getElementById("timezone-hint"),
   impact: document.getElementById("impact"),
+  notifyImpact: document.getElementById("notify-impact"),
   notifications: document.getElementById("notifications-enabled"),
   allDayEnabled: document.getElementById("allday-enabled"),
   allDayHour: document.getElementById("allday-hour"),
@@ -124,7 +125,8 @@ function flash(message, isError = false) {
 }
 
 async function load(prefs) {
-  elements.impact.value = prefs.minImpact;
+  elements.impact.value = prefs.viewMinImpact;
+  elements.notifyImpact.value = prefs.notifyMinImpact;
   elements.notifications.checked = prefs.notificationsEnabled;
   elements.allDayEnabled.checked = prefs.allDayNotifications;
   elements.allDayHour.value = String(prefs.allDayHour);
@@ -154,7 +156,8 @@ elements.save.addEventListener("click", async () => {
     allDayNotifications: elements.allDayEnabled.checked,
     allDayHour,
     timeZone: elements.timezone.value || null,
-    minImpact: elements.impact.value,
+    viewMinImpact: elements.impact.value,
+    notifyMinImpact: elements.notifyImpact.value,
     notificationsEnabled: elements.notifications.checked,
     alarmOffsets: offsets,
     hiddenTypes: hiddenTypesFromForm(),

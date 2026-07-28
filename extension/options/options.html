@@ -20,13 +20,16 @@
     </div>
 
     <div class="field">
-      <label for="impact">Minimum impact</label>
+      <label for="impact">Show events</label>
       <select id="impact">
         <option value="low">All events</option>
         <option value="medium">Medium &amp; high</option>
         <option value="high">High only</option>
       </select>
-      <p class="hint">Applies to both the popup list and notifications.</p>
+      <p class="hint">
+        Filters the popup list only. This is the same control as the dropdown
+        in the popup, and it never changes what you are notified about.
+      </p>
     </div>
   </section>
 
@@ -36,6 +39,20 @@
     <div class="field checkbox">
       <input type="checkbox" id="notifications-enabled">
       <label for="notifications-enabled">Show advance warnings</label>
+    </div>
+
+    <div class="field">
+      <label for="notify-impact">Notify me about</label>
+      <select id="notify-impact">
+        <option value="low">All events</option>
+        <option value="medium">Medium &amp; high</option>
+        <option value="high">High only</option>
+      </select>
+      <p class="hint">
+        Set independently of the list filter. At “all events” every Treasury
+        bill auction interrupts you, and the 20-alarm ceiling starts dropping
+        the furthest-out warnings.
+      </p>
     </div>
 
     <div class="field">

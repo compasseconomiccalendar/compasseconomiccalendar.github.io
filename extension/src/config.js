@@ -18,7 +18,11 @@ export const STORAGE_KEYS = {
 };
 
 export const DEFAULT_PREFS = {
-  minImpact: "medium",
+  // Two separate thresholds on purpose. Filtering what you are *looking at*
+  // must never change what interrupts you -- browsing at "All events" used to
+  // silently subscribe you to every bill auction.
+  viewMinImpact: "medium",
+  notifyMinImpact: "medium",
   // Matches the advance-warning cadence in RESEARCH.md section Phase 2.
   alarmOffsets: [30, 5],
   notificationsEnabled: true,

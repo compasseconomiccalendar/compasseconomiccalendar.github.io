@@ -5,11 +5,12 @@
  * module scope -- every read goes to chrome.storage.local, which survives.
  */
 
-import { DEFAULT_PREFS, FEED_URL, STORAGE_KEYS } from "./config.js";
+import { FEED_URL, STORAGE_KEYS } from "./config.js";
+import { migratePrefs } from "./filters.js";
 
 export async function getPrefs() {
   const stored = await chrome.storage.sync.get(STORAGE_KEYS.prefs);
-  return { ...DEFAULT_PREFS, ...(stored[STORAGE_KEYS.prefs] ?? {}) };
+  return migratePrefs(stored[STORAGE_KEYS.prefs] ?? {});
 }
 
 export async function setPrefs(patch) {

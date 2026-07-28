@@ -116,7 +116,7 @@ async function rescheduleNotifications() {
   const planned = plannedNotifications(calendar.events, {
     now: Date.now(),
     offsets: prefs.alarmOffsets,
-    minImpact: prefs.minImpact,
+    minImpact: prefs.notifyMinImpact,
     hiddenTypes: prefs.hiddenTypes,
     horizonMs: HORIZON_MS,
     max: MAX_SCHEDULED_ALARMS,

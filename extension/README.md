@@ -63,7 +63,8 @@ Stored in `chrome.storage.sync`, so they follow a signed-in Chrome profile.
 | Pref | Default | Notes |
 |---|---|---|
 | `timeZone` | `null` | `null` uses the browser zone; otherwise an IANA name such as `America/Denver` |
-| `minImpact` | `medium` | Applies to the popup list *and* to notifications |
+| `viewMinImpact` | `medium` | Filters the popup list only |
+| `notifyMinImpact` | `medium` | Notification threshold, set independently |
 | `alarmOffsets` | `[30, 5]` | Minutes before the event, up to four |
 | `notificationsEnabled` | `true` | |
 | `hiddenTypes` | `[]` | Event types removed from the list and never notified |

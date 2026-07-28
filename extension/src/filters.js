@@ -6,7 +6,39 @@
  * without losing state, and so this can be tested under plain node.
  */
 
+import { DEFAULT_PREFS } from "./config.js";
+
 export const IMPACT_RANK = { low: 0, medium: 1, high: 2 };
+
+/**
+ * Merge stored preferences over the defaults, migrating the old schema.
+ *
+ * Up to v0.1.0 a single `minImpact` drove both the popup list and the
+ * notification threshold, so changing the view filter silently changed what
+ * you were notified about. Splitting them needs a migration rule for the
+ * stored value:
+ *
+ *   - the view threshold inherits it directly; that was its visible meaning
+ *   - the notify threshold takes the *stricter* of it and the default, so a
+ *     migration can never make notifications noisier than they already were,
+ *     and never carries a permissive browsing filter into interruptions
+ */
+export function migratePrefs(stored = {}) {
+  const merged = { ...DEFAULT_PREFS, ...stored };
+  const legacy = stored.minImpact;
+
+  if (legacy !== undefined) {
+    if (stored.viewMinImpact === undefined) merged.viewMinImpact = legacy;
+    if (stored.notifyMinImpact === undefined) {
+      const legacyRank = IMPACT_RANK[legacy] ?? 0;
+      const defaultRank = IMPACT_RANK[DEFAULT_PREFS.notifyMinImpact];
+      merged.notifyMinImpact =
+        legacyRank > defaultRank ? legacy : DEFAULT_PREFS.notifyMinImpact;
+    }
+  }
+  delete merged.minImpact;
+  return merged;
+}
 
 /** Mirrors the coverage families emitted by ingestion/build_calendar.py. */
 export function familyOf(eventType) {
