@@ -73,16 +73,27 @@ def build_description(event: Dict[str, Any], document: Dict[str, Any]) -> str:
 
 
 def build_calendar(
-    document: Dict[str, Any], min_impact: str, alarm_minutes: List[int]
+    document: Dict[str, Any],
+    min_impact: str,
+    alarm_minutes: List[int],
+    calname: str = "Compass Economic Calendar",
+    uid_suffix: str = "",
 ) -> Calendar:
+    scope = (
+        "US macro releases, FOMC, Treasury auctions and CME futures roll dates."
+        if min_impact == "low"
+        else f"Only {min_impact}-impact events: FOMC, CPI, jobs, PCE, advance GDP "
+             "and quad witching."
+    )
+
     calendar = Calendar()
     calendar.add("prodid", PRODID)
     calendar.add("version", "2.0")
     calendar.add("calscale", "GREGORIAN")
     calendar.add("method", "PUBLISH")
-    calendar.add("x-wr-calname", "Compass Economic Calendar")
+    calendar.add("x-wr-calname", calname)
     calendar.add("x-wr-timezone", "UTC")
-    calendar.add("x-wr-caldesc", f"US macro releases, FOMC, Treasury auctions and CME futures roll dates. {document['disclaimer']}")
+    calendar.add("x-wr-caldesc", f"{scope} {document['disclaimer']}")
     # Ask subscribing clients to re-poll twice a day. These must serialize as
     # ISO durations (PT12H), which means wrapping them in vDuration explicitly.
     calendar.add(
@@ -101,7 +112,11 @@ def build_calendar(
             continue
 
         entry = Event()
-        entry.add("uid", f"{event['id']}@{UID_DOMAIN}")
+        # The suffix keeps the filtered feed's UIDs distinct from the full
+        # feed's, so subscribing to both does not collide in clients that
+        # dedupe by UID across calendars.
+        local_part = f"{event['id']}-{uid_suffix}" if uid_suffix else event["id"]
+        entry.add("uid", f"{local_part}@{UID_DOMAIN}")
         entry.add("dtstamp", stamp)
         entry.add("summary", event["title"])
         entry.add("description", build_description(event, document))
@@ -146,6 +161,14 @@ def main() -> int:
         "--alarm-minutes", type=int, action="append", default=[],
         help="add a reminder N minutes before each timed event (repeatable)",
     )
+    parser.add_argument(
+        "--calname", default="Compass Economic Calendar",
+        help="display name shown by subscribing calendar clients",
+    )
+    parser.add_argument(
+        "--uid-suffix", default="",
+        help="suffix event UIDs, so parallel feeds stay distinct",
+    )
     args = parser.parse_args()
 
     if not args.source.exists():
@@ -158,7 +181,9 @@ def main() -> int:
     with args.source.open(encoding="utf-8") as handle:
         document = json.load(handle)
 
-    calendar = build_calendar(document, args.min_impact, args.alarm_minutes)
+    calendar = build_calendar(
+        document, args.min_impact, args.alarm_minutes, args.calname, args.uid_suffix
+    )
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     with args.out.open("wb") as handle:

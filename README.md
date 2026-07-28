@@ -40,9 +40,21 @@ architecture research behind this design.
 
 - Landing page: <https://compasseconomiccalendar.github.io/compasseconomiccalendar/>
 - JSON: <https://compasseconomiccalendar.github.io/compasseconomiccalendar/calendar.json>
-- ICS: <https://compasseconomiccalendar.github.io/compasseconomiccalendar/compass_calendar.ics>
+- ICS, full: <https://compasseconomiccalendar.github.io/compasseconomiccalendar/compass_calendar.ics>
+- ICS, high impact only: <https://compasseconomiccalendar.github.io/compasseconomiccalendar/compass_calendar_high_impact.ics>
 
-Subscribe to the ICS URL in Google Calendar, Apple Calendar or Outlook.
+Subscribe to either ICS URL in Google Calendar, Apple Calendar or Outlook. The
+high-impact feed carries FOMC, CPI, jobs, PCE, advance GDP and quad witching —
+about half the events, without the routine bill auctions. The two feeds use
+distinct event UIDs, so subscribing to both is safe.
+
+**Google Calendar:** desktop only — sidebar → **Other calendars → + → From
+URL**. Google refreshes subscriptions on its own schedule (typically 8–24
+hours) and ignores the `REFRESH-INTERVAL:PT12H` in the file. **Apple
+Calendar:** use the same URL with `webcal://` and set auto-refresh to Daily.
+
+Neither feed ships reminders by default. Set them per-calendar in your client,
+or regenerate with `--alarm-minutes 30 --alarm-minutes 5` to bake them in.
 
 ---
 
@@ -73,8 +85,12 @@ python ingestion/build_calendar.py --skip-fred
 # Then render the calendar feed
 python ingestion/generate_ics.py
 
-# High-impact-only variant
-python ingestion/generate_ics.py --min-impact high --out output/high_impact.ics
+# High-impact-only variant (as published)
+python ingestion/generate_ics.py \
+  --min-impact high \
+  --out output/compass_calendar_high_impact.ics \
+  --calname "Compass Economic Calendar (High Impact)" \
+  --uid-suffix high
 
 # With reminders baked into the ICS
 python ingestion/generate_ics.py --alarm-minutes 30 --alarm-minutes 5

@@ -46,13 +46,22 @@ jobs:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: python ingestion/build_calendar.py
 
-      - name: Generate compass_calendar.ics
-        run: python ingestion/generate_ics.py
+      - name: Generate ICS feeds
+        run: |
+          python ingestion/generate_ics.py
+          python ingestion/generate_ics.py \
+            --min-impact high \
+            --out output/compass_calendar_high_impact.ics \
+            --calname "Compass Economic Calendar (High Impact)" \
+            --uid-suffix high
 
       - name: Assemble the Pages site
         run: |
           mkdir -p site
-          cp output/calendar.json output/compass_calendar.ics site/
+          cp output/calendar.json \
+             output/compass_calendar.ics \
+             output/compass_calendar_high_impact.ics \
+             site/
           cp web/index.html site/index.html
           touch site/.nojekyll
 
@@ -62,7 +71,9 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           # output/ is gitignored for local builds, so force-add the published
           # artifacts. Once tracked, subsequent runs update them normally.
-          git add -f output/calendar.json output/compass_calendar.ics
+          git add -f output/calendar.json \
+                     output/compass_calendar.ics \
+                     output/compass_calendar_high_impact.ics
           if git diff --staged --quiet; then
             echo "No calendar changes to commit."
           else
