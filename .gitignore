@@ -222,3 +222,6 @@ __marimo__/
 # published feed is versioned, but local builds stay out of the way.
 output/*
 !output/.gitkeep
+
+# Store upload artifacts (regenerate with scripts/package_extension.py)
+dist/

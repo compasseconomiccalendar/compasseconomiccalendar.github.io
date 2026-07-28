@@ -28,6 +28,12 @@ jobs:
       - name: Run tests
         run: node --test 'test/*.test.js'
 
+      # Catches a source file that imports something the package would omit,
+      # or a remote script sneaking into the HTML.
+      - name: Validate the store package
+        working-directory: .
+        run: python3 scripts/package_extension.py --check
+
       - name: Check the manifest parses and matches the checked-in version
         run: |
           node --input-type=module -e '

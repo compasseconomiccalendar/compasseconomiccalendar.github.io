@@ -65,7 +65,7 @@ def render(size: int) -> list:
     return rows
 
 
-def write_png(path: Path, size: int, rows: list) -> None:
+def write_png(path: Path, width: int, height: int, rows: list) -> None:
     def chunk(tag: bytes, data: bytes) -> bytes:
         return (
             struct.pack(">I", len(data))
@@ -75,7 +75,7 @@ def write_png(path: Path, size: int, rows: list) -> None:
         )
 
     raw = b"".join(b"\x00" + row for row in rows)  # filter type 0 per scanline
-    header = struct.pack(">IIBBBBB", size, size, 8, 6, 0, 0, 0)  # 8-bit RGBA
+    header = struct.pack(">IIBBBBB", width, height, 8, 6, 0, 0, 0)  # 8-bit RGBA
     path.write_bytes(
         b"\x89PNG\r\n\x1a\n"
         + chunk(b"IHDR", header)
@@ -88,7 +88,7 @@ def main() -> None:
     out_dir = Path(__file__).resolve().parent
     for size in SIZES:
         target = out_dir / f"icon{size}.png"
-        write_png(target, size, render(size))
+        write_png(target, size, size, render(size))
         print(f"wrote {target.name} ({target.stat().st_size} bytes)")
 
 

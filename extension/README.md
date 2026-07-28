@@ -98,11 +98,31 @@ collected in any category, **no** sale or transfer to third parties, **no**
 use for purposes unrelated to core functionality, **no** use for
 creditworthiness or lending.
 
+### Building the upload zip
+
+```bash
+python scripts/package_extension.py           # writes dist/compass-economic-calendar-vX.Y.Z.zip
+python scripts/package_extension.py --check   # validate only; also runs in CI
+```
+
+Development files are excluded — `package.json`, `test/`, the icon generators
+and the promo tile. Before zipping it checks that every file the manifest
+references is present, that every relative import resolves to a packaged file,
+and that no HTML loads a remote script or stylesheet (MV3 forbids remote code,
+and it is a known rejection reason).
+
+The 440×280 promo tile is at `icons/promo_440x280.png`, regenerated with
+`python icons/generate_promo.py`. It is uploaded to the listing separately,
+not bundled in the extension.
+
 ### Not done yet
 
-- Screenshots (1280×800 or 640×400) and a 440×280 promo tile
+- Screenshots (1280×800 or 640×400) — needs a human at a browser
 - $5 developer registration
 - Paste the permission justifications into the dashboard
+- **Nothing has run in a real browser yet.** Every test here covers pure
+  functions; no `chrome.*` call has executed. Load it unpacked and watch the
+  service worker console before submitting.
 
 **Vanilla JS is settled** — decided 2026-07-28, recorded in `docs/RESEARCH.md`
 §4.4, which originally specified React. Revisit only if the UI grows enough
