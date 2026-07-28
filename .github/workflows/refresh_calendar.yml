@@ -1,0 +1,85 @@
+name: Refresh calendar
+
+on:
+  schedule:
+    # 13:00 UTC every Sunday = 6:00am MST. GitHub's cron is always UTC and does
+    # not follow DST, so this lands at 7:00am MDT for the summer half of the
+    # year. The feed only needs to be fresh, not punctual.
+    - cron: "0 13 * * 0"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "ingestion/**"
+      - "data/overrides.json"
+      - ".github/workflows/refresh_calendar.yml"
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: refresh-calendar
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        run: python -m unittest discover -s ingestion -p 'test_*.py' -v
+
+      - name: Build calendar.json
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: python ingestion/build_calendar.py
+
+      - name: Generate compass_calendar.ics
+        run: python ingestion/generate_ics.py
+
+      - name: Assemble the Pages site
+        run: |
+          mkdir -p site
+          cp output/calendar.json output/compass_calendar.ics site/
+          cp web/index.html site/index.html
+          touch site/.nojekyll
+
+      - name: Commit the refreshed feed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # output/ is gitignored for local builds, so force-add the published
+          # artifacts. Once tracked, subsequent runs update them normally.
+          git add -f output/calendar.json output/compass_calendar.ics
+          if git diff --staged --quiet; then
+            echo "No calendar changes to commit."
+          else
+            git commit -m "chore: refresh economic calendar feed [skip ci]"
+            git push
+          fi
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
