@@ -89,9 +89,18 @@ MONTHS = {
 
 # FRED releases we track. Release ID 11 is the Employment Cost Index -- it is
 # NOT the monthly jobs report (that is 50). See docs/RESEARCH.md 1.2.
-FRED_RELEASES = {
-    50: {
+# Releases are matched against FRED's own release names rather than trusting a
+# hardcoded number. `release_id` where present is an assertion: if FRED's id for
+# that name ever differs, the build fails instead of silently pulling the wrong
+# release. Releases without an id are resolved at build time.
+#
+# Release ID 11 is the Employment Cost Index -- it is NOT the monthly jobs
+# report (that is 50). See docs/RESEARCH.md 1.2.
+FRED_RELEASES = [
+    {
         "slug": "employment-situation",
+        "release_id": 50,
+        "match": r"^Employment Situation$",
         "title": "Employment Situation (Nonfarm Payrolls)",
         "time_et": "08:30",
         "market_impact": "high",
@@ -102,8 +111,10 @@ FRED_RELEASES = {
             "scheduled release of the month for index futures."
         ),
     },
-    10: {
+    {
         "slug": "cpi",
+        "release_id": 10,
+        "match": r"^Consumer Price Index$",
         "title": "Consumer Price Index (CPI)",
         "time_et": "08:30",
         "market_impact": "high",
@@ -114,8 +125,10 @@ FRED_RELEASES = {
             "reaction."
         ),
     },
-    46: {
+    {
         "slug": "ppi",
+        "release_id": 46,
+        "match": r"^Producer Price Index$",
         "title": "Producer Price Index (PPI)",
         "time_et": "08:30",
         "market_impact": "medium",
@@ -125,8 +138,10 @@ FRED_RELEASES = {
             "CPI and for the PPI components that feed the PCE calculation."
         ),
     },
-    53: {
+    {
         "slug": "gdp",
+        "release_id": 53,
+        "match": r"^Gross Domestic Product$",
         "title": "Gross Domestic Product (GDP)",
         "time_et": "08:30",
         "market_impact": "medium",
@@ -136,8 +151,10 @@ FRED_RELEASES = {
             "third estimates. The advance estimate is the market-moving one."
         ),
     },
-    54: {
+    {
         "slug": "pce",
+        "release_id": 54,
+        "match": r"^Personal Income and Outlays$",
         "title": "Personal Income & Outlays (PCE)",
         "time_et": "08:30",
         "market_impact": "high",
@@ -147,7 +164,59 @@ FRED_RELEASES = {
             "gauge. Watched closely into FOMC meetings."
         ),
     },
-}
+    {
+        "slug": "jobless-claims",
+        "match": r"Unemployment Insurance Weekly Claims",
+        "title": "Initial Jobless Claims",
+        "time_et": "08:30",
+        "market_impact": "medium",
+        "primary_source": "https://www.dol.gov/ui/data.pdf",
+        "note": (
+            "Weekly initial and continuing unemployment claims, released every "
+            "Thursday at 8:30am ET. The highest-frequency read on the labour "
+            "market; the four-week average is what traders watch for a trend."
+        ),
+    },
+    {
+        "slug": "retail-sales",
+        "match": r"Advance Monthly Sales for Retail",
+        "title": "Retail Sales (Advance)",
+        "time_et": "08:30",
+        "market_impact": "high",
+        "primary_source": "https://www.census.gov/retail/index.html",
+        "note": (
+            "Census Bureau advance estimate of monthly retail and food service "
+            "sales. Consumer spending is roughly two-thirds of GDP, so the "
+            "control-group figure moves growth expectations and index futures."
+        ),
+    },
+    {
+        "slug": "durable-goods",
+        "match": r"Durable Goods Manufacturers.? Shipments",
+        "title": "Durable Goods Orders",
+        "time_et": "08:30",
+        "market_impact": "medium",
+        "primary_source": "https://www.census.gov/manufacturing/m3/index.html",
+        "note": (
+            "Census Bureau report on new orders for long-lived manufactured "
+            "goods. Core capital goods orders are read as a proxy for business "
+            "investment intentions."
+        ),
+    },
+    {
+        "slug": "jolts",
+        "match": r"Job Openings and Labor Turnover",
+        "title": "JOLTS Job Openings",
+        "time_et": "10:00",
+        "market_impact": "medium",
+        "primary_source": "https://www.bls.gov/schedule/news_release/jolts.htm",
+        "note": (
+            "BLS survey of job openings, hires and quits, released at 10:00am ET "
+            "-- note the later time than most BLS releases. The openings-to-"
+            "unemployed ratio is a labour-market tightness gauge the Fed cites."
+        ),
+    },
+]
 
 # BEA publishes its own schedule page, which distinguishes the three GDP
 # estimates that FRED release 53 lumps together. Only the advance estimate
@@ -247,6 +316,54 @@ def easter_sunday(year: int) -> date:
 
 def good_friday(year: int) -> date:
     return easter_sunday(year) - timedelta(days=2)
+
+
+def _observed(day: date) -> date:
+    """Federal holidays falling on a weekend are observed on the nearest weekday."""
+    if day.weekday() == 5:
+        return day - timedelta(days=1)
+    if day.weekday() == 6:
+        return day + timedelta(days=1)
+    return day
+
+
+def last_weekday(year: int, month: int, weekday: int) -> date:
+    """The last given weekday of a month, e.g. the last Monday in May."""
+    if month == 12:
+        last_day = date(year, 12, 31)
+    else:
+        last_day = date(year, month + 1, 1) - timedelta(days=1)
+    return last_day - timedelta(days=(last_day.weekday() - weekday) % 7)
+
+
+def us_federal_holidays(year: int) -> set:
+    """The eleven federal holidays, as observed. Markets and agencies are shut."""
+    return {
+        _observed(date(year, 1, 1)),                      # New Year's Day
+        nth_weekday(year, 1, weekday=0, n=3),             # MLK Day
+        nth_weekday(year, 2, weekday=0, n=3),             # Presidents' Day
+        last_weekday(year, 5, weekday=0),                 # Memorial Day
+        _observed(date(year, 6, 19)),                     # Juneteenth
+        _observed(date(year, 7, 4)),                      # Independence Day
+        nth_weekday(year, 9, weekday=0, n=1),             # Labor Day
+        nth_weekday(year, 10, weekday=0, n=2),            # Columbus Day
+        _observed(date(year, 11, 11)),                    # Veterans Day
+        nth_weekday(year, 11, weekday=3, n=4),            # Thanksgiving
+        _observed(date(year, 12, 25)),                    # Christmas Day
+    }
+
+
+def nth_business_day(year: int, month: int, n: int) -> date:
+    """The nth weekday of a month that is not a federal holiday."""
+    holidays = us_federal_holidays(year)
+    day = date(year, month, 1)
+    count = 0
+    while True:
+        if day.weekday() < 5 and day not in holidays:
+            count += 1
+            if count == n:
+                return day
+        day += timedelta(days=1)
 
 
 def parse_date(value: Optional[str]) -> Optional[date]:
@@ -537,6 +654,69 @@ def fetch_fomc_events(session: requests.Session, window: Tuple[date, date]) -> L
 # Source 2: FRED
 # --------------------------------------------------------------------------
 
+def resolve_fred_release_ids(
+    session: requests.Session, api_key: str
+) -> List[Tuple[int, Dict[str, Any]]]:
+    """Map each configured release onto FRED's own release list by name.
+
+    Hardcoding numeric ids is how you silently end up publishing the wrong
+    release (id 11 is the Employment Cost Index, not the jobs report). So the
+    ids are resolved from the names FRED reports, and any ``release_id`` in the
+    config is treated as an assertion rather than an input.
+    """
+    response = session.get(
+        f"{FRED_API_BASE}/releases",
+        params={"api_key": api_key, "file_type": "json", "limit": 1000},
+        timeout=HTTP_TIMEOUT,
+    )
+    response.raise_for_status()
+    catalogue = response.json().get("releases", [])
+    if not catalogue:
+        raise RuntimeError("FRED returned an empty release catalogue")
+
+    resolved: List[Tuple[int, Dict[str, Any]]] = []
+    problems: List[str] = []
+
+    for meta in FRED_RELEASES:
+        pattern = re.compile(meta["match"], re.IGNORECASE)
+        matches = [
+            entry for entry in catalogue if pattern.search(entry.get("name", ""))
+        ]
+
+        if not matches:
+            problems.append(
+                f"{meta['slug']}: no FRED release matched /{meta['match']}/"
+            )
+            continue
+        if len(matches) > 1:
+            names = ", ".join(repr(entry["name"]) for entry in matches[:5])
+            problems.append(
+                f"{meta['slug']}: /{meta['match']}/ matched {len(matches)} "
+                f"releases ({names}) -- tighten the pattern"
+            )
+            continue
+
+        found = matches[0]
+        found_id = int(found["id"])
+        expected = meta.get("release_id")
+        if expected is not None and expected != found_id:
+            problems.append(
+                f"{meta['slug']}: expected release id {expected} but FRED "
+                f"reports {found_id} for {found['name']!r}"
+            )
+            continue
+
+        if expected is None:
+            print(f"  resolved {meta['slug']} -> id {found_id} ({found['name']})")
+        resolved.append((found_id, meta))
+
+    if problems:
+        raise RuntimeError(
+            "FRED release resolution failed:\n  " + "\n  ".join(problems)
+        )
+    return resolved
+
+
 def fetch_fred_events(
     session: requests.Session, api_key: str, window: Tuple[date, date]
 ) -> List[Dict[str, Any]]:
@@ -549,7 +729,7 @@ def fetch_fred_events(
     start_bound, end_bound = window
     events: List[Dict[str, Any]] = []
 
-    for release_id, meta in FRED_RELEASES.items():
+    for release_id, meta in resolve_fred_release_ids(session, api_key):
         params = {
             "release_id": release_id,
             "api_key": api_key,
@@ -825,6 +1005,65 @@ def fetch_treasury_events(
 
 
 # --------------------------------------------------------------------------
+# Source 5: ISM PMI (computed, approximate)
+# --------------------------------------------------------------------------
+
+def build_ism_events(window: Tuple[date, date]) -> List[Dict[str, Any]]:
+    """Approximate the ISM PMI release dates.
+
+    ISM is a private organisation; its ToS permits personal use only, so its
+    *values* must never be redistributed (docs/RESEARCH.md 1.1 and 1.3). Dates
+    are facts and are safe -- but ISM does not publish a machine-readable
+    schedule and FRED dropped the series over licensing, so there is nothing to
+    fetch. These are computed from the published pattern instead: manufacturing
+    on the first business day of the month, services on the third.
+
+    They are flagged ``approximate`` so consumers can mark them as estimates.
+    ISM does move them, and a wrong time presented as fact is exactly the
+    accuracy risk in docs/RESEARCH.md 7.
+    """
+    start_bound, end_bound = window
+    specs = (
+        (
+            1, "ism_manufacturing_pmi", "ISM Manufacturing PMI (estimated)", "high",
+            "Purchasing managers' index for manufacturing, normally released on "
+            "the first business day of the month at 10:00am ET. A sub-50 print "
+            "reads as contraction. Date is estimated from ISM's usual pattern -- "
+            "confirm against ism.ws before trading it.",
+        ),
+        (
+            3, "ism_services_pmi", "ISM Services PMI (estimated)", "high",
+            "Purchasing managers' index for services, normally released on the "
+            "third business day of the month at 10:00am ET. Services are the "
+            "bulk of the US economy, so this often outweighs the manufacturing "
+            "print. Date is estimated -- confirm against ism.ws before trading it.",
+        ),
+    )
+
+    events: List[Dict[str, Any]] = []
+    for year in range(start_bound.year, end_bound.year + 1):
+        for month in range(1, 13):
+            for nth, event_type, title, impact, note in specs:
+                day = nth_business_day(year, month, nth)
+                if not (start_bound <= day <= end_bound):
+                    continue
+                events.append(make_event(
+                    event_id=f"{event_type.replace('_', '-')}-{day.isoformat()}",
+                    event_type=event_type,
+                    title=title,
+                    day=day,
+                    time_et="10:00",
+                    market_impact=impact,
+                    source="computed",
+                    source_url="https://www.ismworld.org/supply-management-news-and-reports/reports/ism-report-on-business/",
+                    note=note,
+                    computed=True,
+                    approximate=True,
+                ))
+    return events
+
+
+# --------------------------------------------------------------------------
 # Source 4: CME futures (computed)
 # --------------------------------------------------------------------------
 
@@ -1049,6 +1288,9 @@ def build_coverage(events: List[Dict[str, Any]], window: Tuple[date, date]) -> D
     families = {
         "fomc": ("reported", lambda t: t.startswith("fomc_")),
         "macro_releases": ("reported", lambda t: t.startswith("macro_release_")),
+        # Computed from ISM's usual pattern, so complete by construction -- but
+        # every one is flagged approximate on the event itself.
+        "ism": ("computed", lambda t: t.startswith("ism_")),
         "treasury_auctions": ("reported", lambda t: t == "treasury_auction"),
         "treasury_refunding": ("computed", lambda t: t == "treasury_quarterly_refunding"),
         "futures": (
@@ -1144,6 +1386,10 @@ def main() -> int:
         help="skip the BEA schedule enrichment (GDP estimate differentiation)",
     )
     parser.add_argument(
+        "--skip-ism", action="store_true",
+        help="skip the computed (approximate) ISM PMI dates",
+    )
+    parser.add_argument(
         "--allow-partial",
         action="store_true",
         help="write output even if a source fails (default: fail the build)",
@@ -1192,6 +1438,9 @@ def main() -> int:
         run_source("Treasury auctions", lambda: fetch_treasury_events(session, window))
 
     run_source("CME futures (computed)", lambda: build_futures_events(window))
+
+    if not args.skip_ism:
+        run_source("ISM PMI (computed, approximate)", lambda: build_ism_events(window))
 
     # BEA enrichment is deliberately non-fatal: if it fails the calendar is
     # still complete and correct, just with coarser GDP impact ratings.

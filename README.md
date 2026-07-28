@@ -29,7 +29,8 @@ architecture research behind this design.
 | Source | Events |
 |---|---|
 | federalreserve.gov (scraped) | FOMC meeting day 1, statement (2:00pm ET), Chair press conference (2:30pm ET), SEP / dot plot, minutes |
-| FRED API | Employment Situation, CPI, PPI, GDP, Personal Income & Outlays (all 8:30am ET) |
+| FRED API | Employment Situation, CPI, PPI, GDP, Personal Income & Outlays, Initial Jobless Claims (weekly), Retail Sales, Durable Goods (8:30am ET); JOLTS (10:00am ET) |
+| Computed (ISM pattern) | ISM Manufacturing PMI (1st business day) and Services PMI (3rd business day), 10:00am ET — **flagged `approximate`** |
 | bea.gov (enrichment) | Differentiates GDP advance / second / third estimates so only the advance print is rated high impact |
 | TreasuryDirect | Bill/note/bond/TIPS auctions, plus computed quarterly refunding announcements |
 | Computed (CME rules) | Liquidity roll, CME official roll, futures expiration, quad witching, monthly OPEX for /ES, /NQ, /MES, /MNQ |
@@ -260,6 +261,20 @@ published artifacts so the feed stays versioned.
   available. Cross-check FOMC and Treasury dates against the primary sites.
 - **SEP detection** keys off the Fed's own asterisk, falling back to the
   Mar/Jun/Sep/Dec convention; the signal used is recorded in `sep_signal`.
+- **ISM dates are estimates.** ISM publishes no machine-readable schedule and
+  FRED dropped the series over licensing, so the dates are computed from the
+  usual pattern (1st and 3rd business day, federal holidays excluded). Every
+  ISM event carries `"approximate": true` and says so in its title and note.
+  ISM's *values* are licensed and are never published here — only dates, which
+  are facts (`docs/RESEARCH.md` §1.1).
+
+### FRED release IDs are resolved, not hardcoded
+
+The job looks each release up by name against `fred/releases` and treats any
+`release_id` in the config as an assertion. If FRED's id for a name ever
+changes, or a pattern matches zero or several releases, the build fails with
+the candidates listed rather than silently publishing the wrong release. This
+matters because ID 11 is the Employment Cost Index, not the jobs report.
 
 ---
 

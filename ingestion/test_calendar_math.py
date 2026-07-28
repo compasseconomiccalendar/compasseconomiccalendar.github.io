@@ -20,15 +20,19 @@ from build_calendar import (  # noqa: E402
     _parse_fomc_row_dates,
     build_coverage,
     build_futures_events,
+    build_ism_events,
     enrich_from_bea,
     et_to_utc,
     first_wednesday,
     good_friday,
     iso_z,
+    last_weekday,
     make_event,
+    nth_business_day,
     parse_bea_schedule,
     parse_clock,
     third_friday,
+    us_federal_holidays,
 )
 
 
@@ -122,6 +126,49 @@ class TestExpirationDates(unittest.TestCase):
         self.assertEqual(first_wednesday(2026, 8), date(2026, 8, 5))
         self.assertEqual(first_wednesday(2026, 11), date(2026, 11, 4))
         self.assertEqual(first_wednesday(2027, 2), date(2027, 2, 3))
+
+
+class TestBusinessDays(unittest.TestCase):
+    def test_federal_holidays_land_on_the_right_days(self):
+        holidays = us_federal_holidays(2026)
+        self.assertIn(date(2026, 1, 1), holidays)       # New Year's, a Thursday
+        self.assertIn(date(2026, 1, 19), holidays)      # MLK, 3rd Monday
+        self.assertIn(date(2026, 5, 25), holidays)      # Memorial, last Monday
+        self.assertIn(date(2026, 11, 26), holidays)     # Thanksgiving, 4th Thursday
+        self.assertIn(date(2026, 12, 25), holidays)     # Christmas, a Friday
+
+    def test_weekend_holidays_are_observed_on_a_weekday(self):
+        # 2027-07-04 is a Sunday, so it is observed on Monday the 5th.
+        self.assertEqual(date(2027, 7, 4).weekday(), 6)
+        self.assertIn(date(2027, 7, 5), us_federal_holidays(2027))
+        self.assertNotIn(date(2027, 7, 4), us_federal_holidays(2027))
+        # 2026-07-04 is a Saturday, observed on Friday the 3rd.
+        self.assertIn(date(2026, 7, 3), us_federal_holidays(2026))
+
+    def test_last_weekday(self):
+        self.assertEqual(last_weekday(2026, 5, 0), date(2026, 5, 25))
+        self.assertEqual(last_weekday(2026, 12, 4), date(2026, 12, 25))
+
+    def test_nth_business_day_skips_weekends_and_holidays(self):
+        # Sep 2026 starts on a Tuesday; Labor Day is Mon Sep 7.
+        self.assertEqual(nth_business_day(2026, 9, 1), date(2026, 9, 1))
+        self.assertEqual(nth_business_day(2026, 9, 3), date(2026, 9, 3))
+        # Jan 2027 starts Fri Jan 1 (a holiday), so the 1st business day is Jan 4.
+        self.assertEqual(nth_business_day(2027, 1, 1), date(2027, 1, 4))
+        # Nov 2026 starts on a Sunday, so the 1st business day is Mon Nov 2.
+        self.assertEqual(nth_business_day(2026, 11, 1), date(2026, 11, 2))
+
+    def test_ism_events_are_flagged_approximate(self):
+        events = build_ism_events((date(2026, 9, 1), date(2026, 9, 30)))
+        self.assertEqual(len(events), 2)
+        by_type = {event["event_type"]: event for event in events}
+        self.assertEqual(by_type["ism_manufacturing_pmi"]["date_et"], "2026-09-01")
+        self.assertEqual(by_type["ism_services_pmi"]["date_et"], "2026-09-03")
+        for event in events:
+            self.assertTrue(event["approximate"])
+            self.assertEqual(event["time_et"], "10:00")
+            # ISM values are licensed; only the date may be published.
+            self.assertIn("estimated", event["title"].lower())
 
 
 class TestFomcRowParsing(unittest.TestCase):
