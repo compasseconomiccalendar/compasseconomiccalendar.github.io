@@ -30,6 +30,7 @@ architecture research behind this design.
 |---|---|
 | federalreserve.gov (scraped) | FOMC meeting day 1, statement (2:00pm ET), Chair press conference (2:30pm ET), SEP / dot plot, minutes |
 | FRED API | Employment Situation, CPI, PPI, GDP, Personal Income & Outlays (all 8:30am ET) |
+| bea.gov (enrichment) | Differentiates GDP advance / second / third estimates so only the advance print is rated high impact |
 | TreasuryDirect | Bill/note/bond/TIPS auctions, plus computed quarterly refunding announcements |
 | Computed (CME rules) | Liquidity roll, CME official roll, futures expiration, quad witching, monthly OPEX for /ES, /NQ, /MES, /MNQ |
 
@@ -88,6 +89,7 @@ Useful `build_calendar.py` flags:
 | `--months N` | Forward coverage window (default 13) |
 | `--past-days N` | Retain N days of history (default 0) |
 | `--skip-fred` / `--skip-treasury` / `--skip-fomc` | Skip a source |
+| `--skip-bea` | Skip the BEA GDP-estimate enrichment |
 | `--allow-partial` | Publish even if a source fails (default: fail the build) |
 
 By default **any source failure fails the whole build** rather than silently
@@ -123,6 +125,50 @@ extras (`cusip`, `contract_code`, `fred_release_id`, `has_sep`,
 **All timestamps are UTC.** Eastern release times are converted through the
 IANA `America/New_York` zone, so DST is handled correctly — 8:30am ET is
 12:30Z in summer and 13:30Z in winter. This is covered by tests.
+
+### Coverage block
+
+Computed events (futures, refunding) run to the end of the window by
+construction. Reported events only reach as far as the upstream agency has
+published. `calendar.json` says which is which, so a sparse far-future month
+reads as an unpublished schedule rather than missing data:
+
+```json
+"coverage": {
+  "window_end": "2027-08-28",
+  "families": {
+    "macro_releases": {
+      "horizon": "reported",
+      "event_count": 27,
+      "first_event": "2026-07-30",
+      "confirmed_through": "2026-12-23",
+      "complete_to_window_end": false
+    },
+    "futures": { "horizon": "computed", "complete_to_window_end": true }
+  },
+  "warnings": ["macro_releases: upstream has published dates only through ..."]
+}
+```
+
+**Consumers should read `coverage` before rendering a date range.** A month
+past a family's `confirmed_through` is not empty — it is unpublished.
+
+### BEA enrichment
+
+FRED release 53 reports all three GDP estimates under one name, so the advance
+print is indistinguishable from the third. The BEA schedule page spells the
+difference out, and the job uses it to correct `market_impact`:
+
+| BEA release title | `release_variant` | Impact |
+|---|---|---|
+| GDP (Advance Estimate) | `advance` | high |
+| GDP (Second Estimate) and Corporate Profits | `second` | medium |
+| GDP (Third Estimate), Industries… | `third` | low |
+
+Enriched events gain `bea_release_title` and `confirmed_by: "bea.gov"`, and
+BEA's stated release time overrides the assumed 8:30am ET if they differ.
+This step is **non-fatal** — if BEA is unreachable the calendar is still
+complete, just with coarser GDP ratings. Disable with `--skip-bea`.
 
 ---
 
@@ -175,12 +221,23 @@ published artifacts so the feed stays versioned.
   conference once it is scheduled, which means the link is missing on future
   meetings. A presser has followed every meeting since 2019, so one is emitted
   for every meeting and flagged `"confirmed": false` until the Fed lists it.
-- **FRED only carries ~5 months of forward release dates.** Measured on
-  2026-07-28: FRED returned 5–6 scheduled dates per release, ending
-  2026-12-23, while the FOMC and futures events ran to 2027-08. BLS and BEA
-  publish their own schedules roughly a year out, so closing this gap means
-  reading `bls.gov/schedule` and `bea.gov/news/schedule` directly rather than
-  going through FRED. Worth doing before the extension ships.
+- **Macro releases only reach ~5 months out, and no automated source fixes
+  that.** Measured 2026-07-28: FRED returns 5–6 scheduled dates per release,
+  ending 2026-12-23, while FOMC and futures events run to 2027-08. Both
+  alternatives were investigated and neither helps:
+  - **BLS cannot be scraped.** Every path (`/schedule/`, the annual schedule
+    pages, the RSS feed, `download.bls.gov`) returns HTTP 403 with an explicit
+    policy statement that "bot activity that doesn't conform to BLS usage
+    policy is prohibited." `api.bls.gov` is reachable but serves time-series
+    data only — it has no release-schedule endpoint.
+  - **BEA adds no horizon.** Its schedule page is scrapeable and permitted,
+    but its last dated row is 2026-12-23 — the same date FRED already gives.
+    It is used for precision instead (see below), not for coverage.
+
+  The only real fix is hand-curation once the agencies publish next-year
+  schedules (typically late in the prior year). Drop those dates into
+  `data/overrides.json`; the merge mechanism already exists. Until then the
+  `coverage` block tells consumers exactly where the data stops.
 - **FRED release dates are upstream-reported.** FRED notes that release dates
   come from the data sources and don't necessarily reflect when data will be
   available. Cross-check FOMC and Treasury dates against the primary sites.

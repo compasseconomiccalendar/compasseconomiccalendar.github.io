@@ -18,11 +18,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from build_calendar import (  # noqa: E402
     _parse_fomc_row_dates,
+    build_coverage,
     build_futures_events,
+    enrich_from_bea,
     et_to_utc,
     first_wednesday,
     good_friday,
     iso_z,
+    make_event,
+    parse_bea_schedule,
     parse_clock,
     third_friday,
 )
@@ -147,6 +151,109 @@ class TestFomcRowParsing(unittest.TestCase):
 
     def test_unparseable_row_returns_none(self):
         self.assertIsNone(_parse_fomc_row_dates(2026, "Someday", "TBD"))
+
+
+BEA_HTML = """
+<table>
+  <tr><th>Year 2026</th><th></th><th>Release</th></tr>
+  <tr><td>July 30 8:30 AM</td><td>News</td>
+      <td>GDP (Advance Estimate), 2nd Quarter 2026</td></tr>
+  <tr><td>July 30 8:30 AM</td><td>News</td>
+      <td>Personal Income and Outlays, June 2026</td></tr>
+  <tr><td>August 26 8:30 AM</td><td>News</td>
+      <td>GDP (Second Estimate) and Corporate Profits, 2nd Quarter 2026</td></tr>
+  <tr><td>September 30 8:30 AM</td><td>News</td>
+      <td>GDP (Third Estimate), Industries, Corporate Profits</td></tr>
+  <tr><td>October 6 10:00 AM</td><td>News</td>
+      <td>Services Supplied Through Affiliates, 2024</td></tr>
+  <tr><td>To Be Announced 2026</td><td>News</td>
+      <td>Outdoor Recreation Economic Statistics</td></tr>
+</table>
+"""
+
+
+def _macro_event(event_type, day, time_et="08:30", impact="medium"):
+    return make_event(
+        event_id=f"fred-x-{day}", event_type=event_type, title="GDP",
+        day=date.fromisoformat(day), time_et=time_et, market_impact=impact,
+        source="FRED", source_url="https://fred.stlouisfed.org/releases/53",
+        note="placeholder",
+    )
+
+
+class TestBeaSchedule(unittest.TestCase):
+    def test_parses_dates_titles_and_variants(self):
+        schedule = parse_bea_schedule(BEA_HTML)
+        self.assertEqual(
+            {str(day) for day in schedule},
+            {"2026-07-30", "2026-08-26", "2026-09-30", "2026-10-06"},
+        )
+        # "To Be Announced" rows carry no date and must be dropped.
+        self.assertEqual(len(schedule[date(2026, 7, 30)]), 2)
+        self.assertEqual(schedule[date(2026, 8, 26)][0]["variant"], "second")
+        self.assertEqual(schedule[date(2026, 10, 6)][0]["time_et"], "10:00")
+        self.assertIsNone(schedule[date(2026, 10, 6)][0]["variant"])
+
+    def test_gdp_impact_is_differentiated(self):
+        schedule = parse_bea_schedule(BEA_HTML)
+        events = [
+            _macro_event("macro_release_gdp", "2026-07-30"),
+            _macro_event("macro_release_gdp", "2026-08-26"),
+            _macro_event("macro_release_gdp", "2026-09-30"),
+        ]
+        self.assertEqual(enrich_from_bea(events, schedule), 3)
+        self.assertEqual(
+            [(event["release_variant"], event["market_impact"]) for event in events],
+            [("advance", "high"), ("second", "medium"), ("third", "low")],
+        )
+        self.assertEqual(events[0]["title"], "GDP (Advance Estimate)")
+
+    def test_pce_is_matched_but_not_retitled(self):
+        schedule = parse_bea_schedule(BEA_HTML)
+        events = [_macro_event("macro_release_pce", "2026-07-30", impact="high")]
+        self.assertEqual(enrich_from_bea(events, schedule), 1)
+        self.assertEqual(events[0]["market_impact"], "high")
+        self.assertNotIn("release_variant", events[0])
+        self.assertIn("Personal Income", events[0]["bea_release_title"])
+
+    def test_event_with_no_bea_match_is_left_alone(self):
+        schedule = parse_bea_schedule(BEA_HTML)
+        events = [_macro_event("macro_release_gdp", "2026-11-11")]
+        self.assertEqual(enrich_from_bea(events, schedule), 0)
+        self.assertEqual(events[0]["market_impact"], "medium")
+
+    def test_bea_time_correction_recomputes_utc(self):
+        schedule = parse_bea_schedule(BEA_HTML)
+        # A GDP event we assumed at 08:30 that BEA actually lists at 10:00.
+        events = [_macro_event("macro_release_gdp", "2026-10-06")]
+        # 10-06 has no GDP row, so inject one to exercise the retime path.
+        schedule[date(2026, 10, 6)].insert(
+            0, {"title": "GDP (Advance Estimate)", "time_et": "10:00", "variant": "advance"}
+        )
+        enrich_from_bea(events, schedule)
+        self.assertEqual(events[0]["time_et"], "10:00")
+        self.assertEqual(events[0]["start_utc"], "2026-10-06T14:00:00Z")  # EDT
+        self.assertEqual(events[0]["end_utc"], "2026-10-06T14:30:00Z")
+
+
+class TestCoverage(unittest.TestCase):
+    def test_computed_family_is_complete_and_reported_gap_warns(self):
+        window = (date(2026, 7, 28), date(2027, 8, 28))
+        events = build_futures_events(window)
+        events.append(_macro_event("macro_release_cpi", "2026-12-10"))
+        coverage = build_coverage(events, window)
+
+        self.assertTrue(coverage["families"]["futures"]["complete_to_window_end"])
+        macro = coverage["families"]["macro_releases"]
+        self.assertFalse(macro["complete_to_window_end"])
+        self.assertEqual(macro["confirmed_through"], "2026-12-10")
+        self.assertTrue(any("macro_releases" in w for w in coverage["warnings"]))
+
+    def test_empty_family_reports_zero_not_crash(self):
+        window = (date(2026, 7, 28), date(2027, 8, 28))
+        coverage = build_coverage([], window)
+        self.assertEqual(coverage["families"]["fomc"]["event_count"], 0)
+        self.assertIsNone(coverage["families"]["fomc"]["confirmed_through"])
 
 
 class TestClockParsing(unittest.TestCase):

@@ -12,6 +12,11 @@ Pulls four sources into a single ``output/calendar.json``:
   4. CME equity-index futures roll / expiration / quad-witching dates
      (computed algorithmically -- no API needed)
 
+The BEA schedule page is then used to sharpen the GDP releases FRED reports
+under a single name, so the advance estimate is not rated the same as the
+third estimate. BLS is deliberately not scraped: it returns HTTP 403 and
+prohibits automated retrieval in its usage policy.
+
 Every timestamp is stored in UTC. Eastern-time release times are converted
 through the IANA ``America/New_York`` zone so DST is handled correctly.
 
@@ -142,6 +147,34 @@ FRED_RELEASES = {
             "gauge. Watched closely into FOMC meetings."
         ),
     },
+}
+
+# BEA publishes its own schedule page, which distinguishes the three GDP
+# estimates that FRED release 53 lumps together. Only the advance estimate
+# really moves the market, so this is used to sharpen market_impact rather
+# than to add events. Note it buys no extra forward coverage -- BEA's page
+# ends on the same date FRED's last GDP entry does.
+BEA_SCHEDULE_URL = "https://www.bea.gov/news/schedule"
+
+# (needle in the BEA release title, variant tag, market impact)
+GDP_VARIANTS = (
+    ("advance estimate", "advance", "high"),
+    ("second estimate", "second", "medium"),
+    ("third estimate", "third", "low"),
+)
+GDP_VARIANT_NOTES = {
+    "advance": (
+        "First (advance) estimate of quarterly GDP from the BEA. The advance "
+        "print is the market-moving one -- it is the first read on the quarter."
+    ),
+    "second": (
+        "Second estimate of quarterly GDP, incorporating more complete source "
+        "data. Revisions are usually small and the reaction is muted."
+    ),
+    "third": (
+        "Third estimate of quarterly GDP. The quarter is three months stale by "
+        "now; this rarely moves index futures."
+    ),
 }
 
 # CME equity-index futures on the quarterly cycle.
@@ -561,6 +594,130 @@ def fetch_fred_events(
 
 
 # --------------------------------------------------------------------------
+# Enrichment: BEA schedule
+# --------------------------------------------------------------------------
+
+def parse_bea_schedule(html: str) -> Dict[date, List[Dict[str, Any]]]:
+    """Parse bea.gov/news/schedule into {date: [{title, time_et, variant}]}.
+
+    The table has no year column; the year arrives in a section header row
+    ("Year 2026") that the rows beneath it belong to. Rows dated "To Be
+    Announced" are skipped.
+    """
+    soup = BeautifulSoup(html, "html.parser")
+    schedule: Dict[date, List[Dict[str, Any]]] = {}
+    year: Optional[int] = None
+
+    for row in soup.select("table tr"):
+        cells = [cell.get_text(" ", strip=True) for cell in row.find_all(["th", "td"])]
+        if not cells:
+            continue
+
+        year_match = re.match(r"^Year\s+(\d{4})$", cells[0])
+        if year_match:
+            year = int(year_match.group(1))
+            continue
+        if year is None or len(cells) < 3:
+            continue
+
+        when, title = cells[0], cells[-1]
+        # "October 29 8:30 AM" -> month, day, time
+        match = re.match(
+            r"^([A-Za-z]+)\s+(\d{1,2})\s+(\d{1,2}:\d{2}\s*[APap]\.?[Mm]\.?)$", when
+        )
+        if not match:
+            continue  # "To Be Announced 2026" and similar
+        month_name = match.group(1).lower()
+        if month_name not in MONTHS:
+            continue
+        try:
+            day = date(year, MONTHS[month_name], int(match.group(2)))
+        except ValueError:
+            continue
+
+        lowered = title.lower()
+        variant = next(
+            (tag for needle, tag, _ in GDP_VARIANTS if needle in lowered), None
+        )
+        schedule.setdefault(day, []).append({
+            "title": title,
+            "time_et": parse_clock(match.group(3)) or "08:30",
+            "variant": variant,
+        })
+
+    return schedule
+
+
+def enrich_from_bea(
+    events: List[Dict[str, Any]], schedule: Dict[date, List[Dict[str, Any]]]
+) -> int:
+    """Sharpen GDP/PCE events using BEA's own schedule listing.
+
+    FRED release 53 reports every GDP estimate under one name, so the advance
+    estimate (which moves markets) is indistinguishable from the third estimate
+    (which does not). BEA spells the difference out in the release title.
+    """
+    impact_by_variant = {tag: impact for _, tag, impact in GDP_VARIANTS}
+    enriched = 0
+
+    for event in events:
+        if event["event_type"] not in ("macro_release_gdp", "macro_release_pce"):
+            continue
+        day = parse_date(event.get("date_et"))
+        entries = schedule.get(day) if day else None
+        if not entries:
+            continue
+
+        is_gdp = event["event_type"] == "macro_release_gdp"
+        if is_gdp:
+            match = next((entry for entry in entries if entry["variant"]), None)
+        else:
+            match = next(
+                (entry for entry in entries
+                 if "personal income and outlays" in entry["title"].lower()),
+                None,
+            )
+        if not match:
+            continue
+
+        event["bea_release_title"] = match["title"]
+        event["source_url"] = BEA_SCHEDULE_URL
+        event["confirmed_by"] = "bea.gov"
+
+        if is_gdp:
+            variant = match["variant"]
+            event["release_variant"] = variant
+            event["market_impact"] = impact_by_variant[variant]
+            event["title"] = f"GDP ({variant.title()} Estimate)"
+            event["note"] = GDP_VARIANT_NOTES[variant]
+
+        # BEA states the release time directly; prefer it over our assumed 8:30.
+        if match["time_et"] != event["time_et"]:
+            retime_event(event, match["time_et"])
+
+        enriched += 1
+
+    return enriched
+
+
+def retime_event(event: Dict[str, Any], time_et: str) -> None:
+    """Move an event to a new Eastern wall-clock time, recomputing UTC."""
+    day = parse_date(event["date_et"])
+    if day is None:
+        return
+    start = et_to_utc(day, time_et)
+    duration = timedelta(minutes=30)
+    if event.get("end_utc"):
+        duration = (
+            datetime.strptime(event["end_utc"], "%Y-%m-%dT%H:%M:%SZ")
+            - datetime.strptime(event["start_utc"], "%Y-%m-%dT%H:%M:%SZ")
+        )
+    event["time_et"] = time_et
+    event["start_utc"] = iso_z(start)
+    event["end_utc"] = iso_z(start + duration)
+
+
+# --------------------------------------------------------------------------
 # Source 3: Treasury
 # --------------------------------------------------------------------------
 
@@ -880,6 +1037,64 @@ def validate(events: List[Dict[str, Any]]) -> None:
         raise ValueError("calendar validation failed:\n  " + "\n  ".join(problems[:25]))
 
 
+def build_coverage(events: List[Dict[str, Any]], window: Tuple[date, date]) -> Dict[str, Any]:
+    """Describe how far each family of events actually reaches.
+
+    Computed families (futures, refunding) run to the end of the window by
+    construction. Reported families only go as far as the upstream agency has
+    published, which for macro releases is currently several months short of
+    the window. Consumers need to know that, or a sparse far-future month
+    looks like missing data instead of an unpublished schedule.
+    """
+    families = {
+        "fomc": ("reported", lambda t: t.startswith("fomc_")),
+        "macro_releases": ("reported", lambda t: t.startswith("macro_release_")),
+        "treasury_auctions": ("reported", lambda t: t == "treasury_auction"),
+        "treasury_refunding": ("computed", lambda t: t == "treasury_quarterly_refunding"),
+        "futures": (
+            "computed",
+            lambda t: t.startswith("futures_") or t in ("quad_witching", "monthly_opex"),
+        ),
+    }
+
+    window_end = window[1]
+    summary: Dict[str, Any] = {}
+    warnings: List[str] = []
+
+    for name, (horizon, matches) in families.items():
+        dates = sorted(event["date_et"] for event in events if matches(event["event_type"]))
+        if not dates:
+            summary[name] = {
+                "horizon": horizon, "event_count": 0,
+                "first_event": None, "confirmed_through": None,
+                "complete_to_window_end": False,
+            }
+            warnings.append(f"{name}: no events in the window.")
+            continue
+
+        last = parse_date(dates[-1])
+        gap_days = (window_end - last).days if last else 0
+        # Monthly-cadence sources are only "short" if they trail by more than a
+        # release cycle or so.
+        complete = horizon == "computed" or gap_days <= 45
+
+        summary[name] = {
+            "horizon": horizon,
+            "event_count": len(dates),
+            "first_event": dates[0],
+            "confirmed_through": dates[-1],
+            "complete_to_window_end": complete,
+        }
+        if not complete:
+            warnings.append(
+                f"{name}: upstream has published dates only through {dates[-1]}, "
+                f"{gap_days} days short of the window end {window_end.isoformat()}. "
+                "Treat later months as incomplete, not empty."
+            )
+
+    return {"window_end": window_end.isoformat(), "families": summary, "warnings": warnings}
+
+
 def build_document(events: List[Dict[str, Any]], window: Tuple[date, date]) -> Dict[str, Any]:
     events.sort(key=lambda event: (event["start_utc"], event["id"]))
 
@@ -911,6 +1126,7 @@ def build_document(events: List[Dict[str, Any]], window: Tuple[date, date]) -> D
             {"name": "CME equity index roll dates", "url": "https://www.cmegroup.com/trading/equity-index/rolldates.html"},
         ],
         "counts": {"total": len(events), "by_event_type": counts, "by_market_impact": impact_counts},
+        "coverage": build_coverage(events, window),
         "events": events,
     }
 
@@ -923,6 +1139,10 @@ def main() -> int:
     parser.add_argument("--skip-fred", action="store_true", help="skip FRED (no API key needed)")
     parser.add_argument("--skip-treasury", action="store_true", help="skip TreasuryDirect")
     parser.add_argument("--skip-fomc", action="store_true", help="skip the FOMC scrape")
+    parser.add_argument(
+        "--skip-bea", action="store_true",
+        help="skip the BEA schedule enrichment (GDP estimate differentiation)",
+    )
     parser.add_argument(
         "--allow-partial",
         action="store_true",
@@ -973,6 +1193,18 @@ def main() -> int:
 
     run_source("CME futures (computed)", lambda: build_futures_events(window))
 
+    # BEA enrichment is deliberately non-fatal: if it fails the calendar is
+    # still complete and correct, just with coarser GDP impact ratings.
+    if not args.skip_bea:
+        print("- BEA schedule (enrichment)")
+        try:
+            response = session.get(BEA_SCHEDULE_URL, timeout=HTTP_TIMEOUT)
+            response.raise_for_status()
+            enriched = enrich_from_bea(events, parse_bea_schedule(response.text))
+            print(f"  refined {enriched} GDP/PCE event(s)")
+        except Exception as exc:  # noqa: BLE001
+            print(f"  ! BEA enrichment skipped: {exc}", file=sys.stderr)
+
     if failures and not args.allow_partial:
         print(
             "\nAborting: one or more sources failed. Re-run with --allow-partial "
@@ -998,6 +1230,10 @@ def main() -> int:
 
     print(f"\nWrote {len(events)} events to {args.out}")
     print(f"  by impact: {document['counts']['by_market_impact']}")
+    for name, info in document["coverage"]["families"].items():
+        print(f"  {name:20} {info['event_count']:3} events, through {info['confirmed_through']}")
+    for warning in document["coverage"]["warnings"]:
+        print(f"  ! {warning}")
     print(f"\n{FRED_ATTRIBUTION}")
     return 0
 
