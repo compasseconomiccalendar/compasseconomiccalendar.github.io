@@ -62,7 +62,8 @@ jobs:
              output/compass_calendar.ics \
              output/compass_calendar_high_impact.ics \
              site/
-          cp web/index.html site/index.html
+          # index.html, privacy.html and the shared stylesheet.
+          cp -R web/. site/
           touch site/.nojekyll
 
       - name: Commit the refreshed feed

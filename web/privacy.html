@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="site.css">
+<title>Privacy Policy — Compass Economic Calendar</title>
+</head>
+<body>
+<main>
+  <h1>Privacy Policy</h1>
+  <p class="stamp">
+    Compass Economic Calendar (Chrome extension) · Effective 28 July 2026 ·
+    <a href="./">Back to the calendar</a>
+  </p>
+
+  <p class="lede">
+    Compass Economic Calendar does not collect, transmit, sell or share any
+    personal data. There is no account, no analytics, no advertising and no
+    tracking of any kind. The extension has no server: it reads one public
+    file and stores everything else on your own device.
+  </p>
+
+  <h2>What the extension stores</h2>
+  <p>
+    All of this stays on your device, in Chrome's extension storage. None of
+    it is transmitted to the developer.
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Where</th><th>What</th><th>Why</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>storage.local</code></td>
+          <td>A cached copy of the public calendar feed, its HTTP ETag, the
+              time of the last fetch, and the last fetch error if there was
+              one</td>
+          <td>So the extension works offline and can skip re-downloading an
+              unchanged feed</td>
+        </tr>
+        <tr>
+          <td><code>storage.sync</code></td>
+          <td>Your settings only: timezone, minimum impact level, whether
+              notifications are on, the warning offsets, and any event types
+              you have hidden</td>
+          <td>So your settings persist, and follow you across devices where
+              you are signed in to Chrome</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Settings in <code>storage.sync</code> are synchronised by Chrome through
+    your own Google account, under Google's privacy policy. They do not pass
+    through any server operated by this project.
+  </p>
+
+  <h2>Network requests</h2>
+  <p>The extension makes exactly one kind of request on its own:</p>
+  <ul>
+    <li>
+      A periodic <code>GET</code> of
+      <span class="url">compasseconomiccalendar.github.io/compasseconomiccalendar/calendar.json</span>,
+      roughly twice a day and whenever you press refresh. It sends no
+      identifiers, cookies or query parameters &mdash; only the standard HTTP
+      headers your browser attaches, plus an <code>If-None-Match</code> header
+      carrying the previous file version.
+    </li>
+  </ul>
+  <p>
+    That file is hosted on GitHub Pages. As with any website, GitHub receives
+    the request and may log it (including your IP address) under
+    <a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement">GitHub's
+    privacy statement</a>. The developer has no access to those logs.
+  </p>
+  <p>
+    Separately, if you click an event's verification link or a notification,
+    Chrome opens the relevant official page &mdash; federalreserve.gov,
+    fred.stlouisfed.org, bea.gov, treasurydirect.gov or cmegroup.com. That is
+    an ordinary visit to that site, governed by its own privacy policy. The
+    extension does not open pages on its own.
+  </p>
+
+  <h2>What the extension does not do</h2>
+  <ul>
+    <li>No personal information is collected &mdash; no name, email, account or location</li>
+    <li>No analytics, telemetry, crash reporting or usage measurement</li>
+    <li>No advertising, ad networks or advertising identifiers</li>
+    <li>No cookies, fingerprinting or cross-site tracking</li>
+    <li>No reading, modifying or monitoring of the pages you browse</li>
+    <li>No content scripts &mdash; the extension never runs on any website</li>
+    <li>No remote code &mdash; all logic ships inside the extension, as Manifest V3 requires</li>
+    <li>No sale or transfer of data to third parties, because none is collected</li>
+    <li>No use of data for creditworthiness or lending decisions</li>
+  </ul>
+
+  <h2>Permissions and why each is needed</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Permission</th><th>Purpose</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>storage</code></td>
+          <td>Save your settings and cache the calendar so the popup opens
+              instantly and works offline</td>
+        </tr>
+        <tr>
+          <td><code>alarms</code></td>
+          <td>Refresh the feed on a schedule and fire advance warnings at the
+              offsets you choose. Manifest V3 service workers shut down when
+              idle, so alarms are the only way to run on time</td>
+        </tr>
+        <tr>
+          <td><code>notifications</code></td>
+          <td>Show those advance warnings. Notifications are generated on your
+              device from the cached feed and are not sent from anywhere</td>
+        </tr>
+        <tr>
+          <td>Host access to<br><code>compasseconomiccalendar.github.io/compasseconomiccalendar/*</code></td>
+          <td>Download the calendar feed. Access is scoped to this one path;
+              the extension cannot read any other site</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Your controls</h2>
+  <ul>
+    <li>Turn notifications off, or change their timing, on the extension's options page</li>
+    <li>Hide any event types you do not want to see or be warned about</li>
+    <li>Removing the extension deletes everything it stored in <code>storage.local</code>. Settings held in <code>storage.sync</code> are cleared by Chrome according to your Chrome sync settings</li>
+  </ul>
+
+  <h2>Children</h2>
+  <p>
+    This is a general-audience tool for tracking public economic release
+    schedules. It is not directed at children and collects no data from anyone.
+  </p>
+
+  <h2>Changes</h2>
+  <p>
+    If this policy changes, the revised version will be published at this URL
+    with a new effective date. The
+    <a href="https://github.com/compasseconomiccalendar/compasseconomiccalendar">source
+    repository</a> keeps the full revision history of this page.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Questions or privacy concerns:
+    <a href="https://github.com/compasseconomiccalendar/compasseconomiccalendar/issues">open
+    an issue</a> on the project repository.
+  </p>
+
+  <footer>
+    <p>
+      The calendar itself is provided for informational and educational
+      purposes only. It is not investment advice. Times are subject to change;
+      verify against official sources before trading.
+    </p>
+    <p>
+      This product uses the FRED&reg; API but is not endorsed or certified by
+      the Federal Reserve Bank of St. Louis.
+    </p>
+  </footer>
+</main>
+</body>
+</html>

@@ -42,6 +42,7 @@ architecture research behind this design.
 - JSON: <https://compasseconomiccalendar.github.io/compasseconomiccalendar/calendar.json>
 - ICS, full: <https://compasseconomiccalendar.github.io/compasseconomiccalendar/compass_calendar.ics>
 - ICS, high impact only: <https://compasseconomiccalendar.github.io/compasseconomiccalendar/compass_calendar_high_impact.ics>
+- Privacy policy: <https://compasseconomiccalendar.github.io/compasseconomiccalendar/privacy.html>
 
 Subscribe to either ICS URL in Google Calendar, Apple Calendar or Outlook. The
 high-impact feed carries FOMC, CPI, jobs, PCE, advance GDP and quad witching —

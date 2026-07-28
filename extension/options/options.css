@@ -121,3 +121,4 @@ footer {
   font-size: .78rem;
 }
 footer p { margin: 0 0 .4rem; }
+footer a { color: var(--accent); }

@@ -70,9 +70,25 @@ event across the whole year.
 All selection logic lives in `src/filters.js` as pure functions — no `chrome.*`
 calls and no clock reads — which is what makes it testable under plain node.
 
-## Not done yet
+## Store submission
 
-- Store listing: privacy policy URL, screenshots, permission justifications
+Privacy policy is published at
+<https://compasseconomiccalendar.github.io/compasseconomiccalendar/privacy.html> —
+that URL goes in the Web Store listing's *Privacy policy* field. Its
+"Permissions and why each is needed" table doubles as the source text for the
+per-permission justifications the review asks for. Source lives in
+`web/privacy.html`.
+
+Data-handling disclosures to tick in the developer dashboard: **no** data
+collected in any category, **no** sale or transfer to third parties, **no**
+use for purposes unrelated to core functionality, **no** use for
+creditworthiness or lending.
+
+### Not done yet
+
+- Screenshots (1280×800 or 640×400) and a 440×280 promo tile
+- $5 developer registration
+- Paste the permission justifications into the dashboard
 
 **Vanilla JS is settled** — decided 2026-07-28, recorded in `docs/RESEARCH.md`
 §4.4, which originally specified React. Revisit only if the UI grows enough
