@@ -46,20 +46,138 @@ export function upcomingEvents(events, options = {}) {
     hiddenTypes = [],
     limit = Infinity,
     horizonMs = Infinity,
+    // How long an event stays in the list after it starts. Without this an
+    // FOMC statement disappears at 2:00:01 -- exactly when you are watching it.
+    graceMs = 0,
+    types = null,
   } = options;
 
   const hidden = new Set(hiddenTypes);
+  const allowedGroups = types ? new Set(types) : null;
   const cutoff = horizonMs === Infinity ? Infinity : now + horizonMs;
 
   return events
     .filter((event) => {
       const start = startMs(event);
-      if (!Number.isFinite(start) || start < now || start > cutoff) return false;
+      if (!Number.isFinite(start) || start + graceMs < now || start > cutoff) {
+        return false;
+      }
       if (hidden.has(event.event_type)) return false;
+      if (allowedGroups && !allowedGroups.has(groupOf(event.event_type))) {
+        return false;
+      }
       return meetsImpact(event, minImpact);
     })
     .sort((a, b) => startMs(a) - startMs(b))
     .slice(0, limit === Infinity ? undefined : limit);
+}
+
+/** Whether an event has started but is still inside its grace window. */
+export function isInProgress(event, now, graceMs) {
+  const start = startMs(event);
+  return Number.isFinite(start) && start <= now && start + graceMs >= now;
+}
+
+/**
+ * Coarse groupings for the popup's filter chips. Narrower than `familyOf`,
+ * which mirrors the feed's coverage families.
+ */
+export function groupOf(eventType) {
+  if (eventType.startsWith("fomc_")) return "fomc";
+  if (eventType.startsWith("macro_release_") || eventType.startsWith("ism_")) {
+    return "data";
+  }
+  if (eventType.startsWith("treasury_")) return "treasury";
+  return "futures";
+}
+
+export const TYPE_GROUPS = [
+  { id: "fomc", label: "FOMC" },
+  { id: "data", label: "Data" },
+  { id: "treasury", label: "Treasury" },
+  { id: "futures", label: "Futures" },
+];
+
+/**
+ * The next event worth putting on the toolbar badge, or null.
+ * All-day events are skipped: a countdown to midnight is not useful.
+ */
+export function nextBadgeEvent(events, options = {}) {
+  const { now = Date.now(), minImpact = "high", hiddenTypes = [] } = options;
+  const candidates = upcomingEvents(events, { now, minImpact, hiddenTypes });
+  return candidates.find((event) => !event.all_day) ?? null;
+}
+
+/**
+ * Badge text for a countdown, kept to four characters so Chrome does not
+ * truncate it: "5m", "45m", "2h", "3d".
+ */
+export function badgeText(msUntil) {
+  if (!Number.isFinite(msUntil) || msUntil < 0) return "";
+  const minutes = Math.floor(msUntil / 60_000);
+  if (minutes < 1) return "now";
+  if (minutes < 60) return `${minutes}m`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h`;
+  return `${Math.floor(hours / 24)}d`;
+}
+
+/**
+ * How often the badge needs redrawing, given how far out the event is.
+ * Chrome's alarm floor is 30s, and there is no point ticking every minute
+ * when the next event is three days away.
+ */
+export function badgeTickMinutes(msUntil) {
+  if (!Number.isFinite(msUntil)) return 60;
+  const minutes = msUntil / 60_000;
+  if (minutes <= 60) return 1;
+  if (minutes <= 24 * 60) return 15;
+  return 60;
+}
+
+/** True when the cached feed is old enough that its times may have moved. */
+export function isStale(fetchedAt, now = Date.now(), thresholdDays = 10) {
+  if (!fetchedAt) return true;
+  return now - fetchedAt > thresholdDays * 24 * 3600 * 1000;
+}
+
+/**
+ * Split events into day buckets in the given zone, labelled Today/Tomorrow
+ * where that applies. Bucketing must happen in the viewer's zone, not UTC,
+ * or an 8:30pm ET event lands on the wrong day.
+ */
+export function groupByDay(events, timeZone, now = Date.now()) {
+  const keyFormat = new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "numeric",
+  });
+  const labelFormat = new Intl.DateTimeFormat(undefined, {
+    timeZone,
+    weekday: "long",
+    month: "short",
+    day: "numeric",
+  });
+
+  const today = keyFormat.format(new Date(now));
+  const tomorrow = keyFormat.format(new Date(now + 24 * 3600 * 1000));
+
+  const groups = [];
+  let current = null;
+  for (const event of events) {
+    const when = new Date(event.start_utc);
+    const key = keyFormat.format(when);
+    if (!current || current.key !== key) {
+      let label = labelFormat.format(when);
+      if (key === today) label = "Today";
+      else if (key === tomorrow) label = "Tomorrow";
+      current = { key, label, events: [] };
+      groups.push(current);
+    }
+    current.events.push(event);
+  }
+  return groups;
 }
 
 /**
@@ -77,6 +195,11 @@ export function plannedNotifications(events, options = {}) {
     hiddenTypes = [],
     horizonMs = 72 * 3600 * 1000,
     max = 20,
+    // All-day events (futures rolls, meeting day 1) have no meaningful
+    // "30 minutes before", so they get a morning-of nudge instead.
+    allDayHour = 8,
+    timeZone = undefined,
+    snoozedUntil = {},
   } = options;
 
   const candidates = upcomingEvents(events, {
@@ -88,7 +211,18 @@ export function plannedNotifications(events, options = {}) {
 
   const planned = [];
   for (const event of candidates) {
-    if (event.all_day) continue;
+    if ((snoozedUntil[event.id] ?? 0) > now) continue;
+
+    if (event.all_day) {
+      if (allDayHour === null) continue;
+      const day = event.date_et ?? event.start_utc.slice(0, 10);
+      const fireAt = zonedTimeToUtc(day, allDayHour, 0, timeZone);
+      if (Number.isFinite(fireAt) && fireAt > now && fireAt - now <= horizonMs) {
+        planned.push({ eventId: event.id, offsetMinutes: null, fireAt });
+      }
+      continue;
+    }
+
     const start = startMs(event);
     for (const offset of offsets) {
       const fireAt = start - offset * 60_000;
@@ -98,6 +232,41 @@ export function plannedNotifications(events, options = {}) {
   }
 
   return planned.sort((a, b) => a.fireAt - b.fireAt).slice(0, max);
+}
+
+/** The UTC offset of `timeZone` at a given instant, in milliseconds. */
+function zoneOffsetMs(instant, timeZone) {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    hour12: false,
+    year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", second: "2-digit",
+  })
+    .formatToParts(instant)
+    .reduce((acc, part) => {
+      acc[part.type] = part.value;
+      return acc;
+    }, {});
+
+  const asUtc = Date.UTC(
+    Number(parts.year), Number(parts.month) - 1, Number(parts.day),
+    Number(parts.hour) % 24, Number(parts.minute), Number(parts.second),
+  );
+  return asUtc - instant.getTime();
+}
+
+/**
+ * The UTC instant for a wall-clock time on a given date in a zone.
+ *
+ * Two-step: guess as if the zone were UTC, measure the real offset at that
+ * guess, then correct. Good to the minute except exactly at a DST boundary,
+ * which a morning notification never lands on.
+ */
+export function zonedTimeToUtc(isoDate, hour, minute = 0, timeZone = undefined) {
+  const [year, month, day] = String(isoDate).split("-").map(Number);
+  if (!year || !month || !day) return NaN;
+  const guess = Date.UTC(year, month - 1, day, hour, minute);
+  return guess - zoneOffsetMs(new Date(guess), timeZone);
 }
 
 export function alarmName(prefix, eventId, offsetMinutes) {

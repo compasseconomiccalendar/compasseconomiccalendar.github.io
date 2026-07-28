@@ -13,14 +13,22 @@ import test from "node:test";
 
 import {
   alarmName,
+  badgeText,
+  badgeTickMinutes,
   coverageGaps,
   familyOf,
+  groupByDay,
+  groupOf,
+  isInProgress,
+  isStale,
   meetsImpact,
+  nextBadgeEvent,
   parseAlarmName,
   parseOffsets,
   plannedNotifications,
   resolveTimeZone,
   upcomingEvents,
+  zonedTimeToUtc,
 } from "../src/filters.js";
 
 const NOW = Date.parse("2026-07-28T12:00:00Z");
@@ -89,9 +97,18 @@ test("plannedNotifications never schedules a time in the past", () => {
   assert.ok(planned[0].fireAt > NOW);
 });
 
-test("plannedNotifications skips all-day events", () => {
-  const events = [event("allday", 24, { all_day: true })];
-  assert.deepEqual(plannedNotifications(events, { now: NOW }), []);
+test("all-day events get one morning nudge, never offset warnings", () => {
+  // "30 minutes before midnight" is not a useful warning, so all-day events
+  // are handled separately from the offsets.
+  const events = [event("allday", 24, { all_day: true, date_et: "2026-07-29" })];
+  const planned = plannedNotifications(events, {
+    now: NOW,
+    offsets: [30, 5],
+    timeZone: "UTC",
+    horizonMs: 72 * HOUR,
+  });
+  assert.equal(planned.length, 1);
+  assert.equal(planned[0].offsetMinutes, null);
 });
 
 test("plannedNotifications is bounded and returns the soonest first", () => {
@@ -174,4 +191,157 @@ test("coverageGaps flags reported families but never computed ones", () => {
   // A view that stays inside every confirmed range reports nothing.
   assert.deepEqual(coverageGaps(coverage, Date.parse("2026-09-01T00:00:00Z")), []);
   assert.deepEqual(coverageGaps(undefined, NOW), []);
+});
+
+test("in-progress events stay in the list during the grace window", () => {
+  const started = event("live", -0.5); // began 30 minutes ago
+  const older = event("gone", -3);
+  const graceMs = 90 * 60 * 1000;
+  const result = upcomingEvents([started, older], { now: NOW, graceMs });
+  assert.deepEqual(result.map((item) => item.id), ["live"]);
+  assert.ok(isInProgress(started, NOW, graceMs));
+  assert.ok(!isInProgress(older, NOW, graceMs));
+  // Without a grace window the same event is dropped, which is the old bug.
+  assert.deepEqual(upcomingEvents([started], { now: NOW }), []);
+});
+
+test("groupOf buckets every event type the feed emits", () => {
+  assert.equal(groupOf("fomc_statement"), "fomc");
+  assert.equal(groupOf("macro_release_cpi"), "data");
+  assert.equal(groupOf("ism_manufacturing_pmi"), "data");
+  assert.equal(groupOf("treasury_auction"), "treasury");
+  assert.equal(groupOf("treasury_quarterly_refunding"), "treasury");
+  assert.equal(groupOf("quad_witching"), "futures");
+  assert.equal(groupOf("monthly_opex"), "futures");
+});
+
+test("type filtering keeps only the selected groups", () => {
+  const events = [
+    event("fomc", 1, { event_type: "fomc_statement" }),
+    event("cpi", 2, { event_type: "macro_release_cpi" }),
+    event("auction", 3, { event_type: "treasury_auction" }),
+  ];
+  const result = upcomingEvents(events, { now: NOW, types: ["fomc", "treasury"] });
+  assert.deepEqual(result.map((item) => item.id), ["fomc", "auction"]);
+  // No selection means no filtering.
+  assert.equal(upcomingEvents(events, { now: NOW, types: null }).length, 3);
+});
+
+test("badgeText stays within four characters", () => {
+  assert.equal(badgeText(30_000), "now");
+  assert.equal(badgeText(5 * 60_000), "5m");
+  assert.equal(badgeText(59 * 60_000), "59m");
+  assert.equal(badgeText(2 * 3600_000), "2h");
+  assert.equal(badgeText(3 * 24 * 3600_000), "3d");
+  assert.equal(badgeText(-1), "");
+  for (const ms of [0, 6e4, 36e5, 864e5, 30 * 864e5]) {
+    assert.ok(badgeText(ms).length <= 4, `too long for ${ms}`);
+  }
+});
+
+test("badge ticks faster the closer the event is", () => {
+  assert.equal(badgeTickMinutes(10 * 60_000), 1);
+  assert.equal(badgeTickMinutes(5 * 3600_000), 15);
+  assert.equal(badgeTickMinutes(5 * 24 * 3600_000), 60);
+});
+
+test("nextBadgeEvent picks the soonest timed high-impact event", () => {
+  const events = [
+    event("allday", 1, { all_day: true }),
+    event("low", 2, { market_impact: "low" }),
+    event("hit", 3),
+    event("later", 9),
+  ];
+  assert.equal(nextBadgeEvent(events, { now: NOW }).id, "hit");
+  assert.equal(nextBadgeEvent([], { now: NOW }), null);
+});
+
+test("isStale flags an old or absent cache", () => {
+  const day = 24 * 3600 * 1000;
+  assert.ok(isStale(null, NOW));
+  assert.ok(isStale(NOW - 11 * day, NOW));
+  assert.ok(!isStale(NOW - 2 * day, NOW));
+});
+
+test("groupByDay labels today and tomorrow and buckets in the given zone", () => {
+  // 2026-07-28T12:00Z is 8am in New York.
+  const events = [
+    event("a", 1),
+    event("b", 2),
+    event("c", 25),
+    event("d", 50),
+  ];
+  const groups = groupByDay(events, "America/New_York", NOW);
+  assert.deepEqual(groups.map((group) => group.label).slice(0, 2), ["Today", "Tomorrow"]);
+  assert.deepEqual(groups[0].events.map((item) => item.id), ["a", "b"]);
+  assert.equal(groups.length, 3);
+});
+
+test("groupByDay buckets by local day, not UTC day", () => {
+  // 2026-07-29T01:00Z is still the evening of the 28th in New York.
+  const lateUtc = { ...event("late", 13), start_utc: "2026-07-29T01:00:00Z" };
+  const [group] = groupByDay([lateUtc], "America/New_York", NOW);
+  assert.equal(group.label, "Today");
+  const [utcGroup] = groupByDay([lateUtc], "UTC", NOW);
+  assert.equal(utcGroup.label, "Tomorrow");
+});
+
+test("zonedTimeToUtc resolves a wall-clock hour in a zone", () => {
+  // 8am in Denver is 14:00Z in summer (MDT) and 15:00Z in winter (MST).
+  assert.equal(
+    new Date(zonedTimeToUtc("2026-07-15", 8, 0, "America/Denver")).toISOString(),
+    "2026-07-15T14:00:00.000Z",
+  );
+  assert.equal(
+    new Date(zonedTimeToUtc("2026-01-15", 8, 0, "America/Denver")).toISOString(),
+    "2026-01-15T15:00:00.000Z",
+  );
+  assert.ok(Number.isNaN(zonedTimeToUtc("nonsense", 8, 0, "UTC")));
+});
+
+test("all-day events get a morning-of notification", () => {
+  const roll = event("roll", 30, { all_day: true, date_et: "2026-07-29" });
+  const planned = plannedNotifications([roll], {
+    now: NOW,
+    timeZone: "America/Denver",
+    allDayHour: 8,
+    horizonMs: 72 * HOUR,
+  });
+  assert.equal(planned.length, 1);
+  assert.equal(planned[0].offsetMinutes, null);
+  assert.equal(
+    new Date(planned[0].fireAt).toISOString(),
+    "2026-07-29T14:00:00.000Z",
+  );
+});
+
+test("all-day notifications can be switched off without affecting timed ones", () => {
+  const events = [
+    event("roll", 30, { all_day: true, date_et: "2026-07-29" }),
+    event("cpi", 30),
+  ];
+  const planned = plannedNotifications(events, {
+    now: NOW,
+    allDayHour: null,
+    timeZone: "UTC",
+    horizonMs: 72 * HOUR,
+  });
+  assert.ok(planned.every((item) => item.eventId === "cpi"));
+});
+
+test("snoozed events are dropped until their snooze expires", () => {
+  const events = [event("a", 2), event("b", 3)];
+  const planned = plannedNotifications(events, {
+    now: NOW,
+    snoozedUntil: { a: NOW + HOUR },
+    horizonMs: 72 * HOUR,
+  });
+  assert.ok(planned.every((item) => item.eventId === "b"));
+  // An expired snooze no longer suppresses.
+  const after = plannedNotifications(events, {
+    now: NOW,
+    snoozedUntil: { a: NOW - HOUR },
+    horizonMs: 72 * HOUR,
+  });
+  assert.ok(after.some((item) => item.eventId === "a"));
 });

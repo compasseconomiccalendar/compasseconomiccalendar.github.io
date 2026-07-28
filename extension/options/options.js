@@ -22,6 +22,8 @@ const elements = {
   timezoneHint: document.getElementById("timezone-hint"),
   impact: document.getElementById("impact"),
   notifications: document.getElementById("notifications-enabled"),
+  allDayEnabled: document.getElementById("allday-enabled"),
+  allDayHour: document.getElementById("allday-hour"),
   offsets: document.getElementById("offsets"),
   types: document.getElementById("types"),
   save: document.getElementById("save"),
@@ -124,6 +126,8 @@ function flash(message, isError = false) {
 async function load(prefs) {
   elements.impact.value = prefs.minImpact;
   elements.notifications.checked = prefs.notificationsEnabled;
+  elements.allDayEnabled.checked = prefs.allDayNotifications;
+  elements.allDayHour.value = String(prefs.allDayHour);
   elements.offsets.value = prefs.alarmOffsets.join(", ");
   await buildTypeCheckboxes(prefs.hiddenTypes);
   updateTimezoneHint();
@@ -139,7 +143,16 @@ elements.save.addEventListener("click", async () => {
     return;
   }
 
+  const allDayHour = Number(elements.allDayHour.value);
+  if (!Number.isInteger(allDayHour) || allDayHour < 0 || allDayHour > 23) {
+    flash("Morning reminder hour must be a whole number from 0 to 23.", true);
+    elements.allDayHour.focus();
+    return;
+  }
+
   await setPrefs({
+    allDayNotifications: elements.allDayEnabled.checked,
+    allDayHour,
     timeZone: elements.timezone.value || null,
     minImpact: elements.impact.value,
     notificationsEnabled: elements.notifications.checked,

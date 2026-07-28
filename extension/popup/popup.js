@@ -5,17 +5,28 @@
  * string is ever parsed as markup.
  */
 
+import { IN_PROGRESS_GRACE_MS, STALE_AFTER_DAYS } from "../src/config.js";
 import { detailRows, formatTimes } from "../src/details.js";
-import { coverageGaps, resolveTimeZone, upcomingEvents } from "../src/filters.js";
+import {
+  TYPE_GROUPS,
+  coverageGaps,
+  groupByDay,
+  isInProgress,
+  isStale,
+  resolveTimeZone,
+  upcomingEvents,
+} from "../src/filters.js";
 import { getCached, getPrefs, setPrefs } from "../src/store.js";
 
 const VIEW_HORIZON_MS = 90 * 24 * 3600 * 1000;
-const LIST_LIMIT = 50;
+const LIST_LIMIT = 60;
 
 const elements = {
   events: document.getElementById("events"),
   empty: document.getElementById("empty"),
   banner: document.getElementById("banner"),
+  chips: document.getElementById("chips"),
+  more: document.getElementById("more"),
   status: document.getElementById("status"),
   impact: document.getElementById("impact"),
   refresh: document.getElementById("refresh"),
@@ -34,21 +45,16 @@ const elements = {
 
 // The zone the detail view formats against; kept in sync with prefs on render.
 let activeTimeZone;
+// Group ids currently selected in the chip row; empty means "all".
+let activeGroups = new Set();
 
 // Rebuilt on each render because the zone is a saved preference, not a
 // constant (RESEARCH.md section 4.3 calls for a timezone override).
-let dayFormat;
 let timeFormat;
 
 function buildFormatters(timeZonePref) {
   const timeZone = resolveTimeZone(timeZonePref);
   activeTimeZone = timeZone;
-  dayFormat = new Intl.DateTimeFormat(undefined, {
-    timeZone,
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-  });
   timeFormat = new Intl.DateTimeFormat(undefined, {
     timeZone,
     hour: "numeric",
@@ -59,6 +65,7 @@ function buildFormatters(timeZonePref) {
 
 function relativeLabel(startMs, now) {
   const minutes = Math.round((startMs - now) / 60_000);
+  if (minutes <= 0) return "now";
   if (minutes < 60) return `in ${minutes} min`;
   const hours = Math.round(minutes / 60);
   if (hours < 24) return `in ${hours} h`;
@@ -69,19 +76,23 @@ function relativeLabel(startMs, now) {
 function renderEvent(event, now) {
   const item = document.createElement("li");
   item.className = `event impact-${event.market_impact}`;
+  const inProgress = isInProgress(event, now, IN_PROGRESS_GRACE_MS);
+  if (inProgress) item.classList.add("in-progress");
 
   const when = document.createElement("div");
   when.className = "when";
   const start = new Date(event.start_utc);
-  const day = document.createElement("span");
-  day.className = "day";
-  day.textContent = dayFormat.format(start);
-  when.append(day);
-
   const time = document.createElement("span");
   time.className = "time";
   time.textContent = event.all_day ? "all day" : timeFormat.format(start);
   when.append(time);
+
+  const relative = document.createElement("span");
+  relative.className = "relative";
+  relative.textContent = inProgress
+    ? "now"
+    : relativeLabel(Date.parse(event.start_utc), now);
+  when.append(relative);
 
   const body = document.createElement("div");
   body.className = "body";
@@ -93,35 +104,84 @@ function renderEvent(event, now) {
   title.addEventListener("click", () => showDetail(event));
   body.append(title);
 
+  if (event.approximate) {
+    const flag = document.createElement("span");
+    flag.className = "flag";
+    flag.textContent = "estimated date";
+    body.append(flag);
+  }
+
   const note = document.createElement("p");
   note.className = "note";
   note.textContent = event.note;
   body.append(note);
 
-  const meta = document.createElement("p");
-  meta.className = "meta";
-  meta.textContent = `${event.market_impact} impact · ${relativeLabel(
-    Date.parse(event.start_utc),
-    now,
-  )}`;
-  body.append(meta);
-
   item.append(when, body);
   return item;
 }
 
-function renderBanner(calendar, now) {
+function renderChips() {
+  elements.chips.replaceChildren();
+  for (const group of TYPE_GROUPS) {
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "chip";
+    chip.textContent = group.label;
+    chip.setAttribute("aria-pressed", String(activeGroups.has(group.id)));
+    if (activeGroups.has(group.id)) chip.classList.add("on");
+    chip.addEventListener("click", () => {
+      if (activeGroups.has(group.id)) activeGroups.delete(group.id);
+      else activeGroups.add(group.id);
+      render();
+    });
+    elements.chips.append(chip);
+  }
+}
+
+function renderBanner(calendar, fetchedAt, now) {
+  const messages = [];
+
+  if (isStale(fetchedAt, now, STALE_AFTER_DAYS)) {
+    messages.push(
+      `This calendar has not refreshed in over ${STALE_AFTER_DAYS} days. ` +
+        "Times may have changed — press ↻ and verify before trading.",
+    );
+  }
+  if (calendar.partial_build) {
+    const failed = (calendar.failed_sources ?? []).length;
+    messages.push(
+      `The feed was published with ${failed || "some"} source(s) failing, so ` +
+        "events may be missing.",
+    );
+  }
+
   const gaps = coverageGaps(calendar.coverage, now + VIEW_HORIZON_MS);
-  if (!gaps.length) {
+  if (gaps.length) {
+    const parts = gaps.map(
+      (gap) => `${gap.family.replace(/_/g, " ")} through ${gap.confirmedThrough}`,
+    );
+    messages.push(
+      `Schedules published only up to: ${parts.join("; ")}. ` +
+        "Later dates are unpublished, not empty.",
+    );
+  }
+
+  if (!messages.length) {
     elements.banner.hidden = true;
+    elements.banner.classList.remove("urgent");
     return;
   }
-  const parts = gaps.map(
-    (gap) => `${gap.family.replace(/_/g, " ")} through ${gap.confirmedThrough}`,
+  elements.banner.replaceChildren();
+  for (const message of messages) {
+    const line = document.createElement("p");
+    line.textContent = message;
+    elements.banner.append(line);
+  }
+  // A stale or partial feed is a correctness problem, not an FYI.
+  elements.banner.classList.toggle(
+    "urgent",
+    isStale(fetchedAt, now, STALE_AFTER_DAYS) || Boolean(calendar.partial_build),
   );
-  elements.banner.textContent = `Schedules published only up to: ${parts.join(
-    "; ",
-  )}. Later dates are unpublished, not empty.`;
   elements.banner.hidden = false;
 }
 
@@ -146,10 +206,12 @@ async function render() {
   elements.impact.value = prefs.minImpact;
   buildFormatters(prefs.timeZone);
   renderStatus(fetchedAt, lastError);
+  renderChips();
   // A refresh or filter change can remove whatever the detail view was
   // showing, so always come back to the list.
   showList();
   elements.events.replaceChildren();
+  elements.more.hidden = true;
 
   if (!calendar?.events?.length) {
     elements.empty.textContent =
@@ -160,33 +222,51 @@ async function render() {
   }
 
   const now = Date.now();
-  renderBanner(calendar, now);
+  renderBanner(calendar, fetchedAt, now);
 
-  const events = upcomingEvents(calendar.events, {
+  const query = {
     now,
     minImpact: prefs.minImpact,
     hiddenTypes: prefs.hiddenTypes,
-    limit: LIST_LIMIT,
     horizonMs: VIEW_HORIZON_MS,
-  });
+    graceMs: IN_PROGRESS_GRACE_MS,
+    types: activeGroups.size ? [...activeGroups] : null,
+  };
+  const matching = upcomingEvents(calendar.events, query);
+  const events = matching.slice(0, LIST_LIMIT);
 
   if (!events.length) {
-    elements.empty.textContent = "Nothing upcoming at this impact level.";
+    elements.empty.textContent = activeGroups.size
+      ? "Nothing upcoming for these filters."
+      : "Nothing upcoming at this impact level.";
     elements.empty.hidden = false;
     return;
   }
-
   elements.empty.hidden = true;
-  elements.events.append(
-    ...events.map((event) => renderEvent(event, now)),
-  );
+
+  const live = events.filter((event) => isInProgress(event, now, IN_PROGRESS_GRACE_MS));
+  const ahead = events.filter((event) => !isInProgress(event, now, IN_PROGRESS_GRACE_MS));
+
+  if (live.length) {
+    appendGroup("Happening now", live, now, "live");
+  }
+  for (const group of groupByDay(ahead, activeTimeZone, now)) {
+    appendGroup(group.label, group.events, now);
+  }
+
+  if (matching.length > events.length) {
+    elements.more.textContent = `${matching.length - events.length} more events not shown — narrow the filters to see them.`;
+    elements.more.hidden = false;
+  }
 }
 
-elements.impact.addEventListener("change", async (domEvent) => {
-  await setPrefs({ minImpact: domEvent.target.value });
-  await render();
-  chrome.runtime.sendMessage({ type: "reschedule" });
-});
+function appendGroup(label, events, now, extraClass = "") {
+  const heading = document.createElement("li");
+  heading.className = `day-heading ${extraClass}`.trim();
+  heading.textContent = label;
+  elements.events.append(heading);
+  elements.events.append(...events.map((event) => renderEvent(event, now)));
+}
 
 function appendPairs(target, pairs) {
   target.replaceChildren();
@@ -235,14 +315,42 @@ function showList() {
   elements.listView.hidden = false;
 }
 
+/** Arrow keys move between event titles without leaving the keyboard. */
+function moveFocus(direction) {
+  const titles = [...elements.events.querySelectorAll("button.title")];
+  if (!titles.length) return;
+  const index = titles.indexOf(document.activeElement);
+  const next = index === -1
+    ? 0
+    : Math.min(titles.length - 1, Math.max(0, index + direction));
+  titles[next].focus();
+}
+
 elements.back.addEventListener("click", showList);
 
 document.addEventListener("keydown", (domEvent) => {
-  if (domEvent.key === "Escape" && !elements.detailView.hidden) showList();
+  if (domEvent.key === "Escape" && !elements.detailView.hidden) {
+    showList();
+    return;
+  }
+  if (!elements.detailView.hidden) return;
+  if (domEvent.key === "ArrowDown") {
+    domEvent.preventDefault();
+    moveFocus(1);
+  } else if (domEvent.key === "ArrowUp") {
+    domEvent.preventDefault();
+    moveFocus(-1);
+  }
 });
 
 elements.options.addEventListener("click", () => {
   chrome.runtime.openOptionsPage();
+});
+
+elements.impact.addEventListener("change", async (domEvent) => {
+  await setPrefs({ minImpact: domEvent.target.value });
+  await render();
+  chrome.runtime.sendMessage({ type: "reschedule" });
 });
 
 elements.refresh.addEventListener("click", async () => {

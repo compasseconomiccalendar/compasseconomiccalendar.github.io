@@ -18,6 +18,29 @@ export async function setPrefs(patch) {
   return next;
 }
 
+/**
+ * Snoozed event ids mapped to the timestamp they resume at. Expired entries
+ * are pruned on read so the record cannot grow without bound.
+ */
+export async function getSnoozes() {
+  const stored = await chrome.storage.local.get(STORAGE_KEYS.snoozes);
+  const snoozes = stored[STORAGE_KEYS.snoozes] ?? {};
+  const now = Date.now();
+  const live = Object.fromEntries(
+    Object.entries(snoozes).filter(([, until]) => until > now),
+  );
+  if (Object.keys(live).length !== Object.keys(snoozes).length) {
+    await chrome.storage.local.set({ [STORAGE_KEYS.snoozes]: live });
+  }
+  return live;
+}
+
+export async function snoozeEvent(eventId, until) {
+  const snoozes = await getSnoozes();
+  snoozes[eventId] = until;
+  await chrome.storage.local.set({ [STORAGE_KEYS.snoozes]: snoozes });
+}
+
 export async function getCached() {
   const stored = await chrome.storage.local.get([
     STORAGE_KEYS.calendar,

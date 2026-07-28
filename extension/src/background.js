@@ -6,21 +6,92 @@
  */
 
 import {
+  BADGE_ALARM,
   MAX_SCHEDULED_ALARMS,
   NOTIFY_PREFIX,
   REFRESH_ALARM,
   REFRESH_PERIOD_MINUTES,
   SCHEDULE_HORIZON_HOURS,
+  SNOOZE_MINUTES,
 } from "./config.js";
 import {
   alarmName,
+  badgeText,
+  badgeTickMinutes,
+  isStale,
+  nextBadgeEvent,
   parseAlarmName,
   plannedNotifications,
   resolveTimeZone,
 } from "./filters.js";
-import { getCached, getPrefs, refreshFeed } from "./store.js";
+import {
+  getCached,
+  getPrefs,
+  getSnoozes,
+  refreshFeed,
+  snoozeEvent,
+} from "./store.js";
 
 const HORIZON_MS = SCHEDULE_HORIZON_HOURS * 3600 * 1000;
+
+/**
+ * Paint the toolbar badge with a countdown to the next high-impact event.
+ *
+ * This is the only part of the extension visible without opening the popup,
+ * so it is also where a stale feed gets flagged.
+ */
+async function updateBadge() {
+  const [{ calendar, fetchedAt }, prefs] = await Promise.all([
+    getCached(),
+    getPrefs(),
+  ]);
+
+  if (!calendar?.events?.length || isStale(fetchedAt)) {
+    await chrome.action.setBadgeText({ text: calendar ? "!" : "" });
+    await chrome.action.setBadgeBackgroundColor({ color: "#9a9a94" });
+    await chrome.action.setTitle({
+      title: calendar
+        ? "Compass — calendar data is stale, open to refresh"
+        : "Compass Economic Calendar",
+    });
+    chrome.alarms.create(BADGE_ALARM, { periodInMinutes: 60 });
+    return;
+  }
+
+  const event = nextBadgeEvent(calendar.events, {
+    now: Date.now(),
+    minImpact: "high",
+    hiddenTypes: prefs.hiddenTypes,
+  });
+
+  if (!event) {
+    await chrome.action.setBadgeText({ text: "" });
+    await chrome.action.setTitle({ title: "Compass Economic Calendar" });
+    chrome.alarms.create(BADGE_ALARM, { periodInMinutes: 60 });
+    return;
+  }
+
+  const msUntil = Date.parse(event.start_utc) - Date.now();
+  const urgent = msUntil <= 30 * 60_000;
+
+  await chrome.action.setBadgeText({ text: badgeText(msUntil) });
+  await chrome.action.setBadgeBackgroundColor({
+    color: urgent ? "#c2410c" : "#6b6b66",
+  });
+  await chrome.action.setTitle({
+    title: `${event.title} — ${new Intl.DateTimeFormat(undefined, {
+      timeZone: resolveTimeZone(prefs.timeZone),
+      hour: "numeric",
+      minute: "2-digit",
+      timeZoneName: "short",
+    }).format(new Date(event.start_utc))}`,
+  });
+
+  // Tick faster as the event approaches, slower when it is days out.
+  chrome.alarms.create(BADGE_ALARM, {
+    periodInMinutes: badgeTickMinutes(msUntil),
+  });
+}
 
 /**
  * Rebuild the notification alarms from the cached feed.
@@ -49,6 +120,9 @@ async function rescheduleNotifications() {
     hiddenTypes: prefs.hiddenTypes,
     horizonMs: HORIZON_MS,
     max: MAX_SCHEDULED_ALARMS,
+    allDayHour: prefs.allDayNotifications ? prefs.allDayHour : null,
+    timeZone: resolveTimeZone(prefs.timeZone),
+    snoozedUntil: await getSnoozes(),
   });
 
   for (const item of planned) {
@@ -63,6 +137,7 @@ async function rescheduleNotifications() {
 async function refreshAndReschedule(options) {
   await refreshFeed(options);
   const count = await rescheduleNotifications();
+  await updateBadge();
   console.info(`[compass] refreshed; ${count} notification(s) scheduled`);
 }
 
@@ -79,13 +154,21 @@ async function showNotification(eventId, offsetMinutes) {
     timeZoneName: "short",
   }).format(new Date(event.start_utc));
 
+  const title = offsetMinutes === null
+    ? `Today: ${event.title}`
+    : `${event.title} in ${offsetMinutes} min`;
+  const message = event.all_day
+    ? `${event.market_impact.toUpperCase()} impact`
+    : `${when} · ${event.market_impact.toUpperCase()} impact`;
+
   await chrome.notifications.create(`compass:${event.id}`, {
     type: "basic",
     iconUrl: chrome.runtime.getURL("icons/icon128.png"),
-    title: `${event.title} in ${offsetMinutes} min`,
-    message: `${when} · ${event.market_impact.toUpperCase()} impact`,
+    title,
+    message: event.approximate ? `${message} · estimated date` : message,
     contextMessage: "Compass Economic Calendar",
     priority: event.market_impact === "high" ? 2 : 1,
+    buttons: [{ title: "Verify at source" }, { title: `Snooze ${SNOOZE_MINUTES}m` }],
   });
 }
 
@@ -106,6 +189,10 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
     await refreshAndReschedule();
     return;
   }
+  if (alarm.name === BADGE_ALARM) {
+    await updateBadge();
+    return;
+  }
 
   const parsed = parseAlarmName(NOTIFY_PREFIX, alarm.name);
   if (!parsed) return;
@@ -113,6 +200,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   await showNotification(parsed.eventId, parsed.offsetMinutes);
   // One alarm just fired, freeing a slot -- pull the next one in.
   await rescheduleNotifications();
+  await updateBadge();
 });
 
 // Clicking a notification opens the official source so the time can be
@@ -124,6 +212,21 @@ chrome.notifications.onClicked.addListener(async (notificationId) => {
   const event = calendar?.events?.find((candidate) => candidate.id === eventId);
   if (event?.source_url) await chrome.tabs.create({ url: event.source_url });
   chrome.notifications.clear(notificationId);
+});
+
+chrome.notifications.onButtonClicked.addListener(async (notificationId, index) => {
+  const eventId = notificationId.replace(/^compass:/, "");
+  chrome.notifications.clear(notificationId);
+
+  if (index === 0) {
+    const { calendar } = await getCached();
+    const event = calendar?.events?.find((candidate) => candidate.id === eventId);
+    if (event?.source_url) await chrome.tabs.create({ url: event.source_url });
+    return;
+  }
+
+  await snoozeEvent(eventId, Date.now() + SNOOZE_MINUTES * 60_000);
+  await rescheduleNotifications();
 });
 
 // The popup asks for a refresh when the user hits the reload control.

@@ -35,8 +35,20 @@ Icons are generated, not hand-drawn — regenerate with
 - Advance notifications at configurable offsets (30 and 5 minutes by default);
   clicking one opens the event's `source_url` so the time can be verified
   against the official source
-- Popup lists upcoming events with an impact filter, and surfaces the feed's
-  `coverage` warnings so an unpublished date range does not read as an empty one
+- **Toolbar badge** counts down to the next high-impact event (`45m`, `2h`,
+  `3d`), turning red inside 30 minutes. Ticks every minute when close and
+  hourly when days out; shows `!` when the cache is stale
+- Popup lists upcoming events grouped by day (Today / Tomorrow / weekday) with
+  an impact filter and FOMC/Data/Treasury/Futures chips
+- **Events stay listed for 90 minutes after they start**, under "Happening
+  now" — an FOMC statement should not vanish at 2:00:01
+- Warns when the cache is over 10 days old or the feed was built with a
+  failing source, and surfaces the feed's `coverage` warnings so an
+  unpublished date range does not read as an empty one
+- All-day events (futures rolls, FOMC day 1) get a morning-of nudge instead of
+  a meaningless "30 minutes before midnight"
+- Notification buttons to verify at source or snooze for an hour
+- Arrow keys move between events; Escape leaves the detail view
 - Event detail view: click any event for the full note, source-specific
   metadata (contract code, CUSIP, GDP estimate, meeting span…) and the time in
   your zone, Eastern and UTC. Escape or ← returns to the list
@@ -55,6 +67,8 @@ Stored in `chrome.storage.sync`, so they follow a signed-in Chrome profile.
 | `alarmOffsets` | `[30, 5]` | Minutes before the event, up to four |
 | `notificationsEnabled` | `true` | |
 | `hiddenTypes` | `[]` | Event types removed from the list and never notified |
+| `allDayNotifications` | `true` | Morning-of nudge for all-day events |
+| `allDayHour` | `8` | Local hour for that nudge |
 
 Saving from the options page messages the service worker to rebuild its alarm
 schedule immediately, rather than waiting for the next 12-hour refresh.

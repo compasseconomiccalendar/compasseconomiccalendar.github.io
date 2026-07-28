@@ -14,6 +14,7 @@ export const STORAGE_KEYS = {
   etag: "etag",
   lastError: "lastError",
   prefs: "prefs",
+  snoozes: "snoozes",
 };
 
 export const DEFAULT_PREFS = {
@@ -25,12 +26,24 @@ export const DEFAULT_PREFS = {
   // null means "use the browser's zone"; otherwise an IANA name such as
   // "America/Denver" (RESEARCH.md section 4.3 calls for this override).
   timeZone: null,
+  // All-day events (futures rolls, FOMC day 1) get a morning-of nudge
+  // instead of a "30 minutes before", which would mean 30 min before midnight.
+  allDayNotifications: true,
+  allDayHour: 8,
 };
+
+// How long an event stays in the list after it starts, so an FOMC statement
+// does not vanish at 2:00:01 while you are reading the reaction.
+export const IN_PROGRESS_GRACE_MS = 90 * 60 * 1000;
 
 export const MAX_ALARM_OFFSETS = 4;
 
 export const REFRESH_ALARM = "compass:refresh";
+export const BADGE_ALARM = "compass:badge";
 export const NOTIFY_PREFIX = "compass:notify:";
+
+export const SNOOZE_MINUTES = 60;
+export const STALE_AFTER_DAYS = 10;
 
 // The feed rebuilds weekly; twice a day is plenty and stays well clear of the
 // MV3 alarm floor (30s since Chrome 120).
