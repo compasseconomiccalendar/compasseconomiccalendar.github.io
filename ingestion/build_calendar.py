@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
 """Build the Compass Economic Calendar normalized event feed.
 
-Pulls four sources into a single ``output/calendar.json``:
+Pulls five sources into a single ``output/calendar.json``:
 
   1. FOMC meetings, statements, press conferences, SEP releases and minutes
      (scraped from federalreserve.gov, with a manual override layer)
-  2. Macro release dates from the FRED API (Employment Situation, CPI, PPI,
-     GDP, Personal Income & Outlays)
+  2. Macro release dates from the FRED API (jobs, CPI, PPI, GDP, PCE, jobless
+     claims, retail sales, factory orders, JOLTS)
   3. Treasury auctions + computed quarterly refunding announcements
      (TreasuryDirect web service)
   4. CME equity-index futures roll / expiration / quad-witching dates
      (computed algorithmically -- no API needed)
+  5. ISM PMI dates, computed from the published pattern and flagged
+     ``approximate`` because ISM publishes no machine-readable schedule
+
+Events are then annotated with typical-move context from
+``data/typical_moves.json`` when that file is present.
 
 The BEA schedule page is then used to sharpen the GDP releases FRED reports
 under a single name, so the advance estimate is not rated the same as the
@@ -87,8 +92,6 @@ MONTHS = {
     "sep": 9, "sept": 9, "oct": 10, "nov": 11, "dec": 12,
 }
 
-# FRED releases we track. Release ID 11 is the Employment Cost Index -- it is
-# NOT the monthly jobs report (that is 50). See docs/RESEARCH.md 1.2.
 # Releases are matched against FRED's own release names rather than trusting a
 # hardcoded number. `release_id` where present is an assertion: if FRED's id for
 # that name ever differs, the build fails instead of silently pulling the wrong
@@ -1230,6 +1233,115 @@ def build_futures_events(window: Tuple[date, date]) -> List[Dict[str, Any]]:
 # Overrides, assembly, output
 # --------------------------------------------------------------------------
 
+TYPICAL_MOVES_PATH = REPO_ROOT / "data" / "typical_moves.json"
+
+# A ratio near 1.0 means the event day looks like any other day. Publishing
+# "1.02x normal" on every event would be noise presented as insight, which is
+# the failure mode this whole statistic exists to avoid, so only clearly
+# elevated or clearly quiet events carry a number.
+NOTABLE_ABOVE = 1.25
+NOTABLE_BELOW = 0.85
+
+
+def _index_stats(entry: Dict[str, Any], index: str) -> Optional[Dict[str, Any]]:
+    stats = entry.get(index)
+    if not stats or stats.get("ratio_median_to_baseline") is None:
+        return None
+    return {
+        "median_abs_pct": stats["median_abs_pct"],
+        "ratio": stats["ratio_median_to_baseline"],
+        "n": stats["n"],
+    }
+
+
+def typical_move_for(event_type: str, moves: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """Build the compact per-event summary attached to the feed.
+
+    Prefers the trailing window, because which events move markets is
+    regime-dependent, and falls back to the full sample when the trailing
+    window has too few observations to say anything.
+    """
+    recent = moves.get("recent_window", {}).get("by_event_type", {}).get(event_type)
+    full = moves.get("by_event_type", {}).get(event_type)
+
+    source, window = (recent, "recent") if recent else (full, "full")
+    if not source:
+        return None
+
+    spx = _index_stats(source, "SPX")
+    ndx = _index_stats(source, "NDX")
+    if not spx:
+        return None
+
+    ratio = spx["ratio"]
+    notable = ratio >= NOTABLE_ABOVE or ratio <= NOTABLE_BELOW
+    if ratio >= NOTABLE_ABOVE:
+        summary = f"Historically moves about {ratio:.1f}x as much as a normal day."
+    elif ratio <= NOTABLE_BELOW:
+        summary = f"Historically moves less than a normal day ({ratio:.1f}x)."
+    else:
+        summary = "Historically moves about as much as a normal day."
+
+    period = (
+        moves.get("recent_window", {}).get("sample_period")
+        if window == "recent"
+        else moves.get("sample_period")
+    )
+
+    return {
+        "ratio": ratio,
+        "notable": notable,
+        "summary": summary,
+        "window": window,
+        "sample_start": (period or {}).get("start"),
+        "spx": spx,
+        "ndx": ndx,
+    }
+
+
+def attach_typical_moves(events: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    """Attach typical-move context to events, if the statistics exist.
+
+    Absent or unreadable statistics are not an error: they are a separate,
+    monthly job, and the calendar must still build without them.
+    """
+    if not TYPICAL_MOVES_PATH.exists():
+        print("  no typical_moves.json; skipping move context")
+        return None
+
+    try:
+        with TYPICAL_MOVES_PATH.open(encoding="utf-8") as handle:
+            moves = json.load(handle)
+    except (OSError, json.JSONDecodeError) as exc:
+        print(f"  ! could not read typical_moves.json: {exc}", file=sys.stderr)
+        return None
+
+    cache: Dict[str, Optional[Dict[str, Any]]] = {}
+    attached = 0
+    notable = 0
+    for event in events:
+        event_type = event["event_type"]
+        if event_type not in cache:
+            cache[event_type] = typical_move_for(event_type, moves)
+        summary = cache[event_type]
+        if summary:
+            event["typical_move"] = summary
+            attached += 1
+            if summary["notable"]:
+                notable += 1
+
+    print(f"  attached move context to {attached} event(s); {notable} notable")
+    return {
+        "sample_period": moves.get("sample_period"),
+        "recent_sample_period": moves.get("recent_window", {}).get("sample_period"),
+        "indices": moves.get("indices"),
+        "method": moves.get("method"),
+        "caveat": moves.get("caveat"),
+        "baseline": moves.get("baseline"),
+        "generated_at_utc": moves.get("generated_at_utc"),
+    }
+
+
 def apply_overrides(events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Apply the manual override layer from data/overrides.json.
 
@@ -1483,10 +1595,15 @@ def main() -> int:
             print(f"  - {failure}", file=sys.stderr)
         return 1
 
+    print("- typical move context")
+    typical_moves_meta = attach_typical_moves(events)
+
     events = apply_overrides(events)
     validate(events)
 
     document = build_document(events, window)
+    if typical_moves_meta:
+        document["typical_moves"] = typical_moves_meta
     if failures:
         document["partial_build"] = True
         document["failed_sources"] = failures

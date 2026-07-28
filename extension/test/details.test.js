@@ -9,7 +9,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { detailRows, formatTimes, typeLabel } from "../src/details.js";
+import {
+  detailRows,
+  formatTimes,
+  typeLabel,
+  typicalMoveBadge,
+  typicalMoveDetail,
+} from "../src/details.js";
 
 const labelsOf = (event) => detailRows(event).map((row) => row.label);
 const valueOf = (event, label) =>
@@ -143,4 +149,52 @@ test("an all-day event shows a date, not a time", () => {
 
 test("formatTimes tolerates an unparseable timestamp", () => {
   assert.deepEqual(formatTimes({ ...base, start_utc: "nonsense" }, "UTC"), []);
+});
+
+test("typicalMoveBadge only fires for clearly unusual days", () => {
+  const notable = { ...base, typical_move: { ratio: 1.69, notable: true } };
+  const quiet = { ...base, typical_move: { ratio: 0.82, notable: true } };
+  const ordinary = { ...base, typical_move: { ratio: 1.04, notable: false } };
+
+  assert.equal(typicalMoveBadge(notable), "1.7× normal");
+  assert.equal(typicalMoveBadge(quiet), "quieter than normal");
+  // The whole point: an ordinary day gets no badge rather than "1.0× normal".
+  assert.equal(typicalMoveBadge(ordinary), null);
+  assert.equal(typicalMoveBadge(base), null);
+});
+
+test("typicalMoveDetail always reports sample size", () => {
+  const event = {
+    ...base,
+    typical_move: {
+      ratio: 1.69, notable: true, window: "recent", sample_start: "2023-07-29",
+      summary: "Historically moves about 1.7x as much as a normal day.",
+      spx: { median_abs_pct: 0.65, ratio: 1.69, n: 34 },
+      ndx: { median_abs_pct: 1.06, ratio: 1.74, n: 34 },
+    },
+  };
+  const detail = typicalMoveDetail(event);
+  assert.equal(detail.notable, true);
+  assert.match(detail.headline, /1\.7x/);
+  assert.deepEqual(detail.rows.map((row) => row.label), ["S&P 500", "Nasdaq 100"]);
+  // A ratio without an n invites over-reading a tiny sample.
+  for (const row of detail.rows) assert.match(row.value, /n=34/);
+  assert.match(detail.window, /Recent window since 2023-07-29/);
+});
+
+test("typicalMoveDetail handles a single index and the full-sample fallback", () => {
+  const event = {
+    ...base,
+    typical_move: {
+      ratio: 1.0, notable: false, window: "full", sample_start: "2016-07-28",
+      summary: "Historically moves about as much as a normal day.",
+      spx: { median_abs_pct: 0.49, ratio: 1.0, n: 39 },
+      ndx: null,
+    },
+  };
+  const detail = typicalMoveDetail(event);
+  assert.equal(detail.rows.length, 1);
+  assert.equal(detail.notable, false);
+  assert.match(detail.window, /Full sample since 2016-07-28/);
+  assert.equal(typicalMoveDetail(base), null);
 });

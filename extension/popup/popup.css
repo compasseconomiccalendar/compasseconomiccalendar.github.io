@@ -251,3 +251,35 @@ footer { padding: .7rem .85rem 1rem; border-top: 1px solid var(--line); }
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+
+/* Typical-move context */
+.move-flag {
+  border-color: var(--medium);
+  color: var(--medium);
+}
+
+.move {
+  margin: 0 0 .9rem;
+  padding: .65rem .7rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.move h3 {
+  margin: 0 0 .45rem;
+  font-size: .82rem;
+  font-weight: 600;
+}
+.move h3.notable { color: var(--high); }
+.move .rows { margin: 0 0 .4rem; font-size: .76rem; }
+.move-window {
+  margin: 0;
+  color: var(--muted);
+  font-size: .7rem;
+}
+.move-caveat {
+  margin: .45rem 0 0;
+  color: var(--muted);
+  font-size: .68rem;
+  line-height: 1.45;
+}

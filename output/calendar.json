@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at_utc": "2026-07-28T22:05:56Z",
+  "generated_at_utc": "2026-07-28T22:10:34Z",
   "window": {
     "start": "2026-07-28",
     "end": "2027-08-28"
@@ -32,24 +32,15 @@
     }
   ],
   "counts": {
-    "total": 167,
+    "total": 97,
     "by_event_type": {
       "fomc_meeting_day_1": 9,
       "treasury_auction": 10,
       "fomc_statement": 9,
       "fomc_press_conference": 9,
-      "macro_release_gdp": 6,
-      "macro_release_jobless_claims": 23,
-      "macro_release_pce": 6,
       "ism_manufacturing_pmi": 13,
-      "macro_release_factory_orders": 10,
-      "macro_release_jolts": 5,
       "treasury_quarterly_refunding": 5,
       "ism_services_pmi": 13,
-      "macro_release_employment_situation": 5,
-      "macro_release_cpi": 5,
-      "macro_release_ppi": 5,
-      "macro_release_retail_sales": 5,
       "monthly_opex": 9,
       "futures_liquidity_roll": 4,
       "futures_official_roll": 4,
@@ -58,9 +49,9 @@
       "quad_witching": 4
     },
     "by_market_impact": {
-      "low": 23,
-      "medium": 64,
-      "high": 80
+      "low": 21,
+      "medium": 19,
+      "high": 57
     }
   },
   "coverage": {
@@ -75,9 +66,9 @@
       },
       "macro_releases": {
         "horizon": "reported",
-        "event_count": 70,
-        "first_event": "2026-07-30",
-        "confirmed_through": "2026-12-31",
+        "event_count": 0,
+        "first_event": null,
+        "confirmed_through": null,
         "complete_to_window_end": false
       },
       "ism": {
@@ -110,7 +101,7 @@
       }
     },
     "warnings": [
-      "macro_releases: upstream has published dates only through 2026-12-31, 240 days short of the window end 2027-08-28. Treat later months as incomplete, not empty.",
+      "macro_releases: no events in the window.",
       "treasury_auctions: upstream has published dates only through 2026-08-04, 389 days short of the window end 2027-08-28. Treat later months as incomplete, not empty."
     ]
   },
@@ -222,7 +213,24 @@
       "note": "Interest rate decision and policy statement released at 2:00pm ET. Expect a sharp repricing in index futures on the release and again during the 2:30pm press conference.",
       "meeting_start_date": "2026-07-28",
       "meeting_end_date": "2026-07-29",
-      "has_sep": false
+      "has_sep": false,
+      "typical_move": {
+        "ratio": 1.49,
+        "notable": true,
+        "summary": "Historically moves about 1.5x as much as a normal day.",
+        "window": "recent",
+        "sample_start": "2023-07-29",
+        "spx": {
+          "median_abs_pct": 0.743,
+          "ratio": 1.49,
+          "n": 23
+        },
+        "ndx": {
+          "median_abs_pct": 0.992,
+          "ratio": 1.41,
+          "n": 23
+        }
+      }
     },
     {
       "id": "fomc-presser-2026-07-29",
@@ -238,62 +246,6 @@
       "source_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
       "note": "Chair's press conference begins at 2:30pm ET. The Q&A regularly moves markets more than the statement itself. Not yet confirmed on the Fed's calendar; a presser has followed every meeting since 2019.",
       "confirmed": false
-    },
-    {
-      "id": "fred-gdp-2026-07-30",
-      "event_type": "macro_release_gdp",
-      "title": "GDP (Advance Estimate)",
-      "start_utc": "2026-07-30T12:30:00Z",
-      "end_utc": "2026-07-30T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-07-30",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://www.bea.gov/news/schedule",
-      "note": "First (advance) estimate of quarterly GDP from the BEA. The advance print is the market-moving one -- it is the first read on the quarter.",
-      "fred_release_id": 53,
-      "primary_source_url": "https://www.bea.gov/news/schedule",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "bea_release_title": "GDP (Advance Estimate), 2nd Quarter 2026",
-      "confirmed_by": "bea.gov",
-      "release_variant": "advance"
-    },
-    {
-      "id": "fred-jobless-claims-2026-07-30",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-07-30T12:30:00Z",
-      "end_utc": "2026-07-30T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-07-30",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-pce-2026-07-30",
-      "event_type": "macro_release_pce",
-      "title": "Personal Income & Outlays (PCE)",
-      "start_utc": "2026-07-30T12:30:00Z",
-      "end_utc": "2026-07-30T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-07-30",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://www.bea.gov/news/schedule",
-      "note": "BEA report containing core PCE, the Fed's preferred inflation gauge. Watched closely into FOMC meetings.",
-      "fred_release_id": 54,
-      "primary_source_url": "https://www.bea.gov/news/schedule",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "bea_release_title": "Personal Income and Outlays, June 2026",
-      "confirmed_by": "bea.gov"
     },
     {
       "id": "treasury-auction-912797UW5-2026-07-30",
@@ -388,40 +340,6 @@
       "part_of_quarterly_refunding": false
     },
     {
-      "id": "fred-factory-orders-2026-08-04",
-      "event_type": "macro_release_factory_orders",
-      "title": "Factory Orders (M3)",
-      "start_utc": "2026-08-04T14:00:00Z",
-      "end_utc": "2026-08-04T14:30:00Z",
-      "all_day": false,
-      "date_et": "2026-08-04",
-      "time_et": "10:00",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/95",
-      "note": "Census Bureau M3 survey: shipments, inventories and new orders for manufactured goods, released at 10:00am ET. Core capital goods orders are read as a proxy for business investment intentions. The advance durable goods report precedes this by a few days.",
-      "fred_release_id": 95,
-      "primary_source_url": "https://www.census.gov/manufacturing/m3/index.html",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-jolts-2026-08-04",
-      "event_type": "macro_release_jolts",
-      "title": "JOLTS Job Openings",
-      "start_utc": "2026-08-04T14:00:00Z",
-      "end_utc": "2026-08-04T14:30:00Z",
-      "all_day": false,
-      "date_et": "2026-08-04",
-      "time_et": "10:00",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/192",
-      "note": "BLS survey of job openings, hires and quits, released at 10:00am ET -- note the later time than most BLS releases. The openings-to-unemployed ratio is a labour-market tightness gauge the Fed cites.",
-      "fred_release_id": 192,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/jolts.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
       "id": "treasury-auction-912797UG0-2026-08-04",
       "event_type": "treasury_auction",
       "title": "Treasury Auction: 6-Week Bill",
@@ -491,125 +409,6 @@
       "approximate": true
     },
     {
-      "id": "fred-jobless-claims-2026-08-06",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-08-06T12:30:00Z",
-      "end_utc": "2026-08-06T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-08-06",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-employment-situation-2026-08-07",
-      "event_type": "macro_release_employment_situation",
-      "title": "Employment Situation (Nonfarm Payrolls)",
-      "start_utc": "2026-08-07T12:30:00Z",
-      "end_utc": "2026-08-07T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-08-07",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/50",
-      "note": "Monthly jobs report from the BLS: nonfarm payrolls, unemployment rate and average hourly earnings. Typically the highest-volatility scheduled release of the month for index futures.",
-      "fred_release_id": 50,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/empsit.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-cpi-2026-08-12",
-      "event_type": "macro_release_cpi",
-      "title": "Consumer Price Index (CPI)",
-      "start_utc": "2026-08-12T12:30:00Z",
-      "end_utc": "2026-08-12T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-08-12",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/10",
-      "note": "Headline and core consumer inflation from the BLS. The core month-over-month print drives the immediate rates and equity reaction.",
-      "fred_release_id": 10,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/cpi.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-jobless-claims-2026-08-13",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-08-13T12:30:00Z",
-      "end_utc": "2026-08-13T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-08-13",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-ppi-2026-08-13",
-      "event_type": "macro_release_ppi",
-      "title": "Producer Price Index (PPI)",
-      "start_utc": "2026-08-13T12:30:00Z",
-      "end_utc": "2026-08-13T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-08-13",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/46",
-      "note": "Wholesale/producer inflation from the BLS. Watched as a lead-in to CPI and for the PPI components that feed the PCE calculation.",
-      "fred_release_id": 46,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/ppi.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-retail-sales-2026-08-14",
-      "event_type": "macro_release_retail_sales",
-      "title": "Retail Sales (Advance)",
-      "start_utc": "2026-08-14T12:30:00Z",
-      "end_utc": "2026-08-14T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-08-14",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/9",
-      "note": "Census Bureau advance estimate of monthly retail and food service sales. Consumer spending is roughly two-thirds of GDP, so the control-group figure moves growth expectations and index futures.",
-      "fred_release_id": 9,
-      "primary_source_url": "https://www.census.gov/retail/index.html",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-jobless-claims-2026-08-20",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-08-20T12:30:00Z",
-      "end_utc": "2026-08-20T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-08-20",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
       "id": "monthly-opex-2026-08",
       "event_type": "monthly_opex",
       "title": "Monthly Options Expiration (OPEX)",
@@ -623,97 +422,24 @@
       "source_url": "https://www.cmegroup.com/trading/equity-index/rolldates.html",
       "note": "Monthly equity and index options expire on the third Friday. Dealer hedging into the expiry can pin price near large open-interest strikes.",
       "computed": true,
-      "holiday_adjusted": false
-    },
-    {
-      "id": "fred-gdp-2026-08-26",
-      "event_type": "macro_release_gdp",
-      "title": "GDP (Second Estimate)",
-      "start_utc": "2026-08-26T12:30:00Z",
-      "end_utc": "2026-08-26T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-08-26",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://www.bea.gov/news/schedule",
-      "note": "Second estimate of quarterly GDP, incorporating more complete source data. Revisions are usually small and the reaction is muted.",
-      "fred_release_id": 53,
-      "primary_source_url": "https://www.bea.gov/news/schedule",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "bea_release_title": "GDP (Second Estimate) and Corporate Profits, 2nd Quarter 2026",
-      "confirmed_by": "bea.gov",
-      "release_variant": "second"
-    },
-    {
-      "id": "fred-pce-2026-08-26",
-      "event_type": "macro_release_pce",
-      "title": "Personal Income & Outlays (PCE)",
-      "start_utc": "2026-08-26T12:30:00Z",
-      "end_utc": "2026-08-26T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-08-26",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://www.bea.gov/news/schedule",
-      "note": "BEA report containing core PCE, the Fed's preferred inflation gauge. Watched closely into FOMC meetings.",
-      "fred_release_id": 54,
-      "primary_source_url": "https://www.bea.gov/news/schedule",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "bea_release_title": "Personal Income and Outlays, July 2026",
-      "confirmed_by": "bea.gov"
-    },
-    {
-      "id": "fred-factory-orders-2026-08-26",
-      "event_type": "macro_release_factory_orders",
-      "title": "Factory Orders (M3)",
-      "start_utc": "2026-08-26T14:00:00Z",
-      "end_utc": "2026-08-26T14:30:00Z",
-      "all_day": false,
-      "date_et": "2026-08-26",
-      "time_et": "10:00",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/95",
-      "note": "Census Bureau M3 survey: shipments, inventories and new orders for manufactured goods, released at 10:00am ET. Core capital goods orders are read as a proxy for business investment intentions. The advance durable goods report precedes this by a few days.",
-      "fred_release_id": 95,
-      "primary_source_url": "https://www.census.gov/manufacturing/m3/index.html",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-jobless-claims-2026-08-27",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-08-27T12:30:00Z",
-      "end_utc": "2026-08-27T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-08-27",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-jolts-2026-09-01",
-      "event_type": "macro_release_jolts",
-      "title": "JOLTS Job Openings",
-      "start_utc": "2026-09-01T14:00:00Z",
-      "end_utc": "2026-09-01T14:30:00Z",
-      "all_day": false,
-      "date_et": "2026-09-01",
-      "time_et": "10:00",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/192",
-      "note": "BLS survey of job openings, hires and quits, released at 10:00am ET -- note the later time than most BLS releases. The openings-to-unemployed ratio is a labour-market tightness gauge the Fed cites.",
-      "fred_release_id": 192,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/jolts.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
+      "holiday_adjusted": false,
+      "typical_move": {
+        "ratio": 1.4,
+        "notable": true,
+        "summary": "Historically moves about 1.4x as much as a normal day.",
+        "window": "recent",
+        "sample_start": "2023-07-29",
+        "spx": {
+          "median_abs_pct": 0.697,
+          "ratio": 1.4,
+          "n": 24
+        },
+        "ndx": {
+          "median_abs_pct": 0.819,
+          "ratio": 1.17,
+          "n": 24
+        }
+      }
     },
     {
       "id": "ism-manufacturing-pmi-2026-09-01",
@@ -732,40 +458,6 @@
       "approximate": true
     },
     {
-      "id": "fred-factory-orders-2026-09-02",
-      "event_type": "macro_release_factory_orders",
-      "title": "Factory Orders (M3)",
-      "start_utc": "2026-09-02T14:00:00Z",
-      "end_utc": "2026-09-02T14:30:00Z",
-      "all_day": false,
-      "date_et": "2026-09-02",
-      "time_et": "10:00",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/95",
-      "note": "Census Bureau M3 survey: shipments, inventories and new orders for manufactured goods, released at 10:00am ET. Core capital goods orders are read as a proxy for business investment intentions. The advance durable goods report precedes this by a few days.",
-      "fred_release_id": 95,
-      "primary_source_url": "https://www.census.gov/manufacturing/m3/index.html",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-jobless-claims-2026-09-03",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-09-03T12:30:00Z",
-      "end_utc": "2026-09-03T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-09-03",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
       "id": "ism-services-pmi-2026-09-03",
       "event_type": "ism_services_pmi",
       "title": "ISM Services PMI (estimated)",
@@ -780,23 +472,6 @@
       "note": "Purchasing managers' index for services, normally released on the third business day of the month at 10:00am ET. Services are the bulk of the US economy, so this often outweighs the manufacturing print. Date is estimated -- confirm against ism.ws before trading it.",
       "computed": true,
       "approximate": true
-    },
-    {
-      "id": "fred-employment-situation-2026-09-04",
-      "event_type": "macro_release_employment_situation",
-      "title": "Employment Situation (Nonfarm Payrolls)",
-      "start_utc": "2026-09-04T12:30:00Z",
-      "end_utc": "2026-09-04T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-09-04",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/50",
-      "note": "Monthly jobs report from the BLS: nonfarm payrolls, unemployment rate and average hourly earnings. Typically the highest-volatility scheduled release of the month for index futures.",
-      "fred_release_id": 50,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/empsit.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
     },
     {
       "id": "futures-liquidity-roll-2026-09",
@@ -819,57 +494,6 @@
       ],
       "contract_code": "U6",
       "computed": true
-    },
-    {
-      "id": "fred-jobless-claims-2026-09-10",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-09-10T12:30:00Z",
-      "end_utc": "2026-09-10T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-09-10",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-ppi-2026-09-10",
-      "event_type": "macro_release_ppi",
-      "title": "Producer Price Index (PPI)",
-      "start_utc": "2026-09-10T12:30:00Z",
-      "end_utc": "2026-09-10T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-09-10",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/46",
-      "note": "Wholesale/producer inflation from the BLS. Watched as a lead-in to CPI and for the PPI components that feed the PCE calculation.",
-      "fred_release_id": 46,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/ppi.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-cpi-2026-09-11",
-      "event_type": "macro_release_cpi",
-      "title": "Consumer Price Index (CPI)",
-      "start_utc": "2026-09-11T12:30:00Z",
-      "end_utc": "2026-09-11T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-09-11",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/10",
-      "note": "Headline and core consumer inflation from the BLS. The core month-over-month print drives the immediate rates and equity reaction.",
-      "fred_release_id": 10,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/cpi.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
     },
     {
       "id": "futures-official-roll-2026-09",
@@ -910,23 +534,6 @@
       "meeting_end_date": "2026-09-16"
     },
     {
-      "id": "fred-retail-sales-2026-09-16",
-      "event_type": "macro_release_retail_sales",
-      "title": "Retail Sales (Advance)",
-      "start_utc": "2026-09-16T12:30:00Z",
-      "end_utc": "2026-09-16T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-09-16",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/9",
-      "note": "Census Bureau advance estimate of monthly retail and food service sales. Consumer spending is roughly two-thirds of GDP, so the control-group figure moves growth expectations and index futures.",
-      "fred_release_id": 9,
-      "primary_source_url": "https://www.census.gov/retail/index.html",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
       "id": "fomc-sep-2026-09-16",
       "event_type": "fomc_sep",
       "title": "FOMC Summary of Economic Projections (Dot Plot)",
@@ -956,7 +563,24 @@
       "note": "Interest rate decision and policy statement released at 2:00pm ET. Expect a sharp repricing in index futures on the release and again during the 2:30pm press conference.",
       "meeting_start_date": "2026-09-15",
       "meeting_end_date": "2026-09-16",
-      "has_sep": true
+      "has_sep": true,
+      "typical_move": {
+        "ratio": 1.49,
+        "notable": true,
+        "summary": "Historically moves about 1.5x as much as a normal day.",
+        "window": "recent",
+        "sample_start": "2023-07-29",
+        "spx": {
+          "median_abs_pct": 0.743,
+          "ratio": 1.49,
+          "n": 23
+        },
+        "ndx": {
+          "median_abs_pct": 0.992,
+          "ratio": 1.41,
+          "n": 23
+        }
+      }
     },
     {
       "id": "fomc-presser-2026-09-16",
@@ -972,23 +596,6 @@
       "source_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
       "note": "Chair's press conference begins at 2:30pm ET. The Q&A regularly moves markets more than the statement itself. Not yet confirmed on the Fed's calendar; a presser has followed every meeting since 2019.",
       "confirmed": false
-    },
-    {
-      "id": "fred-jobless-claims-2026-09-17",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-09-17T12:30:00Z",
-      "end_utc": "2026-09-17T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-09-17",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
     },
     {
       "id": "futures-expiration-2026-09",
@@ -1027,114 +634,24 @@
       "source_url": "https://www.cmegroup.com/trading/equity-index/rolldates.html",
       "note": "Index futures, index options, single-stock options and single-stock futures all expire. Expect elevated volume all session and a large closing auction.",
       "computed": true,
-      "holiday_adjusted": false
-    },
-    {
-      "id": "fred-jobless-claims-2026-09-24",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-09-24T12:30:00Z",
-      "end_utc": "2026-09-24T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-09-24",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-factory-orders-2026-09-25",
-      "event_type": "macro_release_factory_orders",
-      "title": "Factory Orders (M3)",
-      "start_utc": "2026-09-25T14:00:00Z",
-      "end_utc": "2026-09-25T14:30:00Z",
-      "all_day": false,
-      "date_et": "2026-09-25",
-      "time_et": "10:00",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/95",
-      "note": "Census Bureau M3 survey: shipments, inventories and new orders for manufactured goods, released at 10:00am ET. Core capital goods orders are read as a proxy for business investment intentions. The advance durable goods report precedes this by a few days.",
-      "fred_release_id": 95,
-      "primary_source_url": "https://www.census.gov/manufacturing/m3/index.html",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-jolts-2026-09-29",
-      "event_type": "macro_release_jolts",
-      "title": "JOLTS Job Openings",
-      "start_utc": "2026-09-29T14:00:00Z",
-      "end_utc": "2026-09-29T14:30:00Z",
-      "all_day": false,
-      "date_et": "2026-09-29",
-      "time_et": "10:00",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/192",
-      "note": "BLS survey of job openings, hires and quits, released at 10:00am ET -- note the later time than most BLS releases. The openings-to-unemployed ratio is a labour-market tightness gauge the Fed cites.",
-      "fred_release_id": 192,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/jolts.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-gdp-2026-09-30",
-      "event_type": "macro_release_gdp",
-      "title": "GDP (Third Estimate)",
-      "start_utc": "2026-09-30T12:30:00Z",
-      "end_utc": "2026-09-30T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-09-30",
-      "time_et": "08:30",
-      "market_impact": "low",
-      "source": "FRED",
-      "source_url": "https://www.bea.gov/news/schedule",
-      "note": "Third estimate of quarterly GDP. The quarter is three months stale by now; this rarely moves index futures.",
-      "fred_release_id": 53,
-      "primary_source_url": "https://www.bea.gov/news/schedule",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "bea_release_title": "GDP (Third Estimate), Industries, Corporate Profits, State GDP, and State Personal Income, 2nd Quarter 2026; State PCE, 2025",
-      "confirmed_by": "bea.gov",
-      "release_variant": "third"
-    },
-    {
-      "id": "fred-pce-2026-09-30",
-      "event_type": "macro_release_pce",
-      "title": "Personal Income & Outlays (PCE)",
-      "start_utc": "2026-09-30T12:30:00Z",
-      "end_utc": "2026-09-30T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-09-30",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://www.bea.gov/news/schedule",
-      "note": "BEA report containing core PCE, the Fed's preferred inflation gauge. Watched closely into FOMC meetings.",
-      "fred_release_id": 54,
-      "primary_source_url": "https://www.bea.gov/news/schedule",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "bea_release_title": "Personal Income and Outlays, August 2026",
-      "confirmed_by": "bea.gov"
-    },
-    {
-      "id": "fred-jobless-claims-2026-10-01",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-10-01T12:30:00Z",
-      "end_utc": "2026-10-01T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-10-01",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
+      "holiday_adjusted": false,
+      "typical_move": {
+        "ratio": 1.0,
+        "notable": false,
+        "summary": "Historically moves about as much as a normal day.",
+        "window": "full",
+        "sample_start": "2016-07-28",
+        "spx": {
+          "median_abs_pct": 0.49,
+          "ratio": 1.0,
+          "n": 39
+        },
+        "ndx": {
+          "median_abs_pct": 0.554,
+          "ratio": 0.79,
+          "n": 39
+        }
+      }
     },
     {
       "id": "ism-manufacturing-pmi-2026-10-01",
@@ -1153,40 +670,6 @@
       "approximate": true
     },
     {
-      "id": "fred-employment-situation-2026-10-02",
-      "event_type": "macro_release_employment_situation",
-      "title": "Employment Situation (Nonfarm Payrolls)",
-      "start_utc": "2026-10-02T12:30:00Z",
-      "end_utc": "2026-10-02T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-10-02",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/50",
-      "note": "Monthly jobs report from the BLS: nonfarm payrolls, unemployment rate and average hourly earnings. Typically the highest-volatility scheduled release of the month for index futures.",
-      "fred_release_id": 50,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/empsit.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-factory-orders-2026-10-02",
-      "event_type": "macro_release_factory_orders",
-      "title": "Factory Orders (M3)",
-      "start_utc": "2026-10-02T14:00:00Z",
-      "end_utc": "2026-10-02T14:30:00Z",
-      "all_day": false,
-      "date_et": "2026-10-02",
-      "time_et": "10:00",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/95",
-      "note": "Census Bureau M3 survey: shipments, inventories and new orders for manufactured goods, released at 10:00am ET. Core capital goods orders are read as a proxy for business investment intentions. The advance durable goods report precedes this by a few days.",
-      "fred_release_id": 95,
-      "primary_source_url": "https://www.census.gov/manufacturing/m3/index.html",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
       "id": "ism-services-pmi-2026-10-05",
       "event_type": "ism_services_pmi",
       "title": "ISM Services PMI (estimated)",
@@ -1203,91 +686,6 @@
       "approximate": true
     },
     {
-      "id": "fred-jobless-claims-2026-10-08",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-10-08T12:30:00Z",
-      "end_utc": "2026-10-08T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-10-08",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-cpi-2026-10-14",
-      "event_type": "macro_release_cpi",
-      "title": "Consumer Price Index (CPI)",
-      "start_utc": "2026-10-14T12:30:00Z",
-      "end_utc": "2026-10-14T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-10-14",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/10",
-      "note": "Headline and core consumer inflation from the BLS. The core month-over-month print drives the immediate rates and equity reaction.",
-      "fred_release_id": 10,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/cpi.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-jobless-claims-2026-10-15",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-10-15T12:30:00Z",
-      "end_utc": "2026-10-15T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-10-15",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-ppi-2026-10-15",
-      "event_type": "macro_release_ppi",
-      "title": "Producer Price Index (PPI)",
-      "start_utc": "2026-10-15T12:30:00Z",
-      "end_utc": "2026-10-15T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-10-15",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/46",
-      "note": "Wholesale/producer inflation from the BLS. Watched as a lead-in to CPI and for the PPI components that feed the PCE calculation.",
-      "fred_release_id": 46,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/ppi.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-retail-sales-2026-10-15",
-      "event_type": "macro_release_retail_sales",
-      "title": "Retail Sales (Advance)",
-      "start_utc": "2026-10-15T12:30:00Z",
-      "end_utc": "2026-10-15T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-10-15",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/9",
-      "note": "Census Bureau advance estimate of monthly retail and food service sales. Consumer spending is roughly two-thirds of GDP, so the control-group figure moves growth expectations and index futures.",
-      "fred_release_id": 9,
-      "primary_source_url": "https://www.census.gov/retail/index.html",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
       "id": "monthly-opex-2026-10",
       "event_type": "monthly_opex",
       "title": "Monthly Options Expiration (OPEX)",
@@ -1301,24 +699,24 @@
       "source_url": "https://www.cmegroup.com/trading/equity-index/rolldates.html",
       "note": "Monthly equity and index options expire on the third Friday. Dealer hedging into the expiry can pin price near large open-interest strikes.",
       "computed": true,
-      "holiday_adjusted": false
-    },
-    {
-      "id": "fred-jobless-claims-2026-10-22",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-10-22T12:30:00Z",
-      "end_utc": "2026-10-22T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-10-22",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
+      "holiday_adjusted": false,
+      "typical_move": {
+        "ratio": 1.4,
+        "notable": true,
+        "summary": "Historically moves about 1.4x as much as a normal day.",
+        "window": "recent",
+        "sample_start": "2023-07-29",
+        "spx": {
+          "median_abs_pct": 0.697,
+          "ratio": 1.4,
+          "n": 24
+        },
+        "ndx": {
+          "median_abs_pct": 0.819,
+          "ratio": 1.17,
+          "n": 24
+        }
+      }
     },
     {
       "id": "fomc-meeting-day1-2026-10-27",
@@ -1337,23 +735,6 @@
       "meeting_end_date": "2026-10-28"
     },
     {
-      "id": "fred-factory-orders-2026-10-27",
-      "event_type": "macro_release_factory_orders",
-      "title": "Factory Orders (M3)",
-      "start_utc": "2026-10-27T14:00:00Z",
-      "end_utc": "2026-10-27T14:30:00Z",
-      "all_day": false,
-      "date_et": "2026-10-27",
-      "time_et": "10:00",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/95",
-      "note": "Census Bureau M3 survey: shipments, inventories and new orders for manufactured goods, released at 10:00am ET. Core capital goods orders are read as a proxy for business investment intentions. The advance durable goods report precedes this by a few days.",
-      "fred_release_id": 95,
-      "primary_source_url": "https://www.census.gov/manufacturing/m3/index.html",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
       "id": "fomc-statement-2026-10-28",
       "event_type": "fomc_statement",
       "title": "FOMC Statement & Rate Decision",
@@ -1368,7 +749,24 @@
       "note": "Interest rate decision and policy statement released at 2:00pm ET. Expect a sharp repricing in index futures on the release and again during the 2:30pm press conference.",
       "meeting_start_date": "2026-10-27",
       "meeting_end_date": "2026-10-28",
-      "has_sep": false
+      "has_sep": false,
+      "typical_move": {
+        "ratio": 1.49,
+        "notable": true,
+        "summary": "Historically moves about 1.5x as much as a normal day.",
+        "window": "recent",
+        "sample_start": "2023-07-29",
+        "spx": {
+          "median_abs_pct": 0.743,
+          "ratio": 1.49,
+          "n": 23
+        },
+        "ndx": {
+          "median_abs_pct": 0.992,
+          "ratio": 1.41,
+          "n": 23
+        }
+      }
     },
     {
       "id": "fomc-presser-2026-10-28",
@@ -1386,62 +784,6 @@
       "confirmed": false
     },
     {
-      "id": "fred-gdp-2026-10-29",
-      "event_type": "macro_release_gdp",
-      "title": "GDP (Advance Estimate)",
-      "start_utc": "2026-10-29T12:30:00Z",
-      "end_utc": "2026-10-29T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-10-29",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://www.bea.gov/news/schedule",
-      "note": "First (advance) estimate of quarterly GDP from the BEA. The advance print is the market-moving one -- it is the first read on the quarter.",
-      "fred_release_id": 53,
-      "primary_source_url": "https://www.bea.gov/news/schedule",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "bea_release_title": "GDP (Advance Estimate), 3rd Quarter 2026",
-      "confirmed_by": "bea.gov",
-      "release_variant": "advance"
-    },
-    {
-      "id": "fred-jobless-claims-2026-10-29",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-10-29T12:30:00Z",
-      "end_utc": "2026-10-29T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-10-29",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-pce-2026-10-29",
-      "event_type": "macro_release_pce",
-      "title": "Personal Income & Outlays (PCE)",
-      "start_utc": "2026-10-29T12:30:00Z",
-      "end_utc": "2026-10-29T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-10-29",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://www.bea.gov/news/schedule",
-      "note": "BEA report containing core PCE, the Fed's preferred inflation gauge. Watched closely into FOMC meetings.",
-      "fred_release_id": 54,
-      "primary_source_url": "https://www.bea.gov/news/schedule",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "bea_release_title": "Personal Income and Outlays, September 2026",
-      "confirmed_by": "bea.gov"
-    },
-    {
       "id": "ism-manufacturing-pmi-2026-11-02",
       "event_type": "ism_manufacturing_pmi",
       "title": "ISM Manufacturing PMI (estimated)",
@@ -1456,40 +798,6 @@
       "note": "Purchasing managers' index for manufacturing, normally released on the first business day of the month at 10:00am ET. A sub-50 print reads as contraction. Date is estimated from ISM's usual pattern -- confirm against ism.ws before trading it.",
       "computed": true,
       "approximate": true
-    },
-    {
-      "id": "fred-factory-orders-2026-11-03",
-      "event_type": "macro_release_factory_orders",
-      "title": "Factory Orders (M3)",
-      "start_utc": "2026-11-03T15:00:00Z",
-      "end_utc": "2026-11-03T15:30:00Z",
-      "all_day": false,
-      "date_et": "2026-11-03",
-      "time_et": "10:00",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/95",
-      "note": "Census Bureau M3 survey: shipments, inventories and new orders for manufactured goods, released at 10:00am ET. Core capital goods orders are read as a proxy for business investment intentions. The advance durable goods report precedes this by a few days.",
-      "fred_release_id": 95,
-      "primary_source_url": "https://www.census.gov/manufacturing/m3/index.html",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-jolts-2026-11-03",
-      "event_type": "macro_release_jolts",
-      "title": "JOLTS Job Openings",
-      "start_utc": "2026-11-03T15:00:00Z",
-      "end_utc": "2026-11-03T15:30:00Z",
-      "all_day": false,
-      "date_et": "2026-11-03",
-      "time_et": "10:00",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/192",
-      "note": "BLS survey of job openings, hires and quits, released at 10:00am ET -- note the later time than most BLS releases. The openings-to-unemployed ratio is a labour-market tightness gauge the Fed cites.",
-      "fred_release_id": 192,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/jolts.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
     },
     {
       "id": "treasury-refunding-2026-11-04",
@@ -1523,125 +831,6 @@
       "approximate": true
     },
     {
-      "id": "fred-jobless-claims-2026-11-05",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-11-05T13:30:00Z",
-      "end_utc": "2026-11-05T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-11-05",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-employment-situation-2026-11-06",
-      "event_type": "macro_release_employment_situation",
-      "title": "Employment Situation (Nonfarm Payrolls)",
-      "start_utc": "2026-11-06T13:30:00Z",
-      "end_utc": "2026-11-06T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-11-06",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/50",
-      "note": "Monthly jobs report from the BLS: nonfarm payrolls, unemployment rate and average hourly earnings. Typically the highest-volatility scheduled release of the month for index futures.",
-      "fred_release_id": 50,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/empsit.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-cpi-2026-11-10",
-      "event_type": "macro_release_cpi",
-      "title": "Consumer Price Index (CPI)",
-      "start_utc": "2026-11-10T13:30:00Z",
-      "end_utc": "2026-11-10T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-11-10",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/10",
-      "note": "Headline and core consumer inflation from the BLS. The core month-over-month print drives the immediate rates and equity reaction.",
-      "fred_release_id": 10,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/cpi.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-jobless-claims-2026-11-12",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-11-12T13:30:00Z",
-      "end_utc": "2026-11-12T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-11-12",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-ppi-2026-11-13",
-      "event_type": "macro_release_ppi",
-      "title": "Producer Price Index (PPI)",
-      "start_utc": "2026-11-13T13:30:00Z",
-      "end_utc": "2026-11-13T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-11-13",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/46",
-      "note": "Wholesale/producer inflation from the BLS. Watched as a lead-in to CPI and for the PPI components that feed the PCE calculation.",
-      "fred_release_id": 46,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/ppi.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-retail-sales-2026-11-17",
-      "event_type": "macro_release_retail_sales",
-      "title": "Retail Sales (Advance)",
-      "start_utc": "2026-11-17T13:30:00Z",
-      "end_utc": "2026-11-17T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-11-17",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/9",
-      "note": "Census Bureau advance estimate of monthly retail and food service sales. Consumer spending is roughly two-thirds of GDP, so the control-group figure moves growth expectations and index futures.",
-      "fred_release_id": 9,
-      "primary_source_url": "https://www.census.gov/retail/index.html",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-jobless-claims-2026-11-19",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-11-19T13:30:00Z",
-      "end_utc": "2026-11-19T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-11-19",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
       "id": "monthly-opex-2026-11",
       "event_type": "monthly_opex",
       "title": "Monthly Options Expiration (OPEX)",
@@ -1655,97 +844,24 @@
       "source_url": "https://www.cmegroup.com/trading/equity-index/rolldates.html",
       "note": "Monthly equity and index options expire on the third Friday. Dealer hedging into the expiry can pin price near large open-interest strikes.",
       "computed": true,
-      "holiday_adjusted": false
-    },
-    {
-      "id": "fred-gdp-2026-11-25",
-      "event_type": "macro_release_gdp",
-      "title": "GDP (Second Estimate)",
-      "start_utc": "2026-11-25T13:30:00Z",
-      "end_utc": "2026-11-25T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-11-25",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://www.bea.gov/news/schedule",
-      "note": "Second estimate of quarterly GDP, incorporating more complete source data. Revisions are usually small and the reaction is muted.",
-      "fred_release_id": 53,
-      "primary_source_url": "https://www.bea.gov/news/schedule",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "bea_release_title": "GDP (Second Estimate) and Corporate Profits, 3rd Quarter 2026",
-      "confirmed_by": "bea.gov",
-      "release_variant": "second"
-    },
-    {
-      "id": "fred-jobless-claims-2026-11-25",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-11-25T13:30:00Z",
-      "end_utc": "2026-11-25T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-11-25",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-pce-2026-11-25",
-      "event_type": "macro_release_pce",
-      "title": "Personal Income & Outlays (PCE)",
-      "start_utc": "2026-11-25T13:30:00Z",
-      "end_utc": "2026-11-25T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-11-25",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://www.bea.gov/news/schedule",
-      "note": "BEA report containing core PCE, the Fed's preferred inflation gauge. Watched closely into FOMC meetings.",
-      "fred_release_id": 54,
-      "primary_source_url": "https://www.bea.gov/news/schedule",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "bea_release_title": "Personal Income and Outlays, October 2026",
-      "confirmed_by": "bea.gov"
-    },
-    {
-      "id": "fred-factory-orders-2026-11-25",
-      "event_type": "macro_release_factory_orders",
-      "title": "Factory Orders (M3)",
-      "start_utc": "2026-11-25T15:00:00Z",
-      "end_utc": "2026-11-25T15:30:00Z",
-      "all_day": false,
-      "date_et": "2026-11-25",
-      "time_et": "10:00",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/95",
-      "note": "Census Bureau M3 survey: shipments, inventories and new orders for manufactured goods, released at 10:00am ET. Core capital goods orders are read as a proxy for business investment intentions. The advance durable goods report precedes this by a few days.",
-      "fred_release_id": 95,
-      "primary_source_url": "https://www.census.gov/manufacturing/m3/index.html",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-jolts-2026-12-01",
-      "event_type": "macro_release_jolts",
-      "title": "JOLTS Job Openings",
-      "start_utc": "2026-12-01T15:00:00Z",
-      "end_utc": "2026-12-01T15:30:00Z",
-      "all_day": false,
-      "date_et": "2026-12-01",
-      "time_et": "10:00",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/192",
-      "note": "BLS survey of job openings, hires and quits, released at 10:00am ET -- note the later time than most BLS releases. The openings-to-unemployed ratio is a labour-market tightness gauge the Fed cites.",
-      "fred_release_id": 192,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/jolts.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
+      "holiday_adjusted": false,
+      "typical_move": {
+        "ratio": 1.4,
+        "notable": true,
+        "summary": "Historically moves about 1.4x as much as a normal day.",
+        "window": "recent",
+        "sample_start": "2023-07-29",
+        "spx": {
+          "median_abs_pct": 0.697,
+          "ratio": 1.4,
+          "n": 24
+        },
+        "ndx": {
+          "median_abs_pct": 0.819,
+          "ratio": 1.17,
+          "n": 24
+        }
+      }
     },
     {
       "id": "ism-manufacturing-pmi-2026-12-01",
@@ -1764,40 +880,6 @@
       "approximate": true
     },
     {
-      "id": "fred-jobless-claims-2026-12-03",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-12-03T13:30:00Z",
-      "end_utc": "2026-12-03T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-12-03",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-factory-orders-2026-12-03",
-      "event_type": "macro_release_factory_orders",
-      "title": "Factory Orders (M3)",
-      "start_utc": "2026-12-03T15:00:00Z",
-      "end_utc": "2026-12-03T15:30:00Z",
-      "all_day": false,
-      "date_et": "2026-12-03",
-      "time_et": "10:00",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/95",
-      "note": "Census Bureau M3 survey: shipments, inventories and new orders for manufactured goods, released at 10:00am ET. Core capital goods orders are read as a proxy for business investment intentions. The advance durable goods report precedes this by a few days.",
-      "fred_release_id": 95,
-      "primary_source_url": "https://www.census.gov/manufacturing/m3/index.html",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
       "id": "ism-services-pmi-2026-12-03",
       "event_type": "ism_services_pmi",
       "title": "ISM Services PMI (estimated)",
@@ -1812,23 +894,6 @@
       "note": "Purchasing managers' index for services, normally released on the third business day of the month at 10:00am ET. Services are the bulk of the US economy, so this often outweighs the manufacturing print. Date is estimated -- confirm against ism.ws before trading it.",
       "computed": true,
       "approximate": true
-    },
-    {
-      "id": "fred-employment-situation-2026-12-04",
-      "event_type": "macro_release_employment_situation",
-      "title": "Employment Situation (Nonfarm Payrolls)",
-      "start_utc": "2026-12-04T13:30:00Z",
-      "end_utc": "2026-12-04T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-12-04",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/50",
-      "note": "Monthly jobs report from the BLS: nonfarm payrolls, unemployment rate and average hourly earnings. Typically the highest-volatility scheduled release of the month for index futures.",
-      "fred_release_id": 50,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/empsit.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
     },
     {
       "id": "fomc-meeting-day1-2026-12-08",
@@ -1876,7 +941,24 @@
       "note": "Interest rate decision and policy statement released at 2:00pm ET. Expect a sharp repricing in index futures on the release and again during the 2:30pm press conference.",
       "meeting_start_date": "2026-12-08",
       "meeting_end_date": "2026-12-09",
-      "has_sep": true
+      "has_sep": true,
+      "typical_move": {
+        "ratio": 1.49,
+        "notable": true,
+        "summary": "Historically moves about 1.5x as much as a normal day.",
+        "window": "recent",
+        "sample_start": "2023-07-29",
+        "spx": {
+          "median_abs_pct": 0.743,
+          "ratio": 1.49,
+          "n": 23
+        },
+        "ndx": {
+          "median_abs_pct": 0.992,
+          "ratio": 1.41,
+          "n": 23
+        }
+      }
     },
     {
       "id": "fomc-presser-2026-12-09",
@@ -1916,40 +998,6 @@
       "computed": true
     },
     {
-      "id": "fred-cpi-2026-12-10",
-      "event_type": "macro_release_cpi",
-      "title": "Consumer Price Index (CPI)",
-      "start_utc": "2026-12-10T13:30:00Z",
-      "end_utc": "2026-12-10T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-12-10",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/10",
-      "note": "Headline and core consumer inflation from the BLS. The core month-over-month print drives the immediate rates and equity reaction.",
-      "fred_release_id": 10,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/cpi.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-jobless-claims-2026-12-10",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-12-10T13:30:00Z",
-      "end_utc": "2026-12-10T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-12-10",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
       "id": "futures-official-roll-2026-12",
       "event_type": "futures_official_roll",
       "title": "CME Official Roll Date (/ES, /NQ, /MES, /MNQ)",
@@ -1970,57 +1018,6 @@
       ],
       "contract_code": "Z6",
       "computed": true
-    },
-    {
-      "id": "fred-ppi-2026-12-15",
-      "event_type": "macro_release_ppi",
-      "title": "Producer Price Index (PPI)",
-      "start_utc": "2026-12-15T13:30:00Z",
-      "end_utc": "2026-12-15T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-12-15",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/46",
-      "note": "Wholesale/producer inflation from the BLS. Watched as a lead-in to CPI and for the PPI components that feed the PCE calculation.",
-      "fred_release_id": 46,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/ppi.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-retail-sales-2026-12-16",
-      "event_type": "macro_release_retail_sales",
-      "title": "Retail Sales (Advance)",
-      "start_utc": "2026-12-16T13:30:00Z",
-      "end_utc": "2026-12-16T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-12-16",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/9",
-      "note": "Census Bureau advance estimate of monthly retail and food service sales. Consumer spending is roughly two-thirds of GDP, so the control-group figure moves growth expectations and index futures.",
-      "fred_release_id": 9,
-      "primary_source_url": "https://www.census.gov/retail/index.html",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-jobless-claims-2026-12-17",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-12-17T13:30:00Z",
-      "end_utc": "2026-12-17T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-12-17",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
     },
     {
       "id": "futures-expiration-2026-12",
@@ -2059,97 +1056,24 @@
       "source_url": "https://www.cmegroup.com/trading/equity-index/rolldates.html",
       "note": "Index futures, index options, single-stock options and single-stock futures all expire. Expect elevated volume all session and a large closing auction.",
       "computed": true,
-      "holiday_adjusted": false
-    },
-    {
-      "id": "fred-gdp-2026-12-23",
-      "event_type": "macro_release_gdp",
-      "title": "GDP (Third Estimate)",
-      "start_utc": "2026-12-23T13:30:00Z",
-      "end_utc": "2026-12-23T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-12-23",
-      "time_et": "08:30",
-      "market_impact": "low",
-      "source": "FRED",
-      "source_url": "https://www.bea.gov/news/schedule",
-      "note": "Third estimate of quarterly GDP. The quarter is three months stale by now; this rarely moves index futures.",
-      "fred_release_id": 53,
-      "primary_source_url": "https://www.bea.gov/news/schedule",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "bea_release_title": "GDP (Third Estimate), Industries, Corporate Profits, State GDP, and State Personal Income, 3rd Quarter 2026",
-      "confirmed_by": "bea.gov",
-      "release_variant": "third"
-    },
-    {
-      "id": "fred-pce-2026-12-23",
-      "event_type": "macro_release_pce",
-      "title": "Personal Income & Outlays (PCE)",
-      "start_utc": "2026-12-23T13:30:00Z",
-      "end_utc": "2026-12-23T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-12-23",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://www.bea.gov/news/schedule",
-      "note": "BEA report containing core PCE, the Fed's preferred inflation gauge. Watched closely into FOMC meetings.",
-      "fred_release_id": 54,
-      "primary_source_url": "https://www.bea.gov/news/schedule",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "bea_release_title": "Personal Income and Outlays, November 2026",
-      "confirmed_by": "bea.gov"
-    },
-    {
-      "id": "fred-factory-orders-2026-12-23",
-      "event_type": "macro_release_factory_orders",
-      "title": "Factory Orders (M3)",
-      "start_utc": "2026-12-23T15:00:00Z",
-      "end_utc": "2026-12-23T15:30:00Z",
-      "all_day": false,
-      "date_et": "2026-12-23",
-      "time_et": "10:00",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/95",
-      "note": "Census Bureau M3 survey: shipments, inventories and new orders for manufactured goods, released at 10:00am ET. Core capital goods orders are read as a proxy for business investment intentions. The advance durable goods report precedes this by a few days.",
-      "fred_release_id": 95,
-      "primary_source_url": "https://www.census.gov/manufacturing/m3/index.html",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-jobless-claims-2026-12-24",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-12-24T13:30:00Z",
-      "end_utc": "2026-12-24T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-12-24",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
-    },
-    {
-      "id": "fred-jobless-claims-2026-12-31",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-12-31T13:30:00Z",
-      "end_utc": "2026-12-31T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-12-31",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
+      "holiday_adjusted": false,
+      "typical_move": {
+        "ratio": 1.0,
+        "notable": false,
+        "summary": "Historically moves about as much as a normal day.",
+        "window": "full",
+        "sample_start": "2016-07-28",
+        "spx": {
+          "median_abs_pct": 0.49,
+          "ratio": 1.0,
+          "n": 39
+        },
+        "ndx": {
+          "median_abs_pct": 0.554,
+          "ratio": 0.79,
+          "n": 39
+        }
+      }
     },
     {
       "id": "ism-manufacturing-pmi-2027-01-04",
@@ -2197,7 +1121,24 @@
       "source_url": "https://www.cmegroup.com/trading/equity-index/rolldates.html",
       "note": "Monthly equity and index options expire on the third Friday. Dealer hedging into the expiry can pin price near large open-interest strikes.",
       "computed": true,
-      "holiday_adjusted": false
+      "holiday_adjusted": false,
+      "typical_move": {
+        "ratio": 1.4,
+        "notable": true,
+        "summary": "Historically moves about 1.4x as much as a normal day.",
+        "window": "recent",
+        "sample_start": "2023-07-29",
+        "spx": {
+          "median_abs_pct": 0.697,
+          "ratio": 1.4,
+          "n": 24
+        },
+        "ndx": {
+          "median_abs_pct": 0.819,
+          "ratio": 1.17,
+          "n": 24
+        }
+      }
     },
     {
       "id": "fomc-meeting-day1-2027-01-26",
@@ -2230,7 +1171,24 @@
       "note": "Interest rate decision and policy statement released at 2:00pm ET. Expect a sharp repricing in index futures on the release and again during the 2:30pm press conference.",
       "meeting_start_date": "2027-01-26",
       "meeting_end_date": "2027-01-27",
-      "has_sep": false
+      "has_sep": false,
+      "typical_move": {
+        "ratio": 1.49,
+        "notable": true,
+        "summary": "Historically moves about 1.5x as much as a normal day.",
+        "window": "recent",
+        "sample_start": "2023-07-29",
+        "spx": {
+          "median_abs_pct": 0.743,
+          "ratio": 1.49,
+          "n": 23
+        },
+        "ndx": {
+          "median_abs_pct": 0.992,
+          "ratio": 1.41,
+          "n": 23
+        }
+      }
     },
     {
       "id": "fomc-presser-2027-01-27",
@@ -2308,7 +1266,24 @@
       "source_url": "https://www.cmegroup.com/trading/equity-index/rolldates.html",
       "note": "Monthly equity and index options expire on the third Friday. Dealer hedging into the expiry can pin price near large open-interest strikes.",
       "computed": true,
-      "holiday_adjusted": false
+      "holiday_adjusted": false,
+      "typical_move": {
+        "ratio": 1.4,
+        "notable": true,
+        "summary": "Historically moves about 1.4x as much as a normal day.",
+        "window": "recent",
+        "sample_start": "2023-07-29",
+        "spx": {
+          "median_abs_pct": 0.697,
+          "ratio": 1.4,
+          "n": 24
+        },
+        "ndx": {
+          "median_abs_pct": 0.819,
+          "ratio": 1.17,
+          "n": 24
+        }
+      }
     },
     {
       "id": "ism-manufacturing-pmi-2027-03-01",
@@ -2432,7 +1407,24 @@
       "note": "Interest rate decision and policy statement released at 2:00pm ET. Expect a sharp repricing in index futures on the release and again during the 2:30pm press conference.",
       "meeting_start_date": "2027-03-16",
       "meeting_end_date": "2027-03-17",
-      "has_sep": true
+      "has_sep": true,
+      "typical_move": {
+        "ratio": 1.49,
+        "notable": true,
+        "summary": "Historically moves about 1.5x as much as a normal day.",
+        "window": "recent",
+        "sample_start": "2023-07-29",
+        "spx": {
+          "median_abs_pct": 0.743,
+          "ratio": 1.49,
+          "n": 23
+        },
+        "ndx": {
+          "median_abs_pct": 0.992,
+          "ratio": 1.41,
+          "n": 23
+        }
+      }
     },
     {
       "id": "fomc-presser-2027-03-17",
@@ -2486,7 +1478,24 @@
       "source_url": "https://www.cmegroup.com/trading/equity-index/rolldates.html",
       "note": "Index futures, index options, single-stock options and single-stock futures all expire. Expect elevated volume all session and a large closing auction.",
       "computed": true,
-      "holiday_adjusted": false
+      "holiday_adjusted": false,
+      "typical_move": {
+        "ratio": 1.0,
+        "notable": false,
+        "summary": "Historically moves about as much as a normal day.",
+        "window": "full",
+        "sample_start": "2016-07-28",
+        "spx": {
+          "median_abs_pct": 0.49,
+          "ratio": 1.0,
+          "n": 39
+        },
+        "ndx": {
+          "median_abs_pct": 0.554,
+          "ratio": 0.79,
+          "n": 39
+        }
+      }
     },
     {
       "id": "ism-manufacturing-pmi-2027-04-01",
@@ -2534,7 +1543,24 @@
       "source_url": "https://www.cmegroup.com/trading/equity-index/rolldates.html",
       "note": "Monthly equity and index options expire on the third Friday. Dealer hedging into the expiry can pin price near large open-interest strikes.",
       "computed": true,
-      "holiday_adjusted": false
+      "holiday_adjusted": false,
+      "typical_move": {
+        "ratio": 1.4,
+        "notable": true,
+        "summary": "Historically moves about 1.4x as much as a normal day.",
+        "window": "recent",
+        "sample_start": "2023-07-29",
+        "spx": {
+          "median_abs_pct": 0.697,
+          "ratio": 1.4,
+          "n": 24
+        },
+        "ndx": {
+          "median_abs_pct": 0.819,
+          "ratio": 1.17,
+          "n": 24
+        }
+      }
     },
     {
       "id": "fomc-meeting-day1-2027-04-27",
@@ -2567,7 +1593,24 @@
       "note": "Interest rate decision and policy statement released at 2:00pm ET. Expect a sharp repricing in index futures on the release and again during the 2:30pm press conference.",
       "meeting_start_date": "2027-04-27",
       "meeting_end_date": "2027-04-28",
-      "has_sep": false
+      "has_sep": false,
+      "typical_move": {
+        "ratio": 1.49,
+        "notable": true,
+        "summary": "Historically moves about 1.5x as much as a normal day.",
+        "window": "recent",
+        "sample_start": "2023-07-29",
+        "spx": {
+          "median_abs_pct": 0.743,
+          "ratio": 1.49,
+          "n": 23
+        },
+        "ndx": {
+          "median_abs_pct": 0.992,
+          "ratio": 1.41,
+          "n": 23
+        }
+      }
     },
     {
       "id": "fomc-presser-2027-04-28",
@@ -2645,7 +1688,24 @@
       "source_url": "https://www.cmegroup.com/trading/equity-index/rolldates.html",
       "note": "Monthly equity and index options expire on the third Friday. Dealer hedging into the expiry can pin price near large open-interest strikes.",
       "computed": true,
-      "holiday_adjusted": false
+      "holiday_adjusted": false,
+      "typical_move": {
+        "ratio": 1.4,
+        "notable": true,
+        "summary": "Historically moves about 1.4x as much as a normal day.",
+        "window": "recent",
+        "sample_start": "2023-07-29",
+        "spx": {
+          "median_abs_pct": 0.697,
+          "ratio": 1.4,
+          "n": 24
+        },
+        "ndx": {
+          "median_abs_pct": 0.819,
+          "ratio": 1.17,
+          "n": 24
+        }
+      }
     },
     {
       "id": "ism-manufacturing-pmi-2027-06-01",
@@ -2725,7 +1785,24 @@
       "note": "Interest rate decision and policy statement released at 2:00pm ET. Expect a sharp repricing in index futures on the release and again during the 2:30pm press conference.",
       "meeting_start_date": "2027-06-08",
       "meeting_end_date": "2027-06-09",
-      "has_sep": true
+      "has_sep": true,
+      "typical_move": {
+        "ratio": 1.49,
+        "notable": true,
+        "summary": "Historically moves about 1.5x as much as a normal day.",
+        "window": "recent",
+        "sample_start": "2023-07-29",
+        "spx": {
+          "median_abs_pct": 0.743,
+          "ratio": 1.49,
+          "n": 23
+        },
+        "ndx": {
+          "median_abs_pct": 0.992,
+          "ratio": 1.41,
+          "n": 23
+        }
+      }
     },
     {
       "id": "fomc-presser-2027-06-09",
@@ -2823,7 +1900,24 @@
       "source_url": "https://www.cmegroup.com/trading/equity-index/rolldates.html",
       "note": "Index futures, index options, single-stock options and single-stock futures all expire. Expect elevated volume all session and a large closing auction.",
       "computed": true,
-      "holiday_adjusted": false
+      "holiday_adjusted": false,
+      "typical_move": {
+        "ratio": 1.0,
+        "notable": false,
+        "summary": "Historically moves about as much as a normal day.",
+        "window": "full",
+        "sample_start": "2016-07-28",
+        "spx": {
+          "median_abs_pct": 0.49,
+          "ratio": 1.0,
+          "n": 39
+        },
+        "ndx": {
+          "median_abs_pct": 0.554,
+          "ratio": 0.79,
+          "n": 39
+        }
+      }
     },
     {
       "id": "ism-manufacturing-pmi-2027-07-01",
@@ -2871,7 +1965,24 @@
       "source_url": "https://www.cmegroup.com/trading/equity-index/rolldates.html",
       "note": "Monthly equity and index options expire on the third Friday. Dealer hedging into the expiry can pin price near large open-interest strikes.",
       "computed": true,
-      "holiday_adjusted": false
+      "holiday_adjusted": false,
+      "typical_move": {
+        "ratio": 1.4,
+        "notable": true,
+        "summary": "Historically moves about 1.4x as much as a normal day.",
+        "window": "recent",
+        "sample_start": "2023-07-29",
+        "spx": {
+          "median_abs_pct": 0.697,
+          "ratio": 1.4,
+          "n": 24
+        },
+        "ndx": {
+          "median_abs_pct": 0.819,
+          "ratio": 1.17,
+          "n": 24
+        }
+      }
     },
     {
       "id": "fomc-meeting-day1-2027-07-27",
@@ -2904,7 +2015,24 @@
       "note": "Interest rate decision and policy statement released at 2:00pm ET. Expect a sharp repricing in index futures on the release and again during the 2:30pm press conference.",
       "meeting_start_date": "2027-07-27",
       "meeting_end_date": "2027-07-28",
-      "has_sep": false
+      "has_sep": false,
+      "typical_move": {
+        "ratio": 1.49,
+        "notable": true,
+        "summary": "Historically moves about 1.5x as much as a normal day.",
+        "window": "recent",
+        "sample_start": "2023-07-29",
+        "spx": {
+          "median_abs_pct": 0.743,
+          "ratio": 1.49,
+          "n": 23
+        },
+        "ndx": {
+          "median_abs_pct": 0.992,
+          "ratio": 1.41,
+          "n": 23
+        }
+      }
     },
     {
       "id": "fomc-presser-2027-07-28",
@@ -2982,7 +2110,59 @@
       "source_url": "https://www.cmegroup.com/trading/equity-index/rolldates.html",
       "note": "Monthly equity and index options expire on the third Friday. Dealer hedging into the expiry can pin price near large open-interest strikes.",
       "computed": true,
-      "holiday_adjusted": false
+      "holiday_adjusted": false,
+      "typical_move": {
+        "ratio": 1.4,
+        "notable": true,
+        "summary": "Historically moves about 1.4x as much as a normal day.",
+        "window": "recent",
+        "sample_start": "2023-07-29",
+        "spx": {
+          "median_abs_pct": 0.697,
+          "ratio": 1.4,
+          "n": 24
+        },
+        "ndx": {
+          "median_abs_pct": 0.819,
+          "ratio": 1.17,
+          "n": 24
+        }
+      }
     }
-  ]
+  ],
+  "typical_moves": {
+    "sample_period": {
+      "start": "2016-07-28",
+      "end": "2026-07-28"
+    },
+    "recent_sample_period": {
+      "start": "2023-07-29",
+      "end": "2026-07-28"
+    },
+    "indices": {
+      "SPX": "S&P 500",
+      "NDX": "Nasdaq 100"
+    },
+    "method": "Absolute close-to-close percentage change of the index on each historical occurrence of the event. ratio_to_baseline compares the mean absolute move on those days with the mean absolute move on every trading day in the same period.",
+    "caveat": "Past behaviour over a limited sample. Not a forecast, not investment advice, and no indication of direction.",
+    "baseline": {
+      "SPX": {
+        "n": 2511,
+        "mean_abs_pct": 0.732,
+        "median_abs_pct": 0.49,
+        "p90_abs_pct": 1.603,
+        "max_abs_pct": 11.984,
+        "share_up": 0.547
+      },
+      "NDX": {
+        "n": 2512,
+        "mean_abs_pct": 0.986,
+        "median_abs_pct": 0.704,
+        "p90_abs_pct": 2.196,
+        "max_abs_pct": 12.193,
+        "share_up": 0.565
+      }
+    },
+    "generated_at_utc": "2026-07-28T22:06:04Z"
+  }
 }

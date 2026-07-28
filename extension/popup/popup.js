@@ -6,7 +6,12 @@
  */
 
 import { IN_PROGRESS_GRACE_MS, STALE_AFTER_DAYS } from "../src/config.js";
-import { detailRows, formatTimes } from "../src/details.js";
+import {
+  detailRows,
+  formatTimes,
+  typicalMoveBadge,
+  typicalMoveDetail,
+} from "../src/details.js";
 import {
   TYPE_GROUPS,
   coverageGaps,
@@ -41,6 +46,10 @@ const elements = {
   detailSource: document.getElementById("detail-source"),
   detailPrimary: document.getElementById("detail-primary"),
   detailAttribution: document.getElementById("detail-attribution"),
+  detailMove: document.getElementById("detail-move"),
+  moveHeadline: document.getElementById("move-headline"),
+  moveRows: document.getElementById("move-rows"),
+  moveWindow: document.getElementById("move-window"),
 };
 
 // The zone the detail view formats against; kept in sync with prefs on render.
@@ -103,6 +112,14 @@ function renderEvent(event, now) {
   title.textContent = event.title;
   title.addEventListener("click", () => showDetail(event));
   body.append(title);
+
+  const moveBadge = typicalMoveBadge(event);
+  if (moveBadge) {
+    const badge = document.createElement("span");
+    badge.className = "flag move-flag";
+    badge.textContent = moveBadge;
+    body.append(badge);
+  }
 
   if (event.approximate) {
     const flag = document.createElement("span");
@@ -285,6 +302,17 @@ function showDetail(event) {
 
   appendPairs(elements.detailTimes, formatTimes(event, activeTimeZone));
   appendPairs(elements.detailRows, detailRows(event));
+
+  const move = typicalMoveDetail(event);
+  if (move) {
+    elements.moveHeadline.textContent = move.headline;
+    elements.moveHeadline.classList.toggle("notable", move.notable);
+    appendPairs(elements.moveRows, move.rows);
+    elements.moveWindow.textContent = move.window;
+    elements.detailMove.hidden = false;
+  } else {
+    elements.detailMove.hidden = true;
+  }
 
   elements.detailSource.href = event.source_url;
   elements.detailSource.textContent = "Verify at official source →";

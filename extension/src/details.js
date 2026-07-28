@@ -99,6 +99,51 @@ export function detailRows(event) {
 }
 
 /**
+ * A short badge for the list, or null.
+ *
+ * Only shown when the event day is clearly different from an ordinary day.
+ * Most event types sit within noise of 1.0x, and stamping "1.02x normal" on
+ * everything would be noise presented as insight.
+ */
+export function typicalMoveBadge(event) {
+  const move = event.typical_move;
+  if (!move?.notable || typeof move.ratio !== "number") return null;
+  return move.ratio >= 1
+    ? `${move.ratio.toFixed(1)}× normal`
+    : "quieter than normal";
+}
+
+/**
+ * The detail-view block: headline, per-index medians with sample sizes, and
+ * the window the figures were computed over.
+ *
+ * Sample size is always shown. A ratio without an `n` invites a confident
+ * reading of very little data.
+ */
+export function typicalMoveDetail(event) {
+  const move = event.typical_move;
+  if (!move) return null;
+
+  const rows = [];
+  for (const [key, label] of [["spx", "S&P 500"], ["ndx", "Nasdaq 100"]]) {
+    const stats = move[key];
+    if (!stats) continue;
+    rows.push({
+      label,
+      value: `${stats.median_abs_pct.toFixed(2)}% median move (n=${stats.n})`,
+    });
+  }
+
+  const since = move.sample_start ? ` since ${move.sample_start}` : "";
+  return {
+    headline: move.summary,
+    notable: Boolean(move.notable),
+    rows,
+    window: `${move.window === "recent" ? "Recent window" : "Full sample"}${since}`,
+  };
+}
+
+/**
  * The same instant rendered three ways: the viewer's chosen zone, Eastern
  * (how the agency announces it), and UTC (what the feed stores). A trader
  * verifying against an official page needs the Eastern one.
