@@ -33,6 +33,8 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import csv
+import io
 import json
 import os
 import statistics
@@ -75,6 +77,67 @@ INDICES = {
 # auction has no reliable same-day equity signature, and pretending otherwise
 # would be the kind of spurious number this script exists to replace.
 FUTURES_EVENT_TYPES = ("quad_witching", "monthly_opex")
+
+# Cboe publishes VIX history free, with no key. SPX is close-only there and
+# NDX is not served at all, so this is the one OHLC-adjacent source available
+# without a commercial data licence.
+CBOE_VIX_URL = "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv"
+
+
+def fetch_vix_closes(session: requests.Session) -> Dict[date, float]:
+    """Daily VIX closes from Cboe."""
+    response = session.get(CBOE_VIX_URL, timeout=HTTP_TIMEOUT)
+    response.raise_for_status()
+
+    closes: Dict[date, float] = {}
+    for row in csv.DictReader(io.StringIO(response.text)):
+        raw_date = (row.get("DATE") or "").strip()
+        raw_close = (row.get("CLOSE") or "").strip()
+        if not raw_date or not raw_close:
+            continue
+        try:
+            day = datetime.strptime(raw_date, "%m/%d/%Y").date()
+            closes[day] = float(raw_close)
+        except ValueError:
+            continue
+
+    if not closes:
+        raise RuntimeError("Cboe returned no usable VIX observations")
+    return closes
+
+
+def vix_changes(closes: Dict[date, float]) -> Dict[date, float]:
+    """Percentage change in VIX, which is comparable across volatility regimes.
+
+    Absolute point changes are not: a one-point move means something very
+    different at VIX 12 than at VIX 40.
+    """
+    ordered = sorted(closes)
+    changes: Dict[date, float] = {}
+    for previous, current in zip(ordered, ordered[1:]):
+        before = closes[previous]
+        if before:
+            changes[current] = (closes[current] / before - 1.0) * 100.0
+    return changes
+
+
+def summarise_vol(changes: List[float]) -> Optional[Dict[str, Any]]:
+    """Signed summary of VIX changes. Sign matters here, unlike price moves.
+
+    A negative median is the 'vol crush' pattern: the market priced uncertainty
+    ahead of the event, and the release resolved it.
+    """
+    if not changes:
+        return None
+    ordered = sorted(changes)
+    return {
+        "n": len(ordered),
+        "median_pct": round(statistics.median(ordered), 3),
+        "mean_pct": round(statistics.fmean(ordered), 3),
+        "share_falling": round(
+            sum(1 for change in changes if change < 0) / len(changes), 3
+        ),
+    }
 
 
 def fetch_series(
@@ -249,10 +312,13 @@ def build_document(
     returns_by_index: Dict[str, Dict[date, float]],
     window: Tuple[date, date],
     min_sample: int,
+    vol: Optional[Dict[date, float]] = None,
 ) -> Dict[str, Any]:
     baseline: Dict[str, Any] = {}
     for index, returns in returns_by_index.items():
         baseline[index] = summarise(list(returns.values()))
+
+    vol_baseline = summarise_vol(list(vol.values())) if vol else None
 
     results: Dict[str, Any] = {}
     for event_type, days in sorted(by_type.items()):
@@ -276,6 +342,19 @@ def build_document(
                 round(stats["median_abs_pct"] / base_median, 2) if base_median else None
             )
             entry[index] = stats
+        # A second, independent read on whether the event matters. Realized
+        # close-to-close move cannot see an 8:30am release that moves the
+        # market pre-open and mean-reverts by the close; the volatility the
+        # market priced into that day, and gave up afterwards, can.
+        if vol and vol_baseline:
+            vol_stats = summarise_vol(moves_for_dates(vol, days))
+            if vol_stats and vol_stats["n"] >= min_sample:
+                vol_stats["baseline_median_pct"] = vol_baseline["median_pct"]
+                vol_stats["excess_pct"] = round(
+                    vol_stats["median_pct"] - vol_baseline["median_pct"], 3
+                )
+                entry["VIX"] = vol_stats
+
         if entry:
             results[event_type] = entry
 
@@ -296,7 +375,9 @@ def build_document(
         "indices": {key: value["label"] for key, value in INDICES.items()},
         "min_sample": min_sample,
         "baseline": baseline,
+        "vix_baseline": vol_baseline,
         "attribution": FRED_ATTRIBUTION,
+        "vix_source": "Cboe daily VIX history (cboe.com), used for the vol-crush measure.",
         "by_event_type": results,
     }
 
@@ -336,10 +417,21 @@ def main() -> int:
         returns_by_index[index] = returns
         print(f"  {index} ({meta['series_id']}): {len(returns)} trading days")
 
+    print("- VIX history (Cboe)")
+    vol = None
+    try:
+        vix = fetch_vix_closes(session)
+        vol = {day: change for day, change in vix_changes(vix).items() if day >= start}
+        print(f"  VIX: {len(vol)} trading days in window")
+    except Exception as exc:  # noqa: BLE001 -- a second lens, not a hard input
+        print(f"  ! VIX unavailable, skipping vol-crush measure: {exc}", file=sys.stderr)
+
     print("- event history")
     by_type = collect_event_dates(session, api_key, start, end)
 
-    document = build_document(by_type, returns_by_index, (start, end), args.min_sample)
+    document = build_document(
+        by_type, returns_by_index, (start, end), args.min_sample, vol=vol
+    )
 
     # Which events move markets is regime-dependent -- CPI was decisive in 2022
     # and background noise in 2017 -- so a decade-long average understates the
@@ -347,12 +439,18 @@ def main() -> int:
     if args.recent_years:
         recent_start = end - timedelta(days=int(args.recent_years * 365.25))
         recent_types, recent_returns = restrict(by_type, returns_by_index, recent_start)
+        recent_vol = (
+            {day: change for day, change in vol.items() if day >= recent_start}
+            if vol else None
+        )
         recent = build_document(
-            recent_types, recent_returns, (recent_start, end), args.min_sample
+            recent_types, recent_returns, (recent_start, end), args.min_sample,
+            vol=recent_vol,
         )
         document["recent_window"] = {
             "sample_period": recent["sample_period"],
             "baseline": recent["baseline"],
+            "vix_baseline": recent["vix_baseline"],
             "by_event_type": recent["by_event_type"],
         }
 
@@ -370,6 +468,8 @@ def main() -> int:
     print(f"  {'event':<34} {'idx':<4} {'median':>7} {'ratio':>6} {'recent':>7}  n")
     for event_type, entry in document["by_event_type"].items():
         for index, stats in entry.items():
+            if index == "VIX":
+                continue
             recent_stats = recent.get(event_type, {}).get(index)
             recent_ratio = (
                 f"{recent_stats['ratio_median_to_baseline']:.2f}x"
@@ -380,6 +480,19 @@ def main() -> int:
                 f"{stats['ratio_median_to_baseline']:>5.2f}x {recent_ratio:>7}  "
                 f"n={stats['n']}"
             )
+    vix_base = document.get("vix_baseline")
+    if vix_base:
+        print(f"\n  VIX baseline: {vix_base['median_pct']:+.2f}% median daily change")
+        print(f"  {'event':<34} {'VIX median':>11} {'excess':>8}   n")
+        rows = [
+            (et, e["VIX"]) for et, e in document["by_event_type"].items() if "VIX" in e
+        ]
+        for event_type, v in sorted(rows, key=lambda kv: kv[1]["excess_pct"]):
+            print(
+                f"  {event_type:<34} {v['median_pct']:>+10.2f}% {v['excess_pct']:>+7.2f}%   "
+                f"n={v['n']}"
+            )
+
     print(f"\n{FRED_ATTRIBUTION}")
     return 0
 

@@ -179,5 +179,69 @@ class TestRestrict(unittest.TestCase):
         self.assertNotIn(date(2020, 1, 1), trimmed_returns["SPX"])
 
 
+
+
+class TestVolCrush(unittest.TestCase):
+    def test_vix_changes_are_percentages(self):
+        from build_typical_moves import vix_changes
+
+        closes = {date(2026, 1, 5): 20.0, date(2026, 1, 6): 18.0}
+        self.assertAlmostEqual(vix_changes(closes)[date(2026, 1, 6)], -10.0)
+
+    def test_summarise_vol_keeps_the_sign(self):
+        from build_typical_moves import summarise_vol
+
+        # Unlike price moves, direction is the whole point here: a negative
+        # median is the vol-crush pattern.
+        stats = summarise_vol([-10.0, -5.0, 1.0])
+        self.assertEqual(stats["n"], 3)
+        self.assertAlmostEqual(stats["median_pct"], -5.0)
+        self.assertAlmostEqual(stats["share_falling"], 2 / 3, places=3)
+        self.assertIsNone(summarise_vol([]))
+
+    def test_excess_is_measured_against_the_baseline(self):
+        from datetime import timedelta
+
+        event_days = [date(2026, 1, 1) + timedelta(days=i * 3) for i in range(15)]
+        vol = {}
+        day = date(2026, 1, 1)
+        for _ in range(60):
+            vol[day] = -8.0 if day in event_days else -0.5
+            day += timedelta(days=1)
+        returns = {key: 1.0 for key in vol}
+
+        document = build_document(
+            {"fomc_statement": event_days},
+            {"SPX": returns},
+            (date(2026, 1, 1), date(2026, 3, 1)),
+            min_sample=12,
+            vol=vol,
+        )
+        crush = document["by_event_type"]["fomc_statement"]["VIX"]
+        self.assertAlmostEqual(crush["median_pct"], -8.0)
+        # Baseline is the mixed population, so excess is the extra crush.
+        self.assertLess(crush["excess_pct"], 0)
+        self.assertEqual(crush["n"], 15)
+
+    def test_vol_is_optional(self):
+        from datetime import timedelta
+
+        event_days = [date(2026, 1, 1) + timedelta(days=i * 3) for i in range(15)]
+        returns = {}
+        day = date(2026, 1, 1)
+        for _ in range(60):
+            returns[day] = 1.0
+            day += timedelta(days=1)
+        document = build_document(
+            {"fomc_statement": event_days},
+            {"SPX": returns},
+            (date(2026, 1, 1), date(2026, 3, 1)),
+            min_sample=12,
+        )
+        # Cboe being unreachable must not break the whole computation.
+        self.assertIsNone(document["vix_baseline"])
+        self.assertNotIn("VIX", document["by_event_type"]["fomc_statement"])
+
+
 if __name__ == "__main__":
     unittest.main()
