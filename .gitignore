@@ -216,3 +216,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- Compass Economic Calendar ---
+# Generated artifacts. The refresh workflow force-adds them (git add -f) so the
+# published feed is versioned, but local builds stay out of the way.
+output/*
+!output/.gitkeep

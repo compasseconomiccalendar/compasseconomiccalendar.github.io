@@ -1,0 +1,7 @@
+# Compass Economic Calendar -- ingestion job dependencies
+# Python 3.9+ (uses zoneinfo from the standard library)
+
+requests>=2.32,<3
+beautifulsoup4>=4.12,<5
+python-dotenv>=1.0,<2
+icalendar>=6.0,<7

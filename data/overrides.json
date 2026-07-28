@@ -1,0 +1,18 @@
+{
+  "_comment": [
+    "Manual override layer for the ingestion job (docs/RESEARCH.md section 7).",
+    "Scraped schedules break and government shutdowns reschedule releases, so",
+    "this file always wins over whatever the sources returned.",
+    "",
+    "'remove' takes a list of event ids to drop from the feed.",
+    "'upsert' takes partial event objects; each one is merged over the event",
+    "with the same id, or appended whole if that id does not exist yet.",
+    "Every touched event is tagged \"manually_overridden\": true in the output.",
+    "",
+    "Example:",
+    "  \"remove\": [\"fred-gdp-2026-10-29\"],",
+    "  \"upsert\": [{\"id\": \"fomc-statement-2026-09-16\", \"time_et\": \"14:00\"}]"
+  ],
+  "remove": [],
+  "upsert": []
+}

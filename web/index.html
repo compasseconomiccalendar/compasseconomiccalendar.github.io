@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compass Economic Calendar</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #fbfbfa; --fg: #1a1a19; --muted: #6b6b66;
+    --line: #e3e3df; --card: #ffffff; --accent: #7a4a2b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #17171a; --fg: #ededeb; --muted: #a0a09a;
+            --line: #2e2e33; --card: #1f1f23; --accent: #d99a6c; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 3rem 1.25rem 4rem;
+    background: var(--bg); color: var(--fg);
+    font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  main { max-width: 46rem; margin: 0 auto; }
+  h1 { font-size: 1.9rem; letter-spacing: -0.02em; margin: 0 0 .4rem; }
+  h2 { font-size: 1.05rem; letter-spacing: -0.01em; margin: 2.5rem 0 .75rem; }
+  .lede { color: var(--muted); margin: 0 0 2rem; }
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 10px; padding: 1rem 1.15rem; margin-bottom: .75rem;
+  }
+  .card h3 { margin: 0 0 .3rem; font-size: .95rem; }
+  .card p { margin: 0; color: var(--muted); font-size: .9rem; }
+  code, .url {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: .85em; background: var(--bg);
+    border: 1px solid var(--line); border-radius: 5px;
+    padding: .15rem .4rem; overflow-wrap: anywhere;
+  }
+  ul { padding-left: 1.15rem; }
+  li { margin: .3rem 0; }
+  a { color: var(--accent); }
+  footer {
+    margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: .82rem;
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Compass Economic Calendar</h1>
+  <p class="lede">
+    A free, machine-readable schedule of U.S. macro releases, FOMC events,
+    Treasury auctions and CME equity-index futures roll dates. Built for
+    futures traders. All timestamps UTC.
+  </p>
+
+  <h2>Subscribe</h2>
+  <div class="card">
+    <h3>Calendar feed (.ics)</h3>
+    <p>
+      Add <span class="url">compass_calendar.ics</span> as a subscribed
+      calendar in Google Calendar, Apple Calendar or Outlook. It refreshes
+      weekly.
+    </p>
+  </div>
+  <div class="card">
+    <h3>JSON feed</h3>
+    <p>
+      <span class="url">calendar.json</span> &mdash; the normalized source of
+      truth. One event per entry with <code>event_type</code>,
+      <code>market_impact</code>, <code>source_url</code> and a plain-English
+      <code>note</code>.
+    </p>
+  </div>
+
+  <h2>What's in it</h2>
+  <ul>
+    <li>FOMC meetings, statements (2:00pm ET), press conferences (2:30pm ET), SEP/dot-plot releases and minutes</li>
+    <li>Employment Situation, CPI, PPI, GDP and PCE release dates (8:30am ET)</li>
+    <li>Treasury auctions and quarterly refunding announcements</li>
+    <li>/ES, /NQ, /MES, /MNQ roll dates, expirations, quad witching and monthly OPEX</li>
+  </ul>
+
+  <h2>Sources</h2>
+  <ul>
+    <li><a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm">Federal Reserve FOMC calendar</a></li>
+    <li><a href="https://fred.stlouisfed.org/docs/api/fred/">FRED API</a></li>
+    <li><a href="https://www.treasurydirect.gov/auctions/announcements-data-results/">TreasuryDirect</a></li>
+    <li><a href="https://www.cmegroup.com/trading/equity-index/rolldates.html">CME equity index roll dates</a> (computed)</li>
+  </ul>
+
+  <footer>
+    <p>
+      For informational and educational purposes only. Not investment advice.
+      Times are subject to change; verify against official sources before
+      trading.
+    </p>
+    <p>
+      This product uses the FRED&reg; API but is not endorsed or certified by
+      the Federal Reserve Bank of St. Louis.
+      See the <a href="https://fred.stlouisfed.org/docs/api/terms_of_use.html">FRED API Terms of Use</a>.
+    </p>
+  </footer>
+</main>
+</body>
+</html>

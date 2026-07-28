@@ -1,0 +1,1006 @@
+#!/usr/bin/env python3
+"""Build the Compass Economic Calendar normalized event feed.
+
+Pulls four sources into a single ``output/calendar.json``:
+
+  1. FOMC meetings, statements, press conferences, SEP releases and minutes
+     (scraped from federalreserve.gov, with a manual override layer)
+  2. Macro release dates from the FRED API (Employment Situation, CPI, PPI,
+     GDP, Personal Income & Outlays)
+  3. Treasury auctions + computed quarterly refunding announcements
+     (TreasuryDirect web service)
+  4. CME equity-index futures roll / expiration / quad-witching dates
+     (computed algorithmically -- no API needed)
+
+Every timestamp is stored in UTC. Eastern-time release times are converted
+through the IANA ``America/New_York`` zone so DST is handled correctly.
+
+Usage:
+    python ingestion/build_calendar.py
+    python ingestion/build_calendar.py --months 18 --out output/calendar.json
+    python ingestion/build_calendar.py --skip-fred      # no API key needed
+
+See docs/RESEARCH.md for the sourcing and licensing rationale.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import re
+import sys
+from datetime import date, datetime, time, timedelta, timezone
+from pathlib import Path
+from typing import Any, Dict, Iterable, List, Optional, Tuple
+from zoneinfo import ZoneInfo
+
+import requests
+from bs4 import BeautifulSoup
+from dotenv import load_dotenv
+
+# --------------------------------------------------------------------------
+# Constants
+# --------------------------------------------------------------------------
+
+SCHEMA_VERSION = "1.0.0"
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_OUT = REPO_ROOT / "output" / "calendar.json"
+OVERRIDES_PATH = REPO_ROOT / "data" / "overrides.json"
+
+ET = ZoneInfo("America/New_York")
+UTC = timezone.utc
+
+USER_AGENT = (
+    "CompassEconomicCalendar/1.0 "
+    "(+https://github.com/compasseconomiccalendar/compasseconomiccalendar)"
+)
+HTTP_TIMEOUT = 30
+
+FOMC_URL = "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+FRED_API_BASE = "https://api.stlouisfed.org/fred"
+TREASURY_BASE = "https://www.treasurydirect.gov/TA_WS/securities"
+
+# Verbatim, required by the FRED API terms of use. Do not reword.
+FRED_ATTRIBUTION = (
+    "This product uses the FRED® API but is not endorsed or certified "
+    "by the Federal Reserve Bank of St. Louis."
+)
+FRED_TERMS_URL = "https://fred.stlouisfed.org/docs/api/terms_of_use.html"
+
+DISCLAIMER = (
+    "For informational and educational purposes only. Not investment advice. "
+    "Times are subject to change; verify against official sources before trading."
+)
+
+MONTHS = {
+    "january": 1, "february": 2, "march": 3, "april": 4, "may": 5, "june": 6,
+    "july": 7, "august": 8, "september": 9, "october": 10, "november": 11,
+    "december": 12,
+    "jan": 1, "feb": 2, "mar": 3, "apr": 4, "jun": 6, "jul": 7, "aug": 8,
+    "sep": 9, "sept": 9, "oct": 10, "nov": 11, "dec": 12,
+}
+
+# FRED releases we track. Release ID 11 is the Employment Cost Index -- it is
+# NOT the monthly jobs report (that is 50). See docs/RESEARCH.md 1.2.
+FRED_RELEASES = {
+    50: {
+        "slug": "employment-situation",
+        "title": "Employment Situation (Nonfarm Payrolls)",
+        "time_et": "08:30",
+        "market_impact": "high",
+        "primary_source": "https://www.bls.gov/schedule/news_release/empsit.htm",
+        "note": (
+            "Monthly jobs report from the BLS: nonfarm payrolls, unemployment "
+            "rate and average hourly earnings. Typically the highest-volatility "
+            "scheduled release of the month for index futures."
+        ),
+    },
+    10: {
+        "slug": "cpi",
+        "title": "Consumer Price Index (CPI)",
+        "time_et": "08:30",
+        "market_impact": "high",
+        "primary_source": "https://www.bls.gov/schedule/news_release/cpi.htm",
+        "note": (
+            "Headline and core consumer inflation from the BLS. The core "
+            "month-over-month print drives the immediate rates and equity "
+            "reaction."
+        ),
+    },
+    46: {
+        "slug": "ppi",
+        "title": "Producer Price Index (PPI)",
+        "time_et": "08:30",
+        "market_impact": "medium",
+        "primary_source": "https://www.bls.gov/schedule/news_release/ppi.htm",
+        "note": (
+            "Wholesale/producer inflation from the BLS. Watched as a lead-in to "
+            "CPI and for the PPI components that feed the PCE calculation."
+        ),
+    },
+    53: {
+        "slug": "gdp",
+        "title": "Gross Domestic Product (GDP)",
+        "time_et": "08:30",
+        "market_impact": "medium",
+        "primary_source": "https://www.bea.gov/news/schedule",
+        "note": (
+            "Quarterly output from the BEA, released in advance, second and "
+            "third estimates. The advance estimate is the market-moving one."
+        ),
+    },
+    54: {
+        "slug": "pce",
+        "title": "Personal Income & Outlays (PCE)",
+        "time_et": "08:30",
+        "market_impact": "high",
+        "primary_source": "https://www.bea.gov/news/schedule",
+        "note": (
+            "BEA report containing core PCE, the Fed's preferred inflation "
+            "gauge. Watched closely into FOMC meetings."
+        ),
+    },
+}
+
+# CME equity-index futures on the quarterly cycle.
+FUTURES_SYMBOLS = ["ES", "NQ", "MES", "MNQ"]
+QUARTERLY_MONTHS = {3: "H", 6: "M", 9: "U", 12: "Z"}
+
+TREASURY_IMPACT = {
+    "Bill": "low",
+    "Note": "medium",
+    "Bond": "high",
+    "TIPS": "medium",
+    "FRN": "low",
+    "CMB": "low",
+}
+# Long-end supply moves the curve; treat these terms as high impact.
+TREASURY_HIGH_IMPACT_TERMS = {"10-Year", "20-Year", "30-Year"}
+
+
+# --------------------------------------------------------------------------
+# Time helpers
+# --------------------------------------------------------------------------
+
+def et_to_utc(day: date, hhmm: str) -> datetime:
+    """Convert a wall-clock Eastern time on ``day`` to an aware UTC datetime.
+
+    Uses the IANA zone rather than a fixed offset so the March/November DST
+    transitions are handled correctly (8:30am ET is 12:30 UTC in summer and
+    13:30 UTC in winter).
+    """
+    hour, minute = (int(part) for part in hhmm.split(":"))
+    local = datetime.combine(day, time(hour, minute), tzinfo=ET)
+    return local.astimezone(UTC)
+
+
+def iso_z(moment: datetime) -> str:
+    """Render an aware datetime as an ISO 8601 string with a trailing Z."""
+    return moment.astimezone(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def nth_weekday(year: int, month: int, weekday: int, n: int) -> date:
+    """Return the nth ``weekday`` (Mon=0) of a month, e.g. the 3rd Friday."""
+    first = date(year, month, 1)
+    offset = (weekday - first.weekday()) % 7
+    return first + timedelta(days=offset + 7 * (n - 1))
+
+
+def third_friday(year: int, month: int) -> date:
+    return nth_weekday(year, month, weekday=4, n=3)
+
+
+def first_wednesday(year: int, month: int) -> date:
+    return nth_weekday(year, month, weekday=2, n=1)
+
+
+def easter_sunday(year: int) -> date:
+    """Anonymous Gregorian computus."""
+    a = year % 19
+    b, c = divmod(year, 100)
+    d, e = divmod(b, 4)
+    f = (b + 8) // 25
+    g = (b - f + 1) // 3
+    h = (19 * a + b - d - g + 15) % 30
+    i, k = divmod(c, 4)
+    lam = (32 + 2 * e + 2 * i - h - k) % 7
+    m = (a + 11 * h + 22 * lam) // 451
+    month = (h + lam - 7 * m + 114) // 31
+    day = ((h + lam - 7 * m + 114) % 31) + 1
+    return date(year, month, day)
+
+
+def good_friday(year: int) -> date:
+    return easter_sunday(year) - timedelta(days=2)
+
+
+def parse_date(value: Optional[str]) -> Optional[date]:
+    """Parse the date-ish strings the upstream feeds hand back."""
+    if not value:
+        return None
+    text = value.strip()
+    if not text:
+        return None
+    if "T" in text:
+        text = text.split("T", 1)[0]
+    try:
+        return datetime.strptime(text, "%Y-%m-%d").date()
+    except ValueError:
+        return None
+
+
+def parse_clock(value: Optional[str]) -> Optional[str]:
+    """Normalize TreasuryDirect's ``11:30 AM`` style strings to ``HH:MM``."""
+    if not value:
+        return None
+    match = re.match(r"^\s*(\d{1,2}):(\d{2})\s*([AaPp])\.?[Mm]\.?\s*$", value)
+    if not match:
+        return None
+    hour, minute, meridiem = int(match.group(1)), match.group(2), match.group(3).lower()
+    if meridiem == "p" and hour != 12:
+        hour += 12
+    if meridiem == "a" and hour == 12:
+        hour = 0
+    return f"{hour:02d}:{minute}"
+
+
+# --------------------------------------------------------------------------
+# Event construction
+# --------------------------------------------------------------------------
+
+def make_event(
+    *,
+    event_id: str,
+    event_type: str,
+    title: str,
+    day: date,
+    time_et: Optional[str],
+    market_impact: str,
+    source: str,
+    source_url: str,
+    note: str,
+    duration_minutes: int = 30,
+    **extra: Any,
+) -> Dict[str, Any]:
+    """Build one normalized event record.
+
+    ``time_et`` of ``None`` produces an all-day event anchored at 00:00 UTC on
+    the given date, which is how the ICS writer decides between a DATE and a
+    DATE-TIME value.
+    """
+    if time_et is None:
+        start = datetime.combine(day, time(0, 0), tzinfo=UTC)
+        all_day = True
+    else:
+        start = et_to_utc(day, time_et)
+        all_day = False
+
+    event: Dict[str, Any] = {
+        "id": event_id,
+        "event_type": event_type,
+        "title": title,
+        "start_utc": iso_z(start),
+        "end_utc": iso_z(start + timedelta(minutes=duration_minutes)) if not all_day else None,
+        "all_day": all_day,
+        "date_et": day.isoformat(),
+        "time_et": time_et,
+        "market_impact": market_impact,
+        "source": source,
+        "source_url": source_url,
+        "note": note,
+    }
+    event.update(extra)
+    return event
+
+
+# --------------------------------------------------------------------------
+# Source 1: FOMC
+# --------------------------------------------------------------------------
+
+def _parse_fomc_row_dates(year: int, month_text: str, date_text: str) -> Optional[Tuple[date, date]]:
+    """Resolve one calendar row's month/day cells into (start, end) dates.
+
+    Handles the two shapes the Fed publishes:
+      ``March`` + ``17-18*``       -> single-month, two-day meeting
+      ``Apr/May`` + ``30-1``       -> meeting spanning a month boundary
+    """
+    month_names = [part.strip().lower().rstrip(".") for part in month_text.split("/") if part.strip()]
+    months = [MONTHS[name] for name in month_names if name in MONTHS]
+    if not months:
+        return None
+
+    # Strip the SEP asterisk and any parenthetical such as "(notation vote)".
+    cleaned = re.sub(r"\([^)]*\)", " ", date_text)
+    days = [int(match) for match in re.findall(r"\d{1,2}", cleaned)]
+    if not days:
+        return None
+
+    start_month = months[0]
+    end_month = months[-1]
+    start_year = year
+    end_year = year
+    # A Dec/Jan row rolls into the following year.
+    if end_month < start_month:
+        end_year = year + 1
+
+    try:
+        start = date(start_year, start_month, days[0])
+        end = date(end_year, end_month, days[-1])
+    except ValueError:
+        return None
+    if end < start:
+        return None
+    return start, end
+
+
+def fetch_fomc_events(session: requests.Session, window: Tuple[date, date]) -> List[Dict[str, Any]]:
+    """Scrape the FOMC calendar page for meetings, statements and pressers.
+
+    docs/RESEARCH.md recommends hand-curating this small dataset with the
+    scrape as a check; data/overrides.json provides that manual layer.
+    """
+    response = session.get(FOMC_URL, timeout=HTTP_TIMEOUT)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    events: List[Dict[str, Any]] = []
+    start_bound, end_bound = window
+
+    for panel in soup.select("div.panel"):
+        heading = panel.select_one(".panel-heading")
+        if not heading:
+            continue
+        year_match = re.search(r"(\d{4})\s+FOMC Meetings", heading.get_text(" ", strip=True))
+        if not year_match:
+            continue
+        year = int(year_match.group(1))
+
+        for row in panel.select("div.row.fomc-meeting"):
+            month_cell = row.select_one(".fomc-meeting__month")
+            date_cell = row.select_one(".fomc-meeting__date")
+            if not month_cell or not date_cell:
+                continue
+
+            month_text = month_cell.get_text(" ", strip=True)
+            date_text = date_cell.get_text(" ", strip=True)
+            parsed = _parse_fomc_row_dates(year, month_text, date_text)
+            if not parsed:
+                print(f"  ! could not parse FOMC row: {month_text!r} {date_text!r}", file=sys.stderr)
+                continue
+            meeting_start, meeting_end = parsed
+
+            row_text = row.get_text(" ", strip=True)
+            # The asterisk on the date is the Fed's own SEP marker; fall back to
+            # the Mar/Jun/Sep/Dec convention if the page drops it.
+            has_star = "*" in date_text
+            has_projections = "Projection Materials" in row_text
+            is_sep = has_star or has_projections or meeting_end.month in QUARTERLY_MONTHS
+            sep_signal = (
+                "asterisk" if has_star
+                else "projection-materials" if has_projections
+                else "quarterly-month-heuristic"
+            )
+            is_notation_vote = "notation vote" in row_text.lower()
+            # The Chair has held a press conference after every meeting since
+            # 2019, but the page only links one once it has been scheduled --
+            # so the link is a confirmation signal, not a precondition.
+            presser_confirmed = "Press Conference" in row_text
+            is_multi_day = meeting_end > meeting_start
+
+            # The meeting itself may sit outside the window while its minutes
+            # (released ~3 weeks later) land inside it, so both are checked
+            # against the window independently.
+            slug = meeting_end.isoformat()
+
+            if start_bound <= meeting_end <= end_bound and not is_notation_vote:
+                if is_multi_day and start_bound <= meeting_start <= end_bound:
+                    events.append(make_event(
+                        event_id=f"fomc-meeting-day1-{meeting_start.isoformat()}",
+                        event_type="fomc_meeting_day_1",
+                        title="FOMC Meeting Begins (Day 1)",
+                        day=meeting_start,
+                        time_et=None,
+                        market_impact="low",
+                        source="federalreserve.gov",
+                        source_url=FOMC_URL,
+                        note=(
+                            "First day of the two-day FOMC meeting. No statement "
+                            "is released today; the decision comes tomorrow at "
+                            "2:00pm ET."
+                        ),
+                        meeting_start_date=meeting_start.isoformat(),
+                        meeting_end_date=meeting_end.isoformat(),
+                    ))
+
+                events.append(make_event(
+                    event_id=f"fomc-statement-{slug}",
+                    event_type="fomc_statement",
+                    title="FOMC Statement & Rate Decision",
+                    day=meeting_end,
+                    time_et="14:00",
+                    market_impact="high",
+                    source="federalreserve.gov",
+                    source_url=FOMC_URL,
+                    note=(
+                        "Interest rate decision and policy statement released at "
+                        "2:00pm ET. Expect a sharp repricing in index futures on "
+                        "the release and again during the 2:30pm press conference."
+                    ),
+                    meeting_start_date=meeting_start.isoformat(),
+                    meeting_end_date=meeting_end.isoformat(),
+                    has_sep=is_sep,
+                ))
+
+                if is_sep:
+                    events.append(make_event(
+                        event_id=f"fomc-sep-{slug}",
+                        event_type="fomc_sep",
+                        title="FOMC Summary of Economic Projections (Dot Plot)",
+                        day=meeting_end,
+                        time_et="14:00",
+                        market_impact="high",
+                        source="federalreserve.gov",
+                        source_url=FOMC_URL,
+                        note=(
+                            "Quarterly Summary of Economic Projections, including "
+                            "the dot plot of participants' rate expectations, "
+                            "published alongside the 2:00pm ET statement."
+                        ),
+                        sep_signal=sep_signal,
+                    ))
+
+                events.append(make_event(
+                    event_id=f"fomc-presser-{slug}",
+                    event_type="fomc_press_conference",
+                    title="FOMC Chair Press Conference",
+                    day=meeting_end,
+                    time_et="14:30",
+                    market_impact="high",
+                    source="federalreserve.gov",
+                    source_url=FOMC_URL,
+                    note=(
+                        "Chair's press conference begins at 2:30pm ET. The Q&A "
+                        "regularly moves markets more than the statement itself."
+                        + ("" if presser_confirmed else
+                           " Not yet confirmed on the Fed's calendar; a presser has "
+                           "followed every meeting since 2019.")
+                    ),
+                    duration_minutes=60,
+                    confirmed=presser_confirmed,
+                ))
+
+            # Minutes for a past meeting are released three weeks later at
+            # 2:00pm ET and are themselves a scheduled market event.
+            minutes_match = re.search(r"\(Released\s+([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})\)", row_text)
+            if minutes_match:
+                month_name = minutes_match.group(1).lower()
+                if month_name in MONTHS:
+                    minutes_day = date(
+                        int(minutes_match.group(3)), MONTHS[month_name], int(minutes_match.group(2))
+                    )
+                    if start_bound <= minutes_day <= end_bound:
+                        events.append(make_event(
+                            event_id=f"fomc-minutes-{minutes_day.isoformat()}",
+                            event_type="fomc_minutes",
+                            title=f"FOMC Minutes ({meeting_end.strftime('%b %d')} meeting)",
+                            day=minutes_day,
+                            time_et="14:00",
+                            market_impact="medium",
+                            source="federalreserve.gov",
+                            source_url=FOMC_URL,
+                            note=(
+                                "Minutes of the prior FOMC meeting, released at "
+                                "2:00pm ET roughly three weeks after the decision."
+                            ),
+                            meeting_end_date=meeting_end.isoformat(),
+                        ))
+
+    return events
+
+
+# --------------------------------------------------------------------------
+# Source 2: FRED
+# --------------------------------------------------------------------------
+
+def fetch_fred_events(
+    session: requests.Session, api_key: str, window: Tuple[date, date]
+) -> List[Dict[str, Any]]:
+    """Pull scheduled release dates for each tracked FRED release.
+
+    ``include_release_dates_with_no_data=true`` is what surfaces future,
+    scheduled-but-unpublished dates; the default of ``false`` only returns
+    dates that already have data attached.
+    """
+    start_bound, end_bound = window
+    events: List[Dict[str, Any]] = []
+
+    for release_id, meta in FRED_RELEASES.items():
+        params = {
+            "release_id": release_id,
+            "api_key": api_key,
+            "file_type": "json",
+            "include_release_dates_with_no_data": "true",
+            "sort_order": "asc",
+            "realtime_start": start_bound.isoformat(),
+            "realtime_end": "9999-12-31",
+            "limit": 10000,
+        }
+        response = session.get(f"{FRED_API_BASE}/release/dates", params=params, timeout=HTTP_TIMEOUT)
+        if response.status_code == 400:
+            raise RuntimeError(
+                f"FRED rejected the request for release {release_id}: {response.text[:200]}"
+            )
+        response.raise_for_status()
+        payload = response.json()
+
+        seen: set = set()
+        for entry in payload.get("release_dates", []):
+            day = parse_date(entry.get("date"))
+            if not day or not (start_bound <= day <= end_bound) or day in seen:
+                continue
+            seen.add(day)
+            events.append(make_event(
+                event_id=f"fred-{meta['slug']}-{day.isoformat()}",
+                event_type=f"macro_release_{meta['slug'].replace('-', '_')}",
+                title=meta["title"],
+                day=day,
+                time_et=meta["time_et"],
+                market_impact=meta["market_impact"],
+                source="FRED",
+                source_url=f"https://fred.stlouisfed.org/releases/{release_id}",
+                note=meta["note"],
+                fred_release_id=release_id,
+                primary_source_url=meta["primary_source"],
+                attribution=FRED_ATTRIBUTION,
+            ))
+        print(f"  fred release {release_id} ({meta['slug']}): {len(seen)} dates in window")
+
+    return events
+
+
+# --------------------------------------------------------------------------
+# Source 3: Treasury
+# --------------------------------------------------------------------------
+
+def _treasury_impact(security_type: str, security_term: str) -> str:
+    if security_term in TREASURY_HIGH_IMPACT_TERMS:
+        return "high"
+    return TREASURY_IMPACT.get(security_type, "low")
+
+
+def fetch_treasury_events(
+    session: requests.Session, window: Tuple[date, date]
+) -> List[Dict[str, Any]]:
+    """Fetch upcoming Treasury auctions and compute refunding announcements.
+
+    Note: the TreasuryDirect web service used to serve XML, but ``?format=xml``
+    and an XML ``Accept`` header both return HTTP 406 as of this writing. The
+    service is JSON-only, so that is what we parse.
+    """
+    start_bound, end_bound = window
+    records: Dict[str, Dict[str, Any]] = {}
+
+    for endpoint in ("upcoming", "auctioned"):
+        try:
+            response = session.get(
+                f"{TREASURY_BASE}/{endpoint}",
+                params={"format": "json"},
+                timeout=HTTP_TIMEOUT,
+            )
+            response.raise_for_status()
+            payload = response.json()
+        except (requests.RequestException, ValueError) as exc:
+            print(f"  ! TreasuryDirect /{endpoint} failed: {exc}", file=sys.stderr)
+            continue
+
+        for item in payload:
+            auction_day = parse_date(item.get("auctionDate"))
+            if not auction_day or not (start_bound <= auction_day <= end_bound):
+                continue
+            key = f"{item.get('cusip', '')}-{auction_day.isoformat()}"
+            records.setdefault(key, item)
+        print(f"  treasurydirect /{endpoint}: {len(payload)} records fetched")
+
+    # The refunding announcement is the first Wednesday of Feb/May/Aug/Nov.
+    refunding_days = set()
+    for year in range(start_bound.year, end_bound.year + 1):
+        for month in (2, 5, 8, 11):
+            refunding_days.add(first_wednesday(year, month))
+
+    events: List[Dict[str, Any]] = []
+    for item in records.values():
+        auction_day = parse_date(item.get("auctionDate"))
+        if auction_day is None:
+            continue
+        security_type = (item.get("securityType") or "Security").strip()
+        security_term = (item.get("securityTerm") or "").strip()
+        cusip = (item.get("cusip") or "").strip()
+        announcement_day = parse_date(item.get("announcementDate"))
+        close_time = parse_clock(item.get("closingTimeCompetitive")) or "13:00"
+        label = f"{security_term} {security_type}".strip()
+
+        events.append(make_event(
+            event_id=f"treasury-auction-{cusip or security_term.lower()}-{auction_day.isoformat()}",
+            event_type="treasury_auction",
+            title=f"Treasury Auction: {label}",
+            day=auction_day,
+            time_et=close_time,
+            market_impact=_treasury_impact(security_type, security_term),
+            source="TreasuryDirect",
+            source_url="https://www.treasurydirect.gov/auctions/announcements-data-results/",
+            note=(
+                f"Competitive bidding for the {label} closes at "
+                f"{close_time} ET. A weak auction (low bid-to-cover, high tail) "
+                "pushes yields up and typically pressures index futures."
+            ),
+            security_type=security_type,
+            security_term=security_term,
+            cusip=cusip or None,
+            announcement_date=announcement_day.isoformat() if announcement_day else None,
+            part_of_quarterly_refunding=bool(announcement_day and announcement_day in refunding_days),
+        ))
+
+    for day in sorted(refunding_days):
+        if not (start_bound <= day <= end_bound):
+            continue
+        events.append(make_event(
+            event_id=f"treasury-refunding-{day.isoformat()}",
+            event_type="treasury_quarterly_refunding",
+            title="Treasury Quarterly Refunding Announcement",
+            day=day,
+            time_et="08:30",
+            market_impact="high",
+            source="computed",
+            source_url="https://home.treasury.gov/news/press-releases",
+            note=(
+                "Treasury announces the size and composition of the coming "
+                "quarter's coupon auctions at 8:30am ET. Changes to long-end "
+                "issuance move yields and, through them, equity futures. "
+                "Computed as the first Wednesday of Feb/May/Aug/Nov -- verify "
+                "against Treasury's press release schedule."
+            ),
+            computed=True,
+        ))
+
+    return events
+
+
+# --------------------------------------------------------------------------
+# Source 4: CME futures (computed)
+# --------------------------------------------------------------------------
+
+def build_futures_events(window: Tuple[date, date]) -> List[Dict[str, Any]]:
+    """Compute roll, expiration, quad-witching and monthly OPEX dates.
+
+    Rules (docs/RESEARCH.md 1.3):
+      * quarterly cycle Mar (H), Jun (M), Sep (U), Dec (Z)
+      * expiration on the third Friday of the delivery month
+      * CME official roll date: the Monday prior to the third Friday
+      * trader liquidity roll: the second Thursday before the third Friday,
+        i.e. eight calendar days before expiry, when volume and open interest
+        migrate to the back month
+      * quad witching: the third Friday of Mar/Jun/Sep/Dec
+      * monthly OPEX: the third Friday of every month
+
+    Good Friday is the one U.S. market holiday that regularly lands on a third
+    Friday; when it does, expiration moves to the preceding Thursday.
+    """
+    start_bound, end_bound = window
+    events: List[Dict[str, Any]] = []
+    symbol_list = ", ".join(f"/{symbol}" for symbol in FUTURES_SYMBOLS)
+
+    for year in range(start_bound.year, end_bound.year + 1):
+        for month in range(1, 13):
+            opex = third_friday(year, month)
+            expiry = opex
+            holiday_shift = False
+            if opex == good_friday(year):
+                expiry = opex - timedelta(days=1)
+                holiday_shift = True
+
+            is_quarterly = month in QUARTERLY_MONTHS
+
+            if is_quarterly:
+                code = QUARTERLY_MONTHS[month]
+                contract = f"{code}{str(year)[-1]}"
+                liquidity_roll = opex - timedelta(days=8)
+                official_roll = opex - timedelta(days=4)  # Monday prior to 3rd Friday
+
+                if start_bound <= liquidity_roll <= end_bound:
+                    events.append(make_event(
+                        event_id=f"futures-liquidity-roll-{year}-{month:02d}",
+                        event_type="futures_liquidity_roll",
+                        title=f"Futures Liquidity Roll ({symbol_list}) → {contract} back month",
+                        day=liquidity_roll,
+                        time_et=None,
+                        market_impact="medium",
+                        source="computed",
+                        source_url="https://www.cmegroup.com/trading/equity-index/rolldates.html",
+                        note=(
+                            "Volume and open interest migrate to the back-month "
+                            "contract around this date (the second Thursday "
+                            "before the third Friday). Quote the back month from "
+                            "here on, and expect wider spreads in the front month."
+                        ),
+                        symbols=FUTURES_SYMBOLS,
+                        contract_code=contract,
+                        computed=True,
+                    ))
+
+                if start_bound <= official_roll <= end_bound:
+                    events.append(make_event(
+                        event_id=f"futures-official-roll-{year}-{month:02d}",
+                        event_type="futures_official_roll",
+                        title=f"CME Official Roll Date ({symbol_list})",
+                        day=official_roll,
+                        time_et=None,
+                        market_impact="low",
+                        source="computed",
+                        source_url="https://www.cmegroup.com/trading/equity-index/rolldates.html",
+                        note=(
+                            "CME's stated roll date for equity index products: "
+                            "the Monday prior to the third Friday. Most traders "
+                            "have already rolled by now -- see the liquidity roll "
+                            "the preceding Thursday."
+                        ),
+                        symbols=FUTURES_SYMBOLS,
+                        contract_code=contract,
+                        computed=True,
+                    ))
+
+                if start_bound <= expiry <= end_bound:
+                    events.append(make_event(
+                        event_id=f"futures-expiration-{year}-{month:02d}",
+                        event_type="futures_expiration",
+                        title=f"Futures Expiration ({symbol_list}) — {contract}",
+                        day=expiry,
+                        time_et="09:30",
+                        market_impact="medium",
+                        source="computed",
+                        source_url="https://www.cmegroup.com/trading/equity-index/rolldates.html",
+                        note=(
+                            "Front-month contract expires, settling to the Special "
+                            "Opening Quotation at the 9:30am ET cash open."
+                            + (" Shifted one day earlier for Good Friday." if holiday_shift else "")
+                        ),
+                        symbols=FUTURES_SYMBOLS,
+                        contract_code=contract,
+                        computed=True,
+                        holiday_adjusted=holiday_shift,
+                    ))
+
+                    events.append(make_event(
+                        event_id=f"quad-witching-{year}-{month:02d}",
+                        event_type="quad_witching",
+                        title="Quad Witching",
+                        day=expiry,
+                        time_et="16:00",
+                        market_impact="high",
+                        source="computed",
+                        source_url="https://www.cmegroup.com/trading/equity-index/rolldates.html",
+                        note=(
+                            "Index futures, index options, single-stock options "
+                            "and single-stock futures all expire. Expect elevated "
+                            "volume all session and a large closing auction."
+                        ),
+                        computed=True,
+                        holiday_adjusted=holiday_shift,
+                    ))
+            elif start_bound <= expiry <= end_bound:
+                events.append(make_event(
+                    event_id=f"monthly-opex-{year}-{month:02d}",
+                    event_type="monthly_opex",
+                    title="Monthly Options Expiration (OPEX)",
+                    day=expiry,
+                    time_et="16:00",
+                    market_impact="medium",
+                    source="computed",
+                    source_url="https://www.cmegroup.com/trading/equity-index/rolldates.html",
+                    note=(
+                        "Monthly equity and index options expire on the third "
+                        "Friday. Dealer hedging into the expiry can pin price "
+                        "near large open-interest strikes."
+                        + (" Shifted one day earlier for Good Friday." if holiday_shift else "")
+                    ),
+                    computed=True,
+                    holiday_adjusted=holiday_shift,
+                ))
+
+    return events
+
+
+# --------------------------------------------------------------------------
+# Overrides, assembly, output
+# --------------------------------------------------------------------------
+
+def apply_overrides(events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Apply the manual override layer from data/overrides.json.
+
+    docs/RESEARCH.md 7 calls for this: scraped schedules break, and government
+    shutdowns reschedule releases. The file supports two keys:
+
+        {"remove": ["<event id>"], "upsert": [{<full or partial event>}]}
+
+    An ``upsert`` entry whose id already exists is merged over the scraped
+    event; otherwise it is added as-is.
+    """
+    if not OVERRIDES_PATH.exists():
+        return events
+
+    with OVERRIDES_PATH.open(encoding="utf-8") as handle:
+        overrides = json.load(handle)
+
+    removed = set(overrides.get("remove", []))
+    if removed:
+        events = [event for event in events if event["id"] not in removed]
+        print(f"  overrides: removed {len(removed)} event(s)")
+
+    by_id = {event["id"]: event for event in events}
+    upserts = overrides.get("upsert", [])
+    for patch in upserts:
+        event_id = patch.get("id")
+        if not event_id:
+            print("  ! override upsert missing 'id', skipped", file=sys.stderr)
+            continue
+        if event_id in by_id:
+            by_id[event_id].update(patch)
+        else:
+            patch.setdefault("source", "manual-override")
+            events.append(patch)
+            by_id[event_id] = patch
+        patch_marker = by_id[event_id]
+        patch_marker["manually_overridden"] = True
+    if upserts:
+        print(f"  overrides: upserted {len(upserts)} event(s)")
+
+    return events
+
+
+def validate(events: List[Dict[str, Any]]) -> None:
+    """Fail loudly on malformed records rather than shipping a broken feed."""
+    required = ("id", "event_type", "title", "start_utc", "market_impact", "source_url", "note")
+    seen_ids: set = set()
+    problems: List[str] = []
+
+    for event in events:
+        for field in required:
+            if not event.get(field):
+                problems.append(f"{event.get('id', '<no id>')}: missing {field}")
+        if event["id"] in seen_ids:
+            problems.append(f"duplicate id: {event['id']}")
+        seen_ids.add(event["id"])
+        if event.get("market_impact") not in ("high", "medium", "low"):
+            problems.append(f"{event['id']}: bad market_impact {event.get('market_impact')!r}")
+        if not str(event.get("start_utc", "")).endswith("Z"):
+            problems.append(f"{event['id']}: start_utc is not UTC")
+
+    if problems:
+        raise ValueError("calendar validation failed:\n  " + "\n  ".join(problems[:25]))
+
+
+def build_document(events: List[Dict[str, Any]], window: Tuple[date, date]) -> Dict[str, Any]:
+    events.sort(key=lambda event: (event["start_utc"], event["id"]))
+
+    counts: Dict[str, int] = {}
+    impact_counts: Dict[str, int] = {}
+    for event in events:
+        counts[event["event_type"]] = counts.get(event["event_type"], 0) + 1
+        impact_counts[event["market_impact"]] = impact_counts.get(event["market_impact"], 0) + 1
+
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "generated_at_utc": iso_z(datetime.now(UTC)),
+        "window": {"start": window[0].isoformat(), "end": window[1].isoformat()},
+        "timezone_note": (
+            "All timestamps are UTC. Eastern release times were converted via "
+            "the IANA America/New_York zone, so DST is already accounted for."
+        ),
+        "disclaimer": DISCLAIMER,
+        "attribution": {
+            "fred": FRED_ATTRIBUTION,
+            "fred_terms_url": FRED_TERMS_URL,
+            "treasury": "TreasuryDirect auction data is public domain (CC0).",
+            "federal_reserve": "FOMC calendar data is a U.S. government work in the public domain.",
+        },
+        "sources": [
+            {"name": "Federal Reserve FOMC calendar", "url": FOMC_URL},
+            {"name": "FRED API", "url": "https://fred.stlouisfed.org/docs/api/fred/"},
+            {"name": "TreasuryDirect", "url": "https://www.treasurydirect.gov/auctions/announcements-data-results/"},
+            {"name": "CME equity index roll dates", "url": "https://www.cmegroup.com/trading/equity-index/rolldates.html"},
+        ],
+        "counts": {"total": len(events), "by_event_type": counts, "by_market_impact": impact_counts},
+        "events": events,
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Build the Compass Economic Calendar JSON feed.")
+    parser.add_argument("--out", type=Path, default=DEFAULT_OUT, help="output JSON path")
+    parser.add_argument("--months", type=int, default=13, help="months of forward coverage")
+    parser.add_argument("--past-days", type=int, default=0, help="days of history to retain")
+    parser.add_argument("--skip-fred", action="store_true", help="skip FRED (no API key needed)")
+    parser.add_argument("--skip-treasury", action="store_true", help="skip TreasuryDirect")
+    parser.add_argument("--skip-fomc", action="store_true", help="skip the FOMC scrape")
+    parser.add_argument(
+        "--allow-partial",
+        action="store_true",
+        help="write output even if a source fails (default: fail the build)",
+    )
+    args = parser.parse_args()
+
+    load_dotenv(REPO_ROOT / ".env")
+
+    today = datetime.now(ET).date()
+    window = (today - timedelta(days=args.past_days), today + timedelta(days=int(args.months * 30.5)))
+    print(f"Building calendar for {window[0]} .. {window[1]}")
+
+    session = requests.Session()
+    session.headers.update({"User-Agent": USER_AGENT})
+
+    events: List[Dict[str, Any]] = []
+    failures: List[str] = []
+
+    def run_source(name: str, fetch) -> None:
+        print(f"- {name}")
+        try:
+            found = fetch()
+        except Exception as exc:  # noqa: BLE001 - reported per-source below
+            print(f"  ! {name} failed: {exc}", file=sys.stderr)
+            failures.append(f"{name}: {exc}")
+            return
+        events.extend(found)
+        print(f"  {len(found)} event(s)")
+
+    if not args.skip_fomc:
+        run_source("FOMC calendar", lambda: fetch_fomc_events(session, window))
+
+    if not args.skip_fred:
+        api_key = os.environ.get("FRED_API_KEY", "").strip()
+        if not api_key:
+            message = (
+                "FRED_API_KEY is not set. Add it to .env (see .env.example) or "
+                "pass --skip-fred."
+            )
+            print(f"  ! {message}", file=sys.stderr)
+            failures.append(message)
+        else:
+            run_source("FRED releases", lambda: fetch_fred_events(session, api_key, window))
+
+    if not args.skip_treasury:
+        run_source("Treasury auctions", lambda: fetch_treasury_events(session, window))
+
+    run_source("CME futures (computed)", lambda: build_futures_events(window))
+
+    if failures and not args.allow_partial:
+        print(
+            "\nAborting: one or more sources failed. Re-run with --allow-partial "
+            "to publish anyway.",
+            file=sys.stderr,
+        )
+        for failure in failures:
+            print(f"  - {failure}", file=sys.stderr)
+        return 1
+
+    events = apply_overrides(events)
+    validate(events)
+
+    document = build_document(events, window)
+    if failures:
+        document["partial_build"] = True
+        document["failed_sources"] = failures
+
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    with args.out.open("w", encoding="utf-8") as handle:
+        json.dump(document, handle, indent=2, ensure_ascii=False)
+        handle.write("\n")
+
+    print(f"\nWrote {len(events)} events to {args.out}")
+    print(f"  by impact: {document['counts']['by_market_impact']}")
+    print(f"\n{FRED_ATTRIBUTION}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
