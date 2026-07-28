@@ -79,7 +79,14 @@ jobs:
             echo "No calendar changes to commit."
           else
             git commit -m "chore: refresh economic calendar feed [skip ci]"
-            git push
+            # The typical-moves workflow also commits, so the two can race.
+            for attempt in 1 2 3; do
+              git pull --rebase --autostash origin main && git push && exit 0
+              echo "push attempt $attempt failed, retrying"
+              sleep 5
+            done
+            echo "could not push after 3 attempts" >&2
+            exit 1
           fi
 
       - uses: actions/upload-pages-artifact@v3

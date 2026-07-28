@@ -53,5 +53,13 @@ jobs:
             echo "No change in typical moves."
           else
             git commit -m "chore: recompute typical move statistics [skip ci]"
-            git push
+            # The weekly refresh workflow also commits, so the two can race.
+            # Rebase onto whatever landed first rather than failing the run.
+            for attempt in 1 2 3; do
+              git pull --rebase --autostash origin main && git push && exit 0
+              echo "push attempt $attempt failed, retrying"
+              sleep 5
+            done
+            echo "could not push after 3 attempts" >&2
+            exit 1
           fi
