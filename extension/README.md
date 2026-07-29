@@ -121,7 +121,7 @@ have to wake it and wait on a message round-trip to run a few comparisons.
 ## Store submission
 
 Privacy policy is published at
-<https://compasseconomiccalendar.github.io/compasseconomiccalendar/privacy.html> —
+<https://compasseconomiccalendar.github.io/privacy.html> —
 that URL goes in the Web Store listing's *Privacy policy* field. Its
 "Permissions and why each is needed" table doubles as the source text for the
 per-permission justifications the review asks for. Source lives in

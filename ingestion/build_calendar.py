@@ -64,7 +64,7 @@ UTC = timezone.utc
 
 USER_AGENT = (
     "CompassEconomicCalendar/1.0 "
-    "(+https://github.com/compasseconomiccalendar/compasseconomiccalendar)"
+    "(+https://github.com/compasseconomiccalendar/compasseconomiccalendar.github.io)"
 )
 HTTP_TIMEOUT = 30
 

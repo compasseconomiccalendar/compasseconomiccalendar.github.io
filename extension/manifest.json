@@ -10,7 +10,7 @@
     "notifications"
   ],
   "host_permissions": [
-    "https://compasseconomiccalendar.github.io/compasseconomiccalendar/*"
+    "https://compasseconomiccalendar.github.io/*"
   ],
   "background": {
     "service_worker": "src/background.js",

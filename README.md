@@ -41,11 +41,11 @@ architecture research behind this design.
 
 ## Published feed
 
-- Landing page: <https://compasseconomiccalendar.github.io/compasseconomiccalendar/>
-- JSON: <https://compasseconomiccalendar.github.io/compasseconomiccalendar/calendar.json>
-- ICS, full: <https://compasseconomiccalendar.github.io/compasseconomiccalendar/compass_calendar.ics>
-- ICS, high impact only: <https://compasseconomiccalendar.github.io/compasseconomiccalendar/compass_calendar_high_impact.ics>
-- Privacy policy: <https://compasseconomiccalendar.github.io/compasseconomiccalendar/privacy.html>
+- Landing page: <https://compasseconomiccalendar.github.io/>
+- JSON: <https://compasseconomiccalendar.github.io/calendar.json>
+- ICS, full: <https://compasseconomiccalendar.github.io/compass_calendar.ics>
+- ICS, high impact only: <https://compasseconomiccalendar.github.io/compass_calendar_high_impact.ics>
+- Privacy policy: <https://compasseconomiccalendar.github.io/privacy.html>
 
 Subscribe to either ICS URL in Google Calendar, Apple Calendar or Outlook. The
 high-impact feed carries FOMC, CPI, jobs, PCE, advance GDP and quad witching —
@@ -65,7 +65,7 @@ or regenerate with `--alarm-minutes 30 --alarm-minutes 5` to bake them in.
 ## Setup
 
 ```bash
-git clone https://github.com/compasseconomiccalendar/compasseconomiccalendar.git
+git clone https://github.com/compasseconomiccalendar/compasseconomiccalendar.github.io.git
 cd compasseconomiccalendar
 
 python3 -m venv venv && source venv/bin/activate

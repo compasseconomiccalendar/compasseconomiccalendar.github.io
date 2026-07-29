@@ -5,7 +5,7 @@
  */
 
 export const FEED_BASE =
-  "https://compasseconomiccalendar.github.io/compasseconomiccalendar";
+  "https://compasseconomiccalendar.github.io";
 export const FEED_URL = `${FEED_BASE}/calendar.json`;
 
 export const STORAGE_KEYS = {
