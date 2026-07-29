@@ -393,6 +393,16 @@ function renderHours(calendar) {
   const marketCal = marketCalendar(calendar?.events ?? []);
   const status = sessionStatus(Date.now(), marketCal, hours);
 
+  // Declared before first use: session state is decided in Eastern, but every
+  // time shown is converted to the viewer's zone, resolved against today's
+  // date since the offset from ET is not fixed.
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/New_York",
+    year: "numeric", month: "2-digit", day: "2-digit",
+  }).format(new Date());
+  const local = activeTimeZone ?? Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const range = (from, to) => etRangeInZone(today, from, to, local, activeHour12);
+
   elements.session.replaceChildren();
   const dot = document.createElement("span");
   dot.className = `dot ${status.state}`;
@@ -405,20 +415,6 @@ function renderHours(calendar) {
     (status.earlyCloseName ? ` · ${status.earlyCloseName}` : "");
   elements.session.append(dot, label, detail);
   elements.session.className = `session ${status.state}`;
-
-  // Times are stated in ET because that is the zone the exchange rules are
-  // written in; the events list is what converts to the viewer's zone.
-  // Session state is decided in Eastern, but shown in the viewer's zone --
-  // resolved against today's date, since the offset from ET is not fixed.
-  const today = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "America/New_York",
-    year: "numeric", month: "2-digit", day: "2-digit",
-  }).format(new Date());
-  const local = activeTimeZone ?? Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-  // Displayed purely in the viewer's zone. Session state is still decided in
-  // Eastern inside sessions.js; only the rendering is local.
-  const range = (from, to) => etRangeInZone(today, from, to, local, activeHour12);
 
   const regularClose = status.isEarlyClose
     ? equities.early_close
