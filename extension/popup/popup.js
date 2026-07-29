@@ -368,6 +368,25 @@ function showList() {
   elements.listView.hidden = activeTab !== "events";
 }
 
+/**
+ * Render a session's next boundary in the viewer's zone.
+ * Falls back to the module's Eastern string when there is no boundary.
+ */
+function localiseDetail(status, refDate, timeZone) {
+  if (status.haltRange) {
+    const shown = etRangeInZone(
+      refDate, status.haltRange.from, status.haltRange.to, timeZone, activeHour12,
+    );
+    return `Halts ${shown}`;
+  }
+  if (status.nextChange) {
+    const { verb, hhmm, suffix } = status.nextChange;
+    const shown = etTimeInZone(refDate, hhmm, timeZone, activeHour12).text;
+    return `${verb} ${shown}${suffix ? ` ${suffix}` : ""}`;
+  }
+  return status.detail;
+}
+
 function renderHours(calendar) {
   const hours = calendar?.market_hours;
   const equities = hours?.equities ?? {};
@@ -381,10 +400,9 @@ function renderHours(calendar) {
   label.textContent = status.label;
   const detail = document.createElement("span");
   detail.className = "session-detail";
-  detail.textContent = status.nextChange
-    ? `${status.nextChange.verb} ${etTimeInZone(today, status.nextChange.hhmm, local, activeHour12).text}` +
-      (status.earlyCloseName ? ` · ${status.earlyCloseName}` : "")
-    : status.detail;
+  detail.textContent =
+    localiseDetail(status, today, local) +
+    (status.earlyCloseName ? ` · ${status.earlyCloseName}` : "");
   elements.session.append(dot, label, detail);
   elements.session.className = `session ${status.state}`;
 
@@ -426,7 +444,7 @@ function renderHours(calendar) {
   flabel.textContent = futuresStatus.label;
   const fdetail = document.createElement("span");
   fdetail.className = "session-detail";
-  fdetail.textContent = futuresStatus.detail;
+  fdetail.textContent = localiseDetail(futuresStatus, today, local);
   elements.futuresSession.append(fdot, flabel, fdetail);
 
   const weekOpen = etTimeInZone(today, futures.week_open ?? "18:00", local, activeHour12);
@@ -460,10 +478,14 @@ function renderHours(calendar) {
 
     const when = document.createElement("span");
     when.className = "closure-date";
+    // All-day closures are anchored at noon UTC so the label cannot slip a day
+    // in western zones; timed half days use their real instant.
     when.textContent = new Intl.DateTimeFormat(undefined, {
-      timeZone: "UTC",
+      timeZone: event.all_day ? "UTC" : local,
       weekday: "short", month: "short", day: "numeric",
-    }).format(new Date(`${event.date_et}T12:00:00Z`));
+    }).format(
+      event.all_day ? new Date(`${event.date_et}T12:00:00Z`) : new Date(event.start_utc),
+    );
 
     const what = document.createElement("span");
     what.className = "closure-name";
@@ -473,7 +495,14 @@ function renderHours(calendar) {
     kind.className =
       event.event_type === "market_early_close" ? "closure-kind early" : "closure-kind";
     kind.textContent =
-      event.event_type === "market_early_close" ? "1:00pm close" : "closed";
+      event.event_type === "market_early_close"
+        ? `${new Intl.DateTimeFormat(undefined, {
+            timeZone: local,
+            hour12: activeHour12,
+            hour: "numeric",
+            minute: "2-digit",
+          }).format(new Date(event.start_utc))} close`
+        : "closed";
 
     item.append(when, what, kind);
     elements.closures.append(item);

@@ -206,3 +206,37 @@ test("sessionStatus reports the next boundary for local rendering", () => {
   // Once the day is over there is no boundary left to show.
   assert.equal(sessionStatus(at("2026-07-30T01:00:00Z"), EMPTY, HOURS).nextChange, null);
 });
+
+test("futures boundaries are returned as data, not baked-in Eastern strings", () => {
+  const H = { timezone: "America/New_York", futures: {} };
+  // Mid-session on a weekday: the halt is a range the caller localises.
+  const open = futuresSessionStatus(at("2026-07-29T14:00:00Z"), EMPTY, H);
+  assert.deepEqual(open.haltRange, { from: "17:00", to: "18:00" });
+
+  // During the halt, and over the weekend, it is a single boundary.
+  assert.deepEqual(
+    futuresSessionStatus(at("2026-07-29T21:30:00Z"), EMPTY, H).nextChange,
+    { verb: "Reopens", hhmm: "18:00" },
+  );
+  assert.deepEqual(
+    futuresSessionStatus(at("2026-08-01T18:00:00Z"), EMPTY, H).nextChange,
+    { verb: "Reopens Sunday", hhmm: "18:00" },
+  );
+  // Friday closes for the week rather than halting.
+  assert.deepEqual(
+    futuresSessionStatus(at("2026-07-31T14:00:00Z"), EMPTY, H).nextChange,
+    { verb: "Closes", hhmm: "17:00", suffix: "today" },
+  );
+});
+
+test("the halt renders in the viewer's zone", () => {
+  // 5:00-6:00pm ET is 3:00-4:00pm in Denver and 22:00-23:00 in London.
+  assert.equal(
+    etRangeInZone("2026-07-29", "17:00", "18:00", "America/Denver", true),
+    "3:00 PM–4:00 PM",
+  );
+  assert.equal(
+    etRangeInZone("2026-07-29", "17:00", "18:00", "Europe/London", false),
+    "22:00–23:00",
+  );
+});

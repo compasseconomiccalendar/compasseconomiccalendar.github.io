@@ -135,21 +135,36 @@ export function futuresSessionStatus(now, calendar, hours = {}) {
   const haltStart = toMinutes(futures.daily_halt_start);
   const haltEnd = toMinutes(futures.daily_halt_end);
 
-  if (weekday === 6) {
-    return { state: "closed-weekend", label: "Closed", detail: "Reopens Sunday 6:00pm ET" };
-  }
+  // Boundaries are returned as Eastern wall-clock strings so the caller can
+  // render them in the viewer's zone; `detail` is an Eastern fallback only.
+  const reopensSunday = {
+    state: "closed-weekend",
+    label: "Closed",
+    detail: `Reopens Sunday ${formatMinutes(weekOpen)} ET`,
+    nextChange: { verb: "Reopens Sunday", hhmm: futures.week_open },
+  };
+
+  if (weekday === 6) return reopensSunday;
   if (weekday === 0) {
     return minutes < weekOpen
-      ? { state: "closed-weekend", label: "Closed", detail: "Opens 6:00pm ET tonight" }
+      ? {
+          state: "closed-weekend",
+          label: "Closed",
+          detail: `Opens ${formatMinutes(weekOpen)} ET tonight`,
+          nextChange: { verb: "Opens", hhmm: futures.week_open },
+        }
       : { state: "open", label: "Open", detail: "Trading through the week" };
   }
-  if (weekday === 5 && minutes >= weekClose) {
-    return { state: "closed-weekend", label: "Closed", detail: "Reopens Sunday 6:00pm ET" };
-  }
+  if (weekday === 5 && minutes >= weekClose) return reopensSunday;
 
   // Mon-Thu evenings pause for an hour between sessions.
   if (weekday >= 1 && weekday <= 4 && minutes >= haltStart && minutes < haltEnd) {
-    return { state: "halt", label: "Daily halt", detail: "Reopens 6:00pm ET" };
+    return {
+      state: "halt",
+      label: "Daily halt",
+      detail: `Reopens ${formatMinutes(haltEnd)} ET`,
+      nextChange: { verb: "Reopens", hhmm: futures.daily_halt_end },
+    };
   }
 
   const holidayName = calendar?.holidays?.[today];
@@ -161,13 +176,19 @@ export function futuresSessionStatus(now, calendar, hours = {}) {
     };
   }
 
+  if (weekday === 5) {
+    return {
+      state: "open",
+      label: "Open",
+      detail: `Closes ${formatMinutes(weekClose)} ET today`,
+      nextChange: { verb: "Closes", hhmm: futures.week_close, suffix: "today" },
+    };
+  }
   return {
     state: "open",
     label: "Open",
-    detail:
-      weekday === 5
-        ? "Closes 5:00pm ET today"
-        : "Halts 5:00pm–6:00pm ET",
+    detail: `Halts ${formatMinutes(haltStart)}–${formatMinutes(haltEnd)} ET`,
+    haltRange: { from: futures.daily_halt_start, to: futures.daily_halt_end },
   };
 }
 
