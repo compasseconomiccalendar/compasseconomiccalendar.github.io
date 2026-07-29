@@ -20,7 +20,6 @@ const PINNED_ZONES = [
 const elements = {
   timezone: document.getElementById("timezone"),
   timezoneHint: document.getElementById("timezone-hint"),
-  impact: document.getElementById("impact"),
   timeFormat: document.getElementById("timeformat"),
   notifyImpact: document.getElementById("notify-impact"),
   notifications: document.getElementById("notifications-enabled"),
@@ -129,7 +128,6 @@ function flash(message, isError = false) {
 }
 
 async function load(prefs) {
-  elements.impact.value = prefs.viewMinImpact;
   elements.timeFormat.value = prefs.timeFormat;
   elements.notifyImpact.value = prefs.notifyMinImpact;
   elements.notifications.checked = prefs.notificationsEnabled;
@@ -176,7 +174,6 @@ elements.save.addEventListener("click", async () => {
     allDayHour,
     timeZone: elements.timezone.value || null,
     timeFormat: elements.timeFormat.value,
-    viewMinImpact: elements.impact.value,
     notifyMinImpact: elements.notifyImpact.value,
     notificationsEnabled: elements.notifications.checked,
     alarmOffsets: offsets,

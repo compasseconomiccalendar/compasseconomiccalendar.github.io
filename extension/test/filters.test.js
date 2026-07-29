@@ -349,13 +349,13 @@ test("snoozed events are dropped until their snooze expires", () => {
   assert.ok(after.some((item) => item.eventId === "a"));
 });
 
-test("prefs migration splits the old single threshold", () => {
-  // A permissive browsing filter must not become a notification threshold --
-  // that is the bug the split exists to fix.
+test("prefs migration keeps only the notification threshold", () => {
+  // A permissive browsing filter must not become a notification threshold.
+  // The popup now filters by event type, so the view threshold is dropped.
   const migrated = migratePrefs({ minImpact: "low" });
-  assert.equal(migrated.viewMinImpact, "low");
   assert.equal(migrated.notifyMinImpact, "medium");
   assert.equal(migrated.minImpact, undefined);
+  assert.equal(migrated.viewMinImpact, undefined);
 });
 
 test("migration never makes notifications noisier than they were", () => {
@@ -365,22 +365,20 @@ test("migration never makes notifications noisier than they were", () => {
   assert.equal(migratePrefs({ minImpact: "low" }).notifyMinImpact, "medium");
 });
 
-test("migration leaves already-split prefs alone", () => {
-  const already = { viewMinImpact: "low", notifyMinImpact: "high" };
-  const migrated = migratePrefs(already);
-  assert.equal(migrated.viewMinImpact, "low");
-  assert.equal(migrated.notifyMinImpact, "high");
-  // A stale legacy key alongside new ones must not override them.
-  const both = migratePrefs({ ...already, minImpact: "low" });
-  assert.equal(both.viewMinImpact, "low");
+test("migration leaves an existing notify threshold alone", () => {
+  const already = { notifyMinImpact: "high" };
+  assert.equal(migratePrefs(already).notifyMinImpact, "high");
+  // Stale keys from either older schema are stripped, not carried forward.
+  const both = migratePrefs({ ...already, minImpact: "low", viewMinImpact: "low" });
   assert.equal(both.notifyMinImpact, "high");
   assert.equal(both.minImpact, undefined);
+  assert.equal(both.viewMinImpact, undefined);
 });
 
 test("migration fills defaults and preserves unrelated prefs", () => {
   const migrated = migratePrefs({ timeZone: "America/Denver" });
-  assert.equal(migrated.viewMinImpact, "medium");
   assert.equal(migrated.notifyMinImpact, "medium");
+  assert.deepEqual(migrated.selectedGroups, []);
   assert.equal(migrated.timeZone, "America/Denver");
   assert.deepEqual(migrated.alarmOffsets, [30, 5]);
   // An empty store yields the defaults untouched.
@@ -403,4 +401,29 @@ test("resolveHour12 maps the preference onto Intl's option", () => {
   // undefined is meaningful: it tells Intl to use the locale convention.
   assert.equal(resolveHour12("auto"), undefined);
   assert.equal(resolveHour12(undefined), undefined);
+});
+
+test("the pills are the view filter and every group is reachable", () => {
+  const events = [
+    event("fomc", 1, { event_type: "fomc_statement" }),
+    event("cpi", 2, { event_type: "macro_release_cpi" }),
+    event("ism", 3, { event_type: "ism_manufacturing_pmi" }),
+    event("auction", 4, { event_type: "treasury_auction", market_impact: "low" }),
+    event("opex", 5, { event_type: "monthly_opex", market_impact: "low" }),
+    event("holiday", 6, { event_type: "market_holiday", market_impact: "low" }),
+  ];
+
+  // No selection shows everything, including low-impact events -- there is no
+  // impact filter on the list any more.
+  assert.equal(upcomingEvents(events, { now: NOW }).length, 6);
+
+  for (const group of TYPE_GROUPS) {
+    const result = upcomingEvents(events, { now: NOW, types: [group.id] });
+    assert.ok(result.length > 0, `no events for the ${group.id} pill`);
+    assert.ok(result.every((item) => groupOf(item.event_type) === group.id));
+  }
+
+  // Selecting several pills unions them.
+  const pair = upcomingEvents(events, { now: NOW, types: ["fomc", "market"] });
+  assert.deepEqual(pair.map((item) => item.id), ["fomc", "holiday"]);
 });

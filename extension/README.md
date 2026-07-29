@@ -38,8 +38,9 @@ Icons are generated, not hand-drawn — regenerate with
 - **Toolbar badge** counts down to the next high-impact event (`45m`, `2h`,
   `3d`), turning red inside 30 minutes. Ticks every minute when close and
   hourly when days out; shows `!` when the cache is stale
-- Popup lists upcoming events grouped by day (Today / Tomorrow / weekday) with
-  an impact filter and FOMC/Data/Treasury/Futures chips
+- Popup lists upcoming events grouped by day (Today / Tomorrow / weekday),
+  filtered by multi-select **FOMC / Data / Treasury / Futures / Market** pills.
+  The selection persists; no pills means everything
 - **Events stay listed for 90 minutes after they start**, under "Happening
   now" — an FOMC statement should not vanish at 2:00:01
 - Warns when the cache is over 10 days old or the feed was built with a
@@ -72,8 +73,8 @@ Stored in `chrome.storage.sync`, so they follow a signed-in Chrome profile.
 |---|---|---|
 | `timeFormat` | `auto` | `auto` follows the locale; `12h` or `24h` force it |
 | `timeZone` | `null` | `null` uses the browser zone; otherwise an IANA name such as `America/Denver` |
-| `viewMinImpact` | `medium` | Filters the popup list only |
-| `notifyMinImpact` | `medium` | Notification threshold, set independently |
+| `selectedGroups` | `[]` | Active type pills; empty means all |
+| `notifyMinImpact` | `medium` | Notification threshold — impact now only gates notifications, not the list |
 | `alarmOffsets` | `[30, 5]` | Minutes before the event, up to four |
 | `notificationsEnabled` | `true` | |
 | `hiddenTypes` | `[]` | Event types removed from the list and never notified |

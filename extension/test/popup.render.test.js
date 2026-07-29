@@ -156,6 +156,14 @@ test("the popup renders a full feed without throwing", async () => {
   assert.ok(events, "#events was never queried");
   assert.ok(events.children.length > 0, "no events rendered");
 
+  // The pills are the top-level filter now: one per group, none preselected.
+  const chips = registry.get("chips");
+  assert.equal(chips.children.length, 5, "expected five type pills");
+  assert.deepEqual(
+    chips.children.map((chip) => chip.textContent),
+    ["FOMC", "Data", "Treasury", "Futures", "Market"],
+  );
+
   // The hours tab rendered too, including its session line.
   assert.ok(registry.get("session").children.length > 0, "no equity session");
   assert.ok(registry.get("futures-session").children.length > 0, "no futures session");

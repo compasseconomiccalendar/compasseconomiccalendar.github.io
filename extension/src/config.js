@@ -18,11 +18,11 @@ export const STORAGE_KEYS = {
 };
 
 export const DEFAULT_PREFS = {
-  // Two separate thresholds on purpose. Filtering what you are *looking at*
-  // must never change what interrupts you -- browsing at "All events" used to
-  // silently subscribe you to every bill auction.
-  viewMinImpact: "medium",
+  // The popup filters by event type, not impact. Impact still gates
+  // notifications, which is a separate decision from what you browse.
   notifyMinImpact: "medium",
+  // Which type pills are active; empty means all.
+  selectedGroups: [],
   // Matches the advance-warning cadence in RESEARCH.md section Phase 2.
   alarmOffsets: [30, 5],
   notificationsEnabled: true,

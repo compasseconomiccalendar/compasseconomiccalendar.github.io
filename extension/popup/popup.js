@@ -43,7 +43,6 @@ const elements = {
   chips: document.getElementById("chips"),
   more: document.getElementById("more"),
   status: document.getElementById("status"),
-  impact: document.getElementById("impact"),
   refresh: document.getElementById("refresh"),
   options: document.getElementById("options"),
   listView: document.getElementById("list-view"),
@@ -76,7 +75,8 @@ let activeTab = "events";
 // The zone the detail view formats against; kept in sync with prefs on render.
 let activeTimeZone;
 let activeHour12;
-// Group ids currently selected in the chip row; empty means "all".
+// Group ids selected in the pill row; empty means all. Persisted, so the
+// filter survives closing the popup.
 let activeGroups = new Set();
 
 // Rebuilt on each render because the zone is a saved preference, not a
@@ -170,10 +170,11 @@ function renderChips() {
     chip.textContent = group.label;
     chip.setAttribute("aria-pressed", String(activeGroups.has(group.id)));
     if (activeGroups.has(group.id)) chip.classList.add("on");
-    chip.addEventListener("click", () => {
+    chip.addEventListener("click", async () => {
       if (activeGroups.has(group.id)) activeGroups.delete(group.id);
       else activeGroups.add(group.id);
-      render();
+      await setPrefs({ selectedGroups: [...activeGroups] });
+      await render();
     });
     elements.chips.append(chip);
   }
@@ -244,7 +245,7 @@ async function render() {
     getPrefs(),
   ]);
 
-  elements.impact.value = prefs.viewMinImpact;
+  activeGroups = new Set(prefs.selectedGroups ?? []);
   buildFormatters(prefs);
   renderStatus(fetchedAt, lastError);
   renderChips();
@@ -268,7 +269,8 @@ async function render() {
 
   const query = {
     now,
-    minImpact: prefs.viewMinImpact,
+    // No impact filter here: the pills are the view filter, and impact is
+    // only a notification concern now.
     hiddenTypes: prefs.hiddenTypes,
     horizonMs: VIEW_HORIZON_MS,
     graceMs: IN_PROGRESS_GRACE_MS,
@@ -279,8 +281,8 @@ async function render() {
 
   if (!events.length) {
     elements.empty.textContent = activeGroups.size
-      ? "Nothing upcoming for these filters."
-      : "Nothing upcoming at this impact level.";
+      ? "Nothing upcoming for the selected types."
+      : "Nothing upcoming.";
     elements.empty.hidden = false;
     return;
   }
@@ -561,11 +563,6 @@ elements.options.addEventListener("click", () => {
 // View-only: this deliberately does not touch the notification threshold or
 // reschedule anything. Changing what you are looking at must not change what
 // interrupts you.
-elements.impact.addEventListener("change", async (domEvent) => {
-  await setPrefs({ viewMinImpact: domEvent.target.value });
-  await render();
-});
-
 elements.refresh.addEventListener("click", async () => {
   elements.refresh.disabled = true;
   elements.status.textContent = "Refreshing…";

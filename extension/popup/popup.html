@@ -9,12 +9,6 @@
   <header>
     <h1>Compass</h1>
     <div class="controls">
-      <label class="sr-only" for="impact">Minimum impact</label>
-      <select id="impact">
-        <option value="low">All events</option>
-        <option value="medium">Medium &amp; high</option>
-        <option value="high">High only</option>
-      </select>
       <button id="refresh" title="Refresh feed" aria-label="Refresh feed">↻</button>
       <button id="options" title="Settings" aria-label="Settings">⚙</button>
     </div>
@@ -39,7 +33,7 @@
   </div>
 
   <div id="list-view">
-    <div id="chips" class="chips"></div>
+    <div id="chips" class="chips" role="group" aria-label="Filter by event type"></div>
     <div id="banner" class="banner" hidden></div>
     <ul id="events" class="events"></ul>
     <p id="empty" class="empty" hidden></p>
