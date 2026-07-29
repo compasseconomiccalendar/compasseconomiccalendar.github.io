@@ -28,6 +28,8 @@ const elements = {
   allDayHour: document.getElementById("allday-hour"),
   offsets: document.getElementById("offsets"),
   types: document.getElementById("types"),
+  openShortcuts: document.getElementById("open-shortcuts"),
+  shortcutCurrent: document.getElementById("shortcut-current"),
   save: document.getElementById("save"),
   reset: document.getElementById("reset"),
   status: document.getElementById("status"),
@@ -138,6 +140,19 @@ async function load(prefs) {
   updateTimezoneHint();
 }
 
+// Chrome exposes the *actual* binding, which may differ from the manifest's
+// suggestion if the user rebound it or it collided with another extension.
+async function showCurrentShortcut() {
+  if (!chrome.commands?.getAll) return;
+  const commands = await chrome.commands.getAll();
+  const action = commands.find((command) => command.name === "_execute_action");
+  elements.shortcutCurrent.textContent = action?.shortcut || "not set";
+}
+
+elements.openShortcuts.addEventListener("click", () => {
+  chrome.tabs.create({ url: "chrome://extensions/shortcuts" });
+});
+
 elements.timezone.addEventListener("change", updateTimezoneHint);
 elements.timeFormat.addEventListener("change", updateTimezoneHint);
 
@@ -185,4 +200,5 @@ elements.reset.addEventListener("click", async () => {
   const prefs = await getPrefs();
   buildTimezoneOptions(prefs.timeZone);
   await load(prefs);
+  await showCurrentShortcut();
 })();

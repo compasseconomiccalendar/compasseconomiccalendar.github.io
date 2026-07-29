@@ -185,7 +185,8 @@ test("typicalMoveDetail always reports sample size", () => {
   };
   const detail = typicalMoveDetail(event);
   assert.equal(detail.notable, true);
-  assert.match(detail.headline, /1\.7x/);
+  // The generated sentence is deliberately not surfaced -- figures only.
+  assert.equal(detail.headline, undefined);
   assert.deepEqual(detail.rows.map((row) => row.label), ["S&P 500", "Nasdaq 100"]);
   // A ratio without an n invites over-reading a tiny sample.
   for (const row of detail.rows) assert.match(row.value, /n=34/);

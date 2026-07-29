@@ -122,3 +122,12 @@ footer {
 }
 footer p { margin: 0 0 .4rem; }
 footer a { color: var(--accent); }
+
+kbd, code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .85em;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: .1rem .35rem;
+}

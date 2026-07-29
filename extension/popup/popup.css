@@ -267,10 +267,12 @@ footer { padding: .7rem .85rem 1rem; border-top: 1px solid var(--line); }
 }
 .move h3 {
   margin: 0 0 .45rem;
-  font-size: .82rem;
+  font-size: .72rem;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--muted);
 }
-.move h3.notable { color: var(--high); }
 .move .rows { margin: 0 0 .4rem; font-size: .76rem; }
 .move-window {
   margin: 0;

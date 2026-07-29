@@ -57,7 +57,6 @@ const elements = {
   detailPrimary: document.getElementById("detail-primary"),
   detailAttribution: document.getElementById("detail-attribution"),
   detailMove: document.getElementById("detail-move"),
-  moveHeadline: document.getElementById("move-headline"),
   moveRows: document.getElementById("move-rows"),
   moveWindow: document.getElementById("move-window"),
   tabEvents: document.getElementById("tab-events"),
@@ -331,8 +330,6 @@ function showDetail(event) {
 
   const move = typicalMoveDetail(event);
   if (move) {
-    elements.moveHeadline.textContent = move.headline;
-    elements.moveHeadline.classList.toggle("notable", move.notable);
     appendPairs(elements.moveRows, move.rows);
     elements.moveWindow.textContent = move.window;
     elements.detailMove.hidden = false;

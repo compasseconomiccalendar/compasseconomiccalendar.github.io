@@ -56,6 +56,9 @@ Icons are generated, not hand-drawn — regenerate with
   after hours / closed, with holidays and half days accounted for) and **CME
   equity index futures** (open / daily halt / weekend), session times **in your
   own timezone**, and upcoming market closures
+- **Keyboard shortcut** (`Alt+Shift+C` by default) opens the popup from
+  anywhere; the options page reads the *live* binding from Chrome and links to
+  `chrome://extensions/shortcuts` to rebind it
 - Options page (⚙ in the popup): timezone override, separate list and
   notification impact thresholds, notification toggle and offsets, and
   per-event-type hiding
@@ -76,6 +79,10 @@ Stored in `chrome.storage.sync`, so they follow a signed-in Chrome profile.
 | `hiddenTypes` | `[]` | Event types removed from the list and never notified |
 | `allDayNotifications` | `true` | Morning-of nudge for all-day events |
 | `allDayHour` | `8` | Local hour for that nudge |
+
+The keyboard shortcut is **not** a stored preference — Chrome owns it. An
+extension cannot set its own binding, so the manifest declares a suggestion
+and the user rebinds it on Chrome's shortcuts page.
 
 Saving from the options page messages the service worker to rebuild its alarm
 schedule immediately, rather than waiting for the next 12-hour refresh.

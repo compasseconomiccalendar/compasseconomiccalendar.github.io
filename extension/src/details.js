@@ -120,8 +120,8 @@ export function typicalMoveBadge(event) {
 }
 
 /**
- * The detail-view block: headline, per-index medians with sample sizes, and
- * the window the figures were computed over.
+ * The detail-view block: per-index medians with sample sizes, the implied-vol
+ * comparison, and the window the figures were computed over.
  *
  * Sample size is always shown. A ratio without an `n` invites a confident
  * reading of very little data.
@@ -151,8 +151,9 @@ export function typicalMoveDetail(event) {
   }
 
   const since = move.sample_start ? ` since ${move.sample_start}` : "";
+  // The feed still carries a prose `summary`; the detail view deliberately
+  // shows the figures instead and lets the reader draw the conclusion.
   return {
-    headline: move.summary,
     notable: Boolean(move.notable),
     rows,
     window: `${move.window === "recent" ? "Recent window" : "Full sample"}${since}`,

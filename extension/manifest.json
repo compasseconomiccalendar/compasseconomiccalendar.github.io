@@ -1,10 +1,14 @@
 {
   "manifest_version": 3,
   "name": "Compass Economic Calendar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "FOMC, CPI, jobs, Treasury auctions and futures roll dates in your local timezone. Not investment advice.",
   "minimum_chrome_version": "120",
-  "permissions": ["alarms", "storage", "notifications"],
+  "permissions": [
+    "alarms",
+    "storage",
+    "notifications"
+  ],
   "host_permissions": [
     "https://compasseconomiccalendar.github.io/compasseconomiccalendar/*"
   ],
@@ -25,5 +29,13 @@
     "32": "icons/icon32.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+Shift+C",
+        "mac": "Alt+Shift+C"
+      }
+    }
   }
 }
