@@ -65,7 +65,15 @@ const CALENDAR = {
   schema_version: "1.0.0",
   disclaimer: "Not investment advice.",
   counts: { total: 3, by_event_type: {} },
-  coverage: { families: {}, warnings: [] },
+  generated_at_utc: "2026-07-29T13:00:00Z",
+  coverage: {
+    families: {
+      fomc: { horizon: "reported", event_count: 31, confirmed_through: "2027-07-28", complete_to_window_end: true },
+      treasury_auctions: { horizon: "reported", event_count: 10, confirmed_through: "2026-08-04", complete_to_window_end: false },
+      futures: { horizon: "computed", event_count: 25, confirmed_through: "2027-08-20", complete_to_window_end: true },
+    },
+    warnings: ["treasury_auctions: upstream has published dates only through 2026-08-04."],
+  },
   market_hours: {
     timezone: "America/New_York",
     equities: {
@@ -169,6 +177,18 @@ test("the popup renders a full feed without throwing", async () => {
   );
   assert.ok(boxes.every((box) => box.checked === false), "nothing preselected");
   assert.equal(registry.get("type-summary").textContent, "All event types");
+
+  // The coverage tab is populated from the feed's own coverage block, and the
+  // gap warning lives there rather than in the banner above the list.
+  assert.equal(registry.get("coverage-families").children.length, 3);
+  assert.equal(registry.get("coverage-warnings").children.length, 1);
+  assert.equal(registry.get("coverage-warnings").hidden, false);
+  assert.ok(registry.get("coverage-meta").children.length > 0);
+  assert.equal(
+    registry.get("banner").children.some?.((line) => /Schedules published/.test(line.textContent)) ?? false,
+    false,
+    "coverage text must not be in the banner",
+  );
 
   // The hours tab rendered too, including its session line.
   assert.ok(registry.get("session").children.length > 0, "no equity session");
@@ -335,4 +355,56 @@ test("ticking type options updates the label and persists the selection", async 
   for (const index of [0, 1, 2]) await tick(index, false);
   assert.deepEqual(storedPrefs.selectedGroups, []);
   assert.equal(summary.textContent, "All event types");
+});
+
+test("the coverage tab shows every family and hides its warnings when clean", async () => {
+  const registry = new Map();
+  const clean = {
+    ...CALENDAR,
+    coverage: {
+      families: {
+        futures: {
+          horizon: "computed", event_count: 25,
+          confirmed_through: "2027-08-20", complete_to_window_end: true,
+        },
+      },
+      warnings: [],
+    },
+  };
+  globalThis.document = {
+    getElementById(id) {
+      if (!registry.has(id)) registry.set(id, makeElement(id));
+      return registry.get(id);
+    },
+    createElement: () => makeElement(),
+    addEventListener() {},
+  };
+  globalThis.window = { scrollTo() {} };
+  globalThis.chrome = {
+    storage: {
+      local: {
+        async get() { return { calendar: clean, fetchedAt: Date.now(), lastError: null }; },
+        async set() {},
+      },
+      sync: { async get() { return {}; }, async set() {} },
+    },
+    runtime: { async sendMessage() { return { ok: true }; }, openOptionsPage() {} },
+  };
+
+  await import(`../popup/popup.js?coverage=${Date.now()}`);
+  await new Promise((resolve) => setTimeout(resolve, 40));
+
+  assert.equal(registry.get("coverage-families").children.length, 1);
+  // No warnings means the block is hidden rather than rendered empty.
+  assert.equal(registry.get("coverage-warnings").hidden, true);
+
+  // Switching tabs shows exactly one view.
+  registry.get("tab-coverage").listeners.click();
+  assert.equal(registry.get("coverage-view").hidden, false);
+  assert.equal(registry.get("list-view").hidden, true);
+  assert.equal(registry.get("hours-view").hidden, true);
+
+  registry.get("tab-events").listeners.click();
+  assert.equal(registry.get("list-view").hidden, false);
+  assert.equal(registry.get("coverage-view").hidden, true);
 });

@@ -394,6 +394,41 @@ footer { padding: .7rem .85rem 1rem; border-top: 1px solid var(--line); }
 }
 .closure-kind.early { color: var(--medium); }
 .closure-empty { padding: .8rem .85rem; color: var(--muted); font-size: .8rem; }
+.coverage-list { list-style: none; margin: 0; padding: 0; }
+.coverage-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: .5rem;
+  align-items: baseline;
+  padding: .4rem .85rem;
+  border-bottom: 1px solid var(--line);
+  font-size: .78rem;
+}
+.coverage-name { text-transform: capitalize; }
+.coverage-horizon {
+  font-size: .64rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  padding: .05rem .3rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--muted);
+}
+.coverage-horizon.computed { color: var(--low); }
+.coverage-horizon.reported { color: var(--medium); border-color: var(--medium); }
+.coverage-through { color: var(--muted); font-variant-numeric: tabular-nums; }
+.coverage-row.short .coverage-through { color: var(--high); }
+
+.coverage-warnings {
+  padding: .6rem .85rem;
+  background: var(--warn-bg);
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: .76rem;
+}
+.coverage-warnings p { margin: 0 0 .35rem; }
+.coverage-warnings p:last-child { margin-bottom: 0; }
+
 .hours-note {
   margin: .8rem 0 0;
   padding: 0 .85rem 1rem;

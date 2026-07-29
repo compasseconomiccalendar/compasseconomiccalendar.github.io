@@ -14,7 +14,6 @@ import {
 } from "../src/details.js";
 import {
   TYPE_GROUPS,
-  coverageGaps,
   groupByDay,
   isInProgress,
   isStale,
@@ -62,6 +61,11 @@ const elements = {
   moveWindow: document.getElementById("move-window"),
   tabEvents: document.getElementById("tab-events"),
   tabHours: document.getElementById("tab-hours"),
+  tabCoverage: document.getElementById("tab-coverage"),
+  coverageView: document.getElementById("coverage-view"),
+  coverageMeta: document.getElementById("coverage-meta"),
+  coverageFamilies: document.getElementById("coverage-families"),
+  coverageWarnings: document.getElementById("coverage-warnings"),
   hoursView: document.getElementById("hours-view"),
   session: document.getElementById("session"),
   hoursRows: document.getElementById("hours-rows"),
@@ -217,17 +221,8 @@ function renderBanner(calendar, fetchedAt, now) {
     );
   }
 
-  const gaps = coverageGaps(calendar.coverage, now + VIEW_HORIZON_MS);
-  if (gaps.length) {
-    const parts = gaps.map(
-      (gap) => `${gap.family.replace(/_/g, " ")} through ${gap.confirmedThrough}`,
-    );
-    messages.push(
-      `Schedules published only up to: ${parts.join("; ")}. ` +
-        "Later dates are unpublished, not empty.",
-    );
-  }
-
+  // Coverage gaps are informational and live on their own tab; the banner is
+  // reserved for things that are actually wrong and need action.
   if (!messages.length) {
     elements.banner.hidden = true;
     elements.banner.classList.remove("urgent");
@@ -286,6 +281,7 @@ async function render() {
   const now = Date.now();
   renderBanner(calendar, fetchedAt, now);
   renderHours(calendar);
+  renderCoverage(calendar, fetchedAt);
 
   const query = {
     now,
@@ -534,15 +530,71 @@ function renderHours(calendar) {
     "verify against CME's calendar before trading a holiday.";
 }
 
+const TABS = [
+  ["events", "tabEvents", "listView"],
+  ["hours", "tabHours", "hoursView"],
+  ["coverage", "tabCoverage", "coverageView"],
+];
+
 function setTab(tab) {
   activeTab = tab;
-  elements.tabEvents.classList.toggle("on", tab === "events");
-  elements.tabHours.classList.toggle("on", tab === "hours");
-  elements.tabEvents.setAttribute("aria-selected", String(tab === "events"));
-  elements.tabHours.setAttribute("aria-selected", String(tab === "hours"));
-  elements.hoursView.hidden = tab !== "hours";
+  for (const [id, button, view] of TABS) {
+    const on = id === tab;
+    elements[button].classList.toggle("on", on);
+    elements[button].setAttribute("aria-selected", String(on));
+    elements[view].hidden = !on;
+  }
   elements.detailView.hidden = true;
-  elements.listView.hidden = tab !== "events";
+}
+
+function renderCoverage(calendar, fetchedAt) {
+  appendPairs(elements.coverageMeta, [
+    {
+      label: "Last refreshed",
+      value: fetchedAt ? new Date(fetchedAt).toLocaleString() : "never",
+    },
+    {
+      label: "Feed built",
+      value: calendar?.generated_at_utc
+        ? new Date(calendar.generated_at_utc).toLocaleString()
+        : "unknown",
+    },
+    { label: "Events", value: String(calendar?.counts?.total ?? calendar?.events?.length ?? 0) },
+  ]);
+
+  const families = calendar?.coverage?.families ?? {};
+  elements.coverageFamilies.replaceChildren();
+
+  for (const [family, info] of Object.entries(families)) {
+    const item = document.createElement("li");
+    item.className = `coverage-row ${info.complete_to_window_end ? "" : "short"}`.trim();
+
+    const name = document.createElement("span");
+    name.className = "coverage-name";
+    name.textContent = family.replace(/_/g, " ");
+
+    const horizon = document.createElement("span");
+    horizon.className = `coverage-horizon ${info.horizon}`;
+    horizon.textContent = info.horizon;
+
+    const through = document.createElement("span");
+    through.className = "coverage-through";
+    through.textContent = info.confirmed_through
+      ? `${info.event_count} · through ${info.confirmed_through}`
+      : "no events";
+
+    item.append(name, horizon, through);
+    elements.coverageFamilies.append(item);
+  }
+
+  const warnings = calendar?.coverage?.warnings ?? [];
+  elements.coverageWarnings.replaceChildren();
+  for (const warning of warnings) {
+    const line = document.createElement("p");
+    line.textContent = warning;
+    elements.coverageWarnings.append(line);
+  }
+  elements.coverageWarnings.hidden = warnings.length === 0;
 }
 
 /** Arrow keys move between event titles without leaving the keyboard. */
@@ -558,6 +610,7 @@ function moveFocus(direction) {
 
 elements.tabEvents.addEventListener("click", () => setTab("events"));
 elements.tabHours.addEventListener("click", () => setTab("hours"));
+elements.tabCoverage.addEventListener("click", () => setTab("coverage"));
 
 elements.back.addEventListener("click", showList);
 

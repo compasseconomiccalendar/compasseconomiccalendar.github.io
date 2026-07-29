@@ -17,7 +17,20 @@
   <nav class="tabs" role="tablist">
     <button id="tab-events" class="tab on" role="tab" aria-selected="true">Events</button>
     <button id="tab-hours" class="tab" role="tab" aria-selected="false">Hours</button>
+    <button id="tab-coverage" class="tab" role="tab" aria-selected="false">Coverage</button>
   </nav>
+
+  <div id="coverage-view" hidden>
+    <dl id="coverage-meta" class="rows hours-rows"></dl>
+    <h3 class="hours-heading">By source</h3>
+    <ul id="coverage-families" class="coverage-list"></ul>
+    <div id="coverage-warnings" class="coverage-warnings"></div>
+    <p class="hours-note">
+      <strong>Computed</strong> schedules follow published rules, so they run to
+      the end of the window. <strong>Reported</strong> ones only reach as far as
+      the agency has published — a later month is unpublished, not empty.
+    </p>
+  </div>
 
   <div id="hours-view" hidden>
     <h3 class="hours-heading first">Equities — NYSE / Nasdaq</h3>

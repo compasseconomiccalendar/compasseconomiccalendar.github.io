@@ -43,9 +43,12 @@ Icons are generated, not hand-drawn — regenerate with
   Futures / Market). The selection persists; nothing ticked means everything
 - **Events stay listed for 90 minutes after they start**, under "Happening
   now" — an FOMC statement should not vanish at 2:00:01
-- Warns when the cache is over 10 days old or the feed was built with a
-  failing source, and surfaces the feed's `coverage` warnings so an
-  unpublished date range does not read as an empty one
+- Warns above the list when the cache is over 10 days old or the feed was
+  built with a failing source — reserved for things that are actually wrong
+- **Coverage tab**: per-source horizons from the feed's `coverage` block,
+  marked computed or reported, so an unpublished date range does not read as
+  an empty one. Informational, so it lives here rather than nagging above the
+  list
 - All-day events (futures rolls, FOMC day 1) get a morning-of nudge instead of
   a meaningless "30 minutes before midnight"
 - Notification buttons to verify at source or snooze for an hour
