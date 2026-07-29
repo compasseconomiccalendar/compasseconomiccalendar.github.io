@@ -39,8 +39,8 @@ Icons are generated, not hand-drawn — regenerate with
   `3d`), turning red inside 30 minutes. Ticks every minute when close and
   hourly when days out; shows `!` when the cache is stale
 - Popup lists upcoming events grouped by day (Today / Tomorrow / weekday),
-  filtered by multi-select **FOMC / Data / Treasury / Futures / Market** pills.
-  The selection persists; no pills means everything
+  filtered by a multi-select **event type** dropdown (FOMC / Data / Treasury /
+  Futures / Market). The selection persists; nothing ticked means everything
 - **Events stay listed for 90 minutes after they start**, under "Happening
   now" — an FOMC statement should not vanish at 2:00:01
 - Warns when the cache is over 10 days old or the feed was built with a
@@ -73,7 +73,7 @@ Stored in `chrome.storage.sync`, so they follow a signed-in Chrome profile.
 |---|---|---|
 | `timeFormat` | `auto` | `auto` follows the locale; `12h` or `24h` force it |
 | `timeZone` | `null` | `null` uses the browser zone; otherwise an IANA name such as `America/Denver` |
-| `selectedGroups` | `[]` | Active type pills; empty means all |
+| `selectedGroups` | `[]` | Ticked event types; empty means all |
 | `notifyMinImpact` | `medium` | Notification threshold — impact now only gates notifications, not the list |
 | `alarmOffsets` | `[30, 5]` | Minutes before the event, up to four |
 | `notificationsEnabled` | `true` | |

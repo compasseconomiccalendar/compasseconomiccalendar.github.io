@@ -41,6 +41,8 @@ const elements = {
   empty: document.getElementById("empty"),
   banner: document.getElementById("banner"),
   chips: document.getElementById("chips"),
+  typeFilter: document.getElementById("type-filter"),
+  typeSummary: document.getElementById("type-summary"),
   more: document.getElementById("more"),
   status: document.getElementById("status"),
   refresh: document.getElementById("refresh"),
@@ -161,22 +163,40 @@ function renderEvent(event, now) {
   return item;
 }
 
-function renderChips() {
+/** Label for the closed dropdown, reflecting what is selected. */
+function typeFilterLabel() {
+  if (!activeGroups.size) return "All event types";
+  const chosen = TYPE_GROUPS.filter((group) => activeGroups.has(group.id));
+  if (chosen.length <= 2) return chosen.map((group) => group.label).join(", ");
+  return `${chosen.length} types selected`;
+}
+
+function renderTypeFilter() {
+  elements.typeSummary.textContent = typeFilterLabel();
   elements.chips.replaceChildren();
+
   for (const group of TYPE_GROUPS) {
-    const chip = document.createElement("button");
-    chip.type = "button";
-    chip.className = "chip";
-    chip.textContent = group.label;
-    chip.setAttribute("aria-pressed", String(activeGroups.has(group.id)));
-    if (activeGroups.has(group.id)) chip.classList.add("on");
-    chip.addEventListener("click", async () => {
-      if (activeGroups.has(group.id)) activeGroups.delete(group.id);
-      else activeGroups.add(group.id);
+    const row = document.createElement("label");
+    row.className = "type-option";
+
+    const box = document.createElement("input");
+    box.type = "checkbox";
+    box.value = group.id;
+    box.checked = activeGroups.has(group.id);
+    // The dropdown stays open on change: it is multi-select, and closing
+    // after each tick would make picking three types a three-open chore.
+    box.addEventListener("change", async () => {
+      if (box.checked) activeGroups.add(group.id);
+      else activeGroups.delete(group.id);
       await setPrefs({ selectedGroups: [...activeGroups] });
       await render();
     });
-    elements.chips.append(chip);
+
+    const text = document.createElement("span");
+    text.textContent = group.label;
+
+    row.append(box, text);
+    elements.chips.append(row);
   }
 }
 
@@ -248,7 +268,7 @@ async function render() {
   activeGroups = new Set(prefs.selectedGroups ?? []);
   buildFormatters(prefs);
   renderStatus(fetchedAt, lastError);
-  renderChips();
+  renderTypeFilter();
   // A refresh or filter change can remove whatever the detail view was
   // showing, so always come back to the list.
   showList();

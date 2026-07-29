@@ -38,11 +38,13 @@ function makeElement(id = "") {
         return on;
       },
     },
+    listeners: {},
     append(...nodes) { element.children.push(...nodes); },
     replaceChildren(...nodes) { element.children = [...nodes]; },
     appendChild(node) { element.children.push(node); return node; },
-    addEventListener() {},
-    removeEventListener() {},
+    // Handlers are recorded so tests can drive the UI, not just render it.
+    addEventListener(type, handler) { element.listeners[type] = handler; },
+    removeEventListener(type) { delete element.listeners[type]; },
     setAttribute() {},
     getAttribute() { return null; },
     focus() {},
@@ -156,13 +158,17 @@ test("the popup renders a full feed without throwing", async () => {
   assert.ok(events, "#events was never queried");
   assert.ok(events.children.length > 0, "no events rendered");
 
-  // The pills are the top-level filter now: one per group, none preselected.
-  const chips = registry.get("chips");
-  assert.equal(chips.children.length, 5, "expected five type pills");
+  // The type filter is a multi-select dropdown: one checkbox per group,
+  // none ticked, and the closed label says so.
+  const menu = registry.get("chips");
+  assert.equal(menu.children.length, 5, "expected five type options");
+  const boxes = menu.children.map((row) => row.children[0]);
   assert.deepEqual(
-    chips.children.map((chip) => chip.textContent),
-    ["FOMC", "Data", "Treasury", "Futures", "Market"],
+    boxes.map((box) => box.value),
+    ["fomc", "data", "treasury", "futures", "market"],
   );
+  assert.ok(boxes.every((box) => box.checked === false), "nothing preselected");
+  assert.equal(registry.get("type-summary").textContent, "All event types");
 
   // The hours tab rendered too, including its session line.
   assert.ok(registry.get("session").children.length > 0, "no equity session");
@@ -275,3 +281,58 @@ for (const [name, stored] of Object.entries(DEGRADED)) {
     assert.deepEqual(errors.map((error) => String(error?.message ?? error)), [], name);
   });
 }
+
+test("ticking type options updates the label and persists the selection", async () => {
+  const registry = new Map();
+  let storedPrefs = {};
+  globalThis.document = {
+    getElementById(id) {
+      if (!registry.has(id)) registry.set(id, makeElement(id));
+      return registry.get(id);
+    },
+    createElement: () => makeElement(),
+    addEventListener() {},
+  };
+  globalThis.window = { scrollTo() {} };
+  globalThis.chrome = {
+    storage: {
+      local: {
+        async get() { return { calendar: CALENDAR, fetchedAt: Date.now(), lastError: null }; },
+        async set() {},
+      },
+      sync: {
+        async get() { return { prefs: storedPrefs }; },
+        async set(items) { storedPrefs = items.prefs; },
+      },
+    },
+    runtime: { async sendMessage() { return { ok: true }; }, openOptionsPage() {} },
+  };
+
+  await import(`../popup/popup.js?filter=${Date.now()}`);
+  await new Promise((resolve) => setTimeout(resolve, 40));
+
+  const menu = registry.get("chips");
+  const summary = registry.get("type-summary");
+  const tick = async (index, checked) => {
+    const box = menu.children[index].children[0];
+    box.checked = checked;
+    await box.listeners.change();
+    await new Promise((resolve) => setTimeout(resolve, 20));
+  };
+
+  await tick(0, true);                       // FOMC
+  assert.deepEqual(storedPrefs.selectedGroups, ["fomc"]);
+  assert.equal(summary.textContent, "FOMC");
+
+  await tick(1, true);                       // + Data
+  assert.equal(summary.textContent, "FOMC, Data");
+
+  await tick(2, true);                       // + Treasury: too many to list
+  assert.equal(summary.textContent, "3 types selected");
+  assert.deepEqual(storedPrefs.selectedGroups, ["fomc", "data", "treasury"]);
+
+  // Unticking everything returns to the unfiltered label.
+  for (const index of [0, 1, 2]) await tick(index, false);
+  assert.deepEqual(storedPrefs.selectedGroups, []);
+  assert.equal(summary.textContent, "All event types");
+});

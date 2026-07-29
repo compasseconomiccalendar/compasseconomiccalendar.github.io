@@ -33,7 +33,13 @@
   </div>
 
   <div id="list-view">
-    <div id="chips" class="chips" role="group" aria-label="Filter by event type"></div>
+    <div class="filterbar">
+      <details id="type-filter" class="dropdown">
+        <summary id="type-summary">All event types</summary>
+        <div id="chips" class="dropdown-menu" role="group"
+             aria-label="Filter by event type"></div>
+      </details>
+    </div>
     <div id="banner" class="banner" hidden></div>
     <ul id="events" class="events"></ul>
     <p id="empty" class="empty" hidden></p>
