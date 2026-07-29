@@ -48,12 +48,75 @@ function toMinutes(hhmm) {
   return hour * 60 + minute;
 }
 
-export function formatMinutes(minutes) {
+export function formatMinutes(minutes, hour12 = true) {
   const hour = Math.floor(minutes / 60);
   const minute = minutes % 60;
+  const padded = String(minute).padStart(2, "0");
+  if (hour12 === false) return `${String(hour).padStart(2, "0")}:${padded}`;
   const suffix = hour >= 12 ? "pm" : "am";
   const display = hour % 12 === 0 ? 12 : hour % 12;
-  return `${display}:${String(minute).padStart(2, "0")}${suffix}`;
+  return `${display}:${padded}${suffix}`;
+}
+
+const DEFAULT_FUTURES = {
+  week_open: "18:00",
+  week_close: "17:00",
+  daily_halt_start: "17:00",
+  daily_halt_end: "18:00",
+};
+
+/**
+ * CME equity index futures session state (/ES, /NQ, /MES, /MNQ).
+ *
+ * The week runs Sunday 6:00pm ET to Friday 5:00pm ET with a one-hour halt each
+ * evening. Holidays are reported as "holiday schedule" rather than closed:
+ * CME usually runs a *shortened* session on exchange holidays rather than
+ * going dark, and claiming closed would be worse than saying go and check.
+ */
+export function futuresSessionStatus(now, calendar, hours = {}) {
+  const futures = { ...DEFAULT_FUTURES, ...(hours?.futures ?? {}) };
+  const zone = hours?.timezone ?? DEFAULT_HOURS.timezone;
+  const { date: today, minutes, weekday } = zonedParts(new Date(now), zone);
+
+  const weekOpen = toMinutes(futures.week_open);
+  const weekClose = toMinutes(futures.week_close);
+  const haltStart = toMinutes(futures.daily_halt_start);
+  const haltEnd = toMinutes(futures.daily_halt_end);
+
+  if (weekday === 6) {
+    return { state: "closed-weekend", label: "Closed", detail: "Reopens Sunday 6:00pm ET" };
+  }
+  if (weekday === 0) {
+    return minutes < weekOpen
+      ? { state: "closed-weekend", label: "Closed", detail: "Opens 6:00pm ET tonight" }
+      : { state: "open", label: "Open", detail: "Trading through the week" };
+  }
+  if (weekday === 5 && minutes >= weekClose) {
+    return { state: "closed-weekend", label: "Closed", detail: "Reopens Sunday 6:00pm ET" };
+  }
+
+  // Mon-Thu evenings pause for an hour between sessions.
+  if (weekday >= 1 && weekday <= 4 && minutes >= haltStart && minutes < haltEnd) {
+    return { state: "halt", label: "Daily halt", detail: "Reopens 6:00pm ET" };
+  }
+
+  const holidayName = calendar?.holidays?.[today];
+  if (holidayName) {
+    return {
+      state: "holiday",
+      label: "Holiday schedule",
+      detail: `${holidayName} — verify the session with CME`,
+    };
+  }
+
+  return {
+    state: "open",
+    label: "Open",
+    detail:
+      weekday === 5
+        ? "Closes 5:00pm ET today"
+        : "Halts 5:00pm–6:00pm ET",
+  };
 }
 
 /**

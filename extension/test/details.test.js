@@ -254,3 +254,15 @@ test("no vol data means no implied-vol row", () => {
   const detail = typicalMoveDetail(event);
   assert.ok(!detail.rows.some((row) => row.label === "Implied vol"));
 });
+
+test("formatTimes honours the 24-hour preference", () => {
+  const rows = (hour12) =>
+    Object.fromEntries(
+      formatTimes(base, "America/Denver", hour12).map((row) => [row.label, row.value]),
+    );
+  assert.match(rows(false)["Your time"], /12:00/);
+  assert.match(rows(false)["Eastern"], /14:00 EDT/);
+  assert.match(rows(true)["Eastern"], /2:00 PM EDT/);
+  // undefined means "follow the locale", not "broken".
+  assert.ok(rows(undefined)["Eastern"].length > 0);
+});

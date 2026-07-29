@@ -18,11 +18,13 @@ import {
   groupByDay,
   isInProgress,
   isStale,
+  resolveHour12,
   resolveTimeZone,
   upcomingEvents,
 } from "../src/filters.js";
 import {
   formatMinutes,
+  futuresSessionStatus,
   marketCalendar,
   sessionStatus,
   upcomingClosures,
@@ -63,12 +65,21 @@ const elements = {
   hoursRows: document.getElementById("hours-rows"),
   closures: document.getElementById("closures"),
   futuresNote: document.getElementById("futures-note"),
+  futuresSession: document.getElementById("futures-session"),
+  futuresRows: document.getElementById("futures-rows"),
 };
+
+/** "09:30" -> minutes past midnight. */
+function toMinutes(hhmm) {
+  const [hour, minute] = String(hhmm).split(":").map(Number);
+  return hour * 60 + minute;
+}
 
 let activeTab = "events";
 
 // The zone the detail view formats against; kept in sync with prefs on render.
 let activeTimeZone;
+let activeHour12;
 // Group ids currently selected in the chip row; empty means "all".
 let activeGroups = new Set();
 
@@ -76,11 +87,13 @@ let activeGroups = new Set();
 // constant (RESEARCH.md section 4.3 calls for a timezone override).
 let timeFormat;
 
-function buildFormatters(timeZonePref) {
-  const timeZone = resolveTimeZone(timeZonePref);
+function buildFormatters(prefs) {
+  const timeZone = resolveTimeZone(prefs.timeZone);
   activeTimeZone = timeZone;
+  activeHour12 = resolveHour12(prefs.timeFormat);
   timeFormat = new Intl.DateTimeFormat(undefined, {
     timeZone,
+    hour12: activeHour12,
     hour: "numeric",
     minute: "2-digit",
     timeZoneName: "short",
@@ -236,7 +249,7 @@ async function render() {
   ]);
 
   elements.impact.value = prefs.viewMinImpact;
-  buildFormatters(prefs.timeZone);
+  buildFormatters(prefs);
   renderStatus(fetchedAt, lastError);
   renderChips();
   // A refresh or filter change can remove whatever the detail view was
@@ -316,7 +329,7 @@ function showDetail(event) {
   elements.detailTitle.textContent = event.title;
   elements.detailNote.textContent = event.note;
 
-  appendPairs(elements.detailTimes, formatTimes(event, activeTimeZone));
+  appendPairs(elements.detailTimes, formatTimes(event, activeTimeZone, activeHour12));
   appendPairs(elements.detailRows, detailRows(event));
 
   const move = typicalMoveDetail(event);
@@ -378,13 +391,39 @@ function renderHours(calendar) {
 
   // Times are stated in ET because that is the zone the exchange rules are
   // written in; the events list is what converts to the viewer's zone.
+  const hhmm = (value) => formatMinutes(toMinutes(value), activeHour12);
   const closeLabel = status.isEarlyClose
-    ? `${formatMinutes(status.closeMinutes)} (early close today)`
-    : equities.regular_close;
+    ? `${formatMinutes(status.closeMinutes, activeHour12)} (early today)`
+    : hhmm(equities.regular_close);
   appendPairs(elements.hoursRows, [
-    { label: "Pre-market", value: `${equities.premarket_open}–${equities.regular_open} ET` },
-    { label: "Regular", value: `${equities.regular_open}–${closeLabel} ET` },
-    { label: "After hours", value: `${equities.regular_close}–${equities.afterhours_close} ET` },
+    { label: "Pre-market", value: `${hhmm(equities.premarket_open)}–${hhmm(equities.regular_open)} ET` },
+    { label: "Regular", value: `${hhmm(equities.regular_open)}–${closeLabel} ET` },
+    { label: "After hours", value: `${hhmm(equities.regular_close)}–${hhmm(equities.afterhours_close)} ET` },
+  ]);
+
+  // Futures subsection: /ES and /NQ run their own, nearly round-the-clock week.
+  const futures = hours?.futures ?? {};
+  const futuresStatus = futuresSessionStatus(Date.now(), marketCal, hours);
+  elements.futuresSession.replaceChildren();
+  const fdot = document.createElement("span");
+  fdot.className = `dot ${futuresStatus.state}`;
+  const flabel = document.createElement("strong");
+  flabel.textContent = futuresStatus.label;
+  const fdetail = document.createElement("span");
+  fdetail.className = "session-detail";
+  fdetail.textContent = futuresStatus.detail;
+  elements.futuresSession.append(fdot, flabel, fdetail);
+
+  appendPairs(elements.futuresRows, [
+    {
+      label: "Week",
+      value: `Sun ${hhmm(futures.week_open ?? "18:00")} – Fri ${hhmm(futures.week_close ?? "17:00")} ET`,
+    },
+    {
+      label: "Daily halt",
+      value: `${hhmm(futures.daily_halt_start ?? "17:00")}–${hhmm(futures.daily_halt_end ?? "18:00")} ET, Mon–Thu`,
+    },
+    { label: "Symbols", value: "/ES · /NQ · /MES · /MNQ" },
   ]);
 
   elements.closures.replaceChildren();
@@ -420,7 +459,9 @@ function renderHours(calendar) {
     elements.closures.append(item);
   }
 
-  elements.futuresNote.textContent = hours?.futures?.note ?? "";
+  elements.futuresNote.textContent =
+    "Futures holiday sessions are usually shortened rather than closed — " +
+    "verify against CME's calendar before trading a holiday.";
 }
 
 function setTab(tab) {

@@ -367,3 +367,13 @@ footer { padding: .7rem .85rem 1rem; border-top: 1px solid var(--line); }
   font-size: .72rem;
   line-height: 1.5;
 }
+
+.hours-heading.first { margin-top: .8rem; }
+.session.sub {
+  padding: .5rem .85rem;
+  border-bottom: none;
+  font-size: .85rem;
+}
+.dot.halt { background: var(--medium); }
+.dot.holiday { background: var(--medium); }
+.dot.open { background: #16a34a; }

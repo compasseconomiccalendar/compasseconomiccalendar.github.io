@@ -52,9 +52,10 @@ Icons are generated, not hand-drawn — regenerate with
 - Event detail view: click any event for the full note, source-specific
   metadata (contract code, CUSIP, GDP estimate, meeting span…) and the time in
   your zone, Eastern and UTC. Escape or ← returns to the list
-- **Hours tab**: live session status (pre-market / open / after hours / closed,
-  with holidays and half days accounted for), the session times in ET, and
-  upcoming market closures
+- **Hours tab**: live session status for both **equities** (pre-market / open /
+  after hours / closed, with holidays and half days accounted for) and **CME
+  equity index futures** (open / daily halt / weekend), session times in ET,
+  and upcoming market closures
 - Options page (⚙ in the popup): timezone override, separate list and
   notification impact thresholds, notification toggle and offsets, and
   per-event-type hiding
@@ -66,6 +67,7 @@ Stored in `chrome.storage.sync`, so they follow a signed-in Chrome profile.
 
 | Pref | Default | Notes |
 |---|---|---|
+| `timeFormat` | `auto` | `auto` follows the locale; `12h` or `24h` force it |
 | `timeZone` | `null` | `null` uses the browser zone; otherwise an IANA name such as `America/Denver` |
 | `viewMinImpact` | `medium` | Filters the popup list only |
 | `notifyMinImpact` | `medium` | Notification threshold, set independently |

@@ -28,6 +28,7 @@ import {
   parseAlarmName,
   parseOffsets,
   plannedNotifications,
+  resolveHour12,
   resolveTimeZone,
   upcomingEvents,
   zonedTimeToUtc,
@@ -394,4 +395,12 @@ test("market closures get their own group and coverage family", () => {
   assert.equal(familyOf("market_holiday"), "market_sessions");
   assert.equal(familyOf("market_early_close"), "market_sessions");
   assert.ok(TYPE_GROUPS.some((group) => group.id === "market"));
+});
+
+test("resolveHour12 maps the preference onto Intl's option", () => {
+  assert.equal(resolveHour12("12h"), true);
+  assert.equal(resolveHour12("24h"), false);
+  // undefined is meaningful: it tells Intl to use the locale convention.
+  assert.equal(resolveHour12("auto"), undefined);
+  assert.equal(resolveHour12(undefined), undefined);
 });

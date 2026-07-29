@@ -5,7 +5,7 @@
  */
 
 import { DEFAULT_PREFS, MAX_ALARM_OFFSETS } from "../src/config.js";
-import { parseOffsets, resolveTimeZone } from "../src/filters.js";
+import { parseOffsets, resolveHour12, resolveTimeZone } from "../src/filters.js";
 import { getCached, getPrefs, setPrefs } from "../src/store.js";
 
 // Common US trading zones first, then everything the browser knows about.
@@ -21,6 +21,7 @@ const elements = {
   timezone: document.getElementById("timezone"),
   timezoneHint: document.getElementById("timezone-hint"),
   impact: document.getElementById("impact"),
+  timeFormat: document.getElementById("timeformat"),
   notifyImpact: document.getElementById("notify-impact"),
   notifications: document.getElementById("notifications-enabled"),
   allDayEnabled: document.getElementById("allday-enabled"),
@@ -64,6 +65,7 @@ function updateTimezoneHint() {
   const zone = resolveTimeZone(elements.timezone.value);
   const sample = new Intl.DateTimeFormat(undefined, {
     timeZone: zone,
+    hour12: resolveHour12(elements.timeFormat.value),
     hour: "numeric",
     minute: "2-digit",
     timeZoneName: "short",
@@ -126,6 +128,7 @@ function flash(message, isError = false) {
 
 async function load(prefs) {
   elements.impact.value = prefs.viewMinImpact;
+  elements.timeFormat.value = prefs.timeFormat;
   elements.notifyImpact.value = prefs.notifyMinImpact;
   elements.notifications.checked = prefs.notificationsEnabled;
   elements.allDayEnabled.checked = prefs.allDayNotifications;
@@ -136,6 +139,7 @@ async function load(prefs) {
 }
 
 elements.timezone.addEventListener("change", updateTimezoneHint);
+elements.timeFormat.addEventListener("change", updateTimezoneHint);
 
 elements.save.addEventListener("click", async () => {
   const offsets = parseOffsets(elements.offsets.value, MAX_ALARM_OFFSETS);
@@ -156,6 +160,7 @@ elements.save.addEventListener("click", async () => {
     allDayNotifications: elements.allDayEnabled.checked,
     allDayHour,
     timeZone: elements.timezone.value || null,
+    timeFormat: elements.timeFormat.value,
     viewMinImpact: elements.impact.value,
     notifyMinImpact: elements.notifyImpact.value,
     notificationsEnabled: elements.notifications.checked,

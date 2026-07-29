@@ -319,6 +319,18 @@ export function parseAlarmName(prefix, name) {
 }
 
 /**
+ * Translate the time-format preference into Intl's `hour12` option.
+ *
+ * `undefined` is meaningful here, not a failure: it tells Intl to use the
+ * locale's own convention, which is what "auto" means.
+ */
+export function resolveHour12(preference) {
+  if (preference === "12h") return true;
+  if (preference === "24h") return false;
+  return undefined;
+}
+
+/**
  * Validate a stored timezone preference.
  *
  * Returns the zone if usable, or undefined to mean "let the formatter use the

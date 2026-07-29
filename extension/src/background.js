@@ -22,6 +22,7 @@ import {
   nextBadgeEvent,
   parseAlarmName,
   plannedNotifications,
+  resolveHour12,
   resolveTimeZone,
 } from "./filters.js";
 import {
@@ -81,6 +82,7 @@ async function updateBadge() {
   await chrome.action.setTitle({
     title: `${event.title} — ${new Intl.DateTimeFormat(undefined, {
       timeZone: resolveTimeZone(prefs.timeZone),
+      hour12: resolveHour12(prefs.timeFormat),
       hour: "numeric",
       minute: "2-digit",
       timeZoneName: "short",
@@ -149,6 +151,7 @@ async function showNotification(eventId, offsetMinutes) {
   const prefs = await getPrefs();
   const when = new Intl.DateTimeFormat(undefined, {
     timeZone: resolveTimeZone(prefs.timeZone),
+    hour12: resolveHour12(prefs.timeFormat),
     hour: "numeric",
     minute: "2-digit",
     timeZoneName: "short",

@@ -10,6 +10,7 @@ import test from "node:test";
 
 import {
   formatMinutes,
+  futuresSessionStatus,
   marketCalendar,
   sessionStatus,
   upcomingClosures,
@@ -111,4 +112,45 @@ test("upcomingClosures drops past dates and other event types", () => {
   ];
   const result = upcomingClosures(events, at("2026-07-28T12:00:00Z"));
   assert.deepEqual(result.map((e) => e.date_et), ["2026-11-27", "2026-12-25"]);
+});
+
+test("formatMinutes honours the 24-hour preference", () => {
+  assert.equal(formatMinutes(9 * 60 + 30, false), "09:30");
+  assert.equal(formatMinutes(16 * 60, false), "16:00");
+  assert.equal(formatMinutes(0, false), "00:00");
+  assert.equal(formatMinutes(13 * 60, false), "13:00");
+  // Explicit true and the default both give 12-hour.
+  assert.equal(formatMinutes(13 * 60, true), "1:00pm");
+  assert.equal(formatMinutes(13 * 60), "1:00pm");
+});
+
+test("futures run the week from Sunday evening to Friday afternoon", () => {
+  const H = { timezone: "America/New_York", futures: {} };
+  const state = (iso) => futuresSessionStatus(at(iso), EMPTY, H).state;
+
+  assert.equal(state("2026-08-01T18:00:00Z"), "closed-weekend");  // Sat 2pm ET
+  assert.equal(state("2026-08-02T20:00:00Z"), "closed-weekend");  // Sun 4pm ET
+  assert.equal(state("2026-08-02T22:00:00Z"), "open");            // Sun 6pm ET
+  assert.equal(state("2026-07-29T14:00:00Z"), "open");            // Wed 10am ET
+  assert.equal(state("2026-07-31T14:00:00Z"), "open");            // Fri 10am ET
+  assert.equal(state("2026-07-31T21:00:00Z"), "closed-weekend");  // Fri 5pm ET
+});
+
+test("the weekday evening halt is an hour, not a close", () => {
+  const H = { timezone: "America/New_York", futures: {} };
+  // Wed 5:30pm ET is the halt; 6:00pm ET reopens.
+  assert.equal(futuresSessionStatus(at("2026-07-29T21:30:00Z"), EMPTY, H).state, "halt");
+  assert.equal(futuresSessionStatus(at("2026-07-29T22:00:00Z"), EMPTY, H).state, "open");
+  // Friday has no halt -- the week has already ended by then.
+  assert.equal(futuresSessionStatus(at("2026-07-31T21:30:00Z"), EMPTY, H).state, "closed-weekend");
+});
+
+test("futures holidays report a shortened session, not a closure", () => {
+  const H = { timezone: "America/New_York", futures: {} };
+  const calendar = { holidays: { "2026-11-26": "Thanksgiving Day" }, earlyCloses: {} };
+  const status = futuresSessionStatus(at("2026-11-26T15:00:00Z"), calendar, H);
+  // CME usually trades a shortened session rather than going dark, so
+  // claiming "closed" would be worse than telling the user to check.
+  assert.equal(status.state, "holiday");
+  assert.match(status.detail, /verify the session with CME/);
 });

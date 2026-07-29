@@ -30,6 +30,8 @@ export const DEFAULT_PREFS = {
   // null means "use the browser's zone"; otherwise an IANA name such as
   // "America/Denver" (RESEARCH.md section 4.3 calls for this override).
   timeZone: null,
+  // "auto" follows the viewer's locale; "12h" and "24h" force the format.
+  timeFormat: "auto",
   // All-day events (futures rolls, FOMC day 1) get a morning-of nudge
   // instead of a "30 minutes before", which would mean 30 min before midnight.
   allDayNotifications: true,

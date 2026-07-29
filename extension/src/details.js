@@ -164,7 +164,7 @@ export function typicalMoveDetail(event) {
  * (how the agency announces it), and UTC (what the feed stores). A trader
  * verifying against an official page needs the Eastern one.
  */
-export function formatTimes(event, timeZone) {
+export function formatTimes(event, timeZone, hour12 = undefined) {
   const start = new Date(event.start_utc);
   if (Number.isNaN(start.getTime())) return [];
 
@@ -176,6 +176,7 @@ export function formatTimes(event, timeZone) {
     label,
     value: new Intl.DateTimeFormat("en-US", {
       timeZone: zone,
+      hour12,
       weekday: "short",
       month: "short",
       day: "numeric",
