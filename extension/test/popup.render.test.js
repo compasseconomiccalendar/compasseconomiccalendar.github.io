@@ -107,7 +107,7 @@ const CALENDAR = {
   ],
 };
 
-function installStubs() {
+function installStubs(calendar = CALENDAR) {
   const registry = new Map();
   globalThis.document = {
     getElementById(id) {
@@ -122,7 +122,7 @@ function installStubs() {
     storage: {
       local: {
         async get() {
-          return { calendar: CALENDAR, fetchedAt: Date.now(), lastError: null };
+          return { calendar, fetchedAt: Date.now(), lastError: null };
         },
         async set() {},
       },
@@ -160,5 +160,36 @@ test("the popup renders a full feed without throwing", async () => {
   assert.ok(registry.get("session").children.length > 0, "no equity session");
   assert.ok(registry.get("futures-session").children.length > 0, "no futures session");
   assert.ok(registry.get("closures").children.length > 0, "no closures");
+  assert.ok(registry.get("hours-rows").children.length > 0, "no hours rows");
+});
+
+test("a feed cached before market_hours existed still renders", async () => {
+  // The extension serves from chrome.storage.local first, so after an upgrade
+  // the popup renders an *older* feed shape before the refresh lands. Any new
+  // top-level field therefore has to be optional in the consumer. Missing
+  // market_hours previously produced a NaN wall-clock time, which reached
+  // Intl.formatToParts as an Invalid Date and threw RangeError, blanking the
+  // entire popup rather than just the hours tab.
+  const legacy = { ...CALENDAR };
+  delete legacy.market_hours;
+
+  const registry = installStubs(legacy);
+  const errors = [];
+  const onRejection = (error) => errors.push(error);
+  process.on("unhandledRejection", onRejection);
+
+  const module = await import(`../popup/popup.js?legacy=${Date.now()}`);
+  await new Promise((resolve) => setTimeout(resolve, 50));
+  process.off("unhandledRejection", onRejection);
+
+  assert.deepEqual(
+    errors.map((error) => String(error?.message ?? error)),
+    [],
+    "render() threw on a legacy feed",
+  );
+  assert.ok(module);
+  // The events list is the part that must survive; it is unrelated to hours.
+  assert.ok(registry.get("events").children.length > 0, "no events rendered");
+  // Hours still renders, falling back to the built-in session defaults.
   assert.ok(registry.get("hours-rows").children.length > 0, "no hours rows");
 });

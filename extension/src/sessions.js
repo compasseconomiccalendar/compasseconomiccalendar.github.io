@@ -12,7 +12,7 @@ import { zonedTimeToUtc } from "./filters.js";
 
 const ET = "America/New_York";
 
-const DEFAULT_HOURS = {
+export const DEFAULT_HOURS = {
   timezone: "America/New_York",
   equities: {
     premarket_open: "04:00",
@@ -76,6 +76,11 @@ export function formatMinutes(minutes, hour12 = true) {
  */
 export function etTimeInZone(isoDate, hhmm, timeZone, hour12 = undefined) {
   const [hour, minute] = String(hhmm).split(":").map(Number);
+  // A cached feed from an older version may not carry market_hours at all, so
+  // the wall-clock string can be undefined. Degrade rather than throw.
+  if (!Number.isFinite(hour) || !Number.isFinite(minute)) {
+    return { text: hhmm ?? "—", dayOffset: 0 };
+  }
   const instant = new Date(zonedTimeToUtc(isoDate, hour, minute, ET));
   if (Number.isNaN(instant.getTime())) return { text: hhmm, dayOffset: 0 };
 

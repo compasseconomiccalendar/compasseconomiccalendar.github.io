@@ -23,6 +23,7 @@ import {
   upcomingEvents,
 } from "../src/filters.js";
 import {
+  DEFAULT_HOURS,
   etRangeInZone,
   etTimeInZone,
   futuresSessionStatus,
@@ -388,8 +389,13 @@ function localiseDetail(status, refDate, timeZone) {
 }
 
 function renderHours(calendar) {
-  const hours = calendar?.market_hours;
-  const equities = hours?.equities ?? {};
+  // A feed cached before market_hours existed must still render.
+  const hours = {
+    ...DEFAULT_HOURS,
+    ...(calendar?.market_hours ?? {}),
+    equities: { ...DEFAULT_HOURS.equities, ...(calendar?.market_hours?.equities ?? {}) },
+  };
+  const equities = hours.equities;
   const marketCal = marketCalendar(calendar?.events ?? []);
   const status = sessionStatus(Date.now(), marketCal, hours);
 

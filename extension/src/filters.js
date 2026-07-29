@@ -300,6 +300,10 @@ function zoneOffsetMs(instant, timeZone) {
 export function zonedTimeToUtc(isoDate, hour, minute = 0, timeZone = undefined) {
   const [year, month, day] = String(isoDate).split("-").map(Number);
   if (!year || !month || !day) return NaN;
+  // A non-finite hour reaches Date.UTC as NaN, and formatToParts throws
+  // RangeError on the resulting Invalid Date rather than returning anything
+  // the caller can check. Reject it here instead.
+  if (!Number.isFinite(hour) || !Number.isFinite(minute)) return NaN;
   const guess = Date.UTC(year, month - 1, day, hour, minute);
   return guess - zoneOffsetMs(new Date(guess), timeZone);
 }
