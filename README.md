@@ -5,8 +5,8 @@ futures: FOMC decisions, macro data releases, Treasury auctions, and CME
 futures roll/expiration dates — normalized into one JSON file and one
 subscribable `.ics` feed.
 
-The normalized JSON is the crown jewel. The ICS feed and (later) the Chrome
-extension are both just consumers of it.
+The normalized JSON is the crown jewel. The ICS feeds and the Chrome extension
+are both just consumers of it.
 
 See [`docs/RESEARCH.md`](docs/RESEARCH.md) for the sourcing, licensing and
 architecture research behind this design.
@@ -18,9 +18,10 @@ architecture research behind this design.
 | Phase | Scope | State |
 |---|---|---|
 | **0** | Python ingestion job → `output/calendar.json` | ✅ Built |
-| **1** | ICS feed → `output/compass_calendar.ics` | ✅ Built |
-| **2** | MV3 Chrome extension | ⬜ Not started (`extension/`) |
-| **3** | "Typical move" context, webhooks, PWA | ⬜ Not started |
+| **1** | ICS feeds → `compass_calendar.ics` + high-impact variant | ✅ Built |
+| **2** | MV3 Chrome extension (`extension/`) | ✅ Built — not yet submitted |
+| **3** | "Typical move" context | ✅ Built |
+| **3+** | Webhooks, PWA dashboard | ⬜ Not started |
 
 ---
 
@@ -29,7 +30,7 @@ architecture research behind this design.
 | Source | Events |
 |---|---|
 | federalreserve.gov (scraped) | FOMC meeting day 1, statement (2:00pm ET), Chair press conference (2:30pm ET), SEP / dot plot, minutes |
-| FRED API | Employment Situation, CPI, PPI, GDP, Personal Income & Outlays, Initial Jobless Claims (weekly), Retail Sales, Durable Goods (8:30am ET); JOLTS (10:00am ET) |
+| FRED API | Employment Situation, CPI, PPI, GDP, Personal Income & Outlays, Initial Jobless Claims (weekly), Retail Sales (8:30am ET); Factory Orders M3, JOLTS (10:00am ET) |
 | Computed (exchange rules) | NYSE/Nasdaq closures and 1:00pm early closes — federal holidays *minus* Columbus and Veterans Day, *plus* Good Friday, with the NYSE Saturday-New-Year exception |
 | Computed (ISM pattern) | ISM Manufacturing PMI (1st business day) and Services PMI (3rd business day), 10:00am ET — **flagged `approximate`** |
 | bea.gov (enrichment) | Differentiates GDP advance / second / third estimates so only the advance print is rated high impact |
@@ -109,6 +110,7 @@ Useful `build_calendar.py` flags:
 | `--past-days N` | Retain N days of history (default 0) |
 | `--skip-fred` / `--skip-treasury` / `--skip-fomc` | Skip a source |
 | `--skip-bea` | Skip the BEA GDP-estimate enrichment |
+| `--skip-ism` | Skip the computed (approximate) ISM dates |
 | `--allow-partial` | Publish even if a source fails (default: fail the build) |
 
 By default **any source failure fails the whole build** rather than silently
@@ -194,7 +196,14 @@ Measured over the trailing 3-year window:
 | CPI | 1.20× | — |
 | GDP | 0.86× | — |
 
-A number is only surfaced at **≥1.25× or ≤0.85×**. Everything else says it
+Realized move is only half of it. Close-to-close cannot see an 8:30am release
+that spikes pre-open and mean-reverts by the close, so a second measure —
+**vol crush**, how much more VIX falls than on an ordinary day (Cboe data,
+free and keyless) — runs alongside. GDP moves *less* than a normal day yet has
+the 4th-deepest crush; it would have been invisible otherwise.
+
+A number is only surfaced at **≥1.25×, ≤0.85×, or a vol crush ≥1.0% deeper
+than normal**. Everything else says it
 moves about as much as a normal day, rather than presenting 1.02× as insight.
 Event types with fewer than `--min-sample` observations are dropped entirely.
 
