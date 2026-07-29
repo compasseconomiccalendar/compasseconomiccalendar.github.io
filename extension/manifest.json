@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Compass Economic Calendar",
   "version": "0.2.0",
-  "description": "Never get caught off guard by a market-moving event. FOMC, CPI, jobs, Treasury auctions and futures rolls, in your timezone.",
+  "description": "Never get caught off guard by a market-moving event. FOMC, CPI, jobs, Treasury auctions, and futures rolls — in your timezone.",
   "minimum_chrome_version": "120",
   "permissions": [
     "alarms",

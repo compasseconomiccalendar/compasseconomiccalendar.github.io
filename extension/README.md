@@ -132,7 +132,7 @@ per-permission justifications the review asks for. Source lives in
 **Short description** (132 char limit — comes from `manifest.json`):
 
 > Never get caught off guard by a market-moving event. FOMC, CPI, jobs,
-> Treasury auctions and futures rolls, in your timezone.
+> Treasury auctions, and futures rolls — in your timezone.
 
 **Detailed description** (paste into the dashboard; the manifest cannot hold
 this length):
