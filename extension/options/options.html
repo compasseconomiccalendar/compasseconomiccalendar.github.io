@@ -40,16 +40,16 @@
     </div>
 
     <div class="field">
-      <label for="notify-impact">Notify me about</label>
-      <select id="notify-impact">
-        <option value="low">All events</option>
-        <option value="medium">Medium &amp; high</option>
-        <option value="high">High only</option>
-      </select>
+      <label for="notify-summary">Notify me about</label>
+      <details id="notify-filter" class="dropdown">
+        <summary id="notify-summary">All event types</summary>
+        <div id="notify-groups" class="dropdown-menu" role="group"
+             aria-label="Notify me about these event types"></div>
+      </details>
       <p class="hint">
-        Set independently of the list filter. At “all events” every Treasury
-        bill auction interrupts you, and the 20-alarm ceiling starts dropping
-        the furthest-out warnings.
+        Set independently of the list filter. With nothing ticked every event
+        interrupts you, including routine bill auctions, and the 20-alarm
+        ceiling starts dropping the furthest-out warnings.
       </p>
     </div>
 

@@ -349,58 +349,32 @@ test("snoozed events are dropped until their snooze expires", () => {
   assert.ok(after.some((item) => item.eventId === "a"));
 });
 
-test("prefs migration keeps only the notification threshold", () => {
-  // A permissive browsing filter must not become a notification threshold.
-  // The popup now filters by event type, so the view threshold is dropped.
-  const migrated = migratePrefs({ minImpact: "low" });
-  assert.equal(migrated.notifyMinImpact, "medium");
+test("migration strips every impact key from older schemas", () => {
+  // minImpact (v0.1.0), then the viewMinImpact/notifyMinImpact split. Neither
+  // means anything now that both list and notifications filter by type, so
+  // they must not linger in synced storage as settings that do nothing.
+  const migrated = migratePrefs({
+    minImpact: "low", viewMinImpact: "low", notifyMinImpact: "high",
+  });
   assert.equal(migrated.minImpact, undefined);
   assert.equal(migrated.viewMinImpact, undefined);
-});
-
-test("migration never makes notifications noisier than they were", () => {
-  // Someone who had set "high" kept a quiet inbox; do not downgrade them.
-  assert.equal(migratePrefs({ minImpact: "high" }).notifyMinImpact, "high");
-  assert.equal(migratePrefs({ minImpact: "medium" }).notifyMinImpact, "medium");
-  assert.equal(migratePrefs({ minImpact: "low" }).notifyMinImpact, "medium");
-});
-
-test("migration leaves an existing notify threshold alone", () => {
-  const already = { notifyMinImpact: "high" };
-  assert.equal(migratePrefs(already).notifyMinImpact, "high");
-  // Stale keys from either older schema are stripped, not carried forward.
-  const both = migratePrefs({ ...already, minImpact: "low", viewMinImpact: "low" });
-  assert.equal(both.notifyMinImpact, "high");
-  assert.equal(both.minImpact, undefined);
-  assert.equal(both.viewMinImpact, undefined);
+  assert.equal(migrated.notifyMinImpact, undefined);
 });
 
 test("migration fills defaults and preserves unrelated prefs", () => {
   const migrated = migratePrefs({ timeZone: "America/Denver" });
-  assert.equal(migrated.notifyMinImpact, "medium");
   assert.deepEqual(migrated.selectedGroups, []);
+  assert.deepEqual(migrated.notifyGroups, ["fomc", "data"]);
+  assert.equal(migrated.viewHorizonDays, 90);
+  assert.equal(migrated.theme, "dark");
   assert.equal(migrated.timeZone, "America/Denver");
   assert.deepEqual(migrated.alarmOffsets, [30, 5]);
-  // An empty store yields the defaults untouched.
   assert.deepEqual(migratePrefs({}), migratePrefs(undefined));
 });
 
-test("market closures get their own group and coverage family", () => {
-  // Without this they fell through to "futures", which is where an unmapped
-  // type lands.
-  assert.equal(groupOf("market_holiday"), "market");
-  assert.equal(groupOf("market_early_close"), "market");
-  assert.equal(familyOf("market_holiday"), "market_sessions");
-  assert.equal(familyOf("market_early_close"), "market_sessions");
-  assert.ok(TYPE_GROUPS.some((group) => group.id === "market"));
-});
-
-test("resolveHour12 maps the preference onto Intl's option", () => {
-  assert.equal(resolveHour12("12h"), true);
-  assert.equal(resolveHour12("24h"), false);
-  // undefined is meaningful: it tells Intl to use the locale convention.
-  assert.equal(resolveHour12("auto"), undefined);
-  assert.equal(resolveHour12(undefined), undefined);
+test("a stored notification type selection survives migration", () => {
+  const migrated = migratePrefs({ notifyGroups: ["treasury"] });
+  assert.deepEqual(migrated.notifyGroups, ["treasury"]);
 });
 
 test("the pills are the view filter and every group is reachable", () => {
@@ -426,4 +400,27 @@ test("the pills are the view filter and every group is reachable", () => {
   // Selecting several pills unions them.
   const pair = upcomingEvents(events, { now: NOW, types: ["fomc", "market"] });
   assert.deepEqual(pair.map((item) => item.id), ["fomc", "holiday"]);
+});
+
+test("notifications filter by event type, not impact", () => {
+  const events = [
+    event("fomc", 1, { event_type: "fomc_statement" }),
+    event("auction", 2, { event_type: "treasury_auction", market_impact: "low" }),
+    event("opex", 3, { event_type: "monthly_opex", market_impact: "low" }),
+  ];
+
+  // Only the selected types are scheduled, regardless of their impact -- the
+  // low-impact auction is included when Treasury is chosen.
+  const treasury = plannedNotifications(events, {
+    now: NOW, types: ["treasury"], horizonMs: 72 * HOUR,
+  });
+  assert.ok(treasury.length > 0);
+  assert.ok(treasury.every((item) => item.eventId === "auction"));
+
+  // No type selection means no type filter.
+  const all = plannedNotifications(events, { now: NOW, horizonMs: 72 * HOUR });
+  assert.deepEqual(
+    [...new Set(all.map((item) => item.eventId))].sort(),
+    ["auction", "fomc", "opex"],
+  );
 });

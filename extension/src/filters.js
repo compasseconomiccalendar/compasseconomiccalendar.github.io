@@ -13,27 +13,17 @@ export const IMPACT_RANK = { low: 0, medium: 1, high: 2 };
 /**
  * Merge stored preferences over the defaults, migrating the old schema.
  *
- * Up to v0.1.0 a single `minImpact` drove both the popup list and the
- * notification threshold. The popup now filters by event type instead, so the
- * only thing left to migrate is the notification threshold, which takes the
- * *stricter* of the stored value and the default. A migration can therefore
- * never make notifications noisier than they already were, and never carries
- * a permissive browsing filter into interruptions.
+ * Both the list and notifications now filter by event type. Impact drove them
+ * in earlier versions, first through a shared `minImpact` and then through a
+ * split `viewMinImpact` / `notifyMinImpact`. None of those keys mean anything
+ * now, so they are stripped rather than left in synced storage as settings
+ * that silently do nothing.
  */
 export function migratePrefs(stored = {}) {
   const merged = { ...DEFAULT_PREFS, ...stored };
-  const legacy = stored.minImpact;
-
-  if (legacy !== undefined) {
-    if (stored.notifyMinImpact === undefined) {
-      const legacyRank = IMPACT_RANK[legacy] ?? 0;
-      const defaultRank = IMPACT_RANK[DEFAULT_PREFS.notifyMinImpact];
-      merged.notifyMinImpact =
-        legacyRank > defaultRank ? legacy : DEFAULT_PREFS.notifyMinImpact;
-    }
+  for (const dead of ["minImpact", "viewMinImpact", "notifyMinImpact"]) {
+    delete merged[dead];
   }
-  delete merged.minImpact;
-  delete merged.viewMinImpact;
   return merged;
 }
 
@@ -223,8 +213,9 @@ export function plannedNotifications(events, options = {}) {
   const {
     now = Date.now(),
     offsets = [30, 5],
-    minImpact = "medium",
+    minImpact = "low",
     hiddenTypes = [],
+    types = null,
     horizonMs = 72 * 3600 * 1000,
     max = 20,
     // All-day events (futures rolls, meeting day 1) have no meaningful
@@ -238,6 +229,7 @@ export function plannedNotifications(events, options = {}) {
     now,
     minImpact,
     hiddenTypes,
+    types,
     horizonMs,
   });
 

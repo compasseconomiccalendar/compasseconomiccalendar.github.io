@@ -20,6 +20,7 @@ function makeElement(id = "", tag = "div") {
     checked: false,
     hidden: false,
     type: "",
+    dataset: {},
     classList: {
       _set: new Set(),
       add(name) { this._set.add(name); },
@@ -38,8 +39,18 @@ function makeElement(id = "", tag = "div") {
     addEventListener(type, handler) { element.listeners[type] = handler; },
     setAttribute() {},
     focus() {},
+    // Descendant search, like the real DOM. A shallow version silently
+    // returned nothing here, since the checkboxes sit inside label rows.
     querySelectorAll() {
-      return element.children.filter((child) => child.type === "checkbox");
+      const found = [];
+      const walk = (node) => {
+        for (const child of node.children ?? []) {
+          if (child.type === "checkbox") found.push(child);
+          walk(child);
+        }
+      };
+      walk(element);
+      return found;
     },
   };
   return element;
@@ -61,6 +72,7 @@ function installStubs({ commands = true } = {}) {
     },
     createElement: (tag) => makeElement("", tag),
     addEventListener() {},
+    documentElement: makeElement("html"),
   };
   globalThis.chrome = {
     storage: {
@@ -98,6 +110,12 @@ test("the options page initialises without throwing", async () => {
 
   // Event-type checkboxes come from the cached feed's counts.
   assert.equal(registry.get("types").children.length, 3);
+
+  // Notification types render as the same multi-select shape as the popup,
+  // seeded from the default selection.
+  const notify = registry.get("notify-groups");
+  assert.equal(notify.children.length, 5);
+  assert.equal(registry.get("notify-summary").textContent, "FOMC, Data");
 
   // The live shortcut is read from Chrome, not assumed from the manifest.
   assert.equal(registry.get("shortcut-current").textContent, "Alt+Shift+C");

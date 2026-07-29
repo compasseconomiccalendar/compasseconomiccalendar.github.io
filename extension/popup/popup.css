@@ -1,5 +1,21 @@
+/* Dark is the default. The toggle writes data-theme on <html>, so the
+   choice sticks rather than following the OS. */
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
+  --bg: #17171a;
+  --fg: #ededeb;
+  --muted: #a0a09a;
+  --line: #2e2e33;
+  --card: #1f1f23;
+  --accent: #d99a6c;
+  --high: #f97316;
+  --medium: #d99a6c;
+  --low: #6b6b66;
+  --warn-bg: #2a2418;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
   --bg: #fbfbfa;
   --fg: #1a1a19;
   --muted: #6b6b66;
@@ -10,20 +26,6 @@
   --medium: #b45309;
   --low: #9a9a94;
   --warn-bg: #fdf6e7;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #17171a;
-    --fg: #ededeb;
-    --muted: #a0a09a;
-    --line: #2e2e33;
-    --card: #1f1f23;
-    --accent: #d99a6c;
-    --high: #f97316;
-    --medium: #d99a6c;
-    --low: #6b6b66;
-    --warn-bg: #2a2418;
-  }
 }
 
 * { box-sizing: border-box; }
@@ -404,7 +406,7 @@ footer { padding: .7rem .85rem 1rem; border-top: 1px solid var(--line); }
   border-bottom: 1px solid var(--line);
   font-size: .78rem;
 }
-.coverage-name { text-transform: capitalize; }
+.coverage-name { }
 .coverage-horizon {
   font-size: .64rem;
   text-transform: uppercase;

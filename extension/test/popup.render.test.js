@@ -126,6 +126,7 @@ function installStubs(calendar = CALENDAR) {
     },
     createElement: () => makeElement(),
     addEventListener() {},
+    documentElement: makeElement("html"),
   };
   globalThis.window = { scrollTo() {} };
   globalThis.chrome = {
@@ -312,6 +313,7 @@ test("ticking type options updates the label and persists the selection", async 
     },
     createElement: () => makeElement(),
     addEventListener() {},
+    documentElement: makeElement("html"),
   };
   globalThis.window = { scrollTo() {} };
   globalThis.chrome = {
@@ -378,6 +380,7 @@ test("the coverage tab shows every family and hides its warnings when clean", as
     },
     createElement: () => makeElement(),
     addEventListener() {},
+    documentElement: makeElement("html"),
   };
   globalThis.window = { scrollTo() {} };
   globalThis.chrome = {
@@ -407,4 +410,56 @@ test("the coverage tab shows every family and hides its warnings when clean", as
   registry.get("tab-events").listeners.click();
   assert.equal(registry.get("list-view").hidden, false);
   assert.equal(registry.get("coverage-view").hidden, true);
+});
+
+test("theme, time frame and coverage labels are wired", async () => {
+  const registry = new Map();
+  let storedPrefs = {};
+  const root = makeElement("html");
+  globalThis.document = {
+    getElementById(id) {
+      if (!registry.has(id)) registry.set(id, makeElement(id));
+      return registry.get(id);
+    },
+    createElement: () => makeElement(),
+    addEventListener() {},
+    documentElement: root,
+  };
+  globalThis.window = { scrollTo() {} };
+  globalThis.chrome = {
+    storage: {
+      local: {
+        async get() { return { calendar: CALENDAR, fetchedAt: Date.now(), lastError: null }; },
+        async set() {},
+      },
+      sync: {
+        async get() { return { prefs: storedPrefs }; },
+        async set(items) { storedPrefs = items.prefs; },
+      },
+    },
+    runtime: { async sendMessage() { return { ok: true }; }, openOptionsPage() {} },
+  };
+
+  await import(`../popup/popup.js?ui=${Date.now()}`);
+  await new Promise((resolve) => setTimeout(resolve, 40));
+
+  // Dark is the default, and is set explicitly rather than left to the OS.
+  assert.equal(root.dataset.theme, "dark");
+  await registry.get("theme").listeners.click();
+  await new Promise((resolve) => setTimeout(resolve, 20));
+  assert.equal(storedPrefs.theme, "light");
+  assert.equal(root.dataset.theme, "light");
+
+  // Time frame persists and drives the query horizon.
+  const horizon = registry.get("horizon");
+  assert.equal(horizon.value, "90");
+  horizon.value = "7";
+  await horizon.listeners.change({ target: { value: "7" } });
+  await new Promise((resolve) => setTimeout(resolve, 20));
+  assert.equal(storedPrefs.viewHorizonDays, 7);
+
+  // Acronyms keep their case in the coverage list.
+  const names = registry.get("coverage-families").children.map((row) => row.children[0].textContent);
+  assert.ok(names.includes("FOMC"), `expected FOMC, got ${names.join(", ")}`);
+  assert.ok(!names.some((name) => /Fomc|Ism/.test(name)), "acronym was title-cased");
 });

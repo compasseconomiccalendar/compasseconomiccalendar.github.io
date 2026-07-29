@@ -8,6 +8,7 @@
 import { IN_PROGRESS_GRACE_MS, STALE_AFTER_DAYS } from "../src/config.js";
 import {
   detailRows,
+  familyLabel,
   formatTimes,
   typicalMoveBadge,
   typicalMoveDetail,
@@ -32,7 +33,6 @@ import {
 } from "../src/sessions.js";
 import { getCached, getPrefs, setPrefs } from "../src/store.js";
 
-const VIEW_HORIZON_MS = 90 * 24 * 3600 * 1000;
 const LIST_LIMIT = 60;
 
 const elements = {
@@ -41,6 +41,8 @@ const elements = {
   banner: document.getElementById("banner"),
   chips: document.getElementById("chips"),
   typeFilter: document.getElementById("type-filter"),
+  horizon: document.getElementById("horizon"),
+  theme: document.getElementById("theme"),
   typeSummary: document.getElementById("type-summary"),
   more: document.getElementById("more"),
   status: document.getElementById("status"),
@@ -81,6 +83,8 @@ let activeTab = "events";
 // The zone the detail view formats against; kept in sync with prefs on render.
 let activeTimeZone;
 let activeHour12;
+// Chosen time frame, in ms. Set from prefs on every render.
+let viewHorizonMs = 90 * 24 * 3600 * 1000;
 // Group ids selected in the pill row; empty means all. Persisted, so the
 // filter survives closing the popup.
 let activeGroups = new Set();
@@ -168,6 +172,15 @@ function renderEvent(event, now) {
 }
 
 /** Label for the closed dropdown, reflecting what is selected. */
+/** Dark unless explicitly set to light; the OS preference is not consulted. */
+function applyTheme(theme) {
+  const root = document.documentElement;
+  if (root) root.dataset.theme = theme === "light" ? "light" : "dark";
+  elements.theme.textContent = theme === "light" ? "☾" : "☀";
+  elements.theme.title =
+    theme === "light" ? "Switch to dark" : "Switch to light";
+}
+
 function typeFilterLabel() {
   if (!activeGroups.size) return "All event types";
   const chosen = TYPE_GROUPS.filter((group) => activeGroups.has(group.id));
@@ -261,6 +274,9 @@ async function render() {
   ]);
 
   activeGroups = new Set(prefs.selectedGroups ?? []);
+  viewHorizonMs = (prefs.viewHorizonDays ?? 90) * 24 * 3600 * 1000;
+  elements.horizon.value = String(prefs.viewHorizonDays ?? 90);
+  applyTheme(prefs.theme);
   buildFormatters(prefs);
   renderStatus(fetchedAt, lastError);
   renderTypeFilter();
@@ -288,7 +304,7 @@ async function render() {
     // No impact filter here: the pills are the view filter, and impact is
     // only a notification concern now.
     hiddenTypes: prefs.hiddenTypes,
-    horizonMs: VIEW_HORIZON_MS,
+    horizonMs: viewHorizonMs,
     graceMs: IN_PROGRESS_GRACE_MS,
     types: activeGroups.size ? [...activeGroups] : null,
   };
@@ -571,7 +587,7 @@ function renderCoverage(calendar, fetchedAt) {
 
     const name = document.createElement("span");
     name.className = "coverage-name";
-    name.textContent = family.replace(/_/g, " ");
+    name.textContent = familyLabel(family);
 
     const horizon = document.createElement("span");
     horizon.className = `coverage-horizon ${info.horizon}`;
@@ -611,6 +627,17 @@ function moveFocus(direction) {
 elements.tabEvents.addEventListener("click", () => setTab("events"));
 elements.tabHours.addEventListener("click", () => setTab("hours"));
 elements.tabCoverage.addEventListener("click", () => setTab("coverage"));
+
+elements.horizon.addEventListener("change", async (domEvent) => {
+  await setPrefs({ viewHorizonDays: Number(domEvent.target.value) });
+  await render();
+});
+
+elements.theme.addEventListener("click", async () => {
+  const { theme } = await getPrefs();
+  await setPrefs({ theme: theme === "light" ? "dark" : "light" });
+  await render();
+});
 
 elements.back.addEventListener("click", showList);
 

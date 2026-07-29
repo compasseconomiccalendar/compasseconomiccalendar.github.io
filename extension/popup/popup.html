@@ -9,6 +9,7 @@
   <header>
     <h1>Compass</h1>
     <div class="controls">
+      <button id="theme" title="Toggle light or dark" aria-label="Toggle light or dark">◐</button>
       <button id="refresh" title="Refresh feed" aria-label="Refresh feed">↻</button>
       <button id="options" title="Settings" aria-label="Settings">⚙</button>
     </div>
@@ -52,6 +53,13 @@
         <div id="chips" class="dropdown-menu" role="group"
              aria-label="Filter by event type"></div>
       </details>
+      <label class="sr-only" for="horizon">Time frame</label>
+      <select id="horizon">
+        <option value="7">Next 7 days</option>
+        <option value="30">Next 30 days</option>
+        <option value="90">Next 90 days</option>
+        <option value="365">Next 12 months</option>
+      </select>
     </div>
     <div id="banner" class="banner" hidden></div>
     <ul id="events" class="events"></ul>

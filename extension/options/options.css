@@ -1,5 +1,18 @@
+/* Dark is the default. The toggle writes data-theme on <html>, so the
+   choice sticks rather than following the OS. */
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
+  --bg: #17171a;
+  --fg: #ededeb;
+  --muted: #a0a09a;
+  --line: #2e2e33;
+  --card: #1f1f23;
+  --accent: #f97316;
+  --error: #f97316;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
   --bg: #fbfbfa;
   --fg: #1a1a19;
   --muted: #6b6b66;
@@ -7,17 +20,6 @@
   --card: #fff;
   --accent: #c2410c;
   --error: #c2410c;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #17171a;
-    --fg: #ededeb;
-    --muted: #a0a09a;
-    --line: #2e2e33;
-    --card: #1f1f23;
-    --accent: #f97316;
-    --error: #f97316;
-  }
 }
 
 * { box-sizing: border-box; }

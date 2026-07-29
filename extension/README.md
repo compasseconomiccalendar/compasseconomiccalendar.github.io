@@ -77,7 +77,9 @@ Stored in `chrome.storage.sync`, so they follow a signed-in Chrome profile.
 | `timeFormat` | `auto` | `auto` follows the locale; `12h` or `24h` force it |
 | `timeZone` | `null` | `null` uses the browser zone; otherwise an IANA name such as `America/Denver` |
 | `selectedGroups` | `[]` | Ticked event types; empty means all |
-| `notifyMinImpact` | `medium` | Notification threshold — impact now only gates notifications, not the list |
+| `notifyGroups` | `["fomc", "data"]` | Event types that notify; empty means all |
+| `viewHorizonDays` | `90` | How far ahead the list reaches |
+| `theme` | `dark` | `dark` or `light`; set explicitly, not from the OS |
 | `alarmOffsets` | `[30, 5]` | Minutes before the event, up to four |
 | `notificationsEnabled` | `true` | |
 | `hiddenTypes` | `[]` | Event types removed from the list and never notified |

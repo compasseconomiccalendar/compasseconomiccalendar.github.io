@@ -28,6 +28,24 @@ const GDP_VARIANT_LABELS = {
   third: "Third estimate — rarely moves futures",
 };
 
+/** Display names for the feed's coverage families. Acronyms stay uppercase. */
+const FAMILY_LABELS = {
+  fomc: "FOMC",
+  macro_releases: "Macro releases",
+  ism: "ISM",
+  treasury_auctions: "Treasury auctions",
+  treasury_refunding: "Treasury refunding",
+  futures: "Futures",
+  market_sessions: "Market sessions",
+  other: "Other",
+};
+
+export function familyLabel(family) {
+  if (FAMILY_LABELS[family]) return FAMILY_LABELS[family];
+  const words = String(family).replace(/_/g, " ");
+  return words.charAt(0).toUpperCase() + words.slice(1);
+}
+
 export function typeLabel(eventType) {
   if (TYPE_LABELS[eventType]) return TYPE_LABELS[eventType];
   if (eventType.startsWith("macro_release_")) return "Macro release";

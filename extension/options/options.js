@@ -5,7 +5,12 @@
  */
 
 import { DEFAULT_PREFS, MAX_ALARM_OFFSETS } from "../src/config.js";
-import { parseOffsets, resolveHour12, resolveTimeZone } from "../src/filters.js";
+import {
+  TYPE_GROUPS,
+  parseOffsets,
+  resolveHour12,
+  resolveTimeZone,
+} from "../src/filters.js";
 import { getCached, getPrefs, setPrefs } from "../src/store.js";
 
 // Common US trading zones first, then everything the browser knows about.
@@ -21,7 +26,8 @@ const elements = {
   timezone: document.getElementById("timezone"),
   timezoneHint: document.getElementById("timezone-hint"),
   timeFormat: document.getElementById("timeformat"),
-  notifyImpact: document.getElementById("notify-impact"),
+  notifyGroups: document.getElementById("notify-groups"),
+  notifySummary: document.getElementById("notify-summary"),
   notifications: document.getElementById("notifications-enabled"),
   allDayEnabled: document.getElementById("allday-enabled"),
   allDayHour: document.getElementById("allday-hour"),
@@ -111,6 +117,49 @@ async function buildTypeCheckboxes(hiddenTypes) {
   }
 }
 
+/** Same multi-select shape as the popup's type filter, for notifications. */
+function buildNotifyGroups(selected) {
+  const active = new Set(selected);
+  elements.notifyGroups.replaceChildren();
+
+  for (const group of TYPE_GROUPS) {
+    const row = document.createElement("label");
+    row.className = "type-option";
+
+    const box = document.createElement("input");
+    box.type = "checkbox";
+    box.value = group.id;
+    box.checked = active.has(group.id);
+    box.addEventListener("change", updateNotifySummary);
+
+    const text = document.createElement("span");
+    text.textContent = group.label;
+
+    row.append(box, text);
+    elements.notifyGroups.append(row);
+  }
+  updateNotifySummary();
+}
+
+function notifyGroupsFromForm() {
+  return [...elements.notifyGroups.querySelectorAll("input[type=checkbox]")]
+    .filter((box) => box.checked)
+    .map((box) => box.value);
+}
+
+function updateNotifySummary() {
+  const chosen = notifyGroupsFromForm();
+  if (!chosen.length) {
+    elements.notifySummary.textContent = "All event types";
+    return;
+  }
+  const labels = TYPE_GROUPS.filter((group) => chosen.includes(group.id)).map(
+    (group) => group.label,
+  );
+  elements.notifySummary.textContent =
+    labels.length <= 2 ? labels.join(", ") : `${labels.length} types selected`;
+}
+
 function hiddenTypesFromForm() {
   return [...elements.types.querySelectorAll("input[type=checkbox]")]
     .filter((box) => !box.checked)
@@ -127,9 +176,15 @@ function flash(message, isError = false) {
   }
 }
 
+function applyTheme(theme) {
+  const root = document.documentElement;
+  if (root) root.dataset.theme = theme === "light" ? "light" : "dark";
+}
+
 async function load(prefs) {
+  applyTheme(prefs.theme);
   elements.timeFormat.value = prefs.timeFormat;
-  elements.notifyImpact.value = prefs.notifyMinImpact;
+  buildNotifyGroups(prefs.notifyGroups ?? []);
   elements.notifications.checked = prefs.notificationsEnabled;
   elements.allDayEnabled.checked = prefs.allDayNotifications;
   elements.allDayHour.value = String(prefs.allDayHour);
@@ -174,7 +229,7 @@ elements.save.addEventListener("click", async () => {
     allDayHour,
     timeZone: elements.timezone.value || null,
     timeFormat: elements.timeFormat.value,
-    notifyMinImpact: elements.notifyImpact.value,
+    notifyGroups: notifyGroupsFromForm(),
     notificationsEnabled: elements.notifications.checked,
     alarmOffsets: offsets,
     hiddenTypes: hiddenTypesFromForm(),

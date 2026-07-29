@@ -18,11 +18,17 @@ export const STORAGE_KEYS = {
 };
 
 export const DEFAULT_PREFS = {
-  // The popup filters by event type, not impact. Impact still gates
-  // notifications, which is a separate decision from what you browse.
-  notifyMinImpact: "medium",
-  // Which type pills are active; empty means all.
+  // Notifications are filtered by event type, like the list. Defaulted to the
+  // two that matter rather than everything: with no filter, every Treasury
+  // bill auction would interrupt you and the alarm ceiling would bind.
+  notifyGroups: ["fomc", "data"],
+  // Which event types the list shows; empty means all.
   selectedGroups: [],
+  // How far ahead the list reaches.
+  viewHorizonDays: 90,
+  // Dark by default; the toggle sets an explicit theme rather than following
+  // the OS, so the choice sticks.
+  theme: "dark",
   // Matches the advance-warning cadence in RESEARCH.md section Phase 2.
   alarmOffsets: [30, 5],
   notificationsEnabled: true,
