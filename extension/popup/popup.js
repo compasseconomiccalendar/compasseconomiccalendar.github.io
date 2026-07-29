@@ -23,8 +23,10 @@ import {
   upcomingEvents,
 } from "../src/filters.js";
 import {
-  formatMinutes,
+  etRangeInZone,
+  etTimeInZone,
   futuresSessionStatus,
+  isEasternZone,
   marketCalendar,
   sessionStatus,
   upcomingClosures,
@@ -69,11 +71,6 @@ const elements = {
   futuresRows: document.getElementById("futures-rows"),
 };
 
-/** "09:30" -> minutes past midnight. */
-function toMinutes(hhmm) {
-  const [hour, minute] = String(hhmm).split(":").map(Number);
-  return hour * 60 + minute;
-}
 
 let activeTab = "events";
 
@@ -385,20 +382,41 @@ function renderHours(calendar) {
   label.textContent = status.label;
   const detail = document.createElement("span");
   detail.className = "session-detail";
-  detail.textContent = status.detail;
+  detail.textContent = status.nextChange
+    ? `${status.nextChange.verb} ${etTimeInZone(today, status.nextChange.hhmm, local, activeHour12).text}` +
+      (status.earlyCloseName ? ` · ${status.earlyCloseName}` : "")
+    : status.detail;
   elements.session.append(dot, label, detail);
   elements.session.className = `session ${status.state}`;
 
   // Times are stated in ET because that is the zone the exchange rules are
   // written in; the events list is what converts to the viewer's zone.
-  const hhmm = (value) => formatMinutes(toMinutes(value), activeHour12);
-  const closeLabel = status.isEarlyClose
-    ? `${formatMinutes(status.closeMinutes, activeHour12)} (early today)`
-    : hhmm(equities.regular_close);
+  // Session state is decided in Eastern, but shown in the viewer's zone --
+  // resolved against today's date, since the offset from ET is not fixed.
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/New_York",
+    year: "numeric", month: "2-digit", day: "2-digit",
+  }).format(new Date());
+  const local = activeTimeZone ?? Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const sameAsEt = isEasternZone(today, local);
+
+  const range = (from, to) => {
+    const shown = etRangeInZone(today, from, to, local, activeHour12);
+    return sameAsEt ? `${shown} ET` : `${shown} · ${from}–${to} ET`;
+  };
+
+  const regularClose = status.isEarlyClose
+    ? equities.early_close
+    : equities.regular_close;
   appendPairs(elements.hoursRows, [
-    { label: "Pre-market", value: `${hhmm(equities.premarket_open)}–${hhmm(equities.regular_open)} ET` },
-    { label: "Regular", value: `${hhmm(equities.regular_open)}–${closeLabel} ET` },
-    { label: "After hours", value: `${hhmm(equities.regular_close)}–${hhmm(equities.afterhours_close)} ET` },
+    { label: "Pre-market", value: range(equities.premarket_open, equities.regular_open) },
+    {
+      label: "Regular",
+      value:
+        range(equities.regular_open, regularClose) +
+        (status.isEarlyClose ? " · early close today" : ""),
+    },
+    { label: "After hours", value: range(equities.regular_close, equities.afterhours_close) },
   ]);
 
   // Futures subsection: /ES and /NQ run their own, nearly round-the-clock week.
@@ -414,14 +432,21 @@ function renderHours(calendar) {
   fdetail.textContent = futuresStatus.detail;
   elements.futuresSession.append(fdot, flabel, fdetail);
 
+  const weekOpen = etTimeInZone(today, futures.week_open ?? "18:00", local, activeHour12);
+  const weekClose = etTimeInZone(today, futures.week_close ?? "17:00", local, activeHour12);
   appendPairs(elements.futuresRows, [
     {
       label: "Week",
-      value: `Sun ${hhmm(futures.week_open ?? "18:00")} – Fri ${hhmm(futures.week_close ?? "17:00")} ET`,
+      value: sameAsEt
+        ? `Sun ${weekOpen.text} – Fri ${weekClose.text} ET`
+        : `Sun ${weekOpen.text} – Fri ${weekClose.text} · 18:00–17:00 ET`,
     },
     {
       label: "Daily halt",
-      value: `${hhmm(futures.daily_halt_start ?? "17:00")}–${hhmm(futures.daily_halt_end ?? "18:00")} ET, Mon–Thu`,
+      value: range(
+        futures.daily_halt_start ?? "17:00",
+        futures.daily_halt_end ?? "18:00",
+      ) + ", Mon–Thu",
     },
     { label: "Symbols", value: "/ES · /NQ · /MES · /MNQ" },
   ]);

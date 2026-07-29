@@ -8,6 +8,10 @@
  * would break for anyone outside New York.
  */
 
+import { zonedTimeToUtc } from "./filters.js";
+
+const ET = "America/New_York";
+
 const DEFAULT_HOURS = {
   timezone: "America/New_York",
   equities: {
@@ -56,6 +60,54 @@ export function formatMinutes(minutes, hour12 = true) {
   const suffix = hour >= 12 ? "pm" : "am";
   const display = hour % 12 === 0 ? 12 : hour % 12;
   return `${display}:${padded}${suffix}`;
+}
+
+/**
+ * Render an Eastern wall-clock time in the viewer's zone.
+ *
+ * Resolved against a reference date rather than a fixed offset, because the
+ * gap between ET and another zone is not constant: US and UK daylight-saving
+ * transitions fall on different dates, so 9:30am ET is 13:30 in London during
+ * one part of March and 14:30 during another. A baked-in mapping is wrong for
+ * several weeks a year.
+ *
+ * Returns { text, dayOffset } where dayOffset is -1, 0 or +1 relative to the
+ * Eastern date -- Tokyo sees the US close on the following morning.
+ */
+export function etTimeInZone(isoDate, hhmm, timeZone, hour12 = undefined) {
+  const [hour, minute] = String(hhmm).split(":").map(Number);
+  const instant = new Date(zonedTimeToUtc(isoDate, hour, minute, ET));
+  if (Number.isNaN(instant.getTime())) return { text: hhmm, dayOffset: 0 };
+
+  const text = new Intl.DateTimeFormat(undefined, {
+    timeZone, hour12, hour: "numeric", minute: "2-digit",
+  }).format(instant);
+
+  const localDate = new Intl.DateTimeFormat("en-CA", {
+    timeZone, year: "numeric", month: "2-digit", day: "2-digit",
+  }).format(instant);
+  const dayOffset = Math.round(
+    (Date.parse(`${localDate}T00:00:00Z`) - Date.parse(`${isoDate}T00:00:00Z`)) / 86_400_000,
+  );
+
+  return { text, dayOffset };
+}
+
+/** "9:30am – 4:00pm" in the viewer's zone, marking any date rollover. */
+export function etRangeInZone(isoDate, startHHMM, endHHMM, timeZone, hour12) {
+  const start = etTimeInZone(isoDate, startHHMM, timeZone, hour12);
+  const end = etTimeInZone(isoDate, endHHMM, timeZone, hour12);
+  const suffix = (offset) => (offset === 0 ? "" : offset > 0 ? " (+1d)" : " (−1d)");
+  return `${start.text}${suffix(start.dayOffset)}–${end.text}${suffix(end.dayOffset)}`;
+}
+
+/** Whether the viewer's zone shows the same wall clock as Eastern. */
+export function isEasternZone(isoDate, timeZone) {
+  if (!timeZone) return false;
+  return (
+    etTimeInZone(isoDate, "09:30", timeZone).text ===
+    etTimeInZone(isoDate, "09:30", ET).text
+  );
 }
 
 const DEFAULT_FUTURES = {
@@ -180,21 +232,31 @@ export function sessionStatus(now, calendar, hours = DEFAULT_HOURS) {
   let state = "closed";
   let label = "Closed";
   let detail = `Opens ${formatMinutes(open)} ET`;
+  // The boundary is returned separately so callers can render it in the
+  // viewer's zone; `detail` stays Eastern as a fallback.
+  let nextChange = { verb: "Opens", hhmm: equities.regular_open };
 
   if (minutes >= preOpen && minutes < open) {
     state = "premarket";
     label = "Pre-market";
     detail = `Regular open ${formatMinutes(open)} ET`;
+    nextChange = { verb: "Regular open", hhmm: equities.regular_open };
   } else if (minutes >= open && minutes < close) {
     state = "regular";
     label = "Open";
     detail = `Closes ${formatMinutes(close)} ET`;
+    nextChange = {
+      verb: "Closes",
+      hhmm: earlyName ? equities.early_close : equities.regular_close,
+    };
   } else if (minutes >= close && minutes < afterClose) {
     state = "afterhours";
     label = "After hours";
     detail = `Until ${formatMinutes(afterClose)} ET`;
+    nextChange = { verb: "Until", hhmm: equities.afterhours_close };
   } else if (minutes >= afterClose) {
     detail = "Reopens tomorrow";
+    nextChange = null;
   }
 
   return {
@@ -202,6 +264,8 @@ export function sessionStatus(now, calendar, hours = DEFAULT_HOURS) {
     label,
     detail: earlyName && state !== "closed" ? `${detail} · ${earlyName}` : detail,
     closeMinutes: close,
+    nextChange,
+    earlyCloseName: earlyName ?? null,
     holidayName: null,
     isEarlyClose: Boolean(earlyName),
   };

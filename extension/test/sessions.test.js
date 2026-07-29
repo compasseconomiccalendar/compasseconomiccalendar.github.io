@@ -9,8 +9,11 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  etRangeInZone,
+  etTimeInZone,
   formatMinutes,
   futuresSessionStatus,
+  isEasternZone,
   marketCalendar,
   sessionStatus,
   upcomingClosures,
@@ -153,4 +156,53 @@ test("futures holidays report a shortened session, not a closure", () => {
   // claiming "closed" would be worse than telling the user to check.
   assert.equal(status.state, "holiday");
   assert.match(status.detail, /verify the session with CME/);
+});
+
+test("Eastern times convert to the viewer's zone against a reference date", () => {
+  // Denver is a fixed 2h behind ET year-round.
+  assert.equal(etTimeInZone("2026-07-29", "09:30", "America/Denver", true).text, "7:30 AM");
+  assert.equal(etTimeInZone("2026-01-15", "09:30", "America/Denver", true).text, "7:30 AM");
+});
+
+test("the ET offset is not fixed, which is why a reference date is required", () => {
+  // US and UK daylight saving shift on different dates, so 9:30am ET is 13:30
+  // in London during part of March and 14:30 in July. A baked-in mapping would
+  // be wrong for several weeks a year.
+  const march = etTimeInZone("2026-03-10", "09:30", "Europe/London", false).text;
+  const july = etTimeInZone("2026-07-15", "09:30", "Europe/London", false).text;
+  assert.equal(march, "13:30");
+  assert.equal(july, "14:30");
+  assert.notEqual(march, july);
+});
+
+test("a session crossing midnight is marked with a day offset", () => {
+  // Tokyo sees the 4:00pm ET close at 5:00am the next morning.
+  const close = etTimeInZone("2026-07-29", "16:00", "Asia/Tokyo", false);
+  assert.equal(close.text, "05:00");
+  assert.equal(close.dayOffset, 1);
+
+  const range = etRangeInZone("2026-07-29", "09:30", "16:00", "Asia/Tokyo", false);
+  assert.match(range, /\+1d/);
+});
+
+test("isEasternZone spots a viewer already on Eastern", () => {
+  assert.equal(isEasternZone("2026-07-29", "America/New_York"), true);
+  assert.equal(isEasternZone("2026-07-29", "America/Denver"), false);
+  assert.equal(isEasternZone("2026-07-29", undefined), false);
+});
+
+test("sessionStatus reports the next boundary for local rendering", () => {
+  const open = sessionStatus(at("2026-07-29T14:00:00Z"), EMPTY, HOURS);
+  assert.deepEqual(open.nextChange, { verb: "Closes", hhmm: "16:00" });
+
+  const early = sessionStatus(
+    at("2026-11-27T16:00:00Z"),
+    { holidays: {}, earlyCloses: { "2026-11-27": "Day after Thanksgiving" } },
+    HOURS,
+  );
+  assert.deepEqual(early.nextChange, { verb: "Closes", hhmm: "13:00" });
+  assert.equal(early.earlyCloseName, "Day after Thanksgiving");
+
+  // Once the day is over there is no boundary left to show.
+  assert.equal(sessionStatus(at("2026-07-30T01:00:00Z"), EMPTY, HOURS).nextChange, null);
 });

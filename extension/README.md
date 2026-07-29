@@ -54,8 +54,9 @@ Icons are generated, not hand-drawn — regenerate with
   your zone, Eastern and UTC. Escape or ← returns to the list
 - **Hours tab**: live session status for both **equities** (pre-market / open /
   after hours / closed, with holidays and half days accounted for) and **CME
-  equity index futures** (open / daily halt / weekend), session times in ET,
-  and upcoming market closures
+  equity index futures** (open / daily halt / weekend), session times **in your
+  own timezone** with ET alongside for verification, and upcoming market
+  closures
 - Options page (⚙ in the popup): timezone override, separate list and
   notification impact thresholds, notification toggle and offsets, and
   per-event-type hiding
