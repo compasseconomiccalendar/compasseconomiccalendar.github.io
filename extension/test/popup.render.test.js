@@ -193,3 +193,77 @@ test("a feed cached before market_hours existed still renders", async () => {
   // Hours still renders, falling back to the built-in session defaults.
   assert.ok(registry.get("hours-rows").children.length > 0, "no hours rows");
 });
+
+/**
+ * Degraded cache states.
+ *
+ * Everything the popup reads comes from chrome.storage, which can hold data
+ * written by an older version, a failed refresh, or nothing at all. A throw in
+ * any of these blanks the whole popup, so each shape is asserted to render.
+ */
+const DEGRADED = {
+  "no calendar cached at all": {
+    local: { calendar: null, fetchedAt: null, lastError: null }, sync: {},
+  },
+  "calendar with no events array": {
+    local: { calendar: { disclaimer: "d" }, fetchedAt: Date.now(), lastError: null },
+    sync: {},
+  },
+  "no coverage block": {
+    local: {
+      calendar: { disclaimer: "d", events: [], counts: { by_event_type: {} } },
+      fetchedAt: Date.now(), lastError: null,
+    },
+    sync: {},
+  },
+  "prefs still on the pre-split schema": {
+    local: { calendar: CALENDAR, fetchedAt: Date.now(), lastError: null },
+    sync: { prefs: { minImpact: "low" } },
+  },
+  "partial build with a failed refresh": {
+    local: {
+      calendar: { ...CALENDAR, partial_build: true, failed_sources: ["FRED"] },
+      fetchedAt: Date.now(), lastError: { message: "boom", at: Date.now() },
+    },
+    sync: {},
+  },
+  "cache older than the staleness threshold": {
+    local: {
+      calendar: CALENDAR,
+      fetchedAt: Date.now() - 20 * 24 * 3600 * 1000,
+      lastError: null,
+    },
+    sync: {},
+  },
+};
+
+for (const [name, stored] of Object.entries(DEGRADED)) {
+  test(`popup renders with ${name}`, async () => {
+    const registry = new Map();
+    globalThis.document = {
+      getElementById(id) {
+        if (!registry.has(id)) registry.set(id, makeElement(id));
+        return registry.get(id);
+      },
+      createElement: () => makeElement(),
+      addEventListener() {},
+    };
+    globalThis.window = { scrollTo() {} };
+    globalThis.chrome = {
+      storage: {
+        local: { async get() { return stored.local; }, async set() {} },
+        sync: { async get() { return stored.sync; }, async set() {} },
+      },
+      runtime: { async sendMessage() { return { ok: true }; }, openOptionsPage() {} },
+    };
+
+    const errors = [];
+    const onRejection = (error) => errors.push(error);
+    process.on("unhandledRejection", onRejection);
+    await import(`../popup/popup.js?degraded=${encodeURIComponent(name)}`);
+    await new Promise((resolve) => setTimeout(resolve, 40));
+    process.off("unhandledRejection", onRejection);
+
+    assert.deepEqual(errors.map((error) => String(error?.message ?? error)), [], name);
+  });
+}
