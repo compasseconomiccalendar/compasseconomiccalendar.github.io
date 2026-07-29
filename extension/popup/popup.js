@@ -26,7 +26,6 @@ import {
   etRangeInZone,
   etTimeInZone,
   futuresSessionStatus,
-  isEasternZone,
   marketCalendar,
   sessionStatus,
   upcomingClosures,
@@ -398,12 +397,10 @@ function renderHours(calendar) {
     year: "numeric", month: "2-digit", day: "2-digit",
   }).format(new Date());
   const local = activeTimeZone ?? Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const sameAsEt = isEasternZone(today, local);
 
-  const range = (from, to) => {
-    const shown = etRangeInZone(today, from, to, local, activeHour12);
-    return sameAsEt ? `${shown} ET` : `${shown} · ${from}–${to} ET`;
-  };
+  // Displayed purely in the viewer's zone. Session state is still decided in
+  // Eastern inside sessions.js; only the rendering is local.
+  const range = (from, to) => etRangeInZone(today, from, to, local, activeHour12);
 
   const regularClose = status.isEarlyClose
     ? equities.early_close
@@ -437,9 +434,7 @@ function renderHours(calendar) {
   appendPairs(elements.futuresRows, [
     {
       label: "Week",
-      value: sameAsEt
-        ? `Sun ${weekOpen.text} – Fri ${weekClose.text} ET`
-        : `Sun ${weekOpen.text} – Fri ${weekClose.text} · 18:00–17:00 ET`,
+      value: `Sun ${weekOpen.text} – Fri ${weekClose.text}`,
     },
     {
       label: "Daily halt",

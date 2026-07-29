@@ -25,6 +25,7 @@ import {
   resolveHour12,
   resolveTimeZone,
 } from "./filters.js";
+import { marketCalendar, sessionStatus } from "./sessions.js";
 import {
   getCached,
   getPrefs,
@@ -66,8 +67,17 @@ async function updateBadge() {
   });
 
   if (!event) {
+    const market = sessionStatus(
+      Date.now(),
+      marketCalendar(calendar.events),
+      calendar.market_hours,
+    );
     await chrome.action.setBadgeText({ text: "" });
-    await chrome.action.setTitle({ title: "Compass Economic Calendar" });
+    await chrome.action.setTitle({
+      title: `Compass — market ${market.label.toLowerCase()}${
+        market.detail ? ` (${market.detail})` : ""
+      }`,
+    });
     chrome.alarms.create(BADGE_ALARM, { periodInMinutes: 60 });
     return;
   }
@@ -75,12 +85,20 @@ async function updateBadge() {
   const msUntil = Date.parse(event.start_utc) - Date.now();
   const urgent = msUntil <= 30 * 60_000;
 
+  // Same shared session logic the popup uses, so market state is known
+  // without the popup ever being opened.
+  const market = sessionStatus(
+    Date.now(),
+    marketCalendar(calendar.events),
+    calendar.market_hours,
+  );
+
   await chrome.action.setBadgeText({ text: badgeText(msUntil) });
   await chrome.action.setBadgeBackgroundColor({
     color: urgent ? "#c2410c" : "#6b6b66",
   });
   await chrome.action.setTitle({
-    title: `${event.title} — ${new Intl.DateTimeFormat(undefined, {
+    title: `Market ${market.label.toLowerCase()} · ${event.title} — ${new Intl.DateTimeFormat(undefined, {
       timeZone: resolveTimeZone(prefs.timeZone),
       hour12: resolveHour12(prefs.timeFormat),
       hour: "numeric",

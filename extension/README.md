@@ -55,8 +55,7 @@ Icons are generated, not hand-drawn — regenerate with
 - **Hours tab**: live session status for both **equities** (pre-market / open /
   after hours / closed, with holidays and half days accounted for) and **CME
   equity index futures** (open / daily halt / weekend), session times **in your
-  own timezone** with ET alongside for verification, and upcoming market
-  closures
+  own timezone**, and upcoming market closures
 - Options page (⚙ in the popup): timezone override, separate list and
   notification impact thresholds, notification toggle and offsets, and
   per-event-type hiding
@@ -89,8 +88,22 @@ are capped (`MAX_SCHEDULED_ALARMS`, 72h horizon) and rebuilt from scratch on
 every refresh and every fired alarm, rather than scheduling one alarm per
 event across the whole year.
 
-All selection logic lives in `src/filters.js` as pure functions — no `chrome.*`
-calls and no clock reads — which is what makes it testable under plain node.
+All selection logic lives in `src/filters.js` and `src/sessions.js` as pure
+functions — no `chrome.*` calls and no clock reads — which is what makes it
+testable under plain node, and lets the popup and the service worker share one
+implementation.
+
+**Session state is decided in Eastern, displayed in the viewer's zone.** Asking
+"is it between 9:30 and 16:00" against local wall-clock would open the market
+two hours late in Denver. Display conversion resolves against today's date
+rather than a stored offset, because the gap from ET is not constant: US and UK
+daylight saving shift on different dates, so 9:30am ET is 13:30 in London
+during part of March and 14:30 in July.
+
+The service worker imports the same session module, so market state is known
+for the badge tooltip without the popup being opened. The computation is *not*
+delegated to the worker — MV3 evicts it after ~30s idle, so the popup would
+have to wake it and wait on a message round-trip to run a few comparisons.
 
 ## Store submission
 
