@@ -127,6 +127,20 @@ that URL goes in the Web Store listing's *Privacy policy* field. Its
 per-permission justifications the review asks for. Source lives in
 `web/privacy.html`.
 
+### Listing copy
+
+**Short description** (132 char limit — comes from `manifest.json`):
+
+> Never get caught off guard by a market-moving event. FOMC, CPI, jobs,
+> Treasury auctions and futures rolls, in your timezone.
+
+**Detailed description** (paste into the dashboard; the manifest cannot hold
+this length):
+
+> Never get caught off guard by a market-moving event. Compass tracks FOMC
+> meetings, CPI, jobs reports, Treasury auctions, and futures contract rolls —
+> all in your local timezone with advance notifications. Not investment advice.
+
 Data-handling disclosures to tick in the developer dashboard: **no** data
 collected in any category, **no** sale or transfer to third parties, **no**
 use for purposes unrelated to core functionality, **no** use for
