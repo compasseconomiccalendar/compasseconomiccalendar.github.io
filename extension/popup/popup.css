@@ -283,3 +283,87 @@ footer { padding: .7rem .85rem 1rem; border-top: 1px solid var(--line); }
   font-size: .68rem;
   line-height: 1.45;
 }
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: .15rem;
+  padding: 0 .85rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+.tab {
+  padding: .45rem .7rem;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: none;
+  color: var(--muted);
+  font-size: .8rem;
+}
+.tab.on {
+  color: var(--fg);
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}
+
+/* Hours view */
+.session {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .8rem .85rem;
+  border-bottom: 1px solid var(--line);
+  font-size: .9rem;
+}
+.session-detail { color: var(--muted); font-size: .8rem; }
+.dot {
+  width: .55rem; height: .55rem;
+  border-radius: 50%;
+  background: var(--low);
+  flex: none;
+}
+.dot.regular { background: #16a34a; }
+.dot.premarket, .dot.afterhours { background: var(--medium); }
+.dot.closed-holiday, .dot.closed-weekend, .dot.closed { background: var(--low); }
+
+.hours-rows {
+  grid-template-columns: 6.4rem 1fr;
+  padding: .7rem .85rem 0;
+  font-size: .8rem;
+}
+.hours-heading {
+  margin: .9rem 0 .35rem;
+  padding: 0 .85rem;
+  font-size: .72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--muted);
+}
+.closures { list-style: none; margin: 0; padding: 0; }
+.closure {
+  display: grid;
+  grid-template-columns: 6.4rem 1fr auto;
+  gap: .5rem;
+  align-items: baseline;
+  padding: .4rem .85rem;
+  border-bottom: 1px solid var(--line);
+  font-size: .8rem;
+}
+.closure-date { color: var(--muted); font-variant-numeric: tabular-nums; }
+.closure-kind {
+  font-size: .68rem;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  color: var(--muted);
+}
+.closure-kind.early { color: var(--medium); }
+.closure-empty { padding: .8rem .85rem; color: var(--muted); font-size: .8rem; }
+.hours-note {
+  margin: .8rem 0 0;
+  padding: 0 .85rem 1rem;
+  color: var(--muted);
+  font-size: .72rem;
+  line-height: 1.5;
+}

@@ -1,0 +1,114 @@
+/**
+ * Tests for market session state.
+ *
+ * Session rules are written in Eastern wall-clock time, so every case pins an
+ * explicit UTC instant and asserts the state a New York trader would see.
+ */
+
+import assert from "node:assert/strict";
+import test from "node:test";
+
+import {
+  formatMinutes,
+  marketCalendar,
+  sessionStatus,
+  upcomingClosures,
+} from "../src/sessions.js";
+
+const HOURS = {
+  timezone: "America/New_York",
+  equities: {
+    premarket_open: "04:00",
+    regular_open: "09:30",
+    regular_close: "16:00",
+    afterhours_close: "20:00",
+    early_close: "13:00",
+  },
+  futures: { note: "futures note" },
+};
+
+const EMPTY = { holidays: {}, earlyCloses: {} };
+const at = (iso) => Date.parse(iso);
+
+test("formatMinutes renders 12-hour times", () => {
+  assert.equal(formatMinutes(9 * 60 + 30), "9:30am");
+  assert.equal(formatMinutes(16 * 60), "4:00pm");
+  assert.equal(formatMinutes(12 * 60), "12:00pm");
+  assert.equal(formatMinutes(0), "12:00am");
+});
+
+test("a normal weekday walks through every session", () => {
+  // 2026-07-29 is a Wednesday. Times below are ET expressed as UTC (EDT, -4).
+  const cases = [
+    ["2026-07-29T07:00:00Z", "closed"],      // 3:00am ET
+    ["2026-07-29T12:00:00Z", "premarket"],   // 8:00am ET
+    ["2026-07-29T14:00:00Z", "regular"],     // 10:00am ET
+    ["2026-07-29T21:00:00Z", "afterhours"],  // 5:00pm ET
+    ["2026-07-30T01:00:00Z", "closed"],      // 9:00pm ET
+  ];
+  for (const [iso, expected] of cases) {
+    assert.equal(sessionStatus(at(iso), EMPTY, HOURS).state, expected, iso);
+  }
+});
+
+test("the open and close boundaries are inclusive of the open", () => {
+  // 9:30am ET exactly is open; 4:00pm ET exactly is after hours.
+  assert.equal(sessionStatus(at("2026-07-29T13:30:00Z"), EMPTY, HOURS).state, "regular");
+  assert.equal(sessionStatus(at("2026-07-29T13:29:00Z"), EMPTY, HOURS).state, "premarket");
+  assert.equal(sessionStatus(at("2026-07-29T20:00:00Z"), EMPTY, HOURS).state, "afterhours");
+});
+
+test("weekends are closed", () => {
+  // 2026-08-01 is a Saturday, 2026-08-02 a Sunday.
+  for (const iso of ["2026-08-01T14:00:00Z", "2026-08-02T14:00:00Z"]) {
+    const status = sessionStatus(at(iso), EMPTY, HOURS);
+    assert.equal(status.state, "closed-weekend");
+    assert.equal(status.detail, "Weekend");
+  }
+});
+
+test("a holiday closes the market and names itself", () => {
+  const calendar = { holidays: { "2026-11-26": "Thanksgiving Day" }, earlyCloses: {} };
+  const status = sessionStatus(at("2026-11-26T15:00:00Z"), calendar, HOURS);
+  assert.equal(status.state, "closed-holiday");
+  assert.equal(status.detail, "Thanksgiving Day");
+});
+
+test("an early close ends the session at 1pm and says why", () => {
+  const calendar = {
+    holidays: {},
+    earlyCloses: { "2026-11-27": "Day after Thanksgiving" },
+  };
+  // 2026-11-27 is EST (-5). 14:00Z = 9:00am ET, 18:30Z = 1:30pm ET.
+  const open = sessionStatus(at("2026-11-27T16:00:00Z"), calendar, HOURS);
+  assert.equal(open.state, "regular");
+  assert.match(open.detail, /1:00pm/);
+  assert.match(open.detail, /Day after Thanksgiving/);
+  assert.equal(open.isEarlyClose, true);
+
+  // After 1pm ET there is no after-hours session on a half day.
+  const after = sessionStatus(at("2026-11-27T18:30:00Z"), calendar, HOURS);
+  assert.equal(after.state, "closed");
+});
+
+test("marketCalendar indexes closures by date", () => {
+  const events = [
+    { event_type: "market_holiday", date_et: "2026-12-25", holiday_name: "Christmas Day" },
+    { event_type: "market_early_close", date_et: "2026-12-24", holiday_name: "Christmas Eve" },
+    { event_type: "macro_release_cpi", date_et: "2026-12-10" },
+  ];
+  const calendar = marketCalendar(events);
+  assert.deepEqual(calendar.holidays, { "2026-12-25": "Christmas Day" });
+  assert.deepEqual(calendar.earlyCloses, { "2026-12-24": "Christmas Eve" });
+});
+
+test("upcomingClosures drops past dates and other event types", () => {
+  const events = [
+    { event_type: "market_holiday", date_et: "2026-01-01", holiday_name: "New Year" },
+    { event_type: "market_holiday", date_et: "2026-12-25", holiday_name: "Christmas" },
+    { event_type: "market_early_close", date_et: "2026-11-27", holiday_name: "Friday" },
+    { event_type: "fomc_statement", date_et: "2026-12-09" },
+  ];
+  const result = upcomingClosures(events, at("2026-07-28T12:00:00Z"));
+  assert.deepEqual(result.map((e) => e.date_et), ["2026-11-27", "2026-12-25"]);
+});

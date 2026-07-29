@@ -46,6 +46,7 @@ export function familyOf(eventType) {
   if (eventType.startsWith("macro_release_")) return "macro_releases";
   if (eventType === "treasury_auction") return "treasury_auctions";
   if (eventType === "treasury_quarterly_refunding") return "treasury_refunding";
+  if (eventType.startsWith("market_")) return "market_sessions";
   if (
     eventType.startsWith("futures_") ||
     eventType === "quad_witching" ||
@@ -120,6 +121,7 @@ export function groupOf(eventType) {
     return "data";
   }
   if (eventType.startsWith("treasury_")) return "treasury";
+  if (eventType.startsWith("market_")) return "market";
   return "futures";
 }
 
@@ -128,6 +130,7 @@ export const TYPE_GROUPS = [
   { id: "data", label: "Data" },
   { id: "treasury", label: "Treasury" },
   { id: "futures", label: "Futures" },
+  { id: "market", label: "Market" },
 ];
 
 /**

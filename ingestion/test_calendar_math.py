@@ -21,6 +21,7 @@ from build_calendar import (  # noqa: E402
     build_coverage,
     build_futures_events,
     build_ism_events,
+    build_market_calendar_events,
     enrich_from_bea,
     et_to_utc,
     first_wednesday,
@@ -33,6 +34,8 @@ from build_calendar import (  # noqa: E402
     parse_clock,
     third_friday,
     us_federal_holidays,
+    us_market_early_closes,
+    us_market_holidays,
 )
 
 
@@ -314,6 +317,72 @@ class TestClockParsing(unittest.TestCase):
         self.assertIsNone(parse_clock(""))
         self.assertIsNone(parse_clock(None))
         self.assertIsNone(parse_clock("noon"))
+
+
+
+
+class TestMarketCalendar(unittest.TestCase):
+    def test_exchange_holidays_are_not_the_federal_set(self):
+        holidays = us_market_holidays(2026)
+        # Closed for Good Friday, which is not a federal holiday at all.
+        self.assertIn(date(2026, 4, 3), holidays)
+        # Open on Columbus Day and Veterans Day, which are federal.
+        self.assertNotIn(date(2026, 10, 12), holidays)
+        self.assertNotIn(date(2026, 11, 11), holidays)
+        self.assertEqual(len(holidays), 10)
+
+    def test_weekend_holidays_are_observed(self):
+        # 2026-07-04 is a Saturday, observed Friday the 3rd.
+        self.assertIn(date(2026, 7, 3), us_market_holidays(2026))
+        # 2027-07-04 is a Sunday, observed Monday the 5th.
+        self.assertIn(date(2027, 7, 5), us_market_holidays(2027))
+
+    def test_new_years_saturday_exception(self):
+        # NYSE Rule 7.2: when New Year's Day is a Saturday the exchange does
+        # NOT close the preceding Friday, unlike every other holiday.
+        self.assertEqual(date(2028, 1, 1).weekday(), 5)
+        holidays = us_market_holidays(2028)
+        self.assertNotIn(date(2027, 12, 31), holidays)
+        self.assertNotIn(date(2028, 1, 1), holidays)
+        # Every other 2028 holiday is still there.
+        self.assertEqual(len(holidays), 9)
+
+    def test_early_closes_yield_to_an_observed_holiday(self):
+        # 2026: July 4 is Saturday, so July 3 is the holiday, not a half day.
+        early_2026 = us_market_early_closes(2026)
+        self.assertNotIn(date(2026, 7, 3), early_2026)
+        self.assertIn(date(2026, 11, 27), early_2026)   # day after Thanksgiving
+        self.assertIn(date(2026, 12, 24), early_2026)   # Christmas Eve, a Thursday
+
+        # 2027: Christmas is Saturday, so Dec 24 is the holiday, not a half day.
+        early_2027 = us_market_early_closes(2027)
+        self.assertNotIn(date(2027, 12, 24), early_2027)
+        self.assertEqual(list(early_2027), [date(2027, 11, 26)])
+
+    def test_independence_eve_half_day_when_the_fourth_is_midweek(self):
+        # 2029-07-04 is a Wednesday, so Tuesday the 3rd is a half day.
+        self.assertEqual(date(2029, 7, 4).weekday(), 2)
+        self.assertIn(date(2029, 7, 3), us_market_early_closes(2029))
+
+    def test_events_are_all_day_for_closures_and_timed_for_half_days(self):
+        events = build_market_calendar_events((date(2026, 11, 1), date(2026, 12, 31)))
+        by_type = {}
+        for event in events:
+            by_type.setdefault(event["event_type"], []).append(event)
+
+        closure = next(
+            e for e in by_type["market_holiday"] if e["date_et"] == "2026-11-26"
+        )
+        self.assertTrue(closure["all_day"])
+        self.assertIn("Thanksgiving", closure["title"])
+
+        half = next(
+            e for e in by_type["market_early_close"] if e["date_et"] == "2026-11-27"
+        )
+        self.assertFalse(half["all_day"])
+        self.assertEqual(half["time_et"], "13:00")
+        # 1pm ET in November is 18:00 UTC (EST).
+        self.assertEqual(half["start_utc"], "2026-11-27T18:00:00Z")
 
 
 if __name__ == "__main__":

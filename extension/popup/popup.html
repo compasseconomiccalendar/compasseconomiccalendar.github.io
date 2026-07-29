@@ -20,6 +20,19 @@
     </div>
   </header>
 
+  <nav class="tabs" role="tablist">
+    <button id="tab-events" class="tab on" role="tab" aria-selected="true">Events</button>
+    <button id="tab-hours" class="tab" role="tab" aria-selected="false">Hours</button>
+  </nav>
+
+  <div id="hours-view" hidden>
+    <div id="session" class="session"></div>
+    <dl id="hours-rows" class="rows hours-rows"></dl>
+    <h3 class="hours-heading">Upcoming closures</h3>
+    <ul id="closures" class="closures"></ul>
+    <p class="hours-note" id="futures-note"></p>
+  </div>
+
   <div id="list-view">
     <div id="chips" class="chips"></div>
     <div id="banner" class="banner" hidden></div>

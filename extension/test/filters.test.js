@@ -12,6 +12,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  TYPE_GROUPS,
   alarmName,
   badgeText,
   badgeTickMinutes,
@@ -383,4 +384,14 @@ test("migration fills defaults and preserves unrelated prefs", () => {
   assert.deepEqual(migrated.alarmOffsets, [30, 5]);
   // An empty store yields the defaults untouched.
   assert.deepEqual(migratePrefs({}), migratePrefs(undefined));
+});
+
+test("market closures get their own group and coverage family", () => {
+  // Without this they fell through to "futures", which is where an unmapped
+  // type lands.
+  assert.equal(groupOf("market_holiday"), "market");
+  assert.equal(groupOf("market_early_close"), "market");
+  assert.equal(familyOf("market_holiday"), "market_sessions");
+  assert.equal(familyOf("market_early_close"), "market_sessions");
+  assert.ok(TYPE_GROUPS.some((group) => group.id === "market"));
 });

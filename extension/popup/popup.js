@@ -21,6 +21,12 @@ import {
   resolveTimeZone,
   upcomingEvents,
 } from "../src/filters.js";
+import {
+  formatMinutes,
+  marketCalendar,
+  sessionStatus,
+  upcomingClosures,
+} from "../src/sessions.js";
 import { getCached, getPrefs, setPrefs } from "../src/store.js";
 
 const VIEW_HORIZON_MS = 90 * 24 * 3600 * 1000;
@@ -50,7 +56,16 @@ const elements = {
   moveHeadline: document.getElementById("move-headline"),
   moveRows: document.getElementById("move-rows"),
   moveWindow: document.getElementById("move-window"),
+  tabEvents: document.getElementById("tab-events"),
+  tabHours: document.getElementById("tab-hours"),
+  hoursView: document.getElementById("hours-view"),
+  session: document.getElementById("session"),
+  hoursRows: document.getElementById("hours-rows"),
+  closures: document.getElementById("closures"),
+  futuresNote: document.getElementById("futures-note"),
 };
+
+let activeTab = "events";
 
 // The zone the detail view formats against; kept in sync with prefs on render.
 let activeTimeZone;
@@ -240,6 +255,7 @@ async function render() {
 
   const now = Date.now();
   renderBanner(calendar, fetchedAt, now);
+  renderHours(calendar);
 
   const query = {
     now,
@@ -340,7 +356,82 @@ function showDetail(event) {
 
 function showList() {
   elements.detailView.hidden = true;
-  elements.listView.hidden = false;
+  elements.listView.hidden = activeTab !== "events";
+}
+
+function renderHours(calendar) {
+  const hours = calendar?.market_hours;
+  const equities = hours?.equities ?? {};
+  const marketCal = marketCalendar(calendar?.events ?? []);
+  const status = sessionStatus(Date.now(), marketCal, hours);
+
+  elements.session.replaceChildren();
+  const dot = document.createElement("span");
+  dot.className = `dot ${status.state}`;
+  const label = document.createElement("strong");
+  label.textContent = status.label;
+  const detail = document.createElement("span");
+  detail.className = "session-detail";
+  detail.textContent = status.detail;
+  elements.session.append(dot, label, detail);
+  elements.session.className = `session ${status.state}`;
+
+  // Times are stated in ET because that is the zone the exchange rules are
+  // written in; the events list is what converts to the viewer's zone.
+  const closeLabel = status.isEarlyClose
+    ? `${formatMinutes(status.closeMinutes)} (early close today)`
+    : equities.regular_close;
+  appendPairs(elements.hoursRows, [
+    { label: "Pre-market", value: `${equities.premarket_open}–${equities.regular_open} ET` },
+    { label: "Regular", value: `${equities.regular_open}–${closeLabel} ET` },
+    { label: "After hours", value: `${equities.regular_close}–${equities.afterhours_close} ET` },
+  ]);
+
+  elements.closures.replaceChildren();
+  const closures = upcomingClosures(calendar?.events ?? [], Date.now());
+  if (!closures.length) {
+    const empty = document.createElement("li");
+    empty.className = "closure-empty";
+    empty.textContent = "No closures in the published window.";
+    elements.closures.append(empty);
+  }
+  for (const event of closures) {
+    const item = document.createElement("li");
+    item.className = "closure";
+
+    const when = document.createElement("span");
+    when.className = "closure-date";
+    when.textContent = new Intl.DateTimeFormat(undefined, {
+      timeZone: "UTC",
+      weekday: "short", month: "short", day: "numeric",
+    }).format(new Date(`${event.date_et}T12:00:00Z`));
+
+    const what = document.createElement("span");
+    what.className = "closure-name";
+    what.textContent = event.holiday_name ?? event.title;
+
+    const kind = document.createElement("span");
+    kind.className =
+      event.event_type === "market_early_close" ? "closure-kind early" : "closure-kind";
+    kind.textContent =
+      event.event_type === "market_early_close" ? "1:00pm close" : "closed";
+
+    item.append(when, what, kind);
+    elements.closures.append(item);
+  }
+
+  elements.futuresNote.textContent = hours?.futures?.note ?? "";
+}
+
+function setTab(tab) {
+  activeTab = tab;
+  elements.tabEvents.classList.toggle("on", tab === "events");
+  elements.tabHours.classList.toggle("on", tab === "hours");
+  elements.tabEvents.setAttribute("aria-selected", String(tab === "events"));
+  elements.tabHours.setAttribute("aria-selected", String(tab === "hours"));
+  elements.hoursView.hidden = tab !== "hours";
+  elements.detailView.hidden = true;
+  elements.listView.hidden = tab !== "events";
 }
 
 /** Arrow keys move between event titles without leaving the keyboard. */
@@ -353,6 +444,9 @@ function moveFocus(direction) {
     : Math.min(titles.length - 1, Math.max(0, index + direction));
   titles[next].focus();
 }
+
+elements.tabEvents.addEventListener("click", () => setTab("events"));
+elements.tabHours.addEventListener("click", () => setTab("hours"));
 
 elements.back.addEventListener("click", showList);
 

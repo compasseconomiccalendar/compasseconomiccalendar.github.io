@@ -1027,6 +1027,149 @@ def fetch_treasury_events(
 
 
 # --------------------------------------------------------------------------
+# Source 6: Market holidays and early closes (computed)
+# --------------------------------------------------------------------------
+
+# US equity sessions, Eastern. Published in the feed so the extension does not
+# hardcode them and a rule change is a data change.
+MARKET_HOURS = {
+    "timezone": "America/New_York",
+    "equities": {
+        "premarket_open": "04:00",
+        "regular_open": "09:30",
+        "regular_close": "16:00",
+        "afterhours_close": "20:00",
+        "early_close": "13:00",
+    },
+    "futures": {
+        # CME equity index (/ES, /NQ and micros) trade nearly around the clock.
+        "week_open": "18:00",
+        "week_close": "17:00",
+        "daily_halt_start": "17:00",
+        "daily_halt_end": "18:00",
+        "note": (
+            "CME equity index futures run Sunday 6:00pm ET to Friday 5:00pm ET, "
+            "with a one-hour halt each day from 5:00pm to 6:00pm ET."
+        ),
+    },
+}
+
+
+def us_market_holidays(year: int) -> Dict[date, str]:
+    """Days the NYSE and Nasdaq are closed.
+
+    Not the same set as the federal holidays: the exchanges stay open on
+    Columbus Day and Veterans Day, and close on Good Friday, which is not
+    federal at all.
+    """
+    holidays: Dict[date, str] = {}
+
+    # NYSE Rule 7.2 carves out one exception to the weekend-observation rule:
+    # when New Year's Day is a Saturday the exchange does *not* close on the
+    # preceding Friday. The weekend simply absorbs it.
+    new_year = date(year, 1, 1)
+    if new_year.weekday() != 5:
+        holidays[_observed(new_year)] = "New Year's Day"
+
+    holidays[nth_weekday(year, 1, weekday=0, n=3)] = "Martin Luther King Jr. Day"
+    holidays[nth_weekday(year, 2, weekday=0, n=3)] = "Presidents' Day"
+    holidays[good_friday(year)] = "Good Friday"
+    holidays[last_weekday(year, 5, weekday=0)] = "Memorial Day"
+    holidays[_observed(date(year, 6, 19))] = "Juneteenth"
+    holidays[_observed(date(year, 7, 4))] = "Independence Day"
+    holidays[nth_weekday(year, 9, weekday=0, n=1)] = "Labor Day"
+    holidays[nth_weekday(year, 11, weekday=3, n=4)] = "Thanksgiving Day"
+    holidays[_observed(date(year, 12, 25))] = "Christmas Day"
+
+    return holidays
+
+
+def us_market_early_closes(year: int) -> Dict[date, str]:
+    """Days the equity market closes at 1:00pm ET.
+
+    Each is conditional on the surrounding days: the eve only shortens when it
+    is itself a trading day and the holiday it precedes is also on a weekday,
+    otherwise the observed holiday has already absorbed it.
+    """
+    early: Dict[date, str] = {}
+    holidays = us_market_holidays(year)
+
+    july_third, july_fourth = date(year, 7, 3), date(year, 7, 4)
+    if (
+        july_third.weekday() < 5
+        and july_fourth.weekday() < 5
+        and july_third not in holidays
+    ):
+        early[july_third] = "Independence Day eve"
+
+    # The day after Thanksgiving is always a Friday, and always a half day.
+    early[nth_weekday(year, 11, weekday=3, n=4) + timedelta(days=1)] = (
+        "Day after Thanksgiving"
+    )
+
+    christmas_eve, christmas = date(year, 12, 24), date(year, 12, 25)
+    if (
+        christmas_eve.weekday() < 5
+        and christmas.weekday() < 5
+        and christmas_eve not in holidays
+    ):
+        early[christmas_eve] = "Christmas Eve"
+
+    return early
+
+
+def build_market_calendar_events(window: Tuple[date, date]) -> List[Dict[str, Any]]:
+    """Emit market closures and half days as calendar events."""
+    start_bound, end_bound = window
+    events: List[Dict[str, Any]] = []
+
+    for year in range(start_bound.year, end_bound.year + 1):
+        for day, name in us_market_holidays(year).items():
+            if not (start_bound <= day <= end_bound):
+                continue
+            events.append(make_event(
+                event_id=f"market-holiday-{day.isoformat()}",
+                event_type="market_holiday",
+                title=f"Market Closed — {name}",
+                day=day,
+                time_et=None,
+                market_impact="low",
+                source="computed",
+                source_url="https://www.nyse.com/markets/hours-calendars",
+                note=(
+                    f"US equity markets are closed for {name}. CME equity index "
+                    "futures are also closed or on a holiday schedule -- check "
+                    "CME's calendar for the exact session."
+                ),
+                holiday_name=name,
+                computed=True,
+            ))
+
+        for day, name in us_market_early_closes(year).items():
+            if not (start_bound <= day <= end_bound):
+                continue
+            events.append(make_event(
+                event_id=f"market-early-close-{day.isoformat()}",
+                event_type="market_early_close",
+                title=f"Early Close (1:00pm ET) — {name}",
+                day=day,
+                time_et="13:00",
+                market_impact="low",
+                source="computed",
+                source_url="https://www.nyse.com/markets/hours-calendars",
+                note=(
+                    f"US equity markets close at 1:00pm ET for {name}. Volume "
+                    "thins out sharply through the morning and the closing "
+                    "auction is much smaller than usual."
+                ),
+                holiday_name=name,
+                computed=True,
+            ))
+
+    return events
+
+
+# --------------------------------------------------------------------------
 # Source 5: ISM PMI (computed, approximate)
 # --------------------------------------------------------------------------
 
@@ -1462,6 +1605,7 @@ def build_coverage(events: List[Dict[str, Any]], window: Tuple[date, date]) -> D
         # Computed from ISM's usual pattern, so complete by construction -- but
         # every one is flagged approximate on the event itself.
         "ism": ("computed", lambda t: t.startswith("ism_")),
+        "market_sessions": ("computed", lambda t: t.startswith("market_")),
         "treasury_auctions": ("reported", lambda t: t == "treasury_auction"),
         "treasury_refunding": ("computed", lambda t: t == "treasury_quarterly_refunding"),
         "futures": (
@@ -1540,6 +1684,7 @@ def build_document(events: List[Dict[str, Any]], window: Tuple[date, date]) -> D
         ],
         "counts": {"total": len(events), "by_event_type": counts, "by_market_impact": impact_counts},
         "coverage": build_coverage(events, window),
+        "market_hours": MARKET_HOURS,
         "events": events,
     }
 
@@ -1612,6 +1757,11 @@ def main() -> int:
 
     if not args.skip_ism:
         run_source("ISM PMI (computed, approximate)", lambda: build_ism_events(window))
+
+    run_source(
+        "Market holidays & early closes (computed)",
+        lambda: build_market_calendar_events(window),
+    )
 
     # BEA enrichment is deliberately non-fatal: if it fails the calendar is
     # still complete and correct, just with coarser GDP impact ratings.

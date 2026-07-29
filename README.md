@@ -30,6 +30,7 @@ architecture research behind this design.
 |---|---|
 | federalreserve.gov (scraped) | FOMC meeting day 1, statement (2:00pm ET), Chair press conference (2:30pm ET), SEP / dot plot, minutes |
 | FRED API | Employment Situation, CPI, PPI, GDP, Personal Income & Outlays, Initial Jobless Claims (weekly), Retail Sales, Durable Goods (8:30am ET); JOLTS (10:00am ET) |
+| Computed (exchange rules) | NYSE/Nasdaq closures and 1:00pm early closes — federal holidays *minus* Columbus and Veterans Day, *plus* Good Friday, with the NYSE Saturday-New-Year exception |
 | Computed (ISM pattern) | ISM Manufacturing PMI (1st business day) and Services PMI (3rd business day), 10:00am ET — **flagged `approximate`** |
 | bea.gov (enrichment) | Differentiates GDP advance / second / third estimates so only the advance print is rated high impact |
 | TreasuryDirect | Bill/note/bond/TIPS auctions, plus computed quarterly refunding announcements |
