@@ -53,7 +53,13 @@ header {
   border-bottom: 1px solid var(--line);
 }
 h1 { margin: 0; font-size: .95rem; letter-spacing: -0.01em; }
-.controls { display: flex; gap: .35rem; }
+.controls { display: flex; align-items: center; gap: .3rem; }
+/* Compact enough to sit beside the icon buttons in a 380px popup. */
+.controls select {
+  padding: .2rem .25rem;
+  font-size: .74rem;
+}
+.controls button { padding: .2rem .4rem; }
 
 select, button {
   font: inherit;
