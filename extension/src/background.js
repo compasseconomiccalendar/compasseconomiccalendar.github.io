@@ -182,15 +182,41 @@ async function showNotification(eventId, offsetMinutes) {
     ? `${event.market_impact.toUpperCase()} impact`
     : `${when} · ${event.market_impact.toUpperCase()} impact`;
 
-  await chrome.notifications.create(`compass:${event.id}`, {
+  const base = {
     type: "basic",
     iconUrl: chrome.runtime.getURL("icons/icon128.png"),
     title,
     message: event.approximate ? `${message} · estimated date` : message,
     contextMessage: "Compass Economic Calendar",
     priority: event.market_impact === "high" ? 2 : 1,
+  };
+
+  // Buttons are decoration, and support for them varies by platform -- some
+  // native notification backends reject the whole call rather than dropping
+  // the unsupported field. Delivering the warning matters more than the
+  // buttons, so a failure retries without them.
+  const withButtons = {
+    ...base,
     buttons: [{ title: "Verify at source" }, { title: `Snooze ${SNOOZE_MINUTES}m` }],
-  });
+  };
+
+  const create = (options) =>
+    new Promise((resolve) => {
+      chrome.notifications.create(`compass:${event.id}`, options, (id) => {
+        resolve({ id, error: chrome.runtime.lastError?.message ?? null });
+      });
+    });
+
+  let result = await create(withButtons);
+  if (!result.id) {
+    console.warn(`[compass] notification with buttons failed: ${result.error}`);
+    result = await create(base);
+  }
+  if (!result.id) {
+    console.error(`[compass] notification failed entirely: ${result.error}`);
+  } else {
+    console.info(`[compass] notified: ${title}`);
+  }
 }
 
 chrome.runtime.onInstalled.addListener(async () => {
@@ -218,6 +244,9 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   const parsed = parseAlarmName(NOTIFY_PREFIX, alarm.name);
   if (!parsed) return;
 
+  // Logged so the alarm -> notification path is visible in the console even
+  // when the notification itself never appears on screen.
+  console.info(`[compass] alarm fired: ${alarm.name}`);
   await showNotification(parsed.eventId, parsed.offsetMinutes);
   // One alarm just fired, freeing a slot -- pull the next one in.
   await rescheduleNotifications();
