@@ -25,7 +25,9 @@ node --test 'test/*.test.js'
 ```
 
 Icons and the promo tile are derived from `icons/compass logo 512.png`, which
-is the master artwork — regenerate with `python icons/generate_icons.py` and
+is the master artwork and must not be deleted — both generators read it, and
+it is the only full-resolution source if a size or crop ever needs revisiting.
+It is excluded from the packaged zip, so it costs users nothing. It — regenerate with `python icons/generate_icons.py` and
 `python icons/generate_promo.py`. Both need Pillow
 (`python3 -m pip install --user Pillow`); it is a tooling dependency only, and
 the extension itself still ships with none.
