@@ -212,8 +212,14 @@ elements.testNotification.addEventListener("click", async () => {
   const response = await chrome.runtime.sendMessage({ type: "test-notification" });
 
   if (response?.ok) {
+    // create() succeeded, so anything missing is below the extension: either
+    // the OS is suppressing them, or the browser build does not register with
+    // the system notification service (common in Chromium and Arc on macOS).
     elements.testResult.textContent =
-      "Sent. If you did not see it, your OS is suppressing notifications for this browser.";
+      "Sent successfully. If nothing appeared, the browser handed it off but " +
+      "your system did not draw it — check OS notification settings, or try " +
+      "Google Chrome. Some Chromium builds (including Arc) do not deliver " +
+      "notifications on macOS. The toolbar badge countdown works either way.";
   } else {
     // Reported in the page, because the failure mode being debugged is one
     // where nothing appears anywhere and there is nothing to go on.

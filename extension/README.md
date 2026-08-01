@@ -96,6 +96,18 @@ and the user rebinds it on Chrome's shortcuts page.
 Saving from the options page messages the service worker to rebuild its alarm
 schedule immediately, rather than waiting for the next 12-hour refresh.
 
+### Notification delivery
+
+`chrome.notifications` is the only API available to an MV3 service worker, and
+a successful `create()` means the browser accepted the notification — not that
+the system drew it. Verified working in Google Chrome; **Chromium and Arc on
+macOS accept the call and display nothing**, with no error to detect. There is
+no extension-side fix, and the workarounds (opening a window or tab) would be
+intrusive enough to risk review.
+
+The toolbar badge countdown is the fallback, since it does not depend on the
+system notification service at all.
+
 ## Design notes
 
 The MV3 service worker is evicted after ~30s idle, so **no state lives in
@@ -143,6 +155,11 @@ this length):
 > Never get caught off guard by a market-moving event. Compass tracks FOMC
 > meetings, CPI, jobs reports, Treasury auctions, and futures contract rolls —
 > all in your local timezone with advance notifications. Not investment advice.
+>
+> Note: desktop notifications require notification permission for your browser
+> in your operating system settings. Some Chromium-based browsers do not
+> deliver system notifications on macOS; the toolbar countdown works
+> regardless.
 
 Data-handling disclosures to tick in the developer dashboard: **no** data
 collected in any category, **no** sale or transfer to third parties, **no**
