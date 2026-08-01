@@ -63,6 +63,9 @@ Icons are generated, not hand-drawn — regenerate with
 - **Keyboard shortcut** (`Alt+Shift+C` by default) opens the popup from
   anywhere; the options page reads the *live* binding from Chrome and links to
   `chrome://extensions/shortcuts` to rebind it
+- **Test notification button** in options — fires one immediately and reports
+  the failure reason in the page, since a blocked notification otherwise
+  produces nothing on screen and nothing in the console
 - Options page (⚙ in the popup): timezone override, separate list and
   notification impact thresholds, notification toggle and offsets, and
   per-event-type hiding

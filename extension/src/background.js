@@ -200,23 +200,60 @@ async function showNotification(eventId, offsetMinutes) {
     buttons: [{ title: "Verify at source" }, { title: `Snooze ${SNOOZE_MINUTES}m` }],
   };
 
+  await deliver(`compass:${event.id}`, withButtons, base, title);
+}
+
+/**
+ * Create a notification, retrying without the optional decoration if the
+ * platform rejects it. Returns { ok, error } so callers can report a failure
+ * rather than leave the user staring at nothing.
+ */
+async function deliver(id, rich, plain, label) {
   const create = (options) =>
     new Promise((resolve) => {
-      chrome.notifications.create(`compass:${event.id}`, options, (id) => {
-        resolve({ id, error: chrome.runtime.lastError?.message ?? null });
+      chrome.notifications.create(id, options, (created) => {
+        resolve({ id: created, error: chrome.runtime.lastError?.message ?? null });
       });
     });
 
-  let result = await create(withButtons);
+  let result = await create(rich);
   if (!result.id) {
     console.warn(`[compass] notification with buttons failed: ${result.error}`);
-    result = await create(base);
+    result = await create(plain);
   }
   if (!result.id) {
     console.error(`[compass] notification failed entirely: ${result.error}`);
-  } else {
-    console.info(`[compass] notified: ${title}`);
+    return { ok: false, error: result.error ?? "unknown error" };
   }
+  console.info(`[compass] notified: ${label}`);
+  return { ok: true, error: null };
+}
+
+/** Fires one notification now, so the user can verify delivery end to end. */
+async function sendTestNotification() {
+  const level = await new Promise((resolve) =>
+    chrome.notifications.getPermissionLevel(resolve),
+  );
+  if (level !== "granted") {
+    return {
+      ok: false,
+      error: `Chrome reports notification permission is "${level}". Check your OS notification settings for this browser.`,
+    };
+  }
+
+  const base = {
+    type: "basic",
+    iconUrl: chrome.runtime.getURL("icons/icon128.png"),
+    title: "Compass test notification",
+    message: "Notifications are working. Real warnings look like this.",
+    contextMessage: "Compass Economic Calendar",
+  };
+  return deliver(
+    "compass:test",
+    { ...base, buttons: [{ title: "Verify at source" }, { title: "Snooze 60m" }] },
+    base,
+    "test",
+  );
 }
 
 chrome.runtime.onInstalled.addListener(async () => {
@@ -284,6 +321,10 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type === "refresh") {
     refreshAndReschedule({ force: true }).then(() => sendResponse({ ok: true }));
     return true; // keep the channel open for the async reply
+  }
+  if (message?.type === "test-notification") {
+    sendTestNotification().then(sendResponse);
+    return true;
   }
   if (message?.type === "reschedule") {
     rescheduleNotifications().then((count) => sendResponse({ ok: true, count }));

@@ -62,9 +62,10 @@ const CALENDAR = {
   },
 };
 
-function installStubs({ commands = true } = {}) {
+function installStubs({ commands = true, testResponse = { ok: true } } = {}) {
   const registry = new Map();
   const opened = [];
+  const sent = [];
   globalThis.document = {
     getElementById(id) {
       if (!registry.has(id)) registry.set(id, makeElement(id));
@@ -82,13 +83,20 @@ function installStubs({ commands = true } = {}) {
       },
       sync: { async get() { return {}; }, async set() {} },
     },
-    runtime: { async sendMessage() { return { ok: true, count: 12 }; } },
+    runtime: {
+      async sendMessage(message) {
+        sent.push(message);
+        return message?.type === "test-notification"
+          ? testResponse
+          : { ok: true, count: 12 };
+      },
+    },
     tabs: { create(options) { opened.push(options.url); } },
     ...(commands
       ? { commands: { async getAll() { return [{ name: "_execute_action", shortcut: "Alt+Shift+C" }]; } } }
       : {}),
   };
-  return { registry, opened };
+  return { registry, opened, sent };
 }
 
 test("the options page initialises without throwing", async () => {
@@ -138,4 +146,33 @@ test("an unset or unavailable shortcut does not break the page", async () => {
   assert.deepEqual(errors.map((error) => String(error?.message ?? error)), []);
   // Falls back to the manifest's suggestion rendered in the HTML.
   assert.equal(registry.get("timezone").children.length > 5, true);
+});
+
+test("the test-notification button reports success and failure in the page", async () => {
+  const { registry, sent } = installStubs({ testResponse: { ok: true } });
+  await import(`../options/options.js?test-ok=${Date.now()}`);
+  await new Promise((resolve) => setTimeout(resolve, 40));
+
+  await registry.get("test-notification").listeners.click();
+  await new Promise((resolve) => setTimeout(resolve, 20));
+
+  assert.ok(sent.some((m) => m.type === "test-notification"));
+  assert.match(registry.get("test-result").textContent, /Sent/);
+});
+
+test("a failed test notification shows the reason rather than nothing", async () => {
+  // The whole point of the button: when delivery fails there is normally no
+  // notification and no error anywhere, so the reason has to reach the page.
+  const { registry } = installStubs({
+    testResponse: { ok: false, error: 'permission is "denied"' },
+  });
+  await import(`../options/options.js?test-fail=${Date.now()}`);
+  await new Promise((resolve) => setTimeout(resolve, 40));
+
+  await registry.get("test-notification").listeners.click();
+  await new Promise((resolve) => setTimeout(resolve, 20));
+
+  const result = registry.get("test-result");
+  assert.match(result.textContent, /Failed: permission is "denied"/);
+  assert.ok(result.classList.contains("error"));
 });

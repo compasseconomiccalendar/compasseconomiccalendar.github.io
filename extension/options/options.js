@@ -35,6 +35,8 @@ const elements = {
   types: document.getElementById("types"),
   openShortcuts: document.getElementById("open-shortcuts"),
   shortcutCurrent: document.getElementById("shortcut-current"),
+  testNotification: document.getElementById("test-notification"),
+  testResult: document.getElementById("test-result"),
   save: document.getElementById("save"),
   reset: document.getElementById("reset"),
   status: document.getElementById("status"),
@@ -201,6 +203,25 @@ async function showCurrentShortcut() {
   const action = commands.find((command) => command.name === "_execute_action");
   elements.shortcutCurrent.textContent = action?.shortcut || "not set";
 }
+
+elements.testNotification.addEventListener("click", async () => {
+  elements.testNotification.disabled = true;
+  elements.testResult.textContent = "Sending…";
+  elements.testResult.classList.remove("error");
+
+  const response = await chrome.runtime.sendMessage({ type: "test-notification" });
+
+  if (response?.ok) {
+    elements.testResult.textContent =
+      "Sent. If you did not see it, your OS is suppressing notifications for this browser.";
+  } else {
+    // Reported in the page, because the failure mode being debugged is one
+    // where nothing appears anywhere and there is nothing to go on.
+    elements.testResult.textContent = `Failed: ${response?.error ?? "no response from the extension"}`;
+    elements.testResult.classList.add("error");
+  }
+  elements.testNotification.disabled = false;
+});
 
 elements.openShortcuts.addEventListener("click", () => {
   chrome.tabs.create({ url: "chrome://extensions/shortcuts" });

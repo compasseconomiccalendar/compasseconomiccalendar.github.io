@@ -67,6 +67,7 @@ select, input[type="text"] {
 }
 
 .hint { margin: .35rem 0 0; color: var(--muted); font-size: .82rem; }
+.hint.error { color: var(--error); }
 
 .types {
   display: grid;
