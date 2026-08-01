@@ -30,8 +30,20 @@
 
 * { box-sizing: border-box; }
 
+/* Chrome sizes the popup to its content, so anything that overflows widens
+   the whole window and leaves the rest of the layout short of the new edge.
+   Pinning html as well as body, and clipping the horizontal axis, keeps a
+   single long value from dragging the popup wider. */
+html {
+  width: 380px;
+  max-width: 380px;
+  overflow-x: hidden;
+}
+
 body {
   width: 380px;
+  max-width: 380px;
+  overflow-x: hidden;
   max-height: 580px;
   margin: 0;
   overflow-y: auto;
@@ -139,6 +151,12 @@ button:disabled { opacity: .5; cursor: default; }
 .type-option:hover { background: var(--bg); }
 
 .events { list-style: none; margin: 0; padding: 0; }
+
+/* Let grid tracks actually shrink, and wrap long values instead of pushing. */
+.event > *,
+.coverage-row > *,
+.closure > *,
+.rows > * { min-width: 0; overflow-wrap: anywhere; }
 
 .day-heading {
   position: sticky;
