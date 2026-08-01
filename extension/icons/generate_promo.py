@@ -17,7 +17,7 @@ import sys
 from pathlib import Path
 
 try:
-    from PIL import Image
+    from PIL import Image, ImageDraw, ImageFont
 except ImportError:  # pragma: no cover - tooling guard
     sys.exit("Pillow is required: python3 -m pip install --user Pillow")
 
@@ -38,59 +38,48 @@ MARK_X, MARK_Y = 22, (HEIGHT - MARK_SIZE) // 2
 TEXT_X = 214
 RIGHT_MARGIN = 20
 
-# 5x7 glyphs, rows top to bottom. Only uppercase and space are needed.
-FONT = {
-    "A": ".###.|#...#|#...#|#####|#...#|#...#|#...#",
-    "B": "####.|#...#|#...#|####.|#...#|#...#|####.",
-    "C": ".###.|#...#|#....|#....|#....|#...#|.###.",
-    "D": "####.|#...#|#...#|#...#|#...#|#...#|####.",
-    "E": "#####|#....|#....|####.|#....|#....|#####",
-    "F": "#####|#....|#....|####.|#....|#....|#....",
-    "G": ".###.|#...#|#....|#.###|#...#|#...#|.###.",
-    "H": "#...#|#...#|#...#|#####|#...#|#...#|#...#",
-    "I": "#####|..#..|..#..|..#..|..#..|..#..|#####",
-    "J": "..###|...#.|...#.|...#.|...#.|#..#.|.##..",
-    "K": "#...#|#..#.|#.#..|##...|#.#..|#..#.|#...#",
-    "L": "#....|#....|#....|#....|#....|#....|#####",
-    "M": "#...#|##.##|#.#.#|#...#|#...#|#...#|#...#",
-    "N": "#...#|##..#|#.#.#|#..##|#...#|#...#|#...#",
-    "O": ".###.|#...#|#...#|#...#|#...#|#...#|.###.",
-    "P": "####.|#...#|#...#|####.|#....|#....|#....",
-    "Q": ".###.|#...#|#...#|#...#|#.#.#|#..#.|.##.#",
-    "R": "####.|#...#|#...#|####.|#.#..|#..#.|#...#",
-    "S": ".####|#....|#....|.###.|....#|....#|####.",
-    "T": "#####|..#..|..#..|..#..|..#..|..#..|..#..",
-    "U": "#...#|#...#|#...#|#...#|#...#|#...#|.###.",
-    "V": "#...#|#...#|#...#|#...#|#...#|.#.#.|..#..",
-    "W": "#...#|#...#|#...#|#...#|#.#.#|##.##|#...#",
-    "X": "#...#|#...#|.#.#.|..#..|.#.#.|#...#|#...#",
-    "Y": "#...#|#...#|.#.#.|..#..|..#..|..#..|..#..",
-    "Z": "#####|....#|...#.|..#..|.#...|#....|#####",
-    " ": ".....|.....|.....|.....|.....|.....|.....",
-}
-
-GLYPH_W, GLYPH_H = 5, 7
+# Real typefaces, best first. Weights are picked for a display line rather
+# than body text; Avenir Next Demi Bold reads as a product wordmark where
+# Helvetica Regular reads as a caption.
+FONT_CANDIDATES = [
+    ("/System/Library/Fonts/Avenir Next.ttc", 5),   # Demi Bold face in the collection
+    ("/System/Library/Fonts/HelveticaNeue.ttc", 2),
+    ("/System/Library/Fonts/Helvetica.ttc", 1),
+    ("/System/Library/Fonts/Supplemental/Arial Bold.ttf", 0),
+]
 
 
-def text_width(text: str, scale: int, tracking: int) -> int:
-    return len(text) * (GLYPH_W * scale + tracking) - tracking
+def load_font(size: int):
+    """First available system typeface at the requested size."""
+    for path, index in FONT_CANDIDATES:
+        if not Path(path).exists():
+            continue
+        try:
+            return ImageFont.truetype(path, size, index=index)
+        except (OSError, ValueError):
+            continue
+    sys.exit(
+        "no usable system font found; edit FONT_CANDIDATES for this platform"
+    )
 
 
-def draw_text(pixels, text, x, y, scale, colour, tracking):
-    """Blit a string into the pixel access object, top-left anchored."""
-    cursor = x
-    for char in text.upper():
-        glyph = FONT.get(char, FONT[" "]).split("|")
-        for row, bits in enumerate(glyph):
-            for col, bit in enumerate(bits):
-                if bit != "#":
-                    continue
-                for dy in range(scale):
-                    for dx in range(scale):
-                        px, py = cursor + col * scale + dx, y + row * scale + dy
-                        if 0 <= px < WIDTH and 0 <= py < HEIGHT:
-                            pixels[px, py] = colour
-        cursor += GLYPH_W * scale + tracking
+def draw_tracked(draw, xy, text, font, fill, tracking=0.0):
+    """Draw text with letter-spacing, which Pillow does not support natively.
+
+    A small-caps line set solid reads as a default; the spacing is what makes
+    it look deliberate. Returns the drawn width.
+    """
+    x, y = xy
+    for char in text:
+        draw.text((x, y), char, font=font, fill=fill)
+        x += draw.textlength(char, font=font) + tracking
+    return x - xy[0] - (tracking if text else 0)
+
+
+def measure_tracked(draw, text, font, tracking=0.0) -> float:
+    if not text:
+        return 0.0
+    return sum(draw.textlength(c, font=font) for c in text) + tracking * (len(text) - 1)
 
 
 def main() -> int:
@@ -106,29 +95,33 @@ def main() -> int:
     # transparent against the tile rather than showing a square edge.
     tile.paste(mark, (MARK_X, MARK_Y), mark)
 
+    draw = ImageDraw.Draw(tile)
+    wordmark_font = load_font(44)
+    submark_font = load_font(14)
+
     lines = [
-        ("COMPASS", 104, 5, WORDMARK, 3),
-        ("ECONOMIC CALENDAR", 152, 2, SUBMARK, 1),
+        ("Compass", 96, wordmark_font, WORDMARK, 0.0),
+        ("ECONOMIC CALENDAR", 152, submark_font, SUBMARK, 2.4),
     ]
 
     # A tile whose wordmark runs off the edge is worse than none, and the
     # overflow is only obvious once rendered -- so fail instead of shipping it.
-    for text, _, scale, _, tracking in lines:
-        end = TEXT_X + text_width(text, scale, tracking)
-        if end > WIDTH - RIGHT_MARGIN:
+    widths = []
+    for text, _, font, _, tracking in lines:
+        width = measure_tracked(draw, text, font, tracking)
+        widths.append(width)
+        if TEXT_X + width > WIDTH - RIGHT_MARGIN:
             sys.exit(
-                f"{text!r} ends at {end}px, past the {WIDTH - RIGHT_MARGIN}px limit"
+                f"{text!r} ends at {TEXT_X + width:.0f}px, "
+                f"past the {WIDTH - RIGHT_MARGIN}px limit"
             )
 
-    pixels = tile.load()
-    for text, y, scale, colour, tracking in lines:
-        draw_text(pixels, text, TEXT_X, y, scale, colour, tracking)
+    for text, y, font, colour, tracking in lines:
+        draw_tracked(draw, (TEXT_X, y), text, font, colour, tracking)
 
-    rule_width = max(
-        text_width(text, scale, tracking) for text, _, scale, _, tracking in lines
+    draw.line(
+        [(TEXT_X, 180), (TEXT_X + max(widths), 180)], fill=RULE, width=1
     )
-    for px in range(TEXT_X, min(WIDTH, TEXT_X + rule_width)):
-        pixels[px, 176] = RULE
 
     tile.convert("RGB").save(TARGET, "PNG", optimize=True)
     print(f"wrote {TARGET.name} ({TARGET.stat().st_size} bytes)")

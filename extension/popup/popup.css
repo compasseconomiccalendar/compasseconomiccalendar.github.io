@@ -64,8 +64,19 @@ header {
   background: var(--bg);
   border-bottom: 1px solid var(--line);
 }
-h1 { margin: 0; font-size: .95rem; letter-spacing: -0.01em; }
-.controls { display: flex; align-items: center; gap: .3rem; }
+/* The full name plus the time frame select and three buttons is a tight fit
+   at 380px, so the title yields first: it shrinks and ellipsises rather than
+   pushing the controls off the edge. */
+h1 {
+  margin: 0;
+  font-size: .82rem;
+  letter-spacing: -0.01em;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.controls { display: flex; align-items: center; gap: .3rem; flex: none; }
 /* Compact enough to sit beside the icon buttons in a 380px popup. */
 .controls select {
   padding: .2rem .25rem;
