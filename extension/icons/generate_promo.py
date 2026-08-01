@@ -96,11 +96,11 @@ def main() -> int:
     tile.paste(mark, (MARK_X, MARK_Y), mark)
 
     draw = ImageDraw.Draw(tile)
-    wordmark_font = load_font(44)
+    wordmark_font = load_font(38)
     submark_font = load_font(14)
 
     lines = [
-        ("Compass", 96, wordmark_font, WORDMARK, 0.0),
+        ("COMPASS", 96, wordmark_font, WORDMARK, 1.5),
         ("ECONOMIC CALENDAR", 152, submark_font, SUBMARK, 2.4),
     ]
 
