@@ -31,6 +31,7 @@ import {
   sessionStatus,
   upcomingClosures,
 } from "../src/sessions.js";
+import { largestFittingSize } from "../src/layout.js";
 import { getCached, getPrefs, setPrefs } from "../src/store.js";
 
 const LIST_LIMIT = 60;
@@ -41,6 +42,7 @@ const elements = {
   banner: document.getElementById("banner"),
   chips: document.getElementById("chips"),
   typeFilter: document.getElementById("type-filter"),
+  title: document.getElementById("title"),
   horizon: document.getElementById("horizon"),
   theme: document.getElementById("theme"),
   typeSummary: document.getElementById("type-summary"),
@@ -172,6 +174,26 @@ function renderEvent(event, now) {
 }
 
 /** Label for the closed dropdown, reflecting what is selected. */
+/**
+ * Shrink the header title until it fits beside the controls.
+ *
+ * CSS cannot size text to its container, and the available width depends on
+ * how wide the controls render -- which varies with the user's font settings
+ * and the selected time frame. Measuring is the only way to guarantee the
+ * whole product name is visible rather than ellipsised.
+ */
+function fitTitle() {
+  const element = elements.title;
+  // scrollWidth/clientWidth are absent outside a real layout engine.
+  if (!element || !element.clientWidth) return;
+
+  const size = largestFittingSize((candidate) => {
+    element.style.fontSize = `${candidate}px`;
+    return element.scrollWidth <= element.clientWidth;
+  });
+  element.style.fontSize = `${size}px`;
+}
+
 /** Dark unless explicitly set to light; the OS preference is not consulted. */
 function applyTheme(theme) {
   const root = document.documentElement;
@@ -298,6 +320,7 @@ async function render() {
   renderBanner(calendar, fetchedAt, now);
   renderHours(calendar);
   renderCoverage(calendar, fetchedAt);
+  fitTitle();
 
   const query = {
     now,

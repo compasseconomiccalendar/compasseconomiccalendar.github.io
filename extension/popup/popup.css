@@ -69,7 +69,8 @@ header {
    pushing the controls off the edge. */
 h1 {
   margin: 0;
-  font-size: .82rem;
+  /* Starting point only -- fitTitle() measures and shrinks to fit. */
+  font-size: 15px;
   letter-spacing: -0.01em;
   min-width: 0;
   overflow: hidden;
