@@ -1,33 +1,42 @@
 #!/usr/bin/env python3
-"""Generate the 440x280 Chrome Web Store promo tile.
+"""Generate the 440x280 Chrome Web Store promo tile from the source logo.
 
-Standard library only, like generate_icons.py, so the store assets stay
-reproducible without an image dependency or a design tool. Text is drawn from
-a small 5x7 bitmap font defined below -- there is no font renderer available,
-and a promo tile without the product name on it is not worth much.
+The mark is the same artwork the icons come from, so the tile cannot drift
+away from what users see in the toolbar. The wordmark is drawn from a small
+5x7 bitmap font defined below -- bundling a real typeface for two words would
+be heavier than the tile itself, and a promo tile without the product name on
+it is not worth much.
 
+    python3 -m pip install --user Pillow
     python extension/icons/generate_promo.py
 """
 
 from __future__ import annotations
 
-import math
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+try:
+    from PIL import Image
+except ImportError:  # pragma: no cover - tooling guard
+    sys.exit("Pillow is required: python3 -m pip install --user Pillow")
 
-from generate_icons import write_png  # noqa: E402
+ICONS_DIR = Path(__file__).resolve().parent
+SOURCE = ICONS_DIR / "compass logo 512.png"
+TARGET = ICONS_DIR / "promo_440x280.png"
 
 WIDTH, HEIGHT = 440, 280
-SUPERSAMPLE = 3
 
-BACKGROUND = (23, 23, 26, 255)
-DISC = (194, 65, 12, 255)
-NEEDLE_NORTH = (255, 255, 255, 255)
-NEEDLE_SOUTH = (255, 255, 255, 110)
+# Sampled from the logo's own plate so the tile reads as one piece of artwork.
+BACKGROUND = (18, 18, 20, 255)
 WORDMARK = (237, 237, 235, 255)
-SUBMARK = (217, 154, 108, 255)
+SUBMARK = (240, 138, 42, 255)   # the needle's orange
+RULE = (60, 60, 66, 255)
+
+MARK_SIZE = 176
+MARK_X, MARK_Y = 22, (HEIGHT - MARK_SIZE) // 2
+TEXT_X = 214
+RIGHT_MARGIN = 20
 
 # 5x7 glyphs, rows top to bottom. Only uppercase and space are needed.
 FONT = {
@@ -68,7 +77,7 @@ def text_width(text: str, scale: int, tracking: int) -> int:
 
 
 def draw_text(pixels, text, x, y, scale, colour, tracking):
-    """Blit a string into the pixel buffer at (x, y), top-left anchored."""
+    """Blit a string into the pixel access object, top-left anchored."""
     cursor = x
     for char in text.upper():
         glyph = FONT.get(char, FONT[" "]).split("|")
@@ -78,70 +87,53 @@ def draw_text(pixels, text, x, y, scale, colour, tracking):
                     continue
                 for dy in range(scale):
                     for dx in range(scale):
-                        px = cursor + col * scale + dx
-                        py = y + row * scale + dy
+                        px, py = cursor + col * scale + dx, y + row * scale + dy
                         if 0 <= px < WIDTH and 0 <= py < HEIGHT:
-                            pixels[py][px] = colour
+                            pixels[px, py] = colour
         cursor += GLYPH_W * scale + tracking
 
 
-def sample_mark(x: float, y: float, radius: float):
-    """The compass mark: a disc with a needle, matching the extension icon."""
-    if math.hypot(x, y) > radius:
-        return None
-    root_half = math.sqrt(0.5)
-    u = (x + y) * root_half
-    v = (x - y) * root_half
-    length, width = radius * 0.78, radius * 0.20
-    if abs(u) < length and abs(v) < width * (1.0 - abs(u) / length):
-        return NEEDLE_NORTH if u < 0 else NEEDLE_SOUTH
-    return DISC
+def main() -> int:
+    if not SOURCE.exists():
+        sys.exit(f"source artwork not found: {SOURCE.name}")
 
+    tile = Image.new("RGBA", (WIDTH, HEIGHT), BACKGROUND)
 
-def render() -> list:
-    pixels = [[BACKGROUND for _ in range(WIDTH)] for _ in range(HEIGHT)]
+    mark = Image.open(SOURCE).convert("RGBA").resize(
+        (MARK_SIZE, MARK_SIZE), Image.LANCZOS
+    )
+    # Pasted with itself as the mask so the logo's rounded corners stay
+    # transparent against the tile rather than showing a square edge.
+    tile.paste(mark, (MARK_X, MARK_Y), mark)
 
-    # Compass mark, supersampled for smooth edges.
-    centre_x, centre_y, radius = 108.0, HEIGHT / 2, 78.0
-    for py in range(HEIGHT):
-        for px in range(WIDTH):
-            if math.hypot(px - centre_x, py - centre_y) > radius + 2:
-                continue
-            totals = [0, 0, 0, 0]
-            hits = 0
-            for sy in range(SUPERSAMPLE):
-                for sx in range(SUPERSAMPLE):
-                    x = px + (sx + 0.5) / SUPERSAMPLE - centre_x
-                    y = py + (sy + 0.5) / SUPERSAMPLE - centre_y
-                    colour = sample_mark(x, y, radius)
-                    if colour is None:
-                        colour = BACKGROUND
-                    for channel in range(4):
-                        totals[channel] += colour[channel]
-                    hits += 1
-            pixels[py][px] = tuple(value // hits for value in totals)
+    lines = [
+        ("COMPASS", 104, 5, WORDMARK, 3),
+        ("ECONOMIC CALENDAR", 152, 2, SUBMARK, 1),
+    ]
 
-    # Wordmark, left-aligned beside the mark and vertically centred on it.
-    # Scale 5 keeps "COMPASS" inside the 440px width with room to spare.
-    text_x = 214
-    draw_text(pixels, "COMPASS", text_x, 104, scale=5, colour=WORDMARK, tracking=4)
-    draw_text(pixels, "ECONOMIC CALENDAR", text_x, 152, scale=2, colour=SUBMARK, tracking=2)
+    # A tile whose wordmark runs off the edge is worse than none, and the
+    # overflow is only obvious once rendered -- so fail instead of shipping it.
+    for text, _, scale, _, tracking in lines:
+        end = TEXT_X + text_width(text, scale, tracking)
+        if end > WIDTH - RIGHT_MARGIN:
+            sys.exit(
+                f"{text!r} ends at {end}px, past the {WIDTH - RIGHT_MARGIN}px limit"
+            )
+
+    pixels = tile.load()
+    for text, y, scale, colour, tracking in lines:
+        draw_text(pixels, text, TEXT_X, y, scale, colour, tracking)
 
     rule_width = max(
-        text_width("COMPASS", 5, 4),
-        text_width("ECONOMIC CALENDAR", 2, 2),
+        text_width(text, scale, tracking) for text, _, scale, _, tracking in lines
     )
-    for px in range(text_x, min(WIDTH, text_x + rule_width)):
-        pixels[176][px] = (60, 60, 66, 255)
+    for px in range(TEXT_X, min(WIDTH, TEXT_X + rule_width)):
+        pixels[px, 176] = RULE
 
-    return [bytes(b for pixel in row for b in pixel) for row in pixels]
-
-
-def main() -> None:
-    target = Path(__file__).resolve().parent / "promo_440x280.png"
-    write_png(target, WIDTH, HEIGHT, render())
-    print(f"wrote {target.name} ({target.stat().st_size} bytes)")
+    tile.convert("RGB").save(TARGET, "PNG", optimize=True)
+    print(f"wrote {TARGET.name} ({TARGET.stat().st_size} bytes)")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

@@ -1,96 +1,95 @@
 #!/usr/bin/env python3
-"""Generate the extension icons: a compass needle on a filled disc.
+"""Derive the extension's icon sizes from the source logo.
 
-Written with the standard library only (zlib + struct emit the PNG), so the
-icons are reproducible without adding an image dependency to the project.
+The 512px artwork is the master; every shipped size is downscaled from it so
+the set can never drift out of sync with the brand mark.
 
+Requires Pillow, which is a tooling dependency only -- the extension itself
+ships the generated PNGs and has no dependencies at all:
+
+    python3 -m pip install --user Pillow
     python extension/icons/generate_icons.py
 """
 
 from __future__ import annotations
 
-import math
-import struct
-import zlib
+import sys
 from pathlib import Path
 
+try:
+    from PIL import Image
+except ImportError:  # pragma: no cover - tooling guard
+    sys.exit("Pillow is required: python3 -m pip install --user Pillow")
+
+ICONS_DIR = Path(__file__).resolve().parent
+SOURCE = ICONS_DIR / "compass logo 512.png"
+
+# Chrome uses 16 in the toolbar and favicons, 32 on Windows, 48 on the
+# extensions page, and 128 in the Web Store and the install dialog.
 SIZES = (16, 32, 48, 128)
-SUPERSAMPLE = 4  # averaged down for anti-aliasing
 
-DISC = (194, 65, 12, 255)        # burnt orange, matches the popup's high-impact hue
-NEEDLE_NORTH = (255, 255, 255, 255)
-NEEDLE_SOUTH = (255, 255, 255, 110)
-TRANSPARENT = (0, 0, 0, 0)
-
-
-def sample(x: float, y: float, radius: float) -> tuple:
-    """Colour one point, in coordinates centred on the disc."""
-    if math.hypot(x, y) > radius:
-        return TRANSPARENT
-
-    # Rotate 45 degrees: u runs NE-SW along the needle, v across it.
-    root_half = math.sqrt(0.5)
-    u = (x + y) * root_half
-    v = (x - y) * root_half
-
-    length = radius * 0.78
-    width = radius * 0.20
-    if abs(u) < length:
-        # Lens shape: widest at the centre, tapering to each point.
-        if abs(v) < width * (1.0 - abs(u) / length):
-            return NEEDLE_NORTH if u < 0 else NEEDLE_SOUTH
-    return DISC
+# The artwork carries about 30% padding around the compass, which reads fine
+# at 128 and turns the needle into an unreadable sliver at 16. Small sizes are
+# therefore cropped toward the content, keeping only a hint of the plate --
+# the same trick a hand-tuned icon set uses.
+CROP_AT_OR_BELOW = 32
+CROP_MARGIN = 0.13  # of the content box, kept on every side
 
 
-def render(size: int) -> list:
-    scale = size * SUPERSAMPLE
-    radius = scale / 2 - SUPERSAMPLE * 0.5
-    centre = scale / 2
+def content_box(image: "Image.Image") -> tuple:
+    """Bounding box of the artwork inside its background plate."""
+    width, height = image.size
+    pixels = image.load()
+    background = pixels[width // 2, 12][:3]
 
-    rows = []
-    for py in range(size):
-        row = bytearray()
-        for px in range(size):
-            totals = [0, 0, 0, 0]
-            for sy in range(SUPERSAMPLE):
-                for sx in range(SUPERSAMPLE):
-                    x = px * SUPERSAMPLE + sx + 0.5 - centre
-                    y = py * SUPERSAMPLE + sy + 0.5 - centre
-                    pixel = sample(x, y, radius)
-                    for channel in range(4):
-                        totals[channel] += pixel[channel]
-            count = SUPERSAMPLE * SUPERSAMPLE
-            row.extend(value // count for value in totals)
-        rows.append(bytes(row))
-    return rows
+    def differs(pixel) -> bool:
+        return pixel[3] > 10 and sum(
+            abs(a - b) for a, b in zip(pixel[:3], background)
+        ) > 40
 
+    xs, ys = [], []
+    for y in range(0, height, 2):
+        for x in range(0, width, 2):
+            if differs(pixels[x, y]):
+                xs.append(x)
+                ys.append(y)
+    if not xs:
+        return (0, 0, width, height)
 
-def write_png(path: Path, width: int, height: int, rows: list) -> None:
-    def chunk(tag: bytes, data: bytes) -> bytes:
-        return (
-            struct.pack(">I", len(data))
-            + tag
-            + data
-            + struct.pack(">I", zlib.crc32(tag + data) & 0xFFFFFFFF)
-        )
-
-    raw = b"".join(b"\x00" + row for row in rows)  # filter type 0 per scanline
-    header = struct.pack(">IIBBBBB", width, height, 8, 6, 0, 0, 0)  # 8-bit RGBA
-    path.write_bytes(
-        b"\x89PNG\r\n\x1a\n"
-        + chunk(b"IHDR", header)
-        + chunk(b"IDAT", zlib.compress(raw, 9))
-        + chunk(b"IEND", b"")
+    margin = int((max(xs) - min(xs)) * CROP_MARGIN)
+    return (
+        max(0, min(xs) - margin),
+        max(0, min(ys) - margin),
+        min(width, max(xs) + margin),
+        min(height, max(ys) + margin),
     )
 
 
-def main() -> None:
-    out_dir = Path(__file__).resolve().parent
+def load_master() -> "Image.Image":
+    if not SOURCE.exists():
+        sys.exit(f"source artwork not found: {SOURCE.name}")
+    master = Image.open(SOURCE).convert("RGBA")
+    if master.size != (512, 512):
+        print(f"note: source is {master.size}, expected 512x512", file=sys.stderr)
+    return master
+
+
+def main() -> int:
+    master = load_master()
+
+    cropped = master.crop(content_box(master))
+
     for size in SIZES:
-        target = out_dir / f"icon{size}.png"
-        write_png(target, size, size, render(size))
+        source = cropped if size <= CROP_AT_OR_BELOW else master
+        # LANCZOS keeps the needle and the thin compass ring legible at 16px,
+        # where a cheaper filter turns both to mush.
+        resized = source.resize((size, size), Image.LANCZOS)
+        target = ICONS_DIR / f"icon{size}.png"
+        resized.save(target, "PNG", optimize=True)
         print(f"wrote {target.name} ({target.stat().st_size} bytes)")
+
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

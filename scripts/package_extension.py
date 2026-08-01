@@ -25,7 +25,15 @@ DIST_DIR = REPO_ROOT / "dist"
 # Not shipped to users. package.json only marks the sources as ES modules for
 # `node --test`; the promo tile is uploaded to the store listing separately,
 # not bundled in the extension.
-EXCLUDED_NAMES = {"package.json", "README.md", ".DS_Store", "promo_440x280.png"}
+EXCLUDED_NAMES = {
+    "package.json",
+    "README.md",
+    ".DS_Store",
+    "promo_440x280.png",
+    # Design master the icons are derived from. Shipping it would add ~34KB
+    # to every install for a file nothing loads.
+    "compass logo 512.png",
+}
 EXCLUDED_DIRS = {"test", "__pycache__", "node_modules"}
 EXCLUDED_SUFFIXES = {".py", ".md", ".zip"}
 

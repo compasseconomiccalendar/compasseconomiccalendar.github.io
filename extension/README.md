@@ -24,8 +24,15 @@ cd extension
 node --test 'test/*.test.js'
 ```
 
-Icons are generated, not hand-drawn — regenerate with
-`python icons/generate_icons.py` (standard library only).
+Icons and the promo tile are derived from `icons/compass logo 512.png`, which
+is the master artwork — regenerate with `python icons/generate_icons.py` and
+`python icons/generate_promo.py`. Both need Pillow
+(`python3 -m pip install --user Pillow`); it is a tooling dependency only, and
+the extension itself still ships with none.
+
+The 16px and 32px icons are cropped toward the compass. The artwork carries
+about 30% padding, which reads well at 128px and reduces the needle to an
+illegible sliver in the toolbar.
 
 ## What works
 
