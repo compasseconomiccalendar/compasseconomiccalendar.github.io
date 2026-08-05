@@ -19,7 +19,7 @@ architecture research behind this design.
 |---|---|---|
 | **0** | Python ingestion job → `output/calendar.json` | ✅ Built |
 | **1** | ICS feeds → `compass_calendar.ics` + high-impact variant | ✅ Built |
-| **2** | MV3 Chrome extension (`extension/`) | ✅ Built — not yet submitted |
+| **2** | MV3 Chrome extension (`extension/`) | ✅ Live on the Chrome Web Store |
 | **3** | "Typical move" context | ✅ Built |
 | **3+** | Webhooks, PWA dashboard | ⬜ Not started |
 
@@ -265,6 +265,36 @@ Pages.
 
 `output/` is gitignored for local builds; the workflow force-adds the two
 published artifacts so the feed stays versioned.
+
+### Feed health
+
+Now that the extension is published, the feed *is* the product: a refresh that
+stops running or a deploy that drops a file shows up as an empty or stale
+calendar for every install, with nothing in this repo going red.
+`scripts/check_feed.py` is the alarm for that.
+
+```bash
+# Check what the world actually receives
+python scripts/check_feed.py
+
+# Check a local build (no network beyond the file)
+python scripts/check_feed.py --file output/calendar.json --skip-ics
+```
+
+It verifies the feed parses, is on schema 1.x, was generated within 9 days (the
+extension warns users at 10), still has forward coverage with no hole in the
+next two weeks, carries the verbatim FRED attribution, and that every
+`event_type` maps to a filter chip the popup knows — plus that both `.ics` files
+and the two site pages still return 200. Standard library only, so the check
+can't be broken by an ingestion dependency.
+
+It runs in two places:
+
+- `.github/workflows/feed_health.yml`, daily at 14:00 UTC, against the live
+  feed. On failure it opens (or comments on) a single `feed-health` issue and
+  closes it once the check passes again.
+- `refresh_calendar.yml`, between the build and the Pages upload, so a bad
+  build fails the job instead of reaching installed extensions.
 
 ---
 

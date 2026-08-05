@@ -1,0 +1,79 @@
+name: Feed health
+
+# The extension reads one static JSON from Pages, so a refresh that stops
+# running, a bad deploy, or a Pages outage is invisible in this repo -- users
+# just see a stale or empty calendar. This job is the alarm for that.
+#
+# Deliberately separate from "Refresh calendar": that workflow can only verify
+# what it just built. This one checks what the world actually receives, on a
+# schedule of its own, and needs no secrets and no dependencies.
+
+on:
+  schedule:
+    # 14:00 UTC daily = an hour after the Sunday refresh window, so Sunday's
+    # run reports on a feed that was just rebuilt.
+    - cron: "0 14 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/check_feed.py"
+      - ".github/workflows/feed_health.yml"
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: feed-health
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # A checker that passes everything would be worse than none at all, so
+      # its own tests run first.
+      - name: Test the checker
+        run: python -m unittest discover -s scripts -p 'test_*.py'
+
+      # No pip install: check_feed.py is standard library only, so this job
+      # cannot be broken by an ingestion dependency.
+      - name: Check the published feed
+        id: check
+        run: python scripts/check_feed.py
+
+      - name: Open or update the alert issue
+        if: failure() && github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          # One rolling issue rather than one per day: find an open one first.
+          existing=$(gh issue list --label feed-health --state open \
+            --json number --jq '.[0].number')
+          body="The daily feed health check failed. See the run log for the failing checks: $RUN_URL"
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh label create feed-health --color B60205 \
+              --description "Published feed is unhealthy" 2>/dev/null || true
+            gh issue create --title "Feed health check is failing" \
+              --label feed-health --body "$body"
+          fi
+
+      - name: Close the alert issue
+        if: success() && github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for number in $(gh issue list --label feed-health --state open \
+            --json number --jq '.[].number'); do
+            gh issue close "$number" --comment "Feed health check is passing again."
+          done
