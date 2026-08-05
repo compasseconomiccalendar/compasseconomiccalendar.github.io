@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0.0",
-  "generated_at_utc": "2026-08-02T14:23:06Z",
+  "generated_at_utc": "2026-08-05T00:33:42Z",
   "window": {
-    "start": "2026-08-02",
-    "end": "2027-09-02"
+    "start": "2026-08-04",
+    "end": "2027-09-04"
   },
   "timezone_note": "All timestamps are UTC. Eastern release times were converted via the IANA America/New_York zone, so DST is already accounted for.",
   "disclaimer": "For informational and educational purposes only. Not investment advice. Times are subject to change; verify against official sources before trading.",
@@ -32,14 +32,13 @@
     }
   ],
   "counts": {
-    "total": 177,
+    "total": 175,
     "by_event_type": {
-      "ism_manufacturing_pmi": 14,
-      "treasury_auction": 13,
       "macro_release_factory_orders": 10,
       "macro_release_jolts": 5,
+      "treasury_auction": 11,
       "treasury_quarterly_refunding": 5,
-      "ism_services_pmi": 13,
+      "ism_services_pmi": 14,
       "macro_release_jobless_claims": 22,
       "macro_release_employment_situation": 5,
       "macro_release_cpi": 5,
@@ -48,6 +47,7 @@
       "monthly_opex": 9,
       "macro_release_gdp": 5,
       "macro_release_pce": 5,
+      "ism_manufacturing_pmi": 13,
       "market_holiday": 10,
       "futures_liquidity_roll": 4,
       "futures_official_roll": 4,
@@ -60,13 +60,13 @@
       "market_early_close": 2
     },
     "by_market_impact": {
-      "high": 79,
-      "low": 36,
-      "medium": 62
+      "medium": 62,
+      "low": 34,
+      "high": 79
     }
   },
   "coverage": {
-    "window_end": "2027-09-02",
+    "window_end": "2027-09-04",
     "families": {
       "fomc": {
         "horizon": "reported",
@@ -85,8 +85,8 @@
       "ism": {
         "horizon": "computed",
         "event_count": 27,
-        "first_event": "2026-08-03",
-        "confirmed_through": "2027-09-01",
+        "first_event": "2026-08-05",
+        "confirmed_through": "2027-09-03",
         "complete_to_window_end": true
       },
       "market_sessions": {
@@ -98,8 +98,8 @@
       },
       "treasury_auctions": {
         "horizon": "reported",
-        "event_count": 13,
-        "first_event": "2026-08-03",
+        "event_count": 11,
+        "first_event": "2026-08-04",
         "confirmed_through": "2026-08-13",
         "complete_to_window_end": false
       },
@@ -119,8 +119,8 @@
       }
     },
     "warnings": [
-      "macro_releases: upstream has published dates only through 2026-12-31, 245 days short of the window end 2027-09-02. Treat later months as incomplete, not empty.",
-      "treasury_auctions: upstream has published dates only through 2026-08-13, 385 days short of the window end 2027-09-02. Treat later months as incomplete, not empty."
+      "macro_releases: upstream has published dates only through 2026-12-31, 247 days short of the window end 2027-09-04. Treat later months as incomplete, not empty.",
+      "treasury_auctions: upstream has published dates only through 2026-08-13, 387 days short of the window end 2027-09-04. Treat later months as incomplete, not empty."
     ]
   },
   "market_hours": {
@@ -141,60 +141,6 @@
     }
   },
   "events": [
-    {
-      "id": "ism-manufacturing-pmi-2026-08-03",
-      "event_type": "ism_manufacturing_pmi",
-      "title": "ISM Manufacturing PMI (estimated)",
-      "start_utc": "2026-08-03T14:00:00Z",
-      "end_utc": "2026-08-03T14:30:00Z",
-      "all_day": false,
-      "date_et": "2026-08-03",
-      "time_et": "10:00",
-      "market_impact": "high",
-      "source": "computed",
-      "source_url": "https://www.ismworld.org/supply-management-news-and-reports/reports/ism-report-on-business/",
-      "note": "Purchasing managers' index for manufacturing, normally released on the first business day of the month at 10:00am ET. A sub-50 print reads as contraction. Date is estimated from ISM's usual pattern -- confirm against ism.ws before trading it.",
-      "computed": true,
-      "approximate": true
-    },
-    {
-      "id": "treasury-auction-912797UM7-2026-08-03",
-      "event_type": "treasury_auction",
-      "title": "Treasury Auction: 13-Week Bill",
-      "start_utc": "2026-08-03T15:30:00Z",
-      "end_utc": "2026-08-03T16:00:00Z",
-      "all_day": false,
-      "date_et": "2026-08-03",
-      "time_et": "11:30",
-      "market_impact": "low",
-      "source": "TreasuryDirect",
-      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
-      "note": "Competitive bidding for the 13-Week Bill closes at 11:30 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
-      "security_type": "Bill",
-      "security_term": "13-Week",
-      "cusip": "912797UM7",
-      "announcement_date": "2026-07-30",
-      "part_of_quarterly_refunding": false
-    },
-    {
-      "id": "treasury-auction-912797VV6-2026-08-03",
-      "event_type": "treasury_auction",
-      "title": "Treasury Auction: 26-Week Bill",
-      "start_utc": "2026-08-03T15:30:00Z",
-      "end_utc": "2026-08-03T16:00:00Z",
-      "all_day": false,
-      "date_et": "2026-08-03",
-      "time_et": "11:30",
-      "market_impact": "low",
-      "source": "TreasuryDirect",
-      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
-      "note": "Competitive bidding for the 26-Week Bill closes at 11:30 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
-      "security_type": "Bill",
-      "security_term": "26-Week",
-      "cusip": "912797VV6",
-      "announcement_date": "2026-07-30",
-      "part_of_quarterly_refunding": false
-    },
     {
       "id": "fred-factory-orders-2026-08-04",
       "event_type": "macro_release_factory_orders",
@@ -352,15 +298,15 @@
       "id": "treasury-auction-912797WE3-2026-08-05",
       "event_type": "treasury_auction",
       "title": "Treasury Auction: 17-Week Bill",
-      "start_utc": "2026-08-05T17:00:00Z",
-      "end_utc": "2026-08-05T17:30:00Z",
+      "start_utc": "2026-08-05T15:30:00Z",
+      "end_utc": "2026-08-05T16:00:00Z",
       "all_day": false,
       "date_et": "2026-08-05",
-      "time_et": "13:00",
+      "time_et": "11:30",
       "market_impact": "low",
       "source": "TreasuryDirect",
       "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
-      "note": "Competitive bidding for the 17-Week Bill closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
+      "note": "Competitive bidding for the 17-Week Bill closes at 11:30 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
       "security_type": "Bill",
       "security_term": "17-Week",
       "cusip": "912797WE3",
@@ -413,15 +359,15 @@
       "id": "treasury-auction-912797VB0-2026-08-06",
       "event_type": "treasury_auction",
       "title": "Treasury Auction: 4-Week Bill",
-      "start_utc": "2026-08-06T17:00:00Z",
-      "end_utc": "2026-08-06T17:30:00Z",
+      "start_utc": "2026-08-06T15:30:00Z",
+      "end_utc": "2026-08-06T16:00:00Z",
       "all_day": false,
       "date_et": "2026-08-06",
-      "time_et": "13:00",
+      "time_et": "11:30",
       "market_impact": "low",
       "source": "TreasuryDirect",
       "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
-      "note": "Competitive bidding for the 4-Week Bill closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
+      "note": "Competitive bidding for the 4-Week Bill closes at 11:30 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
       "security_type": "Bill",
       "security_term": "4-Week",
       "cusip": "912797VB0",
@@ -432,15 +378,15 @@
       "id": "treasury-auction-912797VK0-2026-08-06",
       "event_type": "treasury_auction",
       "title": "Treasury Auction: 8-Week Bill",
-      "start_utc": "2026-08-06T17:00:00Z",
-      "end_utc": "2026-08-06T17:30:00Z",
+      "start_utc": "2026-08-06T15:30:00Z",
+      "end_utc": "2026-08-06T16:00:00Z",
       "all_day": false,
       "date_et": "2026-08-06",
-      "time_et": "13:00",
+      "time_et": "11:30",
       "market_impact": "low",
       "source": "TreasuryDirect",
       "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
-      "note": "Competitive bidding for the 8-Week Bill closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
+      "note": "Competitive bidding for the 8-Week Bill closes at 11:30 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
       "security_type": "Bill",
       "security_term": "8-Week",
       "cusip": "912797VK0",
@@ -5268,6 +5214,22 @@
       "source": "computed",
       "source_url": "https://www.ismworld.org/supply-management-news-and-reports/reports/ism-report-on-business/",
       "note": "Purchasing managers' index for manufacturing, normally released on the first business day of the month at 10:00am ET. A sub-50 print reads as contraction. Date is estimated from ISM's usual pattern -- confirm against ism.ws before trading it.",
+      "computed": true,
+      "approximate": true
+    },
+    {
+      "id": "ism-services-pmi-2027-09-03",
+      "event_type": "ism_services_pmi",
+      "title": "ISM Services PMI (estimated)",
+      "start_utc": "2027-09-03T14:00:00Z",
+      "end_utc": "2027-09-03T14:30:00Z",
+      "all_day": false,
+      "date_et": "2027-09-03",
+      "time_et": "10:00",
+      "market_impact": "high",
+      "source": "computed",
+      "source_url": "https://www.ismworld.org/supply-management-news-and-reports/reports/ism-report-on-business/",
+      "note": "Purchasing managers' index for services, normally released on the third business day of the month at 10:00am ET. Services are the bulk of the US economy, so this often outweighs the manufacturing print. Date is estimated -- confirm against ism.ws before trading it.",
       "computed": true,
       "approximate": true
     }
