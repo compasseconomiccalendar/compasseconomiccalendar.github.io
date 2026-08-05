@@ -39,7 +39,9 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run tests
-        run: python -m unittest discover -s ingestion -p 'test_*.py' -v
+        run: |
+          python -m unittest discover -s ingestion -p 'test_*.py' -v
+          python -m unittest discover -s scripts -p 'test_*.py' -v
 
       - name: Build calendar.json
         env:
@@ -54,6 +56,16 @@ jobs:
             --out output/compass_calendar_high_impact.ics \
             --calname "Compass Economic Calendar (High Impact)" \
             --uid-suffix high
+
+      # Gate the publish on the same checks the daily health job runs against
+      # the live feed. A build that produces an empty or malformed calendar
+      # should fail here rather than reach installed extensions.
+      - name: Verify the built feed
+        run: >
+          python scripts/check_feed.py
+          --file output/calendar.json
+          --skip-ics
+          --max-age-days 1
 
       - name: Assemble the Pages site
         run: |
