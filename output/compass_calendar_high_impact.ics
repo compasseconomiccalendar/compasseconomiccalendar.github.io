@@ -12,69 +12,10 @@ REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
 X-WR-TIMEZONE:UTC
 BEGIN:VEVENT
-SUMMARY:Consumer Price Index (CPI)
-DTSTART:20261014T123000Z
-DTEND:20261014T130000Z
-DTSTAMP:20261011T175013Z
-UID:fred-cpi-2026-10-14-high@compasseconomiccalendar.github.io
-CATEGORIES:macro_release_cpi,impact-high
-DESCRIPTION:Headline and core consumer inflation from the BLS. The core mo
- nth-over-month print drives the immediate rates and equity reaction.\n\nMa
- rket impact: HIGH\nScheduled: 08:30 ET on 2026-10-14\n\nVerify: https://fr
- ed.stlouisfed.org/releases/10\nPrimary source: https://www.bls.gov/schedul
- e/news_release/cpi.htm\n\nThis product uses the FRED® API but is not endo
- rsed or certified by the Federal Reserve Bank of St. Louis.\n\nFor informa
- tional and educational purposes only. Not investment advice. Times are sub
- ject to change\; verify against official sources before trading.
-STATUS:CONFIRMED
-TRANSP:TRANSPARENT
-URL:https://fred.stlouisfed.org/releases/10
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Retail Sales (Advance)
-DTSTART:20261015T123000Z
-DTEND:20261015T130000Z
-DTSTAMP:20261011T175013Z
-UID:fred-retail-sales-2026-10-15-high@compasseconomiccalendar.github.io
-CATEGORIES:macro_release_retail_sales,impact-high
-DESCRIPTION:Census Bureau advance estimate of monthly retail and food serv
- ice sales. Consumer spending is roughly two-thirds of GDP\, so the control
- -group figure moves growth expectations and index futures.\n\nMarket impac
- t: HIGH\nScheduled: 08:30 ET on 2026-10-15\n\nVerify: https://fred.stlouis
- fed.org/releases/9\nPrimary source: https://www.census.gov/retail/index.ht
- ml\n\nThis product uses the FRED® API but is not endorsed or certified by
-  the Federal Reserve Bank of St. Louis.\n\nFor informational and education
- al purposes only. Not investment advice. Times are subject to change\; ver
- ify against official sources before trading.
-STATUS:CONFIRMED
-TRANSP:TRANSPARENT
-URL:https://fred.stlouisfed.org/releases/9
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Treasury Auction: 19-Year 10-Month Bond
-DTSTART:20261021T170000Z
-DTEND:20261021T173000Z
-DTSTAMP:20261011T175013Z
-UID:treasury-auction-912810UX4-2026-10-21-high@compasseconomiccalendar.git
- hub.io
-CATEGORIES:treasury_auction,impact-high
-DESCRIPTION:Competitive bidding for the 19-Year 10-Month Bond closes at 13
- :00 ET. A weak auction (low bid-to-cover\, high tail) pushes yields up and
-  typically pressures index futures.\n\nMarket impact: HIGH\nScheduled: 13:
- 00 ET on 2026-10-21\nSecurity: 19-Year 10-Month Bond\nCUSIP: 912810UX4\n\n
- Verify: https://www.treasurydirect.gov/auctions/announcements-data-results
- /\n\nFor informational and educational purposes only. Not investment advic
- e. Times are subject to change\; verify against official sources before tr
- ading.
-STATUS:CONFIRMED
-TRANSP:TRANSPARENT
-URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
-END:VEVENT
-BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20261028T180000Z
 DTEND:20261028T183000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-statement-2026-10-28-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -92,7 +33,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20261028T183000Z
 DTEND:20261028T193000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-presser-2026-10-28-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -110,7 +51,7 @@ BEGIN:VEVENT
 SUMMARY:GDP (Advance Estimate)
 DTSTART:20261029T123000Z
 DTEND:20261029T130000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fred-gdp-2026-10-29-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_gdp,impact-high
 DESCRIPTION:First (advance) estimate of quarterly GDP from the BEA. The ad
@@ -129,7 +70,7 @@ BEGIN:VEVENT
 SUMMARY:Personal Income & Outlays (PCE)
 DTSTART:20261029T123000Z
 DTEND:20261029T130000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fred-pce-2026-10-29-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_pce,impact-high
 DESCRIPTION:BEA report containing core PCE\, the Fed's preferred inflation
@@ -148,7 +89,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20261102T150000Z
 DTEND:20261102T153000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-manufacturing-pmi-2026-11-02-high@compasseconomiccalendar.github.i
  o
 CATEGORIES:ism_manufacturing_pmi,impact-high
@@ -169,7 +110,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Quarterly Refunding Announcement
 DTSTART:20261104T133000Z
 DTEND:20261104T140000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:treasury-refunding-2026-11-04-high@compasseconomiccalendar.github.io
 CATEGORIES:treasury_quarterly_refunding,impact-high
 DESCRIPTION:Treasury announces the size and composition of the coming quar
@@ -188,7 +129,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20261104T150000Z
 DTEND:20261104T153000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-services-pmi-2026-11-04-high@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -209,7 +150,7 @@ BEGIN:VEVENT
 SUMMARY:Employment Situation (Nonfarm Payrolls)
 DTSTART:20261106T133000Z
 DTEND:20261106T140000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fred-employment-situation-2026-11-06-high@compasseconomiccalendar.gith
  ub.io
 CATEGORIES:macro_release_employment_situation,impact-high
@@ -230,7 +171,7 @@ BEGIN:VEVENT
 SUMMARY:Consumer Price Index (CPI)
 DTSTART:20261110T133000Z
 DTEND:20261110T140000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fred-cpi-2026-11-10-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_cpi,impact-high
 DESCRIPTION:Headline and core consumer inflation from the BLS. The core mo
@@ -249,7 +190,7 @@ BEGIN:VEVENT
 SUMMARY:Retail Sales (Advance)
 DTSTART:20261117T133000Z
 DTEND:20261117T140000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fred-retail-sales-2026-11-17-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_retail_sales,impact-high
 DESCRIPTION:Census Bureau advance estimate of monthly retail and food serv
@@ -269,7 +210,7 @@ BEGIN:VEVENT
 SUMMARY:Personal Income & Outlays (PCE)
 DTSTART:20261125T133000Z
 DTEND:20261125T140000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fred-pce-2026-11-25-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_pce,impact-high
 DESCRIPTION:BEA report containing core PCE\, the Fed's preferred inflation
@@ -288,7 +229,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20261201T150000Z
 DTEND:20261201T153000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-manufacturing-pmi-2026-12-01-high@compasseconomiccalendar.github.i
  o
 CATEGORIES:ism_manufacturing_pmi,impact-high
@@ -309,7 +250,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20261203T150000Z
 DTEND:20261203T153000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-services-pmi-2026-12-03-high@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -330,7 +271,7 @@ BEGIN:VEVENT
 SUMMARY:Employment Situation (Nonfarm Payrolls)
 DTSTART:20261204T133000Z
 DTEND:20261204T140000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fred-employment-situation-2026-12-04-high@compasseconomiccalendar.gith
  ub.io
 CATEGORIES:macro_release_employment_situation,impact-high
@@ -351,7 +292,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Summary of Economic Projections (Dot Plot)
 DTSTART:20261209T190000Z
 DTEND:20261209T193000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-sep-2026-12-09-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_sep,impact-high
 DESCRIPTION:Quarterly Summary of Economic Projections\, including the dot 
@@ -369,7 +310,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20261209T190000Z
 DTEND:20261209T193000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-statement-2026-12-09-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -388,7 +329,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20261209T193000Z
 DTEND:20261209T203000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-presser-2026-12-09-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -406,7 +347,7 @@ BEGIN:VEVENT
 SUMMARY:Consumer Price Index (CPI)
 DTSTART:20261210T133000Z
 DTEND:20261210T140000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fred-cpi-2026-12-10-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_cpi,impact-high
 DESCRIPTION:Headline and core consumer inflation from the BLS. The core mo
@@ -425,7 +366,7 @@ BEGIN:VEVENT
 SUMMARY:Retail Sales (Advance)
 DTSTART:20261216T133000Z
 DTEND:20261216T140000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fred-retail-sales-2026-12-16-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_retail_sales,impact-high
 DESCRIPTION:Census Bureau advance estimate of monthly retail and food serv
@@ -445,7 +386,7 @@ BEGIN:VEVENT
 SUMMARY:Quad Witching
 DTSTART:20261218T210000Z
 DTEND:20261218T213000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:quad-witching-2026-12-high@compasseconomiccalendar.github.io
 CATEGORIES:quad_witching,impact-high
 DESCRIPTION:Index futures\, index options\, single-stock options and singl
@@ -463,7 +404,7 @@ BEGIN:VEVENT
 SUMMARY:Personal Income & Outlays (PCE)
 DTSTART:20261223T133000Z
 DTEND:20261223T140000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fred-pce-2026-12-23-high@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_pce,impact-high
 DESCRIPTION:BEA report containing core PCE\, the Fed's preferred inflation
@@ -482,7 +423,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270104T150000Z
 DTEND:20270104T153000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-manufacturing-pmi-2027-01-04-high@compasseconomiccalendar.github.i
  o
 CATEGORIES:ism_manufacturing_pmi,impact-high
@@ -503,7 +444,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270106T150000Z
 DTEND:20270106T153000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-services-pmi-2027-01-06-high@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -524,7 +465,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270127T190000Z
 DTEND:20270127T193000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-statement-2027-01-27-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -542,7 +483,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270127T193000Z
 DTEND:20270127T203000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-presser-2027-01-27-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -560,7 +501,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270201T150000Z
 DTEND:20270201T153000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-manufacturing-pmi-2027-02-01-high@compasseconomiccalendar.github.i
  o
 CATEGORIES:ism_manufacturing_pmi,impact-high
@@ -581,7 +522,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Quarterly Refunding Announcement
 DTSTART:20270203T133000Z
 DTEND:20270203T140000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:treasury-refunding-2027-02-03-high@compasseconomiccalendar.github.io
 CATEGORIES:treasury_quarterly_refunding,impact-high
 DESCRIPTION:Treasury announces the size and composition of the coming quar
@@ -600,7 +541,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270203T150000Z
 DTEND:20270203T153000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-services-pmi-2027-02-03-high@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -621,7 +562,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270301T150000Z
 DTEND:20270301T153000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-manufacturing-pmi-2027-03-01-high@compasseconomiccalendar.github.i
  o
 CATEGORIES:ism_manufacturing_pmi,impact-high
@@ -642,7 +583,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270303T150000Z
 DTEND:20270303T153000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-services-pmi-2027-03-03-high@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -663,7 +604,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Summary of Economic Projections (Dot Plot)
 DTSTART:20270317T180000Z
 DTEND:20270317T183000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-sep-2027-03-17-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_sep,impact-high
 DESCRIPTION:Quarterly Summary of Economic Projections\, including the dot 
@@ -681,7 +622,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270317T180000Z
 DTEND:20270317T183000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-statement-2027-03-17-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -700,7 +641,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270317T183000Z
 DTEND:20270317T193000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-presser-2027-03-17-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -718,7 +659,7 @@ BEGIN:VEVENT
 SUMMARY:Quad Witching
 DTSTART:20270319T200000Z
 DTEND:20270319T203000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:quad-witching-2027-03-high@compasseconomiccalendar.github.io
 CATEGORIES:quad_witching,impact-high
 DESCRIPTION:Index futures\, index options\, single-stock options and singl
@@ -736,7 +677,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270401T140000Z
 DTEND:20270401T143000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-manufacturing-pmi-2027-04-01-high@compasseconomiccalendar.github.i
  o
 CATEGORIES:ism_manufacturing_pmi,impact-high
@@ -757,7 +698,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270405T140000Z
 DTEND:20270405T143000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-services-pmi-2027-04-05-high@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -778,7 +719,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270428T180000Z
 DTEND:20270428T183000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-statement-2027-04-28-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -796,7 +737,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270428T183000Z
 DTEND:20270428T193000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-presser-2027-04-28-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -814,7 +755,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270503T140000Z
 DTEND:20270503T143000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-manufacturing-pmi-2027-05-03-high@compasseconomiccalendar.github.i
  o
 CATEGORIES:ism_manufacturing_pmi,impact-high
@@ -835,7 +776,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Quarterly Refunding Announcement
 DTSTART:20270505T123000Z
 DTEND:20270505T130000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:treasury-refunding-2027-05-05-high@compasseconomiccalendar.github.io
 CATEGORIES:treasury_quarterly_refunding,impact-high
 DESCRIPTION:Treasury announces the size and composition of the coming quar
@@ -854,7 +795,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270505T140000Z
 DTEND:20270505T143000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-services-pmi-2027-05-05-high@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -875,7 +816,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270601T140000Z
 DTEND:20270601T143000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-manufacturing-pmi-2027-06-01-high@compasseconomiccalendar.github.i
  o
 CATEGORIES:ism_manufacturing_pmi,impact-high
@@ -896,7 +837,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270603T140000Z
 DTEND:20270603T143000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-services-pmi-2027-06-03-high@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -917,7 +858,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Summary of Economic Projections (Dot Plot)
 DTSTART:20270609T180000Z
 DTEND:20270609T183000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-sep-2027-06-09-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_sep,impact-high
 DESCRIPTION:Quarterly Summary of Economic Projections\, including the dot 
@@ -935,7 +876,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270609T180000Z
 DTEND:20270609T183000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-statement-2027-06-09-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -954,7 +895,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270609T183000Z
 DTEND:20270609T193000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-presser-2027-06-09-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -972,7 +913,7 @@ BEGIN:VEVENT
 SUMMARY:Quad Witching
 DTSTART:20270618T200000Z
 DTEND:20270618T203000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:quad-witching-2027-06-high@compasseconomiccalendar.github.io
 CATEGORIES:quad_witching,impact-high
 DESCRIPTION:Index futures\, index options\, single-stock options and singl
@@ -990,7 +931,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270701T140000Z
 DTEND:20270701T143000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-manufacturing-pmi-2027-07-01-high@compasseconomiccalendar.github.i
  o
 CATEGORIES:ism_manufacturing_pmi,impact-high
@@ -1011,7 +952,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270706T140000Z
 DTEND:20270706T143000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-services-pmi-2027-07-06-high@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -1032,7 +973,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270728T180000Z
 DTEND:20270728T183000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-statement-2027-07-28-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -1050,7 +991,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270728T183000Z
 DTEND:20270728T193000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-presser-2027-07-28-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -1068,7 +1009,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270802T140000Z
 DTEND:20270802T143000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-manufacturing-pmi-2027-08-02-high@compasseconomiccalendar.github.i
  o
 CATEGORIES:ism_manufacturing_pmi,impact-high
@@ -1089,7 +1030,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Quarterly Refunding Announcement
 DTSTART:20270804T123000Z
 DTEND:20270804T130000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:treasury-refunding-2027-08-04-high@compasseconomiccalendar.github.io
 CATEGORIES:treasury_quarterly_refunding,impact-high
 DESCRIPTION:Treasury announces the size and composition of the coming quar
@@ -1108,7 +1049,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270804T140000Z
 DTEND:20270804T143000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-services-pmi-2027-08-04-high@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -1129,7 +1070,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270901T140000Z
 DTEND:20270901T143000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-manufacturing-pmi-2027-09-01-high@compasseconomiccalendar.github.i
  o
 CATEGORIES:ism_manufacturing_pmi,impact-high
@@ -1150,7 +1091,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270903T140000Z
 DTEND:20270903T143000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-services-pmi-2027-09-03-high@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -1171,7 +1112,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Summary of Economic Projections (Dot Plot)
 DTSTART:20270915T180000Z
 DTEND:20270915T183000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-sep-2027-09-15-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_sep,impact-high
 DESCRIPTION:Quarterly Summary of Economic Projections\, including the dot 
@@ -1189,7 +1130,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270915T180000Z
 DTEND:20270915T183000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-statement-2027-09-15-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -1208,7 +1149,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270915T183000Z
 DTEND:20270915T193000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-presser-2027-09-15-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -1226,7 +1167,7 @@ BEGIN:VEVENT
 SUMMARY:Quad Witching
 DTSTART:20270917T200000Z
 DTEND:20270917T203000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:quad-witching-2027-09-high@compasseconomiccalendar.github.io
 CATEGORIES:quad_witching,impact-high
 DESCRIPTION:Index futures\, index options\, single-stock options and singl
@@ -1244,7 +1185,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20271001T140000Z
 DTEND:20271001T143000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-manufacturing-pmi-2027-10-01-high@compasseconomiccalendar.github.i
  o
 CATEGORIES:ism_manufacturing_pmi,impact-high
@@ -1265,7 +1206,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20271005T140000Z
 DTEND:20271005T143000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-services-pmi-2027-10-05-high@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -1286,7 +1227,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20271027T180000Z
 DTEND:20271027T183000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-statement-2027-10-27-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -1304,7 +1245,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20271027T183000Z
 DTEND:20271027T193000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:fomc-presser-2027-10-27-high@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -1322,7 +1263,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20271101T140000Z
 DTEND:20271101T143000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-manufacturing-pmi-2027-11-01-high@compasseconomiccalendar.github.i
  o
 CATEGORIES:ism_manufacturing_pmi,impact-high
@@ -1343,7 +1284,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Quarterly Refunding Announcement
 DTSTART:20271103T123000Z
 DTEND:20271103T130000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:treasury-refunding-2027-11-03-high@compasseconomiccalendar.github.io
 CATEGORIES:treasury_quarterly_refunding,impact-high
 DESCRIPTION:Treasury announces the size and composition of the coming quar
@@ -1362,7 +1303,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20271103T140000Z
 DTEND:20271103T143000Z
-DTSTAMP:20261011T175013Z
+DTSTAMP:20261018T161156Z
 UID:ism-services-pmi-2027-11-03-high@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on

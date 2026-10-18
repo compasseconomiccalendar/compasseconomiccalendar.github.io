@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0.0",
-  "generated_at_utc": "2026-10-11T17:50:13Z",
+  "generated_at_utc": "2026-10-18T16:11:56Z",
   "window": {
-    "start": "2026-10-11",
-    "end": "2027-11-11"
+    "start": "2026-10-18",
+    "end": "2027-11-18"
   },
   "timezone_note": "All timestamps are UTC. Eastern release times were converted via the IANA America/New_York zone, so DST is already accounted for.",
   "disclaimer": "For informational and educational purposes only. Not investment advice. Times are subject to change; verify against official sources before trading.",
@@ -32,14 +32,9 @@
     }
   ],
   "counts": {
-    "total": 146,
+    "total": 130,
     "by_event_type": {
-      "treasury_auction": 11,
-      "macro_release_cpi": 3,
-      "macro_release_jobless_claims": 12,
-      "macro_release_ppi": 3,
-      "macro_release_retail_sales": 3,
-      "monthly_opex": 9,
+      "macro_release_jobless_claims": 11,
       "fomc_meeting_day_1": 9,
       "macro_release_factory_orders": 5,
       "fomc_statement": 9,
@@ -51,6 +46,10 @@
       "treasury_quarterly_refunding": 5,
       "ism_services_pmi": 13,
       "macro_release_employment_situation": 2,
+      "macro_release_cpi": 2,
+      "macro_release_ppi": 2,
+      "macro_release_retail_sales": 2,
+      "monthly_opex": 8,
       "market_holiday": 10,
       "market_early_close": 2,
       "fomc_sep": 4,
@@ -60,13 +59,13 @@
       "quad_witching": 4
     },
     "by_market_impact": {
-      "low": 35,
-      "high": 70,
-      "medium": 41
+      "medium": 37,
+      "low": 26,
+      "high": 67
     }
   },
   "coverage": {
-    "window_end": "2027-11-11",
+    "window_end": "2027-11-18",
     "families": {
       "fomc": {
         "horizon": "reported",
@@ -77,8 +76,8 @@
       },
       "macro_releases": {
         "horizon": "reported",
-        "event_count": 36,
-        "first_event": "2026-10-14",
+        "event_count": 32,
+        "first_event": "2026-10-22",
         "confirmed_through": "2026-12-31",
         "complete_to_window_end": false
       },
@@ -98,9 +97,9 @@
       },
       "treasury_auctions": {
         "horizon": "reported",
-        "event_count": 11,
-        "first_event": "2026-10-13",
-        "confirmed_through": "2026-10-22",
+        "event_count": 0,
+        "first_event": null,
+        "confirmed_through": null,
         "complete_to_window_end": false
       },
       "treasury_refunding": {
@@ -112,15 +111,15 @@
       },
       "futures": {
         "horizon": "computed",
-        "event_count": 25,
-        "first_event": "2026-10-16",
+        "event_count": 24,
+        "first_event": "2026-11-20",
         "confirmed_through": "2027-10-15",
         "complete_to_window_end": true
       }
     },
     "warnings": [
-      "macro_releases: upstream has published dates only through 2026-12-31, 315 days short of the window end 2027-11-11. Treat later months as incomplete, not empty.",
-      "treasury_auctions: upstream has published dates only through 2026-10-22, 385 days short of the window end 2027-11-11. Treat later months as incomplete, not empty."
+      "macro_releases: upstream has published dates only through 2026-12-31, 322 days short of the window end 2027-11-18. Treat later months as incomplete, not empty.",
+      "treasury_auctions: no events in the window."
     ]
   },
   "market_hours": {
@@ -141,405 +140,6 @@
     }
   },
   "events": [
-    {
-      "id": "treasury-auction-912797UE5-2026-10-13",
-      "event_type": "treasury_auction",
-      "title": "Treasury Auction: 26-Week Bill",
-      "start_utc": "2026-10-13T15:30:00Z",
-      "end_utc": "2026-10-13T16:00:00Z",
-      "all_day": false,
-      "date_et": "2026-10-13",
-      "time_et": "11:30",
-      "market_impact": "low",
-      "source": "TreasuryDirect",
-      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
-      "note": "Competitive bidding for the 26-Week Bill closes at 11:30 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
-      "security_type": "Bill",
-      "security_term": "26-Week",
-      "cusip": "912797UE5",
-      "announcement_date": "2026-10-08",
-      "part_of_quarterly_refunding": false
-    },
-    {
-      "id": "treasury-auction-912797VT1-2026-10-13",
-      "event_type": "treasury_auction",
-      "title": "Treasury Auction: 13-Week Bill",
-      "start_utc": "2026-10-13T15:30:00Z",
-      "end_utc": "2026-10-13T16:00:00Z",
-      "all_day": false,
-      "date_et": "2026-10-13",
-      "time_et": "11:30",
-      "market_impact": "low",
-      "source": "TreasuryDirect",
-      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
-      "note": "Competitive bidding for the 13-Week Bill closes at 11:30 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
-      "security_type": "Bill",
-      "security_term": "13-Week",
-      "cusip": "912797VT1",
-      "announcement_date": "2026-10-08",
-      "part_of_quarterly_refunding": false
-    },
-    {
-      "id": "treasury-auction-912797SU2-2026-10-13",
-      "event_type": "treasury_auction",
-      "title": "Treasury Auction: 6-Week Bill",
-      "start_utc": "2026-10-13T17:00:00Z",
-      "end_utc": "2026-10-13T17:30:00Z",
-      "all_day": false,
-      "date_et": "2026-10-13",
-      "time_et": "13:00",
-      "market_impact": "low",
-      "source": "TreasuryDirect",
-      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
-      "note": "Competitive bidding for the 6-Week Bill closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
-      "security_type": "Bill",
-      "security_term": "6-Week",
-      "cusip": "912797SU2",
-      "announcement_date": "2026-10-08",
-      "part_of_quarterly_refunding": false
-    },
-    {
-      "id": "fred-cpi-2026-10-14",
-      "event_type": "macro_release_cpi",
-      "title": "Consumer Price Index (CPI)",
-      "start_utc": "2026-10-14T12:30:00Z",
-      "end_utc": "2026-10-14T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-10-14",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/10",
-      "note": "Headline and core consumer inflation from the BLS. The core month-over-month print drives the immediate rates and equity reaction.",
-      "fred_release_id": 10,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/cpi.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "typical_move": {
-        "ratio": 1.38,
-        "notable": true,
-        "move_notable": true,
-        "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-1.9% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
-        "window": "recent",
-        "sample_start": "2023-10-02",
-        "vol_window": "full",
-        "spx": {
-          "median_abs_pct": 0.675,
-          "ratio": 1.38,
-          "n": 36
-        },
-        "ndx": {
-          "median_abs_pct": 0.959,
-          "ratio": 1.37,
-          "n": 36
-        },
-        "vol_crush": {
-          "median_pct": -1.928,
-          "excess_pct": -1.269,
-          "n": 124
-        }
-      }
-    },
-    {
-      "id": "treasury-auction-912797WZ6-2026-10-14",
-      "event_type": "treasury_auction",
-      "title": "Treasury Auction: 17-Week Bill",
-      "start_utc": "2026-10-14T17:00:00Z",
-      "end_utc": "2026-10-14T17:30:00Z",
-      "all_day": false,
-      "date_et": "2026-10-14",
-      "time_et": "13:00",
-      "market_impact": "low",
-      "source": "TreasuryDirect",
-      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
-      "note": "Competitive bidding for the 17-Week Bill closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
-      "security_type": "Bill",
-      "security_term": "17-Week",
-      "cusip": "912797WZ6",
-      "announcement_date": "2026-10-13",
-      "part_of_quarterly_refunding": false
-    },
-    {
-      "id": "fred-jobless-claims-2026-10-15",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-10-15T12:30:00Z",
-      "end_utc": "2026-10-15T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-10-15",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "typical_move": {
-        "ratio": 1.07,
-        "notable": false,
-        "move_notable": false,
-        "vol_notable": false,
-        "summary": "Historically moves about as much as a normal day.",
-        "window": "recent",
-        "sample_start": "2023-10-02",
-        "vol_window": "full",
-        "spx": {
-          "median_abs_pct": 0.523,
-          "ratio": 1.07,
-          "n": 149
-        },
-        "ndx": {
-          "median_abs_pct": 0.683,
-          "ratio": 0.97,
-          "n": 149
-        },
-        "vol_crush": {
-          "median_pct": -0.675,
-          "excess_pct": -0.016,
-          "n": 519
-        }
-      }
-    },
-    {
-      "id": "fred-ppi-2026-10-15",
-      "event_type": "macro_release_ppi",
-      "title": "Producer Price Index (PPI)",
-      "start_utc": "2026-10-15T12:30:00Z",
-      "end_utc": "2026-10-15T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-10-15",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/46",
-      "note": "Wholesale/producer inflation from the BLS. Watched as a lead-in to CPI and for the PPI components that feed the PCE calculation.",
-      "fred_release_id": 46,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/ppi.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "typical_move": {
-        "ratio": 1.12,
-        "notable": false,
-        "move_notable": false,
-        "vol_notable": false,
-        "summary": "Historically moves about as much as a normal day.",
-        "window": "recent",
-        "sample_start": "2023-10-02",
-        "vol_window": "full",
-        "spx": {
-          "median_abs_pct": 0.547,
-          "ratio": 1.12,
-          "n": 36
-        },
-        "ndx": {
-          "median_abs_pct": 0.704,
-          "ratio": 1.0,
-          "n": 36
-        },
-        "vol_crush": {
-          "median_pct": -0.227,
-          "excess_pct": 0.432,
-          "n": 126
-        }
-      }
-    },
-    {
-      "id": "fred-retail-sales-2026-10-15",
-      "event_type": "macro_release_retail_sales",
-      "title": "Retail Sales (Advance)",
-      "start_utc": "2026-10-15T12:30:00Z",
-      "end_utc": "2026-10-15T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-10-15",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/9",
-      "note": "Census Bureau advance estimate of monthly retail and food service sales. Consumer spending is roughly two-thirds of GDP, so the control-group figure moves growth expectations and index futures.",
-      "fred_release_id": 9,
-      "primary_source_url": "https://www.census.gov/retail/index.html",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "typical_move": {
-        "ratio": 1.1,
-        "notable": false,
-        "move_notable": false,
-        "vol_notable": false,
-        "summary": "Historically moves about as much as a normal day.",
-        "window": "recent",
-        "sample_start": "2023-10-02",
-        "vol_window": "full",
-        "spx": {
-          "median_abs_pct": 0.537,
-          "ratio": 1.1,
-          "n": 39
-        },
-        "ndx": {
-          "median_abs_pct": 0.556,
-          "ratio": 0.79,
-          "n": 39
-        },
-        "vol_crush": {
-          "median_pct": -0.241,
-          "excess_pct": 0.418,
-          "n": 126
-        }
-      }
-    },
-    {
-      "id": "treasury-auction-912797VX2-2026-10-15",
-      "event_type": "treasury_auction",
-      "title": "Treasury Auction: 4-Week Bill",
-      "start_utc": "2026-10-15T17:00:00Z",
-      "end_utc": "2026-10-15T17:30:00Z",
-      "all_day": false,
-      "date_et": "2026-10-15",
-      "time_et": "13:00",
-      "market_impact": "low",
-      "source": "TreasuryDirect",
-      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
-      "note": "Competitive bidding for the 4-Week Bill closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
-      "security_type": "Bill",
-      "security_term": "4-Week",
-      "cusip": "912797VX2",
-      "announcement_date": "2026-10-13",
-      "part_of_quarterly_refunding": false
-    },
-    {
-      "id": "treasury-auction-912797WF0-2026-10-15",
-      "event_type": "treasury_auction",
-      "title": "Treasury Auction: 8-Week Bill",
-      "start_utc": "2026-10-15T17:00:00Z",
-      "end_utc": "2026-10-15T17:30:00Z",
-      "all_day": false,
-      "date_et": "2026-10-15",
-      "time_et": "13:00",
-      "market_impact": "low",
-      "source": "TreasuryDirect",
-      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
-      "note": "Competitive bidding for the 8-Week Bill closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
-      "security_type": "Bill",
-      "security_term": "8-Week",
-      "cusip": "912797WF0",
-      "announcement_date": "2026-10-13",
-      "part_of_quarterly_refunding": false
-    },
-    {
-      "id": "monthly-opex-2026-10",
-      "event_type": "monthly_opex",
-      "title": "Monthly Options Expiration (OPEX)",
-      "start_utc": "2026-10-16T20:00:00Z",
-      "end_utc": "2026-10-16T20:30:00Z",
-      "all_day": false,
-      "date_et": "2026-10-16",
-      "time_et": "16:00",
-      "market_impact": "medium",
-      "source": "computed",
-      "source_url": "https://www.cmegroup.com/trading/equity-index/rolldates.html",
-      "note": "Monthly equity and index options expire on the third Friday. Dealer hedging into the expiry can pin price near large open-interest strikes.",
-      "computed": true,
-      "holiday_adjusted": false,
-      "typical_move": {
-        "ratio": 1.43,
-        "notable": true,
-        "move_notable": true,
-        "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-2.1% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
-        "window": "recent",
-        "sample_start": "2023-10-02",
-        "vol_window": "full",
-        "spx": {
-          "median_abs_pct": 0.697,
-          "ratio": 1.43,
-          "n": 24
-        },
-        "ndx": {
-          "median_abs_pct": 0.819,
-          "ratio": 1.17,
-          "n": 24
-        },
-        "vol_crush": {
-          "median_pct": -2.082,
-          "excess_pct": -1.423,
-          "n": 80
-        }
-      }
-    },
-    {
-      "id": "treasury-auction-912797TM9-2026-10-19",
-      "event_type": "treasury_auction",
-      "title": "Treasury Auction: 13-Week Bill",
-      "start_utc": "2026-10-19T17:00:00Z",
-      "end_utc": "2026-10-19T17:30:00Z",
-      "all_day": false,
-      "date_et": "2026-10-19",
-      "time_et": "13:00",
-      "market_impact": "low",
-      "source": "TreasuryDirect",
-      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
-      "note": "Competitive bidding for the 13-Week Bill closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
-      "security_type": "Bill",
-      "security_term": "13-Week",
-      "cusip": "912797TM9",
-      "announcement_date": "2026-10-15",
-      "part_of_quarterly_refunding": false
-    },
-    {
-      "id": "treasury-auction-912797WV5-2026-10-19",
-      "event_type": "treasury_auction",
-      "title": "Treasury Auction: 26-Week Bill",
-      "start_utc": "2026-10-19T17:00:00Z",
-      "end_utc": "2026-10-19T17:30:00Z",
-      "all_day": false,
-      "date_et": "2026-10-19",
-      "time_et": "13:00",
-      "market_impact": "low",
-      "source": "TreasuryDirect",
-      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
-      "note": "Competitive bidding for the 26-Week Bill closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
-      "security_type": "Bill",
-      "security_term": "26-Week",
-      "cusip": "912797WV5",
-      "announcement_date": "2026-10-15",
-      "part_of_quarterly_refunding": false
-    },
-    {
-      "id": "treasury-auction-912797VA2-2026-10-20",
-      "event_type": "treasury_auction",
-      "title": "Treasury Auction: 6-Week Bill",
-      "start_utc": "2026-10-20T17:00:00Z",
-      "end_utc": "2026-10-20T17:30:00Z",
-      "all_day": false,
-      "date_et": "2026-10-20",
-      "time_et": "13:00",
-      "market_impact": "low",
-      "source": "TreasuryDirect",
-      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
-      "note": "Competitive bidding for the 6-Week Bill closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
-      "security_type": "Bill",
-      "security_term": "6-Week",
-      "cusip": "912797VA2",
-      "announcement_date": "2026-10-15",
-      "part_of_quarterly_refunding": false
-    },
-    {
-      "id": "treasury-auction-912810UX4-2026-10-21",
-      "event_type": "treasury_auction",
-      "title": "Treasury Auction: 19-Year 10-Month Bond",
-      "start_utc": "2026-10-21T17:00:00Z",
-      "end_utc": "2026-10-21T17:30:00Z",
-      "all_day": false,
-      "date_et": "2026-10-21",
-      "time_et": "13:00",
-      "market_impact": "high",
-      "source": "TreasuryDirect",
-      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
-      "note": "Competitive bidding for the 19-Year 10-Month Bond closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
-      "security_type": "Bond",
-      "security_term": "19-Year 10-Month",
-      "cusip": "912810UX4",
-      "announcement_date": "2026-10-15",
-      "part_of_quarterly_refunding": false
-    },
     {
       "id": "fred-jobless-claims-2026-10-22",
       "event_type": "macro_release_jobless_claims",
@@ -581,25 +181,6 @@
           "n": 519
         }
       }
-    },
-    {
-      "id": "treasury-auction-91282CRR4-2026-10-22",
-      "event_type": "treasury_auction",
-      "title": "Treasury Auction: 5-Year Note",
-      "start_utc": "2026-10-22T17:00:00Z",
-      "end_utc": "2026-10-22T17:30:00Z",
-      "all_day": false,
-      "date_et": "2026-10-22",
-      "time_et": "13:00",
-      "market_impact": "medium",
-      "source": "TreasuryDirect",
-      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
-      "note": "Competitive bidding for the 5-Year Note closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
-      "security_type": "Note",
-      "security_term": "5-Year",
-      "cusip": "91282CRR4",
-      "announcement_date": "2026-10-15",
-      "part_of_quarterly_refunding": false
     },
     {
       "id": "fomc-meeting-day1-2026-10-27",
