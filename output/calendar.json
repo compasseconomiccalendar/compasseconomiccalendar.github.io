@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0.0",
-  "generated_at_utc": "2026-10-25T16:53:55Z",
+  "generated_at_utc": "2026-11-01T18:10:47Z",
   "window": {
-    "start": "2026-10-25",
-    "end": "2027-11-25"
+    "start": "2026-11-01",
+    "end": "2027-12-02"
   },
   "timezone_note": "All timestamps are UTC. Eastern release times were converted via the IANA America/New_York zone, so DST is already accounted for.",
   "disclaimer": "For informational and educational purposes only. Not investment advice. Times are subject to change; verify against official sources before trading.",
@@ -32,67 +32,67 @@
     }
   ],
   "counts": {
-    "total": 131,
+    "total": 126,
     "by_event_type": {
-      "fomc_meeting_day_1": 9,
-      "macro_release_factory_orders": 5,
-      "fomc_statement": 9,
-      "fomc_press_conference": 9,
-      "macro_release_gdp": 3,
-      "macro_release_jobless_claims": 10,
-      "macro_release_pce": 3,
-      "ism_manufacturing_pmi": 13,
+      "ism_manufacturing_pmi": 14,
+      "macro_release_factory_orders": 4,
       "macro_release_jolts": 2,
       "treasury_quarterly_refunding": 5,
       "ism_services_pmi": 13,
+      "macro_release_jobless_claims": 9,
       "macro_release_employment_situation": 2,
       "macro_release_cpi": 2,
       "macro_release_ppi": 2,
       "macro_release_retail_sales": 2,
       "monthly_opex": 9,
+      "macro_release_gdp": 2,
+      "macro_release_pce": 2,
       "market_holiday": 11,
-      "market_early_close": 2,
+      "market_early_close": 3,
+      "fomc_meeting_day_1": 8,
       "fomc_sep": 4,
+      "fomc_statement": 8,
+      "fomc_press_conference": 8,
       "futures_liquidity_roll": 4,
       "futures_official_roll": 4,
       "futures_expiration": 4,
       "quad_witching": 4
     },
     "by_market_impact": {
-      "low": 27,
-      "medium": 37,
-      "high": 67
+      "high": 64,
+      "medium": 35,
+      "low": 27
     }
   },
   "coverage": {
-    "window_end": "2027-11-25",
+    "window_end": "2027-12-02",
     "families": {
       "fomc": {
         "horizon": "reported",
-        "event_count": 31,
-        "first_event": "2026-10-27",
+        "event_count": 28,
+        "first_event": "2026-12-08",
         "confirmed_through": "2027-10-27",
         "complete_to_window_end": true
       },
       "macro_releases": {
         "horizon": "reported",
-        "event_count": 31,
-        "first_event": "2026-10-27",
+        "event_count": 27,
+        "first_event": "2026-11-03",
         "confirmed_through": "2026-12-31",
         "complete_to_window_end": false
       },
       "ism": {
         "horizon": "computed",
-        "event_count": 26,
+        "event_count": 27,
         "first_event": "2026-11-02",
-        "confirmed_through": "2027-11-03",
+        "confirmed_through": "2027-12-01",
         "complete_to_window_end": true
       },
       "market_sessions": {
         "horizon": "computed",
-        "event_count": 13,
+        "event_count": 14,
         "first_event": "2026-11-26",
-        "confirmed_through": "2027-11-25",
+        "confirmed_through": "2027-11-26",
         "complete_to_window_end": true
       },
       "treasury_auctions": {
@@ -118,7 +118,7 @@
       }
     },
     "warnings": [
-      "macro_releases: upstream has published dates only through 2026-12-31, 329 days short of the window end 2027-11-25. Treat later months as incomplete, not empty.",
+      "macro_releases: upstream has published dates only through 2026-12-31, 336 days short of the window end 2027-12-02. Treat later months as incomplete, not empty.",
       "treasury_auctions: no events in the window."
     ]
   },
@@ -140,252 +140,6 @@
     }
   },
   "events": [
-    {
-      "id": "fomc-meeting-day1-2026-10-27",
-      "event_type": "fomc_meeting_day_1",
-      "title": "FOMC Meeting Begins (Day 1)",
-      "start_utc": "2026-10-27T00:00:00Z",
-      "end_utc": null,
-      "all_day": true,
-      "date_et": "2026-10-27",
-      "time_et": null,
-      "market_impact": "low",
-      "source": "federalreserve.gov",
-      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
-      "note": "First day of the two-day FOMC meeting. No statement is released today; the decision comes tomorrow at 2:00pm ET.",
-      "meeting_start_date": "2026-10-27",
-      "meeting_end_date": "2026-10-28"
-    },
-    {
-      "id": "fred-factory-orders-2026-10-27",
-      "event_type": "macro_release_factory_orders",
-      "title": "Factory Orders (M3)",
-      "start_utc": "2026-10-27T14:00:00Z",
-      "end_utc": "2026-10-27T14:30:00Z",
-      "all_day": false,
-      "date_et": "2026-10-27",
-      "time_et": "10:00",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/95",
-      "note": "Census Bureau M3 survey: shipments, inventories and new orders for manufactured goods, released at 10:00am ET. Core capital goods orders are read as a proxy for business investment intentions. The advance durable goods report precedes this by a few days.",
-      "fred_release_id": 95,
-      "primary_source_url": "https://www.census.gov/manufacturing/m3/index.html",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "typical_move": {
-        "ratio": 1.06,
-        "notable": false,
-        "move_notable": false,
-        "vol_notable": false,
-        "summary": "Historically moves about as much as a normal day.",
-        "window": "recent",
-        "sample_start": "2023-10-02",
-        "vol_window": "full",
-        "spx": {
-          "median_abs_pct": 0.52,
-          "ratio": 1.06,
-          "n": 74
-        },
-        "ndx": {
-          "median_abs_pct": 0.793,
-          "ratio": 1.13,
-          "n": 74
-        },
-        "vol_crush": {
-          "median_pct": -1.061,
-          "excess_pct": -0.402,
-          "n": 246
-        }
-      }
-    },
-    {
-      "id": "fomc-statement-2026-10-28",
-      "event_type": "fomc_statement",
-      "title": "FOMC Statement & Rate Decision",
-      "start_utc": "2026-10-28T18:00:00Z",
-      "end_utc": "2026-10-28T18:30:00Z",
-      "all_day": false,
-      "date_et": "2026-10-28",
-      "time_et": "14:00",
-      "market_impact": "high",
-      "source": "federalreserve.gov",
-      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
-      "note": "Interest rate decision and policy statement released at 2:00pm ET. Expect a sharp repricing in index futures on the release and again during the 2:30pm press conference.",
-      "meeting_start_date": "2026-10-27",
-      "meeting_end_date": "2026-10-28",
-      "has_sep": false,
-      "typical_move": {
-        "ratio": 1.45,
-        "notable": true,
-        "move_notable": true,
-        "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-3.0% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
-        "window": "recent",
-        "sample_start": "2023-10-02",
-        "vol_window": "full",
-        "spx": {
-          "median_abs_pct": 0.709,
-          "ratio": 1.45,
-          "n": 24
-        },
-        "ndx": {
-          "median_abs_pct": 0.846,
-          "ratio": 1.21,
-          "n": 24
-        },
-        "vol_crush": {
-          "median_pct": -2.979,
-          "excess_pct": -2.32,
-          "n": 46
-        }
-      }
-    },
-    {
-      "id": "fomc-presser-2026-10-28",
-      "event_type": "fomc_press_conference",
-      "title": "FOMC Chair Press Conference",
-      "start_utc": "2026-10-28T18:30:00Z",
-      "end_utc": "2026-10-28T19:30:00Z",
-      "all_day": false,
-      "date_et": "2026-10-28",
-      "time_et": "14:30",
-      "market_impact": "high",
-      "source": "federalreserve.gov",
-      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
-      "note": "Chair's press conference begins at 2:30pm ET. The Q&A regularly moves markets more than the statement itself. Not yet confirmed on the Fed's calendar; a presser has followed every meeting since 2019.",
-      "confirmed": false
-    },
-    {
-      "id": "fred-gdp-2026-10-29",
-      "event_type": "macro_release_gdp",
-      "title": "GDP (Advance Estimate)",
-      "start_utc": "2026-10-29T12:30:00Z",
-      "end_utc": "2026-10-29T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-10-29",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://www.bea.gov/news/schedule",
-      "note": "First (advance) estimate of quarterly GDP from the BEA. The advance print is the market-moving one -- it is the first read on the quarter.",
-      "fred_release_id": 53,
-      "primary_source_url": "https://www.bea.gov/news/schedule",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "bea_release_title": "GDP (Advance Estimate), 3rd Quarter 2026",
-      "confirmed_by": "bea.gov",
-      "release_variant": "advance",
-      "typical_move": {
-        "ratio": 0.83,
-        "notable": true,
-        "move_notable": true,
-        "vol_notable": true,
-        "summary": "Historically moves less than a normal day (0.8x). Implied volatility usually drops into it (-1.8% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
-        "window": "recent",
-        "sample_start": "2023-10-02",
-        "vol_window": "full",
-        "spx": {
-          "median_abs_pct": 0.404,
-          "ratio": 0.83,
-          "n": 37
-        },
-        "ndx": {
-          "median_abs_pct": 0.584,
-          "ratio": 0.83,
-          "n": 37
-        },
-        "vol_crush": {
-          "median_pct": -1.818,
-          "excess_pct": -1.159,
-          "n": 132
-        }
-      }
-    },
-    {
-      "id": "fred-jobless-claims-2026-10-29",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-10-29T12:30:00Z",
-      "end_utc": "2026-10-29T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-10-29",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "typical_move": {
-        "ratio": 1.07,
-        "notable": false,
-        "move_notable": false,
-        "vol_notable": false,
-        "summary": "Historically moves about as much as a normal day.",
-        "window": "recent",
-        "sample_start": "2023-10-02",
-        "vol_window": "full",
-        "spx": {
-          "median_abs_pct": 0.523,
-          "ratio": 1.07,
-          "n": 149
-        },
-        "ndx": {
-          "median_abs_pct": 0.683,
-          "ratio": 0.97,
-          "n": 149
-        },
-        "vol_crush": {
-          "median_pct": -0.675,
-          "excess_pct": -0.016,
-          "n": 519
-        }
-      }
-    },
-    {
-      "id": "fred-pce-2026-10-29",
-      "event_type": "macro_release_pce",
-      "title": "Personal Income & Outlays (PCE)",
-      "start_utc": "2026-10-29T12:30:00Z",
-      "end_utc": "2026-10-29T13:00:00Z",
-      "all_day": false,
-      "date_et": "2026-10-29",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "FRED",
-      "source_url": "https://www.bea.gov/news/schedule",
-      "note": "BEA report containing core PCE, the Fed's preferred inflation gauge. Watched closely into FOMC meetings.",
-      "fred_release_id": 54,
-      "primary_source_url": "https://www.bea.gov/news/schedule",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "bea_release_title": "Personal Income and Outlays, September 2026",
-      "confirmed_by": "bea.gov",
-      "typical_move": {
-        "ratio": 1.07,
-        "notable": false,
-        "move_notable": false,
-        "vol_notable": false,
-        "summary": "Historically moves about as much as a normal day.",
-        "window": "recent",
-        "sample_start": "2023-10-02",
-        "vol_window": "full",
-        "spx": {
-          "median_abs_pct": 0.523,
-          "ratio": 1.07,
-          "n": 35
-        },
-        "ndx": {
-          "median_abs_pct": 0.623,
-          "ratio": 0.89,
-          "n": 35
-        },
-        "vol_crush": {
-          "median_pct": -0.63,
-          "excess_pct": 0.029,
-          "n": 118
-        }
-      }
-    },
     {
       "id": "ism-manufacturing-pmi-2026-11-02",
       "event_type": "ism_manufacturing_pmi",
@@ -419,27 +173,27 @@
       "primary_source_url": "https://www.census.gov/manufacturing/m3/index.html",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.06,
+        "ratio": 1.07,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
           "median_abs_pct": 0.52,
-          "ratio": 1.06,
+          "ratio": 1.07,
           "n": 74
         },
         "ndx": {
           "median_abs_pct": 0.793,
-          "ratio": 1.13,
+          "ratio": 1.15,
           "n": 74
         },
         "vol_crush": {
-          "median_pct": -1.061,
-          "excess_pct": -0.402,
+          "median_pct": -1.107,
+          "excess_pct": -0.446,
           "n": 246
         }
       }
@@ -461,28 +215,28 @@
       "primary_source_url": "https://www.bls.gov/schedule/news_release/jolts.htm",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.12,
+        "ratio": 1.06,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.547,
-          "ratio": 1.12,
-          "n": 36
+          "median_abs_pct": 0.512,
+          "ratio": 1.06,
+          "n": 34
         },
         "ndx": {
-          "median_abs_pct": 0.807,
+          "median_abs_pct": 0.793,
           "ratio": 1.15,
-          "n": 36
+          "n": 34
         },
         "vol_crush": {
-          "median_pct": -0.655,
-          "excess_pct": 0.004,
-          "n": 120
+          "median_pct": -0.704,
+          "excess_pct": -0.043,
+          "n": 119
         }
       }
     },
@@ -534,28 +288,28 @@
       "primary_source_url": "https://www.dol.gov/ui/data.pdf",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.07,
+        "ratio": 1.05,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.523,
-          "ratio": 1.07,
+          "median_abs_pct": 0.51,
+          "ratio": 1.05,
           "n": 149
         },
         "ndx": {
-          "median_abs_pct": 0.683,
-          "ratio": 0.97,
-          "n": 149
+          "median_abs_pct": 0.687,
+          "ratio": 1.0,
+          "n": 150
         },
         "vol_crush": {
-          "median_pct": -0.675,
-          "excess_pct": -0.016,
-          "n": 519
+          "median_pct": -0.673,
+          "excess_pct": -0.012,
+          "n": 520
         }
       }
     },
@@ -580,23 +334,23 @@
         "notable": true,
         "move_notable": true,
         "vol_notable": true,
-        "summary": "Historically moves about 1.7x as much as a normal day. Implied volatility usually drops into it (-2.8% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about 1.7x as much as a normal day. Implied volatility usually drops into it (-2.9% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.843,
+          "median_abs_pct": 0.834,
           "ratio": 1.72,
           "n": 35
         },
         "ndx": {
-          "median_abs_pct": 1.221,
-          "ratio": 1.74,
+          "median_abs_pct": 1.206,
+          "ratio": 1.75,
           "n": 35
         },
         "vol_crush": {
-          "median_pct": -2.757,
-          "excess_pct": -2.098,
+          "median_pct": -2.913,
+          "excess_pct": -2.252,
           "n": 118
         }
       }
@@ -618,27 +372,27 @@
       "primary_source_url": "https://www.bls.gov/schedule/news_release/cpi.htm",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.38,
+        "ratio": 1.57,
         "notable": true,
         "move_notable": true,
         "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-1.9% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about 1.6x as much as a normal day. Implied volatility usually drops into it (-1.8% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.675,
-          "ratio": 1.38,
+          "median_abs_pct": 0.758,
+          "ratio": 1.57,
           "n": 36
         },
         "ndx": {
-          "median_abs_pct": 0.959,
-          "ratio": 1.37,
+          "median_abs_pct": 1.023,
+          "ratio": 1.48,
           "n": 36
         },
         "vol_crush": {
-          "median_pct": -1.928,
-          "excess_pct": -1.269,
+          "median_pct": -1.805,
+          "excess_pct": -1.144,
           "n": 124
         }
       }
@@ -660,28 +414,28 @@
       "primary_source_url": "https://www.dol.gov/ui/data.pdf",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.07,
+        "ratio": 1.05,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.523,
-          "ratio": 1.07,
+          "median_abs_pct": 0.51,
+          "ratio": 1.05,
           "n": 149
         },
         "ndx": {
-          "median_abs_pct": 0.683,
-          "ratio": 0.97,
-          "n": 149
+          "median_abs_pct": 0.687,
+          "ratio": 1.0,
+          "n": 150
         },
         "vol_crush": {
-          "median_pct": -0.675,
-          "excess_pct": -0.016,
-          "n": 519
+          "median_pct": -0.673,
+          "excess_pct": -0.012,
+          "n": 520
         }
       }
     },
@@ -702,27 +456,27 @@
       "primary_source_url": "https://www.bls.gov/schedule/news_release/ppi.htm",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.12,
+        "ratio": 1.13,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
           "median_abs_pct": 0.547,
-          "ratio": 1.12,
+          "ratio": 1.13,
           "n": 36
         },
         "ndx": {
-          "median_abs_pct": 0.704,
-          "ratio": 1.0,
+          "median_abs_pct": 0.683,
+          "ratio": 0.99,
           "n": 36
         },
         "vol_crush": {
           "median_pct": -0.227,
-          "excess_pct": 0.432,
+          "excess_pct": 0.434,
           "n": 126
         }
       }
@@ -744,27 +498,27 @@
       "primary_source_url": "https://www.census.gov/retail/index.html",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.1,
+        "ratio": 1.11,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
           "median_abs_pct": 0.537,
-          "ratio": 1.1,
+          "ratio": 1.11,
           "n": 39
         },
         "ndx": {
           "median_abs_pct": 0.556,
-          "ratio": 0.79,
+          "ratio": 0.81,
           "n": 39
         },
         "vol_crush": {
           "median_pct": -0.241,
-          "excess_pct": 0.418,
+          "excess_pct": 0.42,
           "n": 126
         }
       }
@@ -786,28 +540,28 @@
       "primary_source_url": "https://www.dol.gov/ui/data.pdf",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.07,
+        "ratio": 1.05,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.523,
-          "ratio": 1.07,
+          "median_abs_pct": 0.51,
+          "ratio": 1.05,
           "n": 149
         },
         "ndx": {
-          "median_abs_pct": 0.683,
-          "ratio": 0.97,
-          "n": 149
+          "median_abs_pct": 0.687,
+          "ratio": 1.0,
+          "n": 150
         },
         "vol_crush": {
-          "median_pct": -0.675,
-          "excess_pct": -0.016,
-          "n": 519
+          "median_pct": -0.673,
+          "excess_pct": -0.012,
+          "n": 520
         }
       }
     },
@@ -827,27 +581,27 @@
       "computed": true,
       "holiday_adjusted": false,
       "typical_move": {
-        "ratio": 1.43,
+        "ratio": 1.44,
         "notable": true,
         "move_notable": true,
         "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-2.1% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-1.9% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
           "median_abs_pct": 0.697,
-          "ratio": 1.43,
+          "ratio": 1.44,
           "n": 24
         },
         "ndx": {
           "median_abs_pct": 0.819,
-          "ratio": 1.17,
+          "ratio": 1.19,
           "n": 24
         },
         "vol_crush": {
-          "median_pct": -2.082,
-          "excess_pct": -1.423,
+          "median_pct": -1.944,
+          "excess_pct": -1.283,
           "n": 80
         }
       }
@@ -878,21 +632,21 @@
         "vol_notable": true,
         "summary": "Historically moves less than a normal day (0.8x). Implied volatility usually drops into it (-1.8% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.404,
+          "median_abs_pct": 0.402,
           "ratio": 0.83,
-          "n": 37
+          "n": 36
         },
         "ndx": {
           "median_abs_pct": 0.584,
-          "ratio": 0.83,
+          "ratio": 0.85,
           "n": 37
         },
         "vol_crush": {
           "median_pct": -1.818,
-          "excess_pct": -1.159,
+          "excess_pct": -1.157,
           "n": 132
         }
       }
@@ -914,28 +668,28 @@
       "primary_source_url": "https://www.dol.gov/ui/data.pdf",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.07,
+        "ratio": 1.05,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.523,
-          "ratio": 1.07,
+          "median_abs_pct": 0.51,
+          "ratio": 1.05,
           "n": 149
         },
         "ndx": {
-          "median_abs_pct": 0.683,
-          "ratio": 0.97,
-          "n": 149
+          "median_abs_pct": 0.687,
+          "ratio": 1.0,
+          "n": 150
         },
         "vol_crush": {
-          "median_pct": -0.675,
-          "excess_pct": -0.016,
-          "n": 519
+          "median_pct": -0.673,
+          "excess_pct": -0.012,
+          "n": 520
         }
       }
     },
@@ -958,27 +712,27 @@
       "bea_release_title": "Personal Income and Outlays, October 2026",
       "confirmed_by": "bea.gov",
       "typical_move": {
-        "ratio": 1.07,
+        "ratio": 1.11,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.523,
-          "ratio": 1.07,
-          "n": 35
+          "median_abs_pct": 0.536,
+          "ratio": 1.11,
+          "n": 34
         },
         "ndx": {
-          "median_abs_pct": 0.623,
-          "ratio": 0.89,
+          "median_abs_pct": 0.718,
+          "ratio": 1.04,
           "n": 35
         },
         "vol_crush": {
           "median_pct": -0.63,
-          "excess_pct": 0.029,
+          "excess_pct": 0.031,
           "n": 118
         }
       }
@@ -1000,27 +754,27 @@
       "primary_source_url": "https://www.census.gov/manufacturing/m3/index.html",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.06,
+        "ratio": 1.07,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
           "median_abs_pct": 0.52,
-          "ratio": 1.06,
+          "ratio": 1.07,
           "n": 74
         },
         "ndx": {
           "median_abs_pct": 0.793,
-          "ratio": 1.13,
+          "ratio": 1.15,
           "n": 74
         },
         "vol_crush": {
-          "median_pct": -1.061,
-          "excess_pct": -0.402,
+          "median_pct": -1.107,
+          "excess_pct": -0.446,
           "n": 246
         }
       }
@@ -1074,28 +828,28 @@
       "primary_source_url": "https://www.bls.gov/schedule/news_release/jolts.htm",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.12,
+        "ratio": 1.06,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.547,
-          "ratio": 1.12,
-          "n": 36
+          "median_abs_pct": 0.512,
+          "ratio": 1.06,
+          "n": 34
         },
         "ndx": {
-          "median_abs_pct": 0.807,
+          "median_abs_pct": 0.793,
           "ratio": 1.15,
-          "n": 36
+          "n": 34
         },
         "vol_crush": {
-          "median_pct": -0.655,
-          "excess_pct": 0.004,
-          "n": 120
+          "median_pct": -0.704,
+          "excess_pct": -0.043,
+          "n": 119
         }
       }
     },
@@ -1132,28 +886,28 @@
       "primary_source_url": "https://www.dol.gov/ui/data.pdf",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.07,
+        "ratio": 1.05,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.523,
-          "ratio": 1.07,
+          "median_abs_pct": 0.51,
+          "ratio": 1.05,
           "n": 149
         },
         "ndx": {
-          "median_abs_pct": 0.683,
-          "ratio": 0.97,
-          "n": 149
+          "median_abs_pct": 0.687,
+          "ratio": 1.0,
+          "n": 150
         },
         "vol_crush": {
-          "median_pct": -0.675,
-          "excess_pct": -0.016,
-          "n": 519
+          "median_pct": -0.673,
+          "excess_pct": -0.012,
+          "n": 520
         }
       }
     },
@@ -1174,27 +928,27 @@
       "primary_source_url": "https://www.census.gov/manufacturing/m3/index.html",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.06,
+        "ratio": 1.07,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
           "median_abs_pct": 0.52,
-          "ratio": 1.06,
+          "ratio": 1.07,
           "n": 74
         },
         "ndx": {
           "median_abs_pct": 0.793,
-          "ratio": 1.13,
+          "ratio": 1.15,
           "n": 74
         },
         "vol_crush": {
-          "median_pct": -1.061,
-          "excess_pct": -0.402,
+          "median_pct": -1.107,
+          "excess_pct": -0.446,
           "n": 246
         }
       }
@@ -1236,23 +990,23 @@
         "notable": true,
         "move_notable": true,
         "vol_notable": true,
-        "summary": "Historically moves about 1.7x as much as a normal day. Implied volatility usually drops into it (-2.8% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about 1.7x as much as a normal day. Implied volatility usually drops into it (-2.9% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.843,
+          "median_abs_pct": 0.834,
           "ratio": 1.72,
           "n": 35
         },
         "ndx": {
-          "median_abs_pct": 1.221,
-          "ratio": 1.74,
+          "median_abs_pct": 1.206,
+          "ratio": 1.75,
           "n": 35
         },
         "vol_crush": {
-          "median_pct": -2.757,
-          "excess_pct": -2.098,
+          "median_pct": -2.913,
+          "excess_pct": -2.252,
           "n": 118
         }
       }
@@ -1305,28 +1059,28 @@
       "meeting_end_date": "2026-12-09",
       "has_sep": true,
       "typical_move": {
-        "ratio": 1.45,
+        "ratio": 1.18,
         "notable": true,
-        "move_notable": true,
+        "move_notable": false,
         "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-3.0% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about as much as a normal day. Implied volatility usually drops into it (-3.1% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.709,
-          "ratio": 1.45,
+          "median_abs_pct": 0.571,
+          "ratio": 1.18,
           "n": 24
         },
         "ndx": {
-          "median_abs_pct": 0.846,
-          "ratio": 1.21,
+          "median_abs_pct": 0.642,
+          "ratio": 0.93,
           "n": 24
         },
         "vol_crush": {
-          "median_pct": -2.979,
-          "excess_pct": -2.32,
-          "n": 46
+          "median_pct": -3.129,
+          "excess_pct": -2.468,
+          "n": 47
         }
       }
     },
@@ -1384,27 +1138,27 @@
       "primary_source_url": "https://www.bls.gov/schedule/news_release/cpi.htm",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.38,
+        "ratio": 1.57,
         "notable": true,
         "move_notable": true,
         "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-1.9% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about 1.6x as much as a normal day. Implied volatility usually drops into it (-1.8% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.675,
-          "ratio": 1.38,
+          "median_abs_pct": 0.758,
+          "ratio": 1.57,
           "n": 36
         },
         "ndx": {
-          "median_abs_pct": 0.959,
-          "ratio": 1.37,
+          "median_abs_pct": 1.023,
+          "ratio": 1.48,
           "n": 36
         },
         "vol_crush": {
-          "median_pct": -1.928,
-          "excess_pct": -1.269,
+          "median_pct": -1.805,
+          "excess_pct": -1.144,
           "n": 124
         }
       }
@@ -1426,28 +1180,28 @@
       "primary_source_url": "https://www.dol.gov/ui/data.pdf",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.07,
+        "ratio": 1.05,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.523,
-          "ratio": 1.07,
+          "median_abs_pct": 0.51,
+          "ratio": 1.05,
           "n": 149
         },
         "ndx": {
-          "median_abs_pct": 0.683,
-          "ratio": 0.97,
-          "n": 149
+          "median_abs_pct": 0.687,
+          "ratio": 1.0,
+          "n": 150
         },
         "vol_crush": {
-          "median_pct": -0.675,
-          "excess_pct": -0.016,
-          "n": 519
+          "median_pct": -0.673,
+          "excess_pct": -0.012,
+          "n": 520
         }
       }
     },
@@ -1490,27 +1244,27 @@
       "primary_source_url": "https://www.bls.gov/schedule/news_release/ppi.htm",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.12,
+        "ratio": 1.13,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
           "median_abs_pct": 0.547,
-          "ratio": 1.12,
+          "ratio": 1.13,
           "n": 36
         },
         "ndx": {
-          "median_abs_pct": 0.704,
-          "ratio": 1.0,
+          "median_abs_pct": 0.683,
+          "ratio": 0.99,
           "n": 36
         },
         "vol_crush": {
           "median_pct": -0.227,
-          "excess_pct": 0.432,
+          "excess_pct": 0.434,
           "n": 126
         }
       }
@@ -1532,27 +1286,27 @@
       "primary_source_url": "https://www.census.gov/retail/index.html",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.1,
+        "ratio": 1.11,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
           "median_abs_pct": 0.537,
-          "ratio": 1.1,
+          "ratio": 1.11,
           "n": 39
         },
         "ndx": {
           "median_abs_pct": 0.556,
-          "ratio": 0.79,
+          "ratio": 0.81,
           "n": 39
         },
         "vol_crush": {
           "median_pct": -0.241,
-          "excess_pct": 0.418,
+          "excess_pct": 0.42,
           "n": 126
         }
       }
@@ -1574,28 +1328,28 @@
       "primary_source_url": "https://www.dol.gov/ui/data.pdf",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.07,
+        "ratio": 1.05,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.523,
-          "ratio": 1.07,
+          "median_abs_pct": 0.51,
+          "ratio": 1.05,
           "n": 149
         },
         "ndx": {
-          "median_abs_pct": 0.683,
-          "ratio": 0.97,
-          "n": 149
+          "median_abs_pct": 0.687,
+          "ratio": 1.0,
+          "n": 150
         },
         "vol_crush": {
-          "median_pct": -0.675,
-          "excess_pct": -0.016,
-          "n": 519
+          "median_pct": -0.673,
+          "excess_pct": -0.012,
+          "n": 520
         }
       }
     },
@@ -1664,21 +1418,21 @@
         "vol_notable": true,
         "summary": "Historically moves less than a normal day (0.8x). Implied volatility usually drops into it (-1.8% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.404,
+          "median_abs_pct": 0.402,
           "ratio": 0.83,
-          "n": 37
+          "n": 36
         },
         "ndx": {
           "median_abs_pct": 0.584,
-          "ratio": 0.83,
+          "ratio": 0.85,
           "n": 37
         },
         "vol_crush": {
           "median_pct": -1.818,
-          "excess_pct": -1.159,
+          "excess_pct": -1.157,
           "n": 132
         }
       }
@@ -1702,27 +1456,27 @@
       "bea_release_title": "Personal Income and Outlays, November 2026",
       "confirmed_by": "bea.gov",
       "typical_move": {
-        "ratio": 1.07,
+        "ratio": 1.11,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.523,
-          "ratio": 1.07,
-          "n": 35
+          "median_abs_pct": 0.536,
+          "ratio": 1.11,
+          "n": 34
         },
         "ndx": {
-          "median_abs_pct": 0.623,
-          "ratio": 0.89,
+          "median_abs_pct": 0.718,
+          "ratio": 1.04,
           "n": 35
         },
         "vol_crush": {
           "median_pct": -0.63,
-          "excess_pct": 0.029,
+          "excess_pct": 0.031,
           "n": 118
         }
       }
@@ -1744,27 +1498,27 @@
       "primary_source_url": "https://www.census.gov/manufacturing/m3/index.html",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.06,
+        "ratio": 1.07,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
           "median_abs_pct": 0.52,
-          "ratio": 1.06,
+          "ratio": 1.07,
           "n": 74
         },
         "ndx": {
           "median_abs_pct": 0.793,
-          "ratio": 1.13,
+          "ratio": 1.15,
           "n": 74
         },
         "vol_crush": {
-          "median_pct": -1.061,
-          "excess_pct": -0.402,
+          "median_pct": -1.107,
+          "excess_pct": -0.446,
           "n": 246
         }
       }
@@ -1786,28 +1540,28 @@
       "primary_source_url": "https://www.dol.gov/ui/data.pdf",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.07,
+        "ratio": 1.05,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.523,
-          "ratio": 1.07,
+          "median_abs_pct": 0.51,
+          "ratio": 1.05,
           "n": 149
         },
         "ndx": {
-          "median_abs_pct": 0.683,
-          "ratio": 0.97,
-          "n": 149
+          "median_abs_pct": 0.687,
+          "ratio": 1.0,
+          "n": 150
         },
         "vol_crush": {
-          "median_pct": -0.675,
-          "excess_pct": -0.016,
-          "n": 519
+          "median_pct": -0.673,
+          "excess_pct": -0.012,
+          "n": 520
         }
       }
     },
@@ -1860,28 +1614,28 @@
       "primary_source_url": "https://www.dol.gov/ui/data.pdf",
       "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "typical_move": {
-        "ratio": 1.07,
+        "ratio": 1.05,
         "notable": false,
         "move_notable": false,
         "vol_notable": false,
         "summary": "Historically moves about as much as a normal day.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.523,
-          "ratio": 1.07,
+          "median_abs_pct": 0.51,
+          "ratio": 1.05,
           "n": 149
         },
         "ndx": {
-          "median_abs_pct": 0.683,
-          "ratio": 0.97,
-          "n": 149
+          "median_abs_pct": 0.687,
+          "ratio": 1.0,
+          "n": 150
         },
         "vol_crush": {
-          "median_pct": -0.675,
-          "excess_pct": -0.016,
-          "n": 519
+          "median_pct": -0.673,
+          "excess_pct": -0.012,
+          "n": 520
         }
       }
     },
@@ -1949,27 +1703,27 @@
       "computed": true,
       "holiday_adjusted": false,
       "typical_move": {
-        "ratio": 1.43,
+        "ratio": 1.44,
         "notable": true,
         "move_notable": true,
         "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-2.1% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-1.9% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
           "median_abs_pct": 0.697,
-          "ratio": 1.43,
+          "ratio": 1.44,
           "n": 24
         },
         "ndx": {
           "median_abs_pct": 0.819,
-          "ratio": 1.17,
+          "ratio": 1.19,
           "n": 24
         },
         "vol_crush": {
-          "median_pct": -2.082,
-          "excess_pct": -1.423,
+          "median_pct": -1.944,
+          "excess_pct": -1.283,
           "n": 80
         }
       }
@@ -2023,28 +1777,28 @@
       "meeting_end_date": "2027-01-27",
       "has_sep": false,
       "typical_move": {
-        "ratio": 1.45,
+        "ratio": 1.18,
         "notable": true,
-        "move_notable": true,
+        "move_notable": false,
         "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-3.0% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about as much as a normal day. Implied volatility usually drops into it (-3.1% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.709,
-          "ratio": 1.45,
+          "median_abs_pct": 0.571,
+          "ratio": 1.18,
           "n": 24
         },
         "ndx": {
-          "median_abs_pct": 0.846,
-          "ratio": 1.21,
+          "median_abs_pct": 0.642,
+          "ratio": 0.93,
           "n": 24
         },
         "vol_crush": {
-          "median_pct": -2.979,
-          "excess_pct": -2.32,
-          "n": 46
+          "median_pct": -3.129,
+          "excess_pct": -2.468,
+          "n": 47
         }
       }
     },
@@ -2142,27 +1896,27 @@
       "computed": true,
       "holiday_adjusted": false,
       "typical_move": {
-        "ratio": 1.43,
+        "ratio": 1.44,
         "notable": true,
         "move_notable": true,
         "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-2.1% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-1.9% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
           "median_abs_pct": 0.697,
-          "ratio": 1.43,
+          "ratio": 1.44,
           "n": 24
         },
         "ndx": {
           "median_abs_pct": 0.819,
-          "ratio": 1.17,
+          "ratio": 1.19,
           "n": 24
         },
         "vol_crush": {
-          "median_pct": -2.082,
-          "excess_pct": -1.423,
+          "median_pct": -1.944,
+          "excess_pct": -1.283,
           "n": 80
         }
       }
@@ -2291,28 +2045,28 @@
       "meeting_end_date": "2027-03-17",
       "has_sep": true,
       "typical_move": {
-        "ratio": 1.45,
+        "ratio": 1.18,
         "notable": true,
-        "move_notable": true,
+        "move_notable": false,
         "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-3.0% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about as much as a normal day. Implied volatility usually drops into it (-3.1% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.709,
-          "ratio": 1.45,
+          "median_abs_pct": 0.571,
+          "ratio": 1.18,
           "n": 24
         },
         "ndx": {
-          "median_abs_pct": 0.846,
-          "ratio": 1.21,
+          "median_abs_pct": 0.642,
+          "ratio": 0.93,
           "n": 24
         },
         "vol_crush": {
-          "median_pct": -2.979,
-          "excess_pct": -2.32,
-          "n": 46
+          "median_pct": -3.129,
+          "excess_pct": -2.468,
+          "n": 47
         }
       }
     },
@@ -2434,27 +2188,27 @@
       "computed": true,
       "holiday_adjusted": false,
       "typical_move": {
-        "ratio": 1.43,
+        "ratio": 1.44,
         "notable": true,
         "move_notable": true,
         "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-2.1% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-1.9% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
           "median_abs_pct": 0.697,
-          "ratio": 1.43,
+          "ratio": 1.44,
           "n": 24
         },
         "ndx": {
           "median_abs_pct": 0.819,
-          "ratio": 1.17,
+          "ratio": 1.19,
           "n": 24
         },
         "vol_crush": {
-          "median_pct": -2.082,
-          "excess_pct": -1.423,
+          "median_pct": -1.944,
+          "excess_pct": -1.283,
           "n": 80
         }
       }
@@ -2492,28 +2246,28 @@
       "meeting_end_date": "2027-04-28",
       "has_sep": false,
       "typical_move": {
-        "ratio": 1.45,
+        "ratio": 1.18,
         "notable": true,
-        "move_notable": true,
+        "move_notable": false,
         "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-3.0% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about as much as a normal day. Implied volatility usually drops into it (-3.1% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.709,
-          "ratio": 1.45,
+          "median_abs_pct": 0.571,
+          "ratio": 1.18,
           "n": 24
         },
         "ndx": {
-          "median_abs_pct": 0.846,
-          "ratio": 1.21,
+          "median_abs_pct": 0.642,
+          "ratio": 0.93,
           "n": 24
         },
         "vol_crush": {
-          "median_pct": -2.979,
-          "excess_pct": -2.32,
-          "n": 46
+          "median_pct": -3.129,
+          "excess_pct": -2.468,
+          "n": 47
         }
       }
     },
@@ -2595,27 +2349,27 @@
       "computed": true,
       "holiday_adjusted": false,
       "typical_move": {
-        "ratio": 1.43,
+        "ratio": 1.44,
         "notable": true,
         "move_notable": true,
         "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-2.1% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-1.9% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
           "median_abs_pct": 0.697,
-          "ratio": 1.43,
+          "ratio": 1.44,
           "n": 24
         },
         "ndx": {
           "median_abs_pct": 0.819,
-          "ratio": 1.17,
+          "ratio": 1.19,
           "n": 24
         },
         "vol_crush": {
-          "median_pct": -2.082,
-          "excess_pct": -1.423,
+          "median_pct": -1.944,
+          "excess_pct": -1.283,
           "n": 80
         }
       }
@@ -2716,28 +2470,28 @@
       "meeting_end_date": "2027-06-09",
       "has_sep": true,
       "typical_move": {
-        "ratio": 1.45,
+        "ratio": 1.18,
         "notable": true,
-        "move_notable": true,
+        "move_notable": false,
         "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-3.0% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about as much as a normal day. Implied volatility usually drops into it (-3.1% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.709,
-          "ratio": 1.45,
+          "median_abs_pct": 0.571,
+          "ratio": 1.18,
           "n": 24
         },
         "ndx": {
-          "median_abs_pct": 0.846,
-          "ratio": 1.21,
+          "median_abs_pct": 0.642,
+          "ratio": 0.93,
           "n": 24
         },
         "vol_crush": {
-          "median_pct": -2.979,
-          "excess_pct": -2.32,
-          "n": 46
+          "median_pct": -3.129,
+          "excess_pct": -2.468,
+          "n": 47
         }
       }
     },
@@ -2919,27 +2673,27 @@
       "computed": true,
       "holiday_adjusted": false,
       "typical_move": {
-        "ratio": 1.43,
+        "ratio": 1.44,
         "notable": true,
         "move_notable": true,
         "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-2.1% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-1.9% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
           "median_abs_pct": 0.697,
-          "ratio": 1.43,
+          "ratio": 1.44,
           "n": 24
         },
         "ndx": {
           "median_abs_pct": 0.819,
-          "ratio": 1.17,
+          "ratio": 1.19,
           "n": 24
         },
         "vol_crush": {
-          "median_pct": -2.082,
-          "excess_pct": -1.423,
+          "median_pct": -1.944,
+          "excess_pct": -1.283,
           "n": 80
         }
       }
@@ -2977,28 +2731,28 @@
       "meeting_end_date": "2027-07-28",
       "has_sep": false,
       "typical_move": {
-        "ratio": 1.45,
+        "ratio": 1.18,
         "notable": true,
-        "move_notable": true,
+        "move_notable": false,
         "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-3.0% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about as much as a normal day. Implied volatility usually drops into it (-3.1% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.709,
-          "ratio": 1.45,
+          "median_abs_pct": 0.571,
+          "ratio": 1.18,
           "n": 24
         },
         "ndx": {
-          "median_abs_pct": 0.846,
-          "ratio": 1.21,
+          "median_abs_pct": 0.642,
+          "ratio": 0.93,
           "n": 24
         },
         "vol_crush": {
-          "median_pct": -2.979,
-          "excess_pct": -2.32,
-          "n": 46
+          "median_pct": -3.129,
+          "excess_pct": -2.468,
+          "n": 47
         }
       }
     },
@@ -3080,27 +2834,27 @@
       "computed": true,
       "holiday_adjusted": false,
       "typical_move": {
-        "ratio": 1.43,
+        "ratio": 1.44,
         "notable": true,
         "move_notable": true,
         "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-2.1% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-1.9% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
           "median_abs_pct": 0.697,
-          "ratio": 1.43,
+          "ratio": 1.44,
           "n": 24
         },
         "ndx": {
           "median_abs_pct": 0.819,
-          "ratio": 1.17,
+          "ratio": 1.19,
           "n": 24
         },
         "vol_crush": {
-          "median_pct": -2.082,
-          "excess_pct": -1.423,
+          "median_pct": -1.944,
+          "excess_pct": -1.283,
           "n": 80
         }
       }
@@ -3245,28 +2999,28 @@
       "meeting_end_date": "2027-09-15",
       "has_sep": true,
       "typical_move": {
-        "ratio": 1.45,
+        "ratio": 1.18,
         "notable": true,
-        "move_notable": true,
+        "move_notable": false,
         "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-3.0% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about as much as a normal day. Implied volatility usually drops into it (-3.1% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.709,
-          "ratio": 1.45,
+          "median_abs_pct": 0.571,
+          "ratio": 1.18,
           "n": 24
         },
         "ndx": {
-          "median_abs_pct": 0.846,
-          "ratio": 1.21,
+          "median_abs_pct": 0.642,
+          "ratio": 0.93,
           "n": 24
         },
         "vol_crush": {
-          "median_pct": -2.979,
-          "excess_pct": -2.32,
-          "n": 46
+          "median_pct": -3.129,
+          "excess_pct": -2.468,
+          "n": 47
         }
       }
     },
@@ -3372,27 +3126,27 @@
       "computed": true,
       "holiday_adjusted": false,
       "typical_move": {
-        "ratio": 1.43,
+        "ratio": 1.44,
         "notable": true,
         "move_notable": true,
         "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-2.1% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-1.9% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
           "median_abs_pct": 0.697,
-          "ratio": 1.43,
+          "ratio": 1.44,
           "n": 24
         },
         "ndx": {
           "median_abs_pct": 0.819,
-          "ratio": 1.17,
+          "ratio": 1.19,
           "n": 24
         },
         "vol_crush": {
-          "median_pct": -2.082,
-          "excess_pct": -1.423,
+          "median_pct": -1.944,
+          "excess_pct": -1.283,
           "n": 80
         }
       }
@@ -3430,28 +3184,28 @@
       "meeting_end_date": "2027-10-27",
       "has_sep": false,
       "typical_move": {
-        "ratio": 1.45,
+        "ratio": 1.18,
         "notable": true,
-        "move_notable": true,
+        "move_notable": false,
         "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-3.0% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about as much as a normal day. Implied volatility usually drops into it (-3.1% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
-          "median_abs_pct": 0.709,
-          "ratio": 1.45,
+          "median_abs_pct": 0.571,
+          "ratio": 1.18,
           "n": 24
         },
         "ndx": {
-          "median_abs_pct": 0.846,
-          "ratio": 1.21,
+          "median_abs_pct": 0.642,
+          "ratio": 0.93,
           "n": 24
         },
         "vol_crush": {
-          "median_pct": -2.979,
-          "excess_pct": -2.32,
-          "n": 46
+          "median_pct": -3.129,
+          "excess_pct": -2.468,
+          "n": 47
         }
       }
     },
@@ -3533,27 +3287,27 @@
       "computed": true,
       "holiday_adjusted": false,
       "typical_move": {
-        "ratio": 1.43,
+        "ratio": 1.44,
         "notable": true,
         "move_notable": true,
         "vol_notable": true,
-        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-2.1% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
+        "summary": "Historically moves about 1.4x as much as a normal day. Implied volatility usually drops into it (-1.9% vs -0.7% on an ordinary day), so the market prices real uncertainty here.",
         "window": "recent",
-        "sample_start": "2023-10-02",
+        "sample_start": "2023-11-02",
         "vol_window": "full",
         "spx": {
           "median_abs_pct": 0.697,
-          "ratio": 1.43,
+          "ratio": 1.44,
           "n": 24
         },
         "ndx": {
           "median_abs_pct": 0.819,
-          "ratio": 1.17,
+          "ratio": 1.19,
           "n": 24
         },
         "vol_crush": {
-          "median_pct": -2.082,
-          "excess_pct": -1.423,
+          "median_pct": -1.944,
+          "excess_pct": -1.283,
           "n": 80
         }
       }
@@ -3573,16 +3327,48 @@
       "note": "US equity markets are closed for Thanksgiving Day. CME equity index futures are also closed or on a holiday schedule -- check CME's calendar for the exact session.",
       "holiday_name": "Thanksgiving Day",
       "computed": true
+    },
+    {
+      "id": "market-early-close-2027-11-26",
+      "event_type": "market_early_close",
+      "title": "Early Close (1:00pm ET) — Day after Thanksgiving",
+      "start_utc": "2027-11-26T18:00:00Z",
+      "end_utc": "2027-11-26T18:30:00Z",
+      "all_day": false,
+      "date_et": "2027-11-26",
+      "time_et": "13:00",
+      "market_impact": "low",
+      "source": "computed",
+      "source_url": "https://www.nyse.com/markets/hours-calendars",
+      "note": "US equity markets close at 1:00pm ET for Day after Thanksgiving. Volume thins out sharply through the morning and the closing auction is much smaller than usual.",
+      "holiday_name": "Day after Thanksgiving",
+      "computed": true
+    },
+    {
+      "id": "ism-manufacturing-pmi-2027-12-01",
+      "event_type": "ism_manufacturing_pmi",
+      "title": "ISM Manufacturing PMI (estimated)",
+      "start_utc": "2027-12-01T15:00:00Z",
+      "end_utc": "2027-12-01T15:30:00Z",
+      "all_day": false,
+      "date_et": "2027-12-01",
+      "time_et": "10:00",
+      "market_impact": "high",
+      "source": "computed",
+      "source_url": "https://www.ismworld.org/supply-management-news-and-reports/reports/ism-report-on-business/",
+      "note": "Purchasing managers' index for manufacturing, normally released on the first business day of the month at 10:00am ET. A sub-50 print reads as contraction. Date is estimated from ISM's usual pattern -- confirm against ism.ws before trading it.",
+      "computed": true,
+      "approximate": true
     }
   ],
   "typical_moves": {
     "sample_period": {
-      "start": "2016-10-01",
-      "end": "2026-10-01"
+      "start": "2016-11-01",
+      "end": "2026-11-01"
     },
     "recent_sample_period": {
-      "start": "2023-10-02",
-      "end": "2026-10-01"
+      "start": "2023-11-02",
+      "end": "2026-11-01"
     },
     "indices": {
       "SPX": "S&P 500",
@@ -3592,29 +3378,29 @@
     "caveat": "Past behaviour over a limited sample. Not a forecast, not investment advice, and no indication of direction.",
     "baseline": {
       "SPX": {
-        "n": 2511,
-        "mean_abs_pct": 0.734,
-        "median_abs_pct": 0.496,
+        "n": 2510,
+        "mean_abs_pct": 0.736,
+        "median_abs_pct": 0.502,
         "p90_abs_pct": 1.605,
         "max_abs_pct": 11.984,
-        "share_up": 0.546
+        "share_up": 0.548
       },
       "NDX": {
         "n": 2512,
-        "mean_abs_pct": 0.993,
-        "median_abs_pct": 0.708,
-        "p90_abs_pct": 2.201,
+        "mean_abs_pct": 0.997,
+        "median_abs_pct": 0.712,
+        "p90_abs_pct": 2.202,
         "max_abs_pct": 12.193,
-        "share_up": 0.564
+        "share_up": 0.566
       }
     },
     "vix_baseline": {
-      "n": 2545,
-      "median_pct": -0.659,
-      "mean_pct": 0.333,
+      "n": 2546,
+      "median_pct": -0.661,
+      "mean_pct": 0.331,
       "share_falling": 0.546
     },
     "vix_source": "Cboe daily VIX history (cboe.com), used for the vol-crush measure.",
-    "generated_at_utc": "2026-10-01T11:15:38Z"
+    "generated_at_utc": "2026-11-01T11:34:48Z"
   }
 }
