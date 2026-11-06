@@ -5,8 +5,10 @@
  * handler re-reads its state from storage. Nothing survives in module scope.
  */
 
+import { buildBrief, nextBriefTime } from "./brief.js";
 import {
   BADGE_ALARM,
+  BRIEF_ALARM,
   MAX_SCHEDULED_ALARMS,
   NOTIFY_PREFIX,
   REFRESH_ALARM,
@@ -29,6 +31,7 @@ import { marketCalendar, sessionStatus } from "./sessions.js";
 import {
   getCached,
   getPrefs,
+  getReminders,
   getSnoozes,
   refreshFeed,
   snoozeEvent,
@@ -128,13 +131,18 @@ async function rescheduleNotifications() {
   );
 
   const prefs = await getPrefs();
-  if (!prefs.notificationsEnabled) return 0;
-
   const { calendar } = await getCached();
   if (!calendar?.events) return 0;
 
+  // Reminders the user set on individual events fire even with the master
+  // switch off; that switch governs the type-based warnings only.
+  const reminderIds = await getReminders(calendar.events);
+  if (!prefs.notificationsEnabled && !reminderIds.length) return 0;
+
   const planned = plannedNotifications(calendar.events, {
     now: Date.now(),
+    typeAlerts: prefs.notificationsEnabled,
+    reminderIds,
     offsets: prefs.alarmOffsets,
     types: prefs.notifyGroups?.length ? prefs.notifyGroups : null,
     hiddenTypes: prefs.hiddenTypes,
@@ -154,8 +162,49 @@ async function rescheduleNotifications() {
   return planned.length;
 }
 
+/** (Re)arm the morning-brief alarm for the next weekday, or clear it. */
+async function scheduleBrief() {
+  await chrome.alarms.clear(BRIEF_ALARM);
+  const prefs = await getPrefs();
+  if (!prefs.morningBrief) return null;
+  const when = nextBriefTime(
+    Date.now(),
+    prefs.morningBriefHour,
+    resolveTimeZone(prefs.timeZone),
+  );
+  if (!Number.isFinite(when)) return null;
+  chrome.alarms.create(BRIEF_ALARM, { when });
+  return when;
+}
+
+async function showBrief() {
+  const [{ calendar }, prefs] = await Promise.all([getCached(), getPrefs()]);
+  if (!calendar?.events || !prefs.morningBrief) return;
+  const brief = buildBrief(calendar.events, {
+    now: Date.now(),
+    timeZone: resolveTimeZone(prefs.timeZone),
+    hour12: resolveHour12(prefs.timeFormat),
+    hiddenTypes: prefs.hiddenTypes,
+    reminders: await getReminders(),
+  });
+  // A quiet day gets no notification: "nothing today" is not worth a ping.
+  if (!brief) return;
+  const options = {
+    type: "basic",
+    iconUrl: chrome.runtime.getURL("icons/icon128.png"),
+    title: brief.title,
+    message: brief.message,
+    contextMessage: "Compass · Morning brief",
+    priority: brief.priority,
+  };
+  await deliver(BRIEF_NOTIFICATION, options, options, "morning brief");
+}
+
+const BRIEF_NOTIFICATION = "compass:brief";
+
 async function refreshAndReschedule(options) {
   await refreshFeed(options);
+  await scheduleBrief();
   const count = await rescheduleNotifications();
   await updateBadge();
   console.info(`[compass] refreshed; ${count} notification(s) scheduled`);
@@ -277,6 +326,11 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
     await updateBadge();
     return;
   }
+  if (alarm.name === BRIEF_ALARM) {
+    await showBrief();
+    await scheduleBrief();
+    return;
+  }
 
   const parsed = parseAlarmName(NOTIFY_PREFIX, alarm.name);
   if (!parsed) return;
@@ -294,6 +348,11 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 // verified, which is the "verify at official source" mitigation in
 // RESEARCH.md section 7.
 chrome.notifications.onClicked.addListener(async (notificationId) => {
+  // The brief covers several events, so there is no single source to open.
+  if (notificationId === BRIEF_NOTIFICATION) {
+    chrome.notifications.clear(notificationId);
+    return;
+  }
   const eventId = notificationId.replace(/^compass:/, "");
   const { calendar } = await getCached();
   const event = calendar?.events?.find((candidate) => candidate.id === eventId);
@@ -327,7 +386,9 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     return true;
   }
   if (message?.type === "reschedule") {
-    rescheduleNotifications().then((count) => sendResponse({ ok: true, count }));
+    Promise.all([rescheduleNotifications(), scheduleBrief()]).then(([count, brief]) =>
+      sendResponse({ ok: true, count, briefAt: brief }),
+    );
     return true;
   }
   return false;

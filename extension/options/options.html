@@ -117,6 +117,28 @@
         time, so they get one nudge on the day instead.
       </p>
     </div>
+
+    <hr>
+
+    <label class="toggle">
+      <input type="checkbox" id="brief-enabled">
+      <span class="switch" aria-hidden="true"></span>
+      <span>Morning brief</span>
+    </label>
+    <div class="field inline">
+      <label class="label" for="brief-hour">Send at hour</label>
+      <input type="number" id="brief-hour" min="0" max="23" step="1">
+      <p class="hint">
+        One notification each weekday listing the day's high- and medium-impact
+        events, plus anything you've set a reminder on. Skipped on days with
+        nothing major.
+      </p>
+    </div>
+    <p class="hint">
+      To be reminded about one specific event, open it in the popup and press
+      <strong>Remind me</strong>. Those reminders work even when the switch at
+      the top of this section is off.
+    </p>
   </section>
 
   <section class="card">

@@ -302,7 +302,7 @@ for (const [name, stored] of Object.entries(DEGRADED)) {
 
 function installInteractive(initialPrefs = {}) {
   const registry = new Map();
-  const state = { prefs: initialPrefs };
+  const state = { prefs: initialPrefs, reminders: [], sent: [] };
   const root = makeElement("html");
   globalThis.document = {
     getElementById(id) {
@@ -321,11 +321,19 @@ function installInteractive(initialPrefs = {}) {
         async set() {},
       },
       sync: {
-        async get() { return { prefs: state.prefs }; },
-        async set(items) { state.prefs = items.prefs; },
+        async get(key) {
+          return key === "reminders" ? { reminders: state.reminders } : { prefs: state.prefs };
+        },
+        async set(items) {
+          if ("prefs" in items) state.prefs = items.prefs;
+          if ("reminders" in items) state.reminders = items.reminders;
+        },
       },
     },
-    runtime: { async sendMessage() { return { ok: true }; }, openOptionsPage() {} },
+    runtime: {
+      async sendMessage(message) { state.sent.push(message); return { ok: true }; },
+      openOptionsPage() {},
+    },
   };
   return { registry, state, root };
 }
@@ -407,4 +415,43 @@ test("the market pill and hero open their panels, and back returns", async () =>
   registry.get("back").listeners.click();
   assert.equal(registry.get("detail-view").hidden, true);
   assert.equal(registry.get("list-view").hidden, false);
+});
+
+test("the week strip shows five weekdays and dims days with nothing major", async () => {
+  const { registry } = installInteractive();
+  await import(`../popup/popup.js?glance=${Date.now()}`);
+  await settle(40);
+
+  const cells = registry.get("glance").children;
+  assert.equal(cells.length, 5);
+  // The fixture's only high-impact timed event is 6 hours out, so at most
+  // two cells (today, or tomorrow if that crosses midnight) can be enabled.
+  assert.ok(cells.filter((cell) => !cell.disabled).length <= 2);
+  assert.ok(cells.every((cell) => /: /.test(cell.title)), "cells carry a summary tooltip");
+});
+
+test("Remind me toggles a stored reminder and asks for a reschedule", async () => {
+  const { registry, state } = installInteractive();
+  await import(`../popup/popup.js?remind=${Date.now()}`);
+  await settle(40);
+
+  registry.get("next").listeners.click();
+  const remind = registry.get("detail-remind");
+  assert.equal(remind.hidden, false);
+  assert.equal(registry.get("detail-remind-label").textContent, "Remind me");
+  assert.match(registry.get("detail-gcal").href, /^https:\/\/calendar\.google\.com\//);
+
+  await remind.listeners.click();
+  await settle();
+  assert.deepEqual(state.reminders, ["fomc-statement-soon"]);
+  assert.equal(registry.get("detail-remind-label").textContent, "Reminder on");
+  assert.equal(remind.getAttribute("aria-pressed"), "true");
+  assert.ok(state.sent.some((message) => message.type === "reschedule"));
+  // Still on the detail view: toggling must not bounce back to the list.
+  assert.equal(registry.get("detail-view").hidden, false);
+
+  await remind.listeners.click();
+  await settle();
+  assert.deepEqual(state.reminders, []);
+  assert.equal(registry.get("detail-remind-label").textContent, "Remind me");
 });

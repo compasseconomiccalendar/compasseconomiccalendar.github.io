@@ -42,25 +42,37 @@ headless. The popup and settings headers inline the same mark as SVG.
 - **Toolbar badge** counts down to the next high-impact event (`45m`, `2h`,
   `3d`), turning red inside 30 minutes. Ticks every minute when close and
   hourly when days out; shows `!` when the cache is stale
-- Popup lists upcoming events grouped by day (Today / Tomorrow / weekday),
-  filtered by a multi-select **event type** dropdown (FOMC / Data / Treasury /
-  Futures / Market). The selection persists; nothing ticked means everything
+- **Next-event hero**: live countdown to the next high-impact timed event
+  (falling back to the next timed event), with its local time and typical
+  move. Click it for the detail view
+- **Week at a glance**: the next five weekdays with a dot per high- and
+  medium-impact event, holidays marked closed; click a day to jump to it
+- Popup lists upcoming events as one-line rows grouped by day (Today /
+  Tomorrow / weekday), filtered by **event type chips** (All / FOMC / Data /
+  Treasury / Futures / Market). The selection persists
 - **Events stay listed for 90 minutes after they start**, under "Happening
   now" — an FOMC statement should not vanish at 2:00:01
 - Warns above the list when the cache is over 10 days old or the feed was
   built with a failing source — reserved for things that are actually wrong
-- **Coverage tab**: per-source horizons from the feed's `coverage` block,
-  marked computed or reported, so an unpublished date range does not read as
-  an empty one. Informational, so it lives here rather than nagging above the
-  list
+- **Data coverage** (settings page): per-source horizons from the feed's
+  `coverage` block, marked computed or reported, so an unpublished date range
+  does not read as an empty one
 - All-day events (futures rolls, FOMC day 1) get a morning-of nudge instead of
   a meaningless "30 minutes before midnight"
 - Notification buttons to verify at source or snooze for an hour
+- **Per-event reminders**: "Remind me" on any event's detail view notifies at
+  your offsets for that one event, whatever the type filters say and even with
+  type-based warnings switched off. Rows with a reminder show a bell
+- **Morning brief** (opt-in): one weekday notification at an hour you choose,
+  listing the day's high- and medium-impact events plus any you set a reminder
+  on. Skipped on quiet days
+- **Add to calendar** from the detail view: a prefilled Google Calendar link,
+  or a single-event `.ics` download for Apple Calendar and Outlook
 - Arrow keys move between events; Escape leaves the detail view
 - Event detail view: click any event for the full note, source-specific
   metadata (contract code, CUSIP, GDP estimate, meeting span…) and the time in
   your zone, Eastern and UTC. Escape or ← returns to the list
-- **Hours tab**: live session status for both **equities** (pre-market / open /
+- **Market hours** (the NYSE pill in the header): live session status for both **equities** (pre-market / open /
   after hours / closed, with holidays and half days accounted for) and **CME
   equity index futures** (open / daily halt / weekend), session times **in your
   own timezone**, and upcoming market closures
@@ -70,9 +82,9 @@ headless. The popup and settings headers inline the same mark as SVG.
 - **Test notification button** in options — fires one immediately and reports
   the failure reason in the page, since a blocked notification otherwise
   produces nothing on screen and nothing in the console
-- Options page (⚙ in the popup): timezone override, separate list and
-  notification impact thresholds, notification toggle and offsets, and
-  per-event-type hiding
+- Settings page: theme, time frame, timezone and time format; notification
+  types, offsets and toggles; morning brief; grouped per-event-type hiding;
+  copy-link buttons for the ICS subscriptions
 - Disclaimer and FRED attribution on both the popup and the options page
 
 ## Preferences
@@ -92,6 +104,13 @@ Stored in `chrome.storage.sync`, so they follow a signed-in Chrome profile.
 | `hiddenTypes` | `[]` | Event types removed from the list and never notified |
 | `allDayNotifications` | `true` | Morning-of nudge for all-day events |
 | `allDayHour` | `8` | Local hour for that nudge |
+| `morningBrief` | `false` | Weekday summary notification; opt-in |
+| `morningBriefHour` | `7` | Local hour for the brief |
+
+Per-event reminders are stored separately, as a list of event ids under the
+`reminders` key in `chrome.storage.sync`. Ids more than a day past are pruned
+on read; an id missing from the current feed is kept, since a refresh can
+drop and restore an event.
 
 The keyboard shortcut is **not** a stored preference — Chrome owns it. An
 extension cannot set its own binding, so the manifest declares a suggestion

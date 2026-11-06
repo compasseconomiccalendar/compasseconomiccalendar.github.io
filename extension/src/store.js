@@ -42,6 +42,37 @@ export async function snoozeEvent(eventId, until) {
   await chrome.storage.local.set({ [STORAGE_KEYS.snoozes]: snoozes });
 }
 
+/**
+ * Event ids with a per-event reminder. Ids for events more than a day past
+ * are pruned on read, given the current feed, so the list cannot grow.
+ */
+export async function getReminders(events = null) {
+  const stored = await chrome.storage.sync.get(STORAGE_KEYS.reminders);
+  const ids = Array.isArray(stored[STORAGE_KEYS.reminders]) ? stored[STORAGE_KEYS.reminders] : [];
+  if (!events) return ids;
+
+  const cutoff = Date.now() - 24 * 3600 * 1000;
+  const live = ids.filter((id) => {
+    const event = events.find((candidate) => candidate.id === id);
+    // An id missing from this feed is kept: a refresh can drop and restore
+    // an event, and losing the user's reminder over that would be wrong.
+    return !event || Date.parse(event.start_utc) >= cutoff;
+  });
+  if (live.length !== ids.length) {
+    await chrome.storage.sync.set({ [STORAGE_KEYS.reminders]: live });
+  }
+  return live;
+}
+
+/** Turn a reminder on or off; returns whether it is now on. */
+export async function setReminder(eventId, on) {
+  const ids = new Set(await getReminders());
+  if (on) ids.add(eventId);
+  else ids.delete(eventId);
+  await chrome.storage.sync.set({ [STORAGE_KEYS.reminders]: [...ids] });
+  return on;
+}
+
 export async function getCached() {
   const stored = await chrome.storage.local.get([
     STORAGE_KEYS.calendar,
