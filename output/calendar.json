@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0.0",
-  "generated_at_utc": "2026-11-01T18:10:47Z",
+  "generated_at_utc": "2026-11-06T03:25:05Z",
   "window": {
-    "start": "2026-11-01",
-    "end": "2027-12-02"
+    "start": "2026-11-05",
+    "end": "2027-12-06"
   },
   "timezone_note": "All timestamps are UTC. Eastern release times were converted via the IANA America/New_York zone, so DST is already accounted for.",
   "disclaimer": "For informational and educational purposes only. Not investment advice. Times are subject to change; verify against official sources before trading.",
@@ -32,14 +32,10 @@
     }
   ],
   "counts": {
-    "total": 126,
+    "total": 130,
     "by_event_type": {
-      "ism_manufacturing_pmi": 14,
-      "macro_release_factory_orders": 4,
-      "macro_release_jolts": 2,
-      "treasury_quarterly_refunding": 5,
-      "ism_services_pmi": 13,
       "macro_release_jobless_claims": 9,
+      "treasury_auction": 8,
       "macro_release_employment_situation": 2,
       "macro_release_cpi": 2,
       "macro_release_ppi": 2,
@@ -47,8 +43,12 @@
       "monthly_opex": 9,
       "macro_release_gdp": 2,
       "macro_release_pce": 2,
+      "macro_release_factory_orders": 3,
       "market_holiday": 11,
       "market_early_close": 3,
+      "macro_release_jolts": 1,
+      "ism_manufacturing_pmi": 13,
+      "ism_services_pmi": 13,
       "fomc_meeting_day_1": 8,
       "fomc_sep": 4,
       "fomc_statement": 8,
@@ -56,16 +56,17 @@
       "futures_liquidity_roll": 4,
       "futures_official_roll": 4,
       "futures_expiration": 4,
-      "quad_witching": 4
+      "quad_witching": 4,
+      "treasury_quarterly_refunding": 4
     },
     "by_market_impact": {
-      "high": 64,
-      "medium": 35,
-      "low": 27
+      "medium": 34,
+      "low": 32,
+      "high": 64
     }
   },
   "coverage": {
-    "window_end": "2027-12-02",
+    "window_end": "2027-12-06",
     "families": {
       "fomc": {
         "horizon": "reported",
@@ -76,16 +77,16 @@
       },
       "macro_releases": {
         "horizon": "reported",
-        "event_count": 27,
-        "first_event": "2026-11-03",
+        "event_count": 25,
+        "first_event": "2026-11-05",
         "confirmed_through": "2026-12-31",
         "complete_to_window_end": false
       },
       "ism": {
         "horizon": "computed",
-        "event_count": 27,
-        "first_event": "2026-11-02",
-        "confirmed_through": "2027-12-01",
+        "event_count": 26,
+        "first_event": "2026-12-01",
+        "confirmed_through": "2027-12-03",
         "complete_to_window_end": true
       },
       "market_sessions": {
@@ -97,15 +98,15 @@
       },
       "treasury_auctions": {
         "horizon": "reported",
-        "event_count": 0,
-        "first_event": null,
-        "confirmed_through": null,
+        "event_count": 8,
+        "first_event": "2026-11-05",
+        "confirmed_through": "2026-11-12",
         "complete_to_window_end": false
       },
       "treasury_refunding": {
         "horizon": "computed",
-        "event_count": 5,
-        "first_event": "2026-11-04",
+        "event_count": 4,
+        "first_event": "2027-02-03",
         "confirmed_through": "2027-11-03",
         "complete_to_window_end": true
       },
@@ -118,8 +119,8 @@
       }
     },
     "warnings": [
-      "macro_releases: upstream has published dates only through 2026-12-31, 336 days short of the window end 2027-12-02. Treat later months as incomplete, not empty.",
-      "treasury_auctions: no events in the window."
+      "macro_releases: upstream has published dates only through 2026-12-31, 340 days short of the window end 2027-12-06. Treat later months as incomplete, not empty.",
+      "treasury_auctions: upstream has published dates only through 2026-11-12, 389 days short of the window end 2027-12-06. Treat later months as incomplete, not empty."
     ]
   },
   "market_hours": {
@@ -140,137 +141,6 @@
     }
   },
   "events": [
-    {
-      "id": "ism-manufacturing-pmi-2026-11-02",
-      "event_type": "ism_manufacturing_pmi",
-      "title": "ISM Manufacturing PMI (estimated)",
-      "start_utc": "2026-11-02T15:00:00Z",
-      "end_utc": "2026-11-02T15:30:00Z",
-      "all_day": false,
-      "date_et": "2026-11-02",
-      "time_et": "10:00",
-      "market_impact": "high",
-      "source": "computed",
-      "source_url": "https://www.ismworld.org/supply-management-news-and-reports/reports/ism-report-on-business/",
-      "note": "Purchasing managers' index for manufacturing, normally released on the first business day of the month at 10:00am ET. A sub-50 print reads as contraction. Date is estimated from ISM's usual pattern -- confirm against ism.ws before trading it.",
-      "computed": true,
-      "approximate": true
-    },
-    {
-      "id": "fred-factory-orders-2026-11-03",
-      "event_type": "macro_release_factory_orders",
-      "title": "Factory Orders (M3)",
-      "start_utc": "2026-11-03T15:00:00Z",
-      "end_utc": "2026-11-03T15:30:00Z",
-      "all_day": false,
-      "date_et": "2026-11-03",
-      "time_et": "10:00",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/95",
-      "note": "Census Bureau M3 survey: shipments, inventories and new orders for manufactured goods, released at 10:00am ET. Core capital goods orders are read as a proxy for business investment intentions. The advance durable goods report precedes this by a few days.",
-      "fred_release_id": 95,
-      "primary_source_url": "https://www.census.gov/manufacturing/m3/index.html",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "typical_move": {
-        "ratio": 1.07,
-        "notable": false,
-        "move_notable": false,
-        "vol_notable": false,
-        "summary": "Historically moves about as much as a normal day.",
-        "window": "recent",
-        "sample_start": "2023-11-02",
-        "vol_window": "full",
-        "spx": {
-          "median_abs_pct": 0.52,
-          "ratio": 1.07,
-          "n": 74
-        },
-        "ndx": {
-          "median_abs_pct": 0.793,
-          "ratio": 1.15,
-          "n": 74
-        },
-        "vol_crush": {
-          "median_pct": -1.107,
-          "excess_pct": -0.446,
-          "n": 246
-        }
-      }
-    },
-    {
-      "id": "fred-jolts-2026-11-03",
-      "event_type": "macro_release_jolts",
-      "title": "JOLTS Job Openings",
-      "start_utc": "2026-11-03T15:00:00Z",
-      "end_utc": "2026-11-03T15:30:00Z",
-      "all_day": false,
-      "date_et": "2026-11-03",
-      "time_et": "10:00",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/192",
-      "note": "BLS survey of job openings, hires and quits, released at 10:00am ET -- note the later time than most BLS releases. The openings-to-unemployed ratio is a labour-market tightness gauge the Fed cites.",
-      "fred_release_id": 192,
-      "primary_source_url": "https://www.bls.gov/schedule/news_release/jolts.htm",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "typical_move": {
-        "ratio": 1.06,
-        "notable": false,
-        "move_notable": false,
-        "vol_notable": false,
-        "summary": "Historically moves about as much as a normal day.",
-        "window": "recent",
-        "sample_start": "2023-11-02",
-        "vol_window": "full",
-        "spx": {
-          "median_abs_pct": 0.512,
-          "ratio": 1.06,
-          "n": 34
-        },
-        "ndx": {
-          "median_abs_pct": 0.793,
-          "ratio": 1.15,
-          "n": 34
-        },
-        "vol_crush": {
-          "median_pct": -0.704,
-          "excess_pct": -0.043,
-          "n": 119
-        }
-      }
-    },
-    {
-      "id": "treasury-refunding-2026-11-04",
-      "event_type": "treasury_quarterly_refunding",
-      "title": "Treasury Quarterly Refunding Announcement",
-      "start_utc": "2026-11-04T13:30:00Z",
-      "end_utc": "2026-11-04T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-11-04",
-      "time_et": "08:30",
-      "market_impact": "high",
-      "source": "computed",
-      "source_url": "https://home.treasury.gov/news/press-releases",
-      "note": "Treasury announces the size and composition of the coming quarter's coupon auctions at 8:30am ET. Changes to long-end issuance move yields and, through them, equity futures. Computed as the first Wednesday of Feb/May/Aug/Nov -- verify against Treasury's press release schedule.",
-      "computed": true
-    },
-    {
-      "id": "ism-services-pmi-2026-11-04",
-      "event_type": "ism_services_pmi",
-      "title": "ISM Services PMI (estimated)",
-      "start_utc": "2026-11-04T15:00:00Z",
-      "end_utc": "2026-11-04T15:30:00Z",
-      "all_day": false,
-      "date_et": "2026-11-04",
-      "time_et": "10:00",
-      "market_impact": "high",
-      "source": "computed",
-      "source_url": "https://www.ismworld.org/supply-management-news-and-reports/reports/ism-report-on-business/",
-      "note": "Purchasing managers' index for services, normally released on the third business day of the month at 10:00am ET. Services are the bulk of the US economy, so this often outweighs the manufacturing print. Date is estimated -- confirm against ism.ws before trading it.",
-      "computed": true,
-      "approximate": true
-    },
     {
       "id": "fred-jobless-claims-2026-11-05",
       "event_type": "macro_release_jobless_claims",
@@ -312,6 +182,44 @@
           "n": 520
         }
       }
+    },
+    {
+      "id": "treasury-auction-912797WE3-2026-11-05",
+      "event_type": "treasury_auction",
+      "title": "Treasury Auction: 4-Week Bill",
+      "start_utc": "2026-11-05T16:30:00Z",
+      "end_utc": "2026-11-05T17:00:00Z",
+      "all_day": false,
+      "date_et": "2026-11-05",
+      "time_et": "11:30",
+      "market_impact": "low",
+      "source": "TreasuryDirect",
+      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
+      "note": "Competitive bidding for the 4-Week Bill closes at 11:30 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
+      "security_type": "Bill",
+      "security_term": "4-Week",
+      "cusip": "912797WE3",
+      "announcement_date": "2026-11-03",
+      "part_of_quarterly_refunding": false
+    },
+    {
+      "id": "treasury-auction-912797WN3-2026-11-05",
+      "event_type": "treasury_auction",
+      "title": "Treasury Auction: 8-Week Bill",
+      "start_utc": "2026-11-05T16:30:00Z",
+      "end_utc": "2026-11-05T17:00:00Z",
+      "all_day": false,
+      "date_et": "2026-11-05",
+      "time_et": "11:30",
+      "market_impact": "low",
+      "source": "TreasuryDirect",
+      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
+      "note": "Competitive bidding for the 8-Week Bill closes at 11:30 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
+      "security_type": "Bill",
+      "security_term": "8-Week",
+      "cusip": "912797WN3",
+      "announcement_date": "2026-11-03",
+      "part_of_quarterly_refunding": false
     },
     {
       "id": "fred-employment-situation-2026-11-06",
@@ -356,6 +264,82 @@
       }
     },
     {
+      "id": "treasury-auction-912797UX3-2026-11-09",
+      "event_type": "treasury_auction",
+      "title": "Treasury Auction: 26-Week Bill",
+      "start_utc": "2026-11-09T16:30:00Z",
+      "end_utc": "2026-11-09T17:00:00Z",
+      "all_day": false,
+      "date_et": "2026-11-09",
+      "time_et": "11:30",
+      "market_impact": "low",
+      "source": "TreasuryDirect",
+      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
+      "note": "Competitive bidding for the 26-Week Bill closes at 11:30 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
+      "security_type": "Bill",
+      "security_term": "26-Week",
+      "cusip": "912797UX3",
+      "announcement_date": "2026-11-05",
+      "part_of_quarterly_refunding": false
+    },
+    {
+      "id": "treasury-auction-912797WB9-2026-11-09",
+      "event_type": "treasury_auction",
+      "title": "Treasury Auction: 13-Week Bill",
+      "start_utc": "2026-11-09T16:30:00Z",
+      "end_utc": "2026-11-09T17:00:00Z",
+      "all_day": false,
+      "date_et": "2026-11-09",
+      "time_et": "11:30",
+      "market_impact": "low",
+      "source": "TreasuryDirect",
+      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
+      "note": "Competitive bidding for the 13-Week Bill closes at 11:30 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
+      "security_type": "Bill",
+      "security_term": "13-Week",
+      "cusip": "912797WB9",
+      "announcement_date": "2026-11-05",
+      "part_of_quarterly_refunding": false
+    },
+    {
+      "id": "treasury-auction-912797TC1-2026-11-09",
+      "event_type": "treasury_auction",
+      "title": "Treasury Auction: 6-Week Bill",
+      "start_utc": "2026-11-09T18:00:00Z",
+      "end_utc": "2026-11-09T18:30:00Z",
+      "all_day": false,
+      "date_et": "2026-11-09",
+      "time_et": "13:00",
+      "market_impact": "low",
+      "source": "TreasuryDirect",
+      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
+      "note": "Competitive bidding for the 6-Week Bill closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
+      "security_type": "Bill",
+      "security_term": "6-Week",
+      "cusip": "912797TC1",
+      "announcement_date": "2026-11-05",
+      "part_of_quarterly_refunding": false
+    },
+    {
+      "id": "treasury-auction-91282CRW3-2026-11-09",
+      "event_type": "treasury_auction",
+      "title": "Treasury Auction: 3-Year Note",
+      "start_utc": "2026-11-09T18:00:00Z",
+      "end_utc": "2026-11-09T18:30:00Z",
+      "all_day": false,
+      "date_et": "2026-11-09",
+      "time_et": "13:00",
+      "market_impact": "medium",
+      "source": "TreasuryDirect",
+      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
+      "note": "Competitive bidding for the 3-Year Note closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
+      "security_type": "Note",
+      "security_term": "3-Year",
+      "cusip": "91282CRW3",
+      "announcement_date": "2026-11-04",
+      "part_of_quarterly_refunding": true
+    },
+    {
       "id": "fred-cpi-2026-11-10",
       "event_type": "macro_release_cpi",
       "title": "Consumer Price Index (CPI)",
@@ -398,6 +382,25 @@
       }
     },
     {
+      "id": "treasury-auction-91282CRX1-2026-11-10",
+      "event_type": "treasury_auction",
+      "title": "Treasury Auction: 10-Year Note",
+      "start_utc": "2026-11-10T18:00:00Z",
+      "end_utc": "2026-11-10T18:30:00Z",
+      "all_day": false,
+      "date_et": "2026-11-10",
+      "time_et": "13:00",
+      "market_impact": "high",
+      "source": "TreasuryDirect",
+      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
+      "note": "Competitive bidding for the 10-Year Note closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
+      "security_type": "Note",
+      "security_term": "10-Year",
+      "cusip": "91282CRX1",
+      "announcement_date": "2026-11-04",
+      "part_of_quarterly_refunding": true
+    },
+    {
       "id": "fred-jobless-claims-2026-11-12",
       "event_type": "macro_release_jobless_claims",
       "title": "Initial Jobless Claims",
@@ -438,6 +441,25 @@
           "n": 520
         }
       }
+    },
+    {
+      "id": "treasury-auction-912810UY2-2026-11-12",
+      "event_type": "treasury_auction",
+      "title": "Treasury Auction: 30-Year Bond",
+      "start_utc": "2026-11-12T18:00:00Z",
+      "end_utc": "2026-11-12T18:30:00Z",
+      "all_day": false,
+      "date_et": "2026-11-12",
+      "time_et": "13:00",
+      "market_impact": "high",
+      "source": "TreasuryDirect",
+      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
+      "note": "Competitive bidding for the 30-Year Bond closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
+      "security_type": "Bond",
+      "security_term": "30-Year",
+      "cusip": "912810UY2",
+      "announcement_date": "2026-11-04",
+      "part_of_quarterly_refunding": true
     },
     {
       "id": "fred-ppi-2026-11-13",
@@ -3357,6 +3379,22 @@
       "source": "computed",
       "source_url": "https://www.ismworld.org/supply-management-news-and-reports/reports/ism-report-on-business/",
       "note": "Purchasing managers' index for manufacturing, normally released on the first business day of the month at 10:00am ET. A sub-50 print reads as contraction. Date is estimated from ISM's usual pattern -- confirm against ism.ws before trading it.",
+      "computed": true,
+      "approximate": true
+    },
+    {
+      "id": "ism-services-pmi-2027-12-03",
+      "event_type": "ism_services_pmi",
+      "title": "ISM Services PMI (estimated)",
+      "start_utc": "2027-12-03T15:00:00Z",
+      "end_utc": "2027-12-03T15:30:00Z",
+      "all_day": false,
+      "date_et": "2027-12-03",
+      "time_et": "10:00",
+      "market_impact": "high",
+      "source": "computed",
+      "source_url": "https://www.ismworld.org/supply-management-news-and-reports/reports/ism-report-on-business/",
+      "note": "Purchasing managers' index for services, normally released on the third business day of the month at 10:00am ET. Services are the bulk of the US economy, so this often outweighs the manufacturing print. Date is estimated -- confirm against ism.ws before trading it.",
       "computed": true,
       "approximate": true
     }
