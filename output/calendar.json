@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at_utc": "2026-11-06T16:25:29Z",
+  "generated_at_utc": "2026-11-06T16:34:43Z",
   "window": {
     "start": "2026-11-06",
     "end": "2027-12-07"
@@ -32,7 +32,7 @@
     }
   ],
   "counts": {
-    "total": 144,
+    "total": 151,
     "by_event_type": {
       "macro_release_employment_situation": 2,
       "treasury_auction": 14,
@@ -40,11 +40,14 @@
       "macro_release_jobless_claims": 8,
       "macro_release_ppi": 2,
       "macro_release_retail_sales": 2,
+      "macro_release_industrial_production": 2,
+      "macro_release_housing_starts": 4,
       "fomc_minutes": 9,
       "monthly_opex": 9,
       "macro_release_gdp": 2,
       "macro_release_pce": 2,
       "macro_release_factory_orders": 3,
+      "fomc_beige_book": 1,
       "market_holiday": 11,
       "market_early_close": 3,
       "macro_release_jolts": 1,
@@ -63,7 +66,7 @@
     "by_market_impact": {
       "high": 65,
       "low": 36,
-      "medium": 43
+      "medium": 50
     }
   },
   "coverage": {
@@ -78,9 +81,16 @@
       },
       "macro_releases": {
         "horizon": "reported",
-        "event_count": 24,
+        "event_count": 28,
         "first_event": "2026-11-06",
         "confirmed_through": "2026-12-31",
+        "complete_to_window_end": false
+      },
+      "fed_board": {
+        "horizon": "reported",
+        "event_count": 3,
+        "first_event": "2026-11-17",
+        "confirmed_through": "2026-12-16",
         "complete_to_window_end": false
       },
       "ism": {
@@ -121,6 +131,7 @@
     },
     "warnings": [
       "macro_releases: upstream has published dates only through 2026-12-31, 341 days short of the window end 2027-12-07. Treat later months as incomplete, not empty.",
+      "fed_board: upstream has published dates only through 2026-12-16, 356 days short of the window end 2027-12-07. Treat later months as incomplete, not empty.",
       "treasury_auctions: upstream has published dates only through 2026-11-19, 383 days short of the window end 2027-12-07. Treat later months as incomplete, not empty."
     ]
   },
@@ -562,6 +573,20 @@
       }
     },
     {
+      "id": "fed-industrial-production-2026-11-17",
+      "event_type": "macro_release_industrial_production",
+      "title": "Industrial Production & Capacity Utilization",
+      "start_utc": "2026-11-17T14:15:00Z",
+      "end_utc": "2026-11-17T14:45:00Z",
+      "all_day": false,
+      "date_et": "2026-11-17",
+      "time_et": "09:15",
+      "market_impact": "medium",
+      "source": "federalreserve.gov",
+      "source_url": "https://www.federalreserve.gov/releases/g17/current/default.htm",
+      "note": "Monthly output of factories, mines and utilities, and how much spare capacity they have (G.17). A read on the goods economy and on inflation pressure."
+    },
+    {
       "id": "treasury-auction-912797VJ3-2026-11-17",
       "event_type": "treasury_auction",
       "title": "Treasury Auction: 6-Week Bill",
@@ -579,6 +604,23 @@
       "cusip": "912797VJ3",
       "announcement_date": "2026-11-12",
       "part_of_quarterly_refunding": false
+    },
+    {
+      "id": "fred-housing-starts-2026-11-18",
+      "event_type": "macro_release_housing_starts",
+      "title": "Housing Starts & Building Permits",
+      "start_utc": "2026-11-18T13:30:00Z",
+      "end_utc": "2026-11-18T14:00:00Z",
+      "all_day": false,
+      "date_et": "2026-11-18",
+      "time_et": "08:30",
+      "market_impact": "medium",
+      "source": "FRED",
+      "source_url": "https://fred.stlouisfed.org/releases/27",
+      "note": "Census report on new homes started and permits issued. The most rate-sensitive corner of the economy, so a read on how policy is biting.",
+      "fred_release_id": 27,
+      "primary_source_url": "https://www.census.gov/construction/nrc/index.html",
+      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
     },
     {
       "id": "treasury-auction-912810UZ9-2026-11-18",
@@ -764,6 +806,23 @@
       }
     },
     {
+      "id": "fred-housing-starts-2026-11-25",
+      "event_type": "macro_release_housing_starts",
+      "title": "Housing Starts & Building Permits",
+      "start_utc": "2026-11-25T13:30:00Z",
+      "end_utc": "2026-11-25T14:00:00Z",
+      "all_day": false,
+      "date_et": "2026-11-25",
+      "time_et": "08:30",
+      "market_impact": "medium",
+      "source": "FRED",
+      "source_url": "https://fred.stlouisfed.org/releases/27",
+      "note": "Census report on new homes started and permits issued. The most rate-sensitive corner of the economy, so a read on how policy is biting.",
+      "fred_release_id": 27,
+      "primary_source_url": "https://www.census.gov/construction/nrc/index.html",
+      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
+    },
+    {
       "id": "fred-jobless-claims-2026-11-25",
       "event_type": "macro_release_jobless_claims",
       "title": "Initial Jobless Claims",
@@ -890,6 +949,20 @@
           "n": 246
         }
       }
+    },
+    {
+      "id": "fed-beige-book-2026-11-25",
+      "event_type": "fomc_beige_book",
+      "title": "Beige Book",
+      "start_utc": "2026-11-25T19:00:00Z",
+      "end_utc": "2026-11-25T19:30:00Z",
+      "all_day": false,
+      "date_et": "2026-11-25",
+      "time_et": "14:00",
+      "market_impact": "medium",
+      "source": "federalreserve.gov",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/beige-book-default.htm",
+      "note": "The Fed's summary of conditions in each of its twelve districts, published two weeks before each FOMC meeting. Read for early signs of how the committee sees the economy."
     },
     {
       "id": "market-holiday-2026-11-26",
@@ -1424,6 +1497,37 @@
       }
     },
     {
+      "id": "fed-industrial-production-2026-12-16",
+      "event_type": "macro_release_industrial_production",
+      "title": "Industrial Production & Capacity Utilization",
+      "start_utc": "2026-12-16T14:15:00Z",
+      "end_utc": "2026-12-16T14:45:00Z",
+      "all_day": false,
+      "date_et": "2026-12-16",
+      "time_et": "09:15",
+      "market_impact": "medium",
+      "source": "federalreserve.gov",
+      "source_url": "https://www.federalreserve.gov/releases/g17/current/default.htm",
+      "note": "Monthly output of factories, mines and utilities, and how much spare capacity they have (G.17). A read on the goods economy and on inflation pressure."
+    },
+    {
+      "id": "fred-housing-starts-2026-12-17",
+      "event_type": "macro_release_housing_starts",
+      "title": "Housing Starts & Building Permits",
+      "start_utc": "2026-12-17T13:30:00Z",
+      "end_utc": "2026-12-17T14:00:00Z",
+      "all_day": false,
+      "date_et": "2026-12-17",
+      "time_et": "08:30",
+      "market_impact": "medium",
+      "source": "FRED",
+      "source_url": "https://fred.stlouisfed.org/releases/27",
+      "note": "Census report on new homes started and permits issued. The most rate-sensitive corner of the economy, so a read on how policy is biting.",
+      "fred_release_id": 27,
+      "primary_source_url": "https://www.census.gov/construction/nrc/index.html",
+      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
+    },
+    {
       "id": "fred-jobless-claims-2026-12-17",
       "event_type": "macro_release_jobless_claims",
       "title": "Initial Jobless Claims",
@@ -1548,6 +1652,23 @@
           "n": 132
         }
       }
+    },
+    {
+      "id": "fred-housing-starts-2026-12-23",
+      "event_type": "macro_release_housing_starts",
+      "title": "Housing Starts & Building Permits",
+      "start_utc": "2026-12-23T13:30:00Z",
+      "end_utc": "2026-12-23T14:00:00Z",
+      "all_day": false,
+      "date_et": "2026-12-23",
+      "time_et": "08:30",
+      "market_impact": "medium",
+      "source": "FRED",
+      "source_url": "https://fred.stlouisfed.org/releases/27",
+      "note": "Census report on new homes started and permits issued. The most rate-sensitive corner of the economy, so a read on how policy is biting.",
+      "fred_release_id": 27,
+      "primary_source_url": "https://www.census.gov/construction/nrc/index.html",
+      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis."
     },
     {
       "id": "fred-pce-2026-12-23",
