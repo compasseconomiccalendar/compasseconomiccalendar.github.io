@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0.0",
-  "generated_at_utc": "2026-11-06T03:25:44Z",
+  "generated_at_utc": "2026-11-06T16:25:29Z",
   "window": {
-    "start": "2026-11-05",
-    "end": "2027-12-06"
+    "start": "2026-11-06",
+    "end": "2027-12-07"
   },
   "timezone_note": "All timestamps are UTC. Eastern release times were converted via the IANA America/New_York zone, so DST is already accounted for.",
   "disclaimer": "For informational and educational purposes only. Not investment advice. Times are subject to change; verify against official sources before trading.",
@@ -32,14 +32,15 @@
     }
   ],
   "counts": {
-    "total": 130,
+    "total": 144,
     "by_event_type": {
-      "macro_release_jobless_claims": 9,
-      "treasury_auction": 8,
       "macro_release_employment_situation": 2,
+      "treasury_auction": 14,
       "macro_release_cpi": 2,
+      "macro_release_jobless_claims": 8,
       "macro_release_ppi": 2,
       "macro_release_retail_sales": 2,
+      "fomc_minutes": 9,
       "monthly_opex": 9,
       "macro_release_gdp": 2,
       "macro_release_pce": 2,
@@ -60,25 +61,25 @@
       "treasury_quarterly_refunding": 4
     },
     "by_market_impact": {
-      "medium": 34,
-      "low": 32,
-      "high": 64
+      "high": 65,
+      "low": 36,
+      "medium": 43
     }
   },
   "coverage": {
-    "window_end": "2027-12-06",
+    "window_end": "2027-12-07",
     "families": {
       "fomc": {
         "horizon": "reported",
-        "event_count": 28,
-        "first_event": "2026-12-08",
-        "confirmed_through": "2027-10-27",
+        "event_count": 37,
+        "first_event": "2026-11-18",
+        "confirmed_through": "2027-11-17",
         "complete_to_window_end": true
       },
       "macro_releases": {
         "horizon": "reported",
-        "event_count": 25,
-        "first_event": "2026-11-05",
+        "event_count": 24,
+        "first_event": "2026-11-06",
         "confirmed_through": "2026-12-31",
         "complete_to_window_end": false
       },
@@ -98,9 +99,9 @@
       },
       "treasury_auctions": {
         "horizon": "reported",
-        "event_count": 8,
-        "first_event": "2026-11-05",
-        "confirmed_through": "2026-11-12",
+        "event_count": 14,
+        "first_event": "2026-11-09",
+        "confirmed_through": "2026-11-19",
         "complete_to_window_end": false
       },
       "treasury_refunding": {
@@ -119,8 +120,8 @@
       }
     },
     "warnings": [
-      "macro_releases: upstream has published dates only through 2026-12-31, 340 days short of the window end 2027-12-06. Treat later months as incomplete, not empty.",
-      "treasury_auctions: upstream has published dates only through 2026-11-12, 389 days short of the window end 2027-12-06. Treat later months as incomplete, not empty."
+      "macro_releases: upstream has published dates only through 2026-12-31, 341 days short of the window end 2027-12-07. Treat later months as incomplete, not empty.",
+      "treasury_auctions: upstream has published dates only through 2026-11-19, 383 days short of the window end 2027-12-07. Treat later months as incomplete, not empty."
     ]
   },
   "market_hours": {
@@ -141,86 +142,6 @@
     }
   },
   "events": [
-    {
-      "id": "fred-jobless-claims-2026-11-05",
-      "event_type": "macro_release_jobless_claims",
-      "title": "Initial Jobless Claims",
-      "start_utc": "2026-11-05T13:30:00Z",
-      "end_utc": "2026-11-05T14:00:00Z",
-      "all_day": false,
-      "date_et": "2026-11-05",
-      "time_et": "08:30",
-      "market_impact": "medium",
-      "source": "FRED",
-      "source_url": "https://fred.stlouisfed.org/releases/180",
-      "note": "Weekly initial and continuing unemployment claims, released every Thursday at 8:30am ET. The highest-frequency read on the labour market; the four-week average is what traders watch for a trend.",
-      "fred_release_id": 180,
-      "primary_source_url": "https://www.dol.gov/ui/data.pdf",
-      "attribution": "This product uses the FRED® API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
-      "typical_move": {
-        "ratio": 1.05,
-        "notable": false,
-        "move_notable": false,
-        "vol_notable": false,
-        "summary": "Historically moves about as much as a normal day.",
-        "window": "recent",
-        "sample_start": "2023-11-02",
-        "vol_window": "full",
-        "spx": {
-          "median_abs_pct": 0.51,
-          "ratio": 1.05,
-          "n": 149
-        },
-        "ndx": {
-          "median_abs_pct": 0.687,
-          "ratio": 1.0,
-          "n": 150
-        },
-        "vol_crush": {
-          "median_pct": -0.673,
-          "excess_pct": -0.012,
-          "n": 520
-        }
-      }
-    },
-    {
-      "id": "treasury-auction-912797WE3-2026-11-05",
-      "event_type": "treasury_auction",
-      "title": "Treasury Auction: 4-Week Bill",
-      "start_utc": "2026-11-05T16:30:00Z",
-      "end_utc": "2026-11-05T17:00:00Z",
-      "all_day": false,
-      "date_et": "2026-11-05",
-      "time_et": "11:30",
-      "market_impact": "low",
-      "source": "TreasuryDirect",
-      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
-      "note": "Competitive bidding for the 4-Week Bill closes at 11:30 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
-      "security_type": "Bill",
-      "security_term": "4-Week",
-      "cusip": "912797WE3",
-      "announcement_date": "2026-11-03",
-      "part_of_quarterly_refunding": false
-    },
-    {
-      "id": "treasury-auction-912797WN3-2026-11-05",
-      "event_type": "treasury_auction",
-      "title": "Treasury Auction: 8-Week Bill",
-      "start_utc": "2026-11-05T16:30:00Z",
-      "end_utc": "2026-11-05T17:00:00Z",
-      "all_day": false,
-      "date_et": "2026-11-05",
-      "time_et": "11:30",
-      "market_impact": "low",
-      "source": "TreasuryDirect",
-      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
-      "note": "Competitive bidding for the 8-Week Bill closes at 11:30 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
-      "security_type": "Bill",
-      "security_term": "8-Week",
-      "cusip": "912797WN3",
-      "announcement_date": "2026-11-03",
-      "part_of_quarterly_refunding": false
-    },
     {
       "id": "fred-employment-situation-2026-11-06",
       "event_type": "macro_release_employment_situation",
@@ -443,6 +364,63 @@
       }
     },
     {
+      "id": "treasury-auction-912797WF0-2026-11-12",
+      "event_type": "treasury_auction",
+      "title": "Treasury Auction: 4-Week Bill",
+      "start_utc": "2026-11-12T18:00:00Z",
+      "end_utc": "2026-11-12T18:30:00Z",
+      "all_day": false,
+      "date_et": "2026-11-12",
+      "time_et": "13:00",
+      "market_impact": "low",
+      "source": "TreasuryDirect",
+      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
+      "note": "Competitive bidding for the 4-Week Bill closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
+      "security_type": "Bill",
+      "security_term": "4-Week",
+      "cusip": "912797WF0",
+      "announcement_date": "2026-11-10",
+      "part_of_quarterly_refunding": false
+    },
+    {
+      "id": "treasury-auction-912797WP8-2026-11-12",
+      "event_type": "treasury_auction",
+      "title": "Treasury Auction: 8-Week Bill",
+      "start_utc": "2026-11-12T18:00:00Z",
+      "end_utc": "2026-11-12T18:30:00Z",
+      "all_day": false,
+      "date_et": "2026-11-12",
+      "time_et": "13:00",
+      "market_impact": "low",
+      "source": "TreasuryDirect",
+      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
+      "note": "Competitive bidding for the 8-Week Bill closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
+      "security_type": "Bill",
+      "security_term": "8-Week",
+      "cusip": "912797WP8",
+      "announcement_date": "2026-11-10",
+      "part_of_quarterly_refunding": false
+    },
+    {
+      "id": "treasury-auction-912797XH5-2026-11-12",
+      "event_type": "treasury_auction",
+      "title": "Treasury Auction: 17-Week Bill",
+      "start_utc": "2026-11-12T18:00:00Z",
+      "end_utc": "2026-11-12T18:30:00Z",
+      "all_day": false,
+      "date_et": "2026-11-12",
+      "time_et": "13:00",
+      "market_impact": "low",
+      "source": "TreasuryDirect",
+      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
+      "note": "Competitive bidding for the 17-Week Bill closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
+      "security_type": "Bill",
+      "security_term": "17-Week",
+      "cusip": "912797XH5",
+      "announcement_date": "2026-11-10",
+      "part_of_quarterly_refunding": false
+    },
+    {
       "id": "treasury-auction-912810UY2-2026-11-12",
       "event_type": "treasury_auction",
       "title": "Treasury Auction: 30-Year Bond",
@@ -504,6 +482,44 @@
       }
     },
     {
+      "id": "treasury-auction-912797TV9-2026-11-16",
+      "event_type": "treasury_auction",
+      "title": "Treasury Auction: 13-Week Bill",
+      "start_utc": "2026-11-16T18:00:00Z",
+      "end_utc": "2026-11-16T18:30:00Z",
+      "all_day": false,
+      "date_et": "2026-11-16",
+      "time_et": "13:00",
+      "market_impact": "low",
+      "source": "TreasuryDirect",
+      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
+      "note": "Competitive bidding for the 13-Week Bill closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
+      "security_type": "Bill",
+      "security_term": "13-Week",
+      "cusip": "912797TV9",
+      "announcement_date": "2026-11-12",
+      "part_of_quarterly_refunding": false
+    },
+    {
+      "id": "treasury-auction-912797XD4-2026-11-16",
+      "event_type": "treasury_auction",
+      "title": "Treasury Auction: 26-Week Bill",
+      "start_utc": "2026-11-16T18:00:00Z",
+      "end_utc": "2026-11-16T18:30:00Z",
+      "all_day": false,
+      "date_et": "2026-11-16",
+      "time_et": "13:00",
+      "market_impact": "low",
+      "source": "TreasuryDirect",
+      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
+      "note": "Competitive bidding for the 26-Week Bill closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
+      "security_type": "Bill",
+      "security_term": "26-Week",
+      "cusip": "912797XD4",
+      "announcement_date": "2026-11-12",
+      "part_of_quarterly_refunding": false
+    },
+    {
       "id": "fred-retail-sales-2026-11-17",
       "event_type": "macro_release_retail_sales",
       "title": "Retail Sales (Advance)",
@@ -546,6 +562,61 @@
       }
     },
     {
+      "id": "treasury-auction-912797VJ3-2026-11-17",
+      "event_type": "treasury_auction",
+      "title": "Treasury Auction: 6-Week Bill",
+      "start_utc": "2026-11-17T18:00:00Z",
+      "end_utc": "2026-11-17T18:30:00Z",
+      "all_day": false,
+      "date_et": "2026-11-17",
+      "time_et": "13:00",
+      "market_impact": "low",
+      "source": "TreasuryDirect",
+      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
+      "note": "Competitive bidding for the 6-Week Bill closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
+      "security_type": "Bill",
+      "security_term": "6-Week",
+      "cusip": "912797VJ3",
+      "announcement_date": "2026-11-12",
+      "part_of_quarterly_refunding": false
+    },
+    {
+      "id": "treasury-auction-912810UZ9-2026-11-18",
+      "event_type": "treasury_auction",
+      "title": "Treasury Auction: 20-Year Bond",
+      "start_utc": "2026-11-18T18:00:00Z",
+      "end_utc": "2026-11-18T18:30:00Z",
+      "all_day": false,
+      "date_et": "2026-11-18",
+      "time_et": "13:00",
+      "market_impact": "high",
+      "source": "TreasuryDirect",
+      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
+      "note": "Competitive bidding for the 20-Year Bond closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
+      "security_type": "Bond",
+      "security_term": "20-Year",
+      "cusip": "912810UZ9",
+      "announcement_date": "2026-11-12",
+      "part_of_quarterly_refunding": false
+    },
+    {
+      "id": "fomc-minutes-2026-10-28",
+      "event_type": "fomc_minutes",
+      "title": "FOMC Minutes (Oct 28 meeting)",
+      "start_utc": "2026-11-18T19:00:00Z",
+      "end_utc": "2026-11-18T19:30:00Z",
+      "all_day": false,
+      "date_et": "2026-11-18",
+      "time_et": "14:00",
+      "market_impact": "medium",
+      "source": "federalreserve.gov",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "note": "Minutes of the FOMC meeting that ended October 28, released at 2:00pm ET. Markets read them for how divided the committee is and what it is weighing for the next decision. Date expected from the Fed's standing practice of releasing minutes three weeks after the decision; it is confirmed on the Fed's calendar on release.",
+      "meeting_end_date": "2026-10-28",
+      "confirmed": false,
+      "approximate": true
+    },
+    {
       "id": "fred-jobless-claims-2026-11-19",
       "event_type": "macro_release_jobless_claims",
       "title": "Initial Jobless Claims",
@@ -586,6 +657,25 @@
           "n": 520
         }
       }
+    },
+    {
+      "id": "treasury-auction-91282CRE3-2026-11-19",
+      "event_type": "treasury_auction",
+      "title": "Treasury Auction: 9-Year 8-Month Note",
+      "start_utc": "2026-11-19T18:00:00Z",
+      "end_utc": "2026-11-19T18:30:00Z",
+      "all_day": false,
+      "date_et": "2026-11-19",
+      "time_et": "13:00",
+      "market_impact": "medium",
+      "source": "TreasuryDirect",
+      "source_url": "https://www.treasurydirect.gov/auctions/announcements-data-results/",
+      "note": "Competitive bidding for the 9-Year 8-Month Note closes at 13:00 ET. A weak auction (low bid-to-cover, high tail) pushes yields up and typically pressures index futures.",
+      "security_type": "Note",
+      "security_term": "9-Year 8-Month",
+      "cusip": "91282CRE3",
+      "announcement_date": "2026-11-12",
+      "part_of_quarterly_refunding": false
     },
     {
       "id": "monthly-opex-2026-11",
@@ -1620,6 +1710,23 @@
       "computed": true
     },
     {
+      "id": "fomc-minutes-2026-12-09",
+      "event_type": "fomc_minutes",
+      "title": "FOMC Minutes (Dec 9 meeting)",
+      "start_utc": "2026-12-30T19:00:00Z",
+      "end_utc": "2026-12-30T19:30:00Z",
+      "all_day": false,
+      "date_et": "2026-12-30",
+      "time_et": "14:00",
+      "market_impact": "medium",
+      "source": "federalreserve.gov",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "note": "Minutes of the FOMC meeting that ended December 9, released at 2:00pm ET. Markets read them for how divided the committee is and what it is weighing for the next decision. Date expected from the Fed's standing practice of releasing minutes three weeks after the decision; it is confirmed on the Fed's calendar on release.",
+      "meeting_end_date": "2026-12-09",
+      "confirmed": false,
+      "approximate": true
+    },
+    {
       "id": "fred-jobless-claims-2026-12-31",
       "event_type": "macro_release_jobless_claims",
       "title": "Initial Jobless Claims",
@@ -1901,6 +2008,23 @@
       "note": "US equity markets are closed for Presidents' Day. CME equity index futures are also closed or on a holiday schedule -- check CME's calendar for the exact session.",
       "holiday_name": "Presidents' Day",
       "computed": true
+    },
+    {
+      "id": "fomc-minutes-2027-01-27",
+      "event_type": "fomc_minutes",
+      "title": "FOMC Minutes (Jan 27 meeting)",
+      "start_utc": "2027-02-17T19:00:00Z",
+      "end_utc": "2027-02-17T19:30:00Z",
+      "all_day": false,
+      "date_et": "2027-02-17",
+      "time_et": "14:00",
+      "market_impact": "medium",
+      "source": "federalreserve.gov",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "note": "Minutes of the FOMC meeting that ended January 27, released at 2:00pm ET. Markets read them for how divided the committee is and what it is weighing for the next decision. Date expected from the Fed's standing practice of releasing minutes three weeks after the decision; it is confirmed on the Fed's calendar on release.",
+      "meeting_end_date": "2027-01-27",
+      "confirmed": false,
+      "approximate": true
     },
     {
       "id": "monthly-opex-2027-02",
@@ -2195,6 +2319,23 @@
       "approximate": true
     },
     {
+      "id": "fomc-minutes-2027-03-17",
+      "event_type": "fomc_minutes",
+      "title": "FOMC Minutes (Mar 17 meeting)",
+      "start_utc": "2027-04-07T18:00:00Z",
+      "end_utc": "2027-04-07T18:30:00Z",
+      "all_day": false,
+      "date_et": "2027-04-07",
+      "time_et": "14:00",
+      "market_impact": "medium",
+      "source": "federalreserve.gov",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "note": "Minutes of the FOMC meeting that ended March 17, released at 2:00pm ET. Markets read them for how divided the committee is and what it is weighing for the next decision. Date expected from the Fed's standing practice of releasing minutes three weeks after the decision; it is confirmed on the Fed's calendar on release.",
+      "meeting_end_date": "2027-03-17",
+      "confirmed": false,
+      "approximate": true
+    },
+    {
       "id": "monthly-opex-2027-04",
       "event_type": "monthly_opex",
       "title": "Monthly Options Expiration (OPEX)",
@@ -2353,6 +2494,23 @@
       "source_url": "https://www.ismworld.org/supply-management-news-and-reports/reports/ism-report-on-business/",
       "note": "Purchasing managers' index for services, normally released on the third business day of the month at 10:00am ET. Services are the bulk of the US economy, so this often outweighs the manufacturing print. Date is estimated -- confirm against ism.ws before trading it.",
       "computed": true,
+      "approximate": true
+    },
+    {
+      "id": "fomc-minutes-2027-04-28",
+      "event_type": "fomc_minutes",
+      "title": "FOMC Minutes (Apr 28 meeting)",
+      "start_utc": "2027-05-19T18:00:00Z",
+      "end_utc": "2027-05-19T18:30:00Z",
+      "all_day": false,
+      "date_et": "2027-05-19",
+      "time_et": "14:00",
+      "market_impact": "medium",
+      "source": "federalreserve.gov",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "note": "Minutes of the FOMC meeting that ended April 28, released at 2:00pm ET. Markets read them for how divided the committee is and what it is weighing for the next decision. Date expected from the Fed's standing practice of releasing minutes three weeks after the decision; it is confirmed on the Fed's calendar on release.",
+      "meeting_end_date": "2027-04-28",
+      "confirmed": false,
       "approximate": true
     },
     {
@@ -2632,6 +2790,23 @@
       "holiday_adjusted": false
     },
     {
+      "id": "fomc-minutes-2027-06-09",
+      "event_type": "fomc_minutes",
+      "title": "FOMC Minutes (Jun 9 meeting)",
+      "start_utc": "2027-06-30T18:00:00Z",
+      "end_utc": "2027-06-30T18:30:00Z",
+      "all_day": false,
+      "date_et": "2027-06-30",
+      "time_et": "14:00",
+      "market_impact": "medium",
+      "source": "federalreserve.gov",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "note": "Minutes of the FOMC meeting that ended June 9, released at 2:00pm ET. Markets read them for how divided the committee is and what it is weighing for the next decision. Date expected from the Fed's standing practice of releasing minutes three weeks after the decision; it is confirmed on the Fed's calendar on release.",
+      "meeting_end_date": "2027-06-09",
+      "confirmed": false,
+      "approximate": true
+    },
+    {
       "id": "ism-manufacturing-pmi-2027-07-01",
       "event_type": "ism_manufacturing_pmi",
       "title": "ISM Manufacturing PMI (estimated)",
@@ -2838,6 +3013,23 @@
       "source_url": "https://www.ismworld.org/supply-management-news-and-reports/reports/ism-report-on-business/",
       "note": "Purchasing managers' index for services, normally released on the third business day of the month at 10:00am ET. Services are the bulk of the US economy, so this often outweighs the manufacturing print. Date is estimated -- confirm against ism.ws before trading it.",
       "computed": true,
+      "approximate": true
+    },
+    {
+      "id": "fomc-minutes-2027-07-28",
+      "event_type": "fomc_minutes",
+      "title": "FOMC Minutes (Jul 28 meeting)",
+      "start_utc": "2027-08-18T18:00:00Z",
+      "end_utc": "2027-08-18T18:30:00Z",
+      "all_day": false,
+      "date_et": "2027-08-18",
+      "time_et": "14:00",
+      "market_impact": "medium",
+      "source": "federalreserve.gov",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "note": "Minutes of the FOMC meeting that ended July 28, released at 2:00pm ET. Markets read them for how divided the committee is and what it is weighing for the next decision. Date expected from the Fed's standing practice of releasing minutes three weeks after the decision; it is confirmed on the Fed's calendar on release.",
+      "meeting_end_date": "2027-07-28",
+      "confirmed": false,
       "approximate": true
     },
     {
@@ -3133,6 +3325,23 @@
       "approximate": true
     },
     {
+      "id": "fomc-minutes-2027-09-15",
+      "event_type": "fomc_minutes",
+      "title": "FOMC Minutes (Sep 15 meeting)",
+      "start_utc": "2027-10-06T18:00:00Z",
+      "end_utc": "2027-10-06T18:30:00Z",
+      "all_day": false,
+      "date_et": "2027-10-06",
+      "time_et": "14:00",
+      "market_impact": "medium",
+      "source": "federalreserve.gov",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "note": "Minutes of the FOMC meeting that ended September 15, released at 2:00pm ET. Markets read them for how divided the committee is and what it is weighing for the next decision. Date expected from the Fed's standing practice of releasing minutes three weeks after the decision; it is confirmed on the Fed's calendar on release.",
+      "meeting_end_date": "2027-09-15",
+      "confirmed": false,
+      "approximate": true
+    },
+    {
       "id": "monthly-opex-2027-10",
       "event_type": "monthly_opex",
       "title": "Monthly Options Expiration (OPEX)",
@@ -3291,6 +3500,23 @@
       "source_url": "https://www.ismworld.org/supply-management-news-and-reports/reports/ism-report-on-business/",
       "note": "Purchasing managers' index for services, normally released on the third business day of the month at 10:00am ET. Services are the bulk of the US economy, so this often outweighs the manufacturing print. Date is estimated -- confirm against ism.ws before trading it.",
       "computed": true,
+      "approximate": true
+    },
+    {
+      "id": "fomc-minutes-2027-10-27",
+      "event_type": "fomc_minutes",
+      "title": "FOMC Minutes (Oct 27 meeting)",
+      "start_utc": "2027-11-17T19:00:00Z",
+      "end_utc": "2027-11-17T19:30:00Z",
+      "all_day": false,
+      "date_et": "2027-11-17",
+      "time_et": "14:00",
+      "market_impact": "medium",
+      "source": "federalreserve.gov",
+      "source_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "note": "Minutes of the FOMC meeting that ended October 27, released at 2:00pm ET. Markets read them for how divided the committee is and what it is weighing for the next decision. Date expected from the Fed's standing practice of releasing minutes three weeks after the decision; it is confirmed on the Fed's calendar on release.",
+      "meeting_end_date": "2027-10-27",
+      "confirmed": false,
       "approximate": true
     },
     {
