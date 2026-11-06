@@ -5,8 +5,10 @@
  */
 
 import { DEFAULT_PREFS, MAX_ALARM_OFFSETS } from "../src/config.js";
+import { familyLabel, typeLabel } from "../src/details.js";
 import {
   TYPE_GROUPS,
+  groupOf,
   parseOffsets,
   resolveHour12,
   resolveTimeZone,
@@ -26,6 +28,15 @@ const elements = {
   timezone: document.getElementById("timezone"),
   timezoneHint: document.getElementById("timezone-hint"),
   timeFormat: document.getElementById("timeformat"),
+  themeDark: document.getElementById("theme-dark"),
+  themeLight: document.getElementById("theme-light"),
+  horizons: [7, 30, 90, 365].map((days) => ({
+    days,
+    input: document.getElementById(`horizon-${days}`),
+  })),
+  coverageMeta: document.getElementById("coverage-meta"),
+  coverageFamilies: document.getElementById("coverage-families"),
+  coverageWarnings: document.getElementById("coverage-warnings"),
   notifyGroups: document.getElementById("notify-groups"),
   notifySummary: document.getElementById("notify-summary"),
   notifications: document.getElementById("notifications-enabled"),
@@ -97,69 +108,105 @@ async function buildTypeCheckboxes(hiddenTypes) {
     return;
   }
 
+  // Grouped the same way as the popup's filter chips, so a type is found
+  // under the heading it is filtered by.
   const hidden = new Set(hiddenTypes);
-  for (const type of types) {
-    const row = document.createElement("label");
-    row.className = "type";
+  for (const group of TYPE_GROUPS) {
+    const members = types.filter((type) => groupOf(type) === group.id);
+    if (!members.length) continue;
 
-    const box = document.createElement("input");
-    box.type = "checkbox";
-    box.value = type;
-    box.checked = !hidden.has(type);
+    const block = document.createElement("div");
+    block.className = "type-group";
+    const heading = document.createElement("h3");
+    heading.textContent = group.label;
+    const list = document.createElement("div");
+    list.className = "type-list";
 
-    const label = document.createElement("span");
-    label.textContent = type.replace(/_/g, " ");
+    for (const type of members) {
+      const row = document.createElement("label");
+      row.className = "type";
 
-    const count = document.createElement("span");
-    count.className = "count";
-    count.textContent = String(counts[type]);
+      const box = document.createElement("input");
+      box.type = "checkbox";
+      box.value = type;
+      box.checked = !hidden.has(type);
 
-    row.append(box, label, count);
-    elements.types.append(row);
+      const label = document.createElement("span");
+      label.textContent = settingsTypeLabel(type);
+
+      const count = document.createElement("span");
+      count.className = "count";
+      count.textContent = String(counts[type]);
+
+      row.append(box, label, count);
+      list.append(row);
+    }
+    block.append(heading, list);
+    elements.types.append(block);
   }
 }
 
-/** Same multi-select shape as the popup's type filter, for notifications. */
+const ACRONYMS = new Set(["fomc", "ism", "cpi", "ppi", "pce", "gdp", "pmi", "jolts", "sep"]);
+
+/**
+ * Readable name for a raw event type. The shared typeLabel() covers the
+ * curated names; macro releases collapse to "Macro release" there, which is
+ * right for a detail row but useless in a list of checkboxes.
+ */
+function settingsTypeLabel(type) {
+  const known = typeLabel(type);
+  if (known !== "Macro release" && known !== type.replace(/_/g, " ")) return known;
+  const text = type
+    .replace(/^macro_release_/, "")
+    .replace(/^market_early_close$/, "early_close")
+    .split("_")
+    .map((word) => (ACRONYMS.has(word) ? word.toUpperCase() : word))
+    .join(" ");
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+// Notification groups are chips, like the popup filter. Their state lives
+// here rather than being read back from the DOM.
+let notifySelected = new Set();
+
 function buildNotifyGroups(selected) {
-  const active = new Set(selected);
+  notifySelected = new Set(selected);
   elements.notifyGroups.replaceChildren();
 
   for (const group of TYPE_GROUPS) {
-    const row = document.createElement("label");
-    row.className = "type-option";
-
-    const box = document.createElement("input");
-    box.type = "checkbox";
-    box.value = group.id;
-    box.checked = active.has(group.id);
-    box.addEventListener("change", updateNotifySummary);
-
-    const text = document.createElement("span");
-    text.textContent = group.label;
-
-    row.append(box, text);
-    elements.notifyGroups.append(row);
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "chip";
+    chip.value = group.id;
+    chip.textContent = group.label;
+    chip.setAttribute("aria-pressed", String(notifySelected.has(group.id)));
+    chip.addEventListener("click", () => {
+      if (notifySelected.has(group.id)) notifySelected.delete(group.id);
+      else notifySelected.add(group.id);
+      chip.setAttribute("aria-pressed", String(notifySelected.has(group.id)));
+      updateNotifySummary();
+    });
+    elements.notifyGroups.append(chip);
   }
   updateNotifySummary();
 }
 
 function notifyGroupsFromForm() {
-  return [...elements.notifyGroups.querySelectorAll("input[type=checkbox]")]
-    .filter((box) => box.checked)
-    .map((box) => box.value);
+  return TYPE_GROUPS.map((group) => group.id).filter((id) => notifySelected.has(id));
 }
 
 function updateNotifySummary() {
   const chosen = notifyGroupsFromForm();
   if (!chosen.length) {
-    elements.notifySummary.textContent = "All event types";
+    elements.notifySummary.textContent =
+      "Nothing selected means every event notifies, including routine bill " +
+      "auctions, and the 20-alarm ceiling starts dropping the furthest-out warnings.";
     return;
   }
   const labels = TYPE_GROUPS.filter((group) => chosen.includes(group.id)).map(
     (group) => group.label,
   );
-  elements.notifySummary.textContent =
-    labels.length <= 2 ? labels.join(", ") : `${labels.length} types selected`;
+  elements.notifySummary.textContent = `Only ${labels.join(", ")} events will notify you.`;
 }
 
 function hiddenTypesFromForm() {
@@ -171,6 +218,7 @@ function hiddenTypesFromForm() {
 function flash(message, isError = false) {
   elements.status.textContent = message;
   elements.status.classList.toggle("error", isError);
+  elements.status.classList.toggle("ok", !isError);
   if (!isError) {
     setTimeout(() => {
       elements.status.textContent = "";
@@ -183,8 +231,68 @@ function applyTheme(theme) {
   if (root) root.dataset.theme = theme === "light" ? "light" : "dark";
 }
 
+function selectedHorizon() {
+  const checked = elements.horizons.find(({ input }) => input?.checked);
+  return checked ? checked.days : DEFAULT_PREFS.viewHorizonDays;
+}
+
+function element(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+
+/** Where each source's schedule runs out; moved here from the popup. */
+async function renderCoverage() {
+  const { calendar, fetchedAt } = await getCached();
+  const when = (value) =>
+    value
+      ? new Date(value).toLocaleString(undefined, {
+          month: "short", day: "numeric", hour: "numeric", minute: "2-digit",
+        })
+      : "never";
+
+  elements.coverageMeta.replaceChildren();
+  for (const [label, value] of [
+    ["Last refreshed", when(fetchedAt)],
+    ["Feed built", calendar?.generated_at_utc ? when(calendar.generated_at_utc) : "unknown"],
+    ["Events", String(calendar?.counts?.total ?? calendar?.events?.length ?? 0)],
+  ]) {
+    const cell = element("div");
+    cell.append(element("dt", "", label), element("dd", "", value));
+    elements.coverageMeta.append(cell);
+  }
+
+  elements.coverageFamilies.replaceChildren();
+  for (const [family, info] of Object.entries(calendar?.coverage?.families ?? {})) {
+    const row = element("li", `coverage-row${info.complete_to_window_end ? "" : " short"}`);
+    row.append(
+      element("span", "coverage-name", familyLabel(family)),
+      element("span", `coverage-horizon ${info.horizon}`, info.horizon),
+      element(
+        "span",
+        "coverage-through",
+        info.confirmed_through
+          ? `${info.event_count} events · through ${info.confirmed_through}`
+          : "no events",
+      ),
+    );
+    elements.coverageFamilies.append(row);
+  }
+
+  const warnings = calendar?.coverage?.warnings ?? [];
+  elements.coverageWarnings.replaceChildren(...warnings.map((text) => element("p", "", text)));
+  elements.coverageWarnings.hidden = warnings.length === 0;
+}
+
 async function load(prefs) {
   applyTheme(prefs.theme);
+  elements.themeDark.checked = prefs.theme !== "light";
+  elements.themeLight.checked = prefs.theme === "light";
+  for (const { days, input } of elements.horizons) {
+    if (input) input.checked = days === (prefs.viewHorizonDays ?? 90);
+  }
   elements.timeFormat.value = prefs.timeFormat;
   buildNotifyGroups(prefs.notifyGroups ?? []);
   elements.notifications.checked = prefs.notificationsEnabled;
@@ -234,6 +342,25 @@ elements.openShortcuts.addEventListener("click", () => {
 });
 
 elements.timezone.addEventListener("change", updateTimezoneHint);
+// Theme previews immediately; it is still only stored on Save.
+elements.themeDark.addEventListener("change", () => applyTheme("dark"));
+elements.themeLight.addEventListener("change", () => applyTheme("light"));
+
+for (const button of document.querySelectorAll?.(".copy") ?? []) {
+  button.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(button.dataset.url);
+      button.textContent = "Copied";
+      button.classList.add("done");
+    } catch {
+      button.textContent = "Copy failed";
+    }
+    setTimeout(() => {
+      button.textContent = "Copy link";
+      button.classList.remove("done");
+    }, 1800);
+  });
+}
 elements.timeFormat.addEventListener("change", updateTimezoneHint);
 
 elements.save.addEventListener("click", async () => {
@@ -252,6 +379,8 @@ elements.save.addEventListener("click", async () => {
   }
 
   await setPrefs({
+    theme: elements.themeLight.checked ? "light" : "dark",
+    viewHorizonDays: selectedHorizon(),
     allDayNotifications: elements.allDayEnabled.checked,
     allDayHour,
     timeZone: elements.timezone.value || null,
@@ -279,5 +408,6 @@ elements.reset.addEventListener("click", async () => {
   const prefs = await getPrefs();
   buildTimezoneOptions(prefs.timeZone);
   await load(prefs);
+  await renderCoverage();
   await showCurrentShortcut();
 })();

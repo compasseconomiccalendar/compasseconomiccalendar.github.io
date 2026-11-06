@@ -45,8 +45,9 @@ function makeElement(id = "") {
     // Handlers are recorded so tests can drive the UI, not just render it.
     addEventListener(type, handler) { element.listeners[type] = handler; },
     removeEventListener(type) { delete element.listeners[type]; },
-    setAttribute() {},
-    getAttribute() { return null; },
+    attributes: {},
+    setAttribute(name, value) { element.attributes[name] = String(value); },
+    getAttribute(name) { return element.attributes[name] ?? null; },
     focus() {},
     querySelectorAll() { return []; },
     querySelector() { return null; },
@@ -167,31 +168,27 @@ test("the popup renders a full feed without throwing", async () => {
   assert.ok(events, "#events was never queried");
   assert.ok(events.children.length > 0, "no events rendered");
 
-  // The type filter is a multi-select dropdown: one checkbox per group,
-  // none ticked, and the closed label says so.
-  const menu = registry.get("chips");
-  assert.equal(menu.children.length, 5, "expected five type options");
-  const boxes = menu.children.map((row) => row.children[0]);
+  // The hero counts down to the next high-impact timed event.
+  assert.equal(registry.get("next").hidden, false, "hero hidden");
+  assert.equal(registry.get("next-title").textContent, "FOMC Statement");
+  assert.ok(registry.get("next-countdown").children.length > 0, "no countdown");
+  assert.match(registry.get("next-eyebrow").textContent, /High impact/);
+
+  // Filter chips: "All" first, then one per group, with only "All" pressed.
+  const chips = registry.get("chips").children;
   assert.deepEqual(
-    boxes.map((box) => box.value),
-    ["fomc", "data", "treasury", "futures", "market"],
+    chips.map((chip) => chip.value),
+    ["", "fomc", "data", "treasury", "futures", "market"],
   );
-  assert.ok(boxes.every((box) => box.checked === false), "nothing preselected");
-  assert.equal(registry.get("type-summary").textContent, "All event types");
-
-  // The coverage tab is populated from the feed's own coverage block, and the
-  // gap warning lives there rather than in the banner above the list.
-  assert.equal(registry.get("coverage-families").children.length, 3);
-  assert.equal(registry.get("coverage-warnings").children.length, 1);
-  assert.equal(registry.get("coverage-warnings").hidden, false);
-  assert.ok(registry.get("coverage-meta").children.length > 0);
-  assert.equal(
-    registry.get("banner").children.some?.((line) => /Schedules published/.test(line.textContent)) ?? false,
-    false,
-    "coverage text must not be in the banner",
+  assert.deepEqual(
+    chips.map((chip) => chip.getAttribute("aria-pressed")),
+    ["true", "false", "false", "false", "false", "false"],
   );
 
-  // The hours tab rendered too, including its session line.
+  // The header pill carries the equity session.
+  assert.match(registry.get("market-label").textContent, /^NYSE /);
+
+  // The hours panel rendered too, including its session line.
   assert.ok(registry.get("session").children.length > 0, "no equity session");
   assert.ok(registry.get("futures-session").children.length > 0, "no futures session");
   assert.ok(registry.get("closures").children.length > 0, "no closures");
@@ -303,118 +300,9 @@ for (const [name, stored] of Object.entries(DEGRADED)) {
   });
 }
 
-test("ticking type options updates the label and persists the selection", async () => {
+function installInteractive(initialPrefs = {}) {
   const registry = new Map();
-  let storedPrefs = {};
-  globalThis.document = {
-    getElementById(id) {
-      if (!registry.has(id)) registry.set(id, makeElement(id));
-      return registry.get(id);
-    },
-    createElement: () => makeElement(),
-    addEventListener() {},
-    documentElement: makeElement("html"),
-  };
-  globalThis.window = { scrollTo() {} };
-  globalThis.chrome = {
-    storage: {
-      local: {
-        async get() { return { calendar: CALENDAR, fetchedAt: Date.now(), lastError: null }; },
-        async set() {},
-      },
-      sync: {
-        async get() { return { prefs: storedPrefs }; },
-        async set(items) { storedPrefs = items.prefs; },
-      },
-    },
-    runtime: { async sendMessage() { return { ok: true }; }, openOptionsPage() {} },
-  };
-
-  await import(`../popup/popup.js?filter=${Date.now()}`);
-  await new Promise((resolve) => setTimeout(resolve, 40));
-
-  const menu = registry.get("chips");
-  const summary = registry.get("type-summary");
-  const tick = async (index, checked) => {
-    const box = menu.children[index].children[0];
-    box.checked = checked;
-    await box.listeners.change();
-    await new Promise((resolve) => setTimeout(resolve, 20));
-  };
-
-  await tick(0, true);                       // FOMC
-  assert.deepEqual(storedPrefs.selectedGroups, ["fomc"]);
-  assert.equal(summary.textContent, "FOMC");
-
-  await tick(1, true);                       // + Data
-  assert.equal(summary.textContent, "FOMC, Data");
-
-  await tick(2, true);                       // + Treasury: too many to list
-  assert.equal(summary.textContent, "3 types selected");
-  assert.deepEqual(storedPrefs.selectedGroups, ["fomc", "data", "treasury"]);
-
-  // Unticking everything returns to the unfiltered label.
-  for (const index of [0, 1, 2]) await tick(index, false);
-  assert.deepEqual(storedPrefs.selectedGroups, []);
-  assert.equal(summary.textContent, "All event types");
-});
-
-test("the coverage tab shows every family and hides its warnings when clean", async () => {
-  const registry = new Map();
-  const clean = {
-    ...CALENDAR,
-    coverage: {
-      families: {
-        futures: {
-          horizon: "computed", event_count: 25,
-          confirmed_through: "2027-08-20", complete_to_window_end: true,
-        },
-      },
-      warnings: [],
-    },
-  };
-  globalThis.document = {
-    getElementById(id) {
-      if (!registry.has(id)) registry.set(id, makeElement(id));
-      return registry.get(id);
-    },
-    createElement: () => makeElement(),
-    addEventListener() {},
-    documentElement: makeElement("html"),
-  };
-  globalThis.window = { scrollTo() {} };
-  globalThis.chrome = {
-    storage: {
-      local: {
-        async get() { return { calendar: clean, fetchedAt: Date.now(), lastError: null }; },
-        async set() {},
-      },
-      sync: { async get() { return {}; }, async set() {} },
-    },
-    runtime: { async sendMessage() { return { ok: true }; }, openOptionsPage() {} },
-  };
-
-  await import(`../popup/popup.js?coverage=${Date.now()}`);
-  await new Promise((resolve) => setTimeout(resolve, 40));
-
-  assert.equal(registry.get("coverage-families").children.length, 1);
-  // No warnings means the block is hidden rather than rendered empty.
-  assert.equal(registry.get("coverage-warnings").hidden, true);
-
-  // Switching tabs shows exactly one view.
-  registry.get("tab-coverage").listeners.click();
-  assert.equal(registry.get("coverage-view").hidden, false);
-  assert.equal(registry.get("list-view").hidden, true);
-  assert.equal(registry.get("hours-view").hidden, true);
-
-  registry.get("tab-events").listeners.click();
-  assert.equal(registry.get("list-view").hidden, false);
-  assert.equal(registry.get("coverage-view").hidden, true);
-});
-
-test("theme, time frame and coverage labels are wired", async () => {
-  const registry = new Map();
-  let storedPrefs = {};
+  const state = { prefs: initialPrefs };
   const root = makeElement("html");
   globalThis.document = {
     getElementById(id) {
@@ -433,33 +321,90 @@ test("theme, time frame and coverage labels are wired", async () => {
         async set() {},
       },
       sync: {
-        async get() { return { prefs: storedPrefs }; },
-        async set(items) { storedPrefs = items.prefs; },
+        async get() { return { prefs: state.prefs }; },
+        async set(items) { state.prefs = items.prefs; },
       },
     },
     runtime: { async sendMessage() { return { ok: true }; }, openOptionsPage() {} },
   };
+  return { registry, state, root };
+}
 
-  await import(`../popup/popup.js?ui=${Date.now()}`);
-  await new Promise((resolve) => setTimeout(resolve, 40));
+const settle = (ms = 20) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  // Dark is the default, and is set explicitly rather than left to the OS.
-  assert.equal(root.dataset.theme, "dark");
-  await registry.get("theme").listeners.click();
-  await new Promise((resolve) => setTimeout(resolve, 20));
-  assert.equal(storedPrefs.theme, "light");
+test("filter chips toggle groups, persist them, and collapse back to All", async () => {
+  const { registry, state } = installInteractive();
+  await import(`../popup/popup.js?filter=${Date.now()}`);
+  await settle(40);
+
+  // Chips are rebuilt on every render, so look them up fresh each time.
+  const chip = (value) => registry.get("chips").children.find((c) => c.value === value);
+  const press = async (value) => {
+    await chip(value).listeners.click();
+    await settle();
+  };
+
+  await press("fomc");
+  assert.deepEqual(state.prefs.selectedGroups, ["fomc"]);
+  assert.equal(chip("fomc").getAttribute("aria-pressed"), "true");
+  assert.equal(chip("").getAttribute("aria-pressed"), "false");
+
+  await press("data");
+  assert.deepEqual(state.prefs.selectedGroups, ["fomc", "data"]);
+
+  // Pressing a selected chip again removes it.
+  await press("fomc");
+  assert.deepEqual(state.prefs.selectedGroups, ["data"]);
+
+  // "All" clears the selection.
+  await press("");
+  assert.deepEqual(state.prefs.selectedGroups, []);
+  assert.equal(chip("").getAttribute("aria-pressed"), "true");
+
+  // Selecting every group is the same as selecting none.
+  for (const value of ["fomc", "data", "treasury", "futures"]) await press(value);
+  await press("market");
+  assert.deepEqual(state.prefs.selectedGroups, []);
+});
+
+test("theme and time frame come from settings", async () => {
+  const { registry, root } = installInteractive({ theme: "light", viewHorizonDays: 7 });
+  await import(`../popup/popup.js?prefs=${Date.now()}`);
+  await settle(40);
+
   assert.equal(root.dataset.theme, "light");
+  // A one-week horizon drops the holiday 30 days out: one day heading plus
+  // the FOMC row.
+  const rows = registry.get("events").children.filter((child) => /event/.test(child.className));
+  assert.equal(rows.length, 1);
+});
 
-  // Time frame persists and drives the query horizon.
-  const horizon = registry.get("horizon");
-  assert.equal(horizon.value, "90");
-  horizon.value = "7";
-  await horizon.listeners.change({ target: { value: "7" } });
-  await new Promise((resolve) => setTimeout(resolve, 20));
-  assert.equal(storedPrefs.viewHorizonDays, 7);
+test("dark is the default theme, set explicitly rather than left to the OS", async () => {
+  const { root } = installInteractive();
+  await import(`../popup/popup.js?dark=${Date.now()}`);
+  await settle(40);
+  assert.equal(root.dataset.theme, "dark");
+});
 
-  // Acronyms keep their case in the coverage list.
-  const names = registry.get("coverage-families").children.map((row) => row.children[0].textContent);
-  assert.ok(names.includes("FOMC"), `expected FOMC, got ${names.join(", ")}`);
-  assert.ok(!names.some((name) => /Fomc|Ism/.test(name)), "acronym was title-cased");
+test("the market pill and hero open their panels, and back returns", async () => {
+  const { registry } = installInteractive();
+  await import(`../popup/popup.js?panels=${Date.now()}`);
+  await settle(40);
+
+  registry.get("market").listeners.click();
+  assert.equal(registry.get("hours-view").hidden, false);
+  assert.equal(registry.get("list-view").hidden, true);
+
+  registry.get("hours-back").listeners.click();
+  assert.equal(registry.get("list-view").hidden, false);
+  assert.equal(registry.get("hours-view").hidden, true);
+
+  registry.get("next").listeners.click();
+  assert.equal(registry.get("detail-view").hidden, false);
+  assert.equal(registry.get("detail-title").textContent, "FOMC Statement");
+  assert.equal(registry.get("detail-source").href, "https://example.gov");
+
+  registry.get("back").listeners.click();
+  assert.equal(registry.get("detail-view").hidden, true);
+  assert.equal(registry.get("list-view").hidden, false);
 });

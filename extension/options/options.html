@@ -2,144 +2,181 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../styles/tokens.css">
 <link rel="stylesheet" href="options.css">
-<title>Compass Economic Calendar — Options</title>
+<title>Compass Economic Calendar — Settings</title>
 </head>
 <body>
-<main>
-  <h1>Compass Economic Calendar</h1>
-  <p class="lede">Settings apply to the popup and to advance notifications.</p>
+<header class="top">
+  <div class="top-inner">
+    <svg class="mark" viewBox="0 0 24 24" aria-hidden="true">
+        <rect x=".25" y=".25" width="23.5" height="23.5" rx="5.3" fill="#f4f3f0" stroke="var(--line-strong)" stroke-width=".5"/>
+        <g transform="translate(2.4 2.6) scale(.8)">
+          <rect x="3.5" y="5" width="17" height="15.5" rx="4" fill="none" stroke="#141517" stroke-width="1.7"/>
+          <path d="M8.5 3v4M15.5 3v4" stroke="#141517" stroke-width="1.7" stroke-linecap="round"/>
+          <path d="M15.9 10.6 12.95 15.55 11.05 13.65Z" fill="#ff7a1a"/>
+          <path d="M8.1 18.6 11.05 13.65 12.95 15.55Z" fill="#141517"/>
+        </g>
+      </svg>
+    <div>
+      <h1>Settings</h1>
+      <p class="lede">Compass · Economic Calendar</p>
+    </div>
+  </div>
+</header>
 
-  <section>
+<main>
+  <section class="card">
     <h2>Display</h2>
 
     <div class="field">
-      <label for="timezone">Timezone</label>
-      <select id="timezone"></select>
-      <p class="hint" id="timezone-hint"></p>
+      <span class="label" id="theme-label">Theme</span>
+      <div class="segmented" role="radiogroup" aria-labelledby="theme-label">
+        <input type="radio" name="theme" id="theme-dark" value="dark">
+        <label for="theme-dark">Dark</label>
+        <input type="radio" name="theme" id="theme-light" value="light">
+        <label for="theme-light">Light</label>
+      </div>
     </div>
 
     <div class="field">
-      <label for="timeformat">Time format</label>
-      <select id="timeformat">
-        <option value="auto">Automatic (follows your locale)</option>
-        <option value="12h">12-hour — 2:00pm</option>
-        <option value="24h">24-hour — 14:00</option>
-      </select>
-      <p class="hint">Applies to the event list, hours tab and notifications.</p>
+      <span class="label" id="horizon-label">Show events up to</span>
+      <div class="segmented" role="radiogroup" aria-labelledby="horizon-label">
+        <input type="radio" name="horizon" id="horizon-7" value="7">
+        <label for="horizon-7">1 week</label>
+        <input type="radio" name="horizon" id="horizon-30" value="30">
+        <label for="horizon-30">30 days</label>
+        <input type="radio" name="horizon" id="horizon-90" value="90">
+        <label for="horizon-90">90 days</label>
+        <input type="radio" name="horizon" id="horizon-365" value="365">
+        <label for="horizon-365">12 months</label>
+      </div>
     </div>
 
+    <div class="grid-2">
+      <div class="field">
+        <label class="label" for="timezone">Time zone</label>
+        <select id="timezone"></select>
+      </div>
+      <div class="field">
+        <label class="label" for="timeformat">Time format</label>
+        <select id="timeformat">
+          <option value="auto">Automatic</option>
+          <option value="12h">12-hour · 2:00 PM</option>
+          <option value="24h">24-hour · 14:00</option>
+        </select>
+      </div>
+    </div>
+    <p class="hint" id="timezone-hint"></p>
   </section>
 
-  <section>
+  <section class="card">
     <h2>Notifications</h2>
 
-    <div class="field checkbox">
+    <label class="toggle">
       <input type="checkbox" id="notifications-enabled">
-      <label for="notifications-enabled">Show advance warnings</label>
-    </div>
+      <span class="switch" aria-hidden="true"></span>
+      <span>Warn me before events</span>
+    </label>
 
     <div class="field">
-      <label for="notify-summary">Notify me about</label>
-      <details id="notify-filter" class="dropdown">
-        <summary id="notify-summary">All event types</summary>
-        <div id="notify-groups" class="dropdown-menu" role="group"
-             aria-label="Notify me about these event types"></div>
-      </details>
-      <p class="hint">
-        Set independently of the list filter. With nothing ticked every event
-        interrupts you, including routine bill auctions, and the 20-alarm
-        ceiling starts dropping the furthest-out warnings.
-      </p>
+      <span class="label" id="notify-label">Notify me about</span>
+      <div id="notify-groups" class="chips" role="group" aria-labelledby="notify-label"></div>
+      <p class="hint" id="notify-summary"></p>
     </div>
 
-    <div class="field">
-      <label for="offsets">Warn me this many minutes before</label>
-      <input type="text" id="offsets" inputmode="numeric" placeholder="30, 5">
-      <p class="hint">Comma separated, up to four. Applies to timed events.</p>
+    <div class="grid-2">
+      <div class="field">
+        <label class="label" for="offsets">Minutes before</label>
+        <input type="text" id="offsets" inputmode="numeric" placeholder="30, 5">
+        <p class="hint">Comma separated, up to four.</p>
+      </div>
+      <div class="field">
+        <span class="label">Check delivery</span>
+        <button id="test-notification" class="button" type="button">Send a test notification</button>
+      </div>
     </div>
+    <p class="hint" id="test-result">
+      If a test doesn't appear, your operating system is blocking
+      notifications for this browser rather than the extension failing.
+    </p>
 
-    <div class="field">
-      <button id="test-notification">Send a test notification</button>
-      <p class="hint" id="test-result">
-        Fires one now. If nothing appears, your operating system is blocking
-        notifications for this browser rather than the extension failing.
-      </p>
-    </div>
+    <hr>
 
-    <div class="field checkbox">
+    <label class="toggle">
       <input type="checkbox" id="allday-enabled">
-      <label for="allday-enabled">Remind me on the morning of all-day events</label>
-    </div>
-    <div class="field">
-      <label for="allday-hour">Morning reminder hour</label>
+      <span class="switch" aria-hidden="true"></span>
+      <span>Morning reminder for all-day events</span>
+    </label>
+    <div class="field inline">
+      <label class="label" for="allday-hour">Remind at hour</label>
       <input type="number" id="allday-hour" min="0" max="23" step="1">
       <p class="hint">
-        Local hour, 0–23. All-day entries such as futures roll dates have no
-        start time, so they get one nudge on the day instead.
+        Local hour, 0–23. Futures roll dates and similar entries have no start
+        time, so they get one nudge on the day instead.
       </p>
     </div>
   </section>
 
-  <section>
-    <h2>Keyboard shortcut</h2>
+  <section class="card">
+    <h2>Event types</h2>
     <p class="hint">
-      Opens this extension's popup from anywhere in Chrome. The default is
-      <kbd id="shortcut-current">Alt+Shift+C</kbd>.
-    </p>
-    <p class="hint">
-      Chrome does not let an extension set its own shortcut, so the binding
-      lives on Chrome's shortcuts page. Open it below, find
-      <em>Compass Economic Calendar</em>, and click the pencil to rebind.
-    </p>
-    <div class="actions">
-      <button id="open-shortcuts">Open Chrome shortcut settings</button>
-    </div>
-    <p class="hint">
-      If that does not open, paste
-      <code>chrome://extensions/shortcuts</code> into the address bar.
-    </p>
-  </section>
-
-  <section>
-    <h2>Calendar subscriptions</h2>
-    <p class="hint">
-      The same data as a subscribable feed, for Google Calendar, Apple Calendar
-      or Outlook. Desktop Google Calendar: <em>Other calendars → + → From
-      URL</em>.
-    </p>
-    <ul class="links">
-      <li>
-        <a href="https://compasseconomiccalendar.github.io/compass_calendar.ics"
-           target="_blank" rel="noreferrer">Full calendar (.ics)</a>
-      </li>
-      <li>
-        <a href="https://compasseconomiccalendar.github.io/compass_calendar_high_impact.ics"
-           target="_blank" rel="noreferrer">High impact only (.ics)</a>
-      </li>
-      <li>
-        <a href="https://compasseconomiccalendar.github.io/calendar.json"
-           target="_blank" rel="noreferrer">Raw JSON feed</a>
-      </li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>Hide event types</h2>
-    <p class="hint">
-      Unchecked types are removed from the popup and never notify. Counts come
+      Unticked types are removed from the popup and never notify. Counts come
       from the cached feed.
     </p>
     <div id="types" class="types"></div>
   </section>
 
-  <div class="actions">
-    <button id="save" class="primary">Save</button>
-    <button id="reset">Reset to defaults</button>
-    <span id="status" class="status" role="status"></span>
-  </div>
+  <section class="card">
+    <h2>Add to your calendar</h2>
+    <p class="hint">
+      The same schedule as a subscription for Google Calendar, Apple Calendar
+      or Outlook. In Google Calendar: <em>Other calendars → + → From URL</em>.
+    </p>
+    <ul class="subs">
+      <li>
+        <span><strong>Full calendar</strong><span class="hint">Every event type</span></span>
+        <button class="button copy" type="button"
+                data-url="https://compasseconomiccalendar.github.io/compass_calendar.ics">Copy link</button>
+      </li>
+      <li>
+        <span><strong>High impact only</strong><span class="hint">FOMC, CPI, jobs and the like</span></span>
+        <button class="button copy" type="button"
+                data-url="https://compasseconomiccalendar.github.io/compass_calendar_high_impact.ics">Copy link</button>
+      </li>
+      <li>
+        <span><strong>Raw JSON feed</strong><span class="hint">For your own tools</span></span>
+        <a class="button" href="https://compasseconomiccalendar.github.io/calendar.json"
+           target="_blank" rel="noreferrer">Open</a>
+      </li>
+    </ul>
+  </section>
 
-  <footer>
+  <section class="card">
+    <h2>Data coverage</h2>
+    <dl id="coverage-meta" class="meta"></dl>
+    <div id="coverage-warnings" class="warnings" hidden></div>
+    <ul id="coverage-families" class="coverage"></ul>
+    <p class="hint">
+      <strong>Computed</strong> schedules follow published rules, so they run to
+      the end of the window. <strong>Reported</strong> ones only reach as far as
+      the agency has published — a later month is unpublished, not empty.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Keyboard shortcut</h2>
+    <p class="hint">
+      Opens the popup from anywhere in Chrome. Currently
+      <kbd id="shortcut-current">Alt+Shift+C</kbd>. Chrome keeps shortcuts on
+      its own settings page: find <em>Compass Economic Calendar</em> and click
+      the pencil to rebind.
+    </p>
+    <button id="open-shortcuts" class="button" type="button">Open Chrome shortcut settings</button>
+  </section>
+
+  <footer class="foot">
     <p>
       <a href="https://compasseconomiccalendar.github.io/privacy.html"
          target="_blank" rel="noreferrer">Privacy policy</a>
@@ -158,6 +195,15 @@
     </p>
   </footer>
 </main>
+
+<div class="savebar">
+  <div class="savebar-inner">
+    <span id="status" class="status" role="status"></span>
+    <button id="reset" class="button ghost" type="button">Reset to defaults</button>
+    <button id="save" class="button primary" type="button">Save changes</button>
+  </div>
+</div>
+
 <script type="module" src="options.js"></script>
 </body>
 </html>

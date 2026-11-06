@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <!-- Master mark: line-drawn calendar with a compass needle; only the
+       needle's tip carries the brand orange. Light plate, dark line work. -->
+  <rect x=".25" y=".25" width="23.5" height="23.5" rx="5.3" fill="#f4f3f0" stroke="#d6d3cb" stroke-width=".5"/>
+  <g transform="translate(2.4 2.6) scale(.8)">
+    <rect x="3.5" y="5" width="17" height="15.5" rx="4" fill="none" stroke="#141517" stroke-width="1.7"/>
+    <path d="M8.5 3v4M15.5 3v4" stroke="#141517" stroke-width="1.7" stroke-linecap="round"/>
+    <path d="M15.9 10.6 12.95 15.55 11.05 13.65Z" fill="#ff7a1a"/>
+    <path d="M8.1 18.6 11.05 13.65 12.95 15.55Z" fill="#141517"/>
+  </g>
+</svg>
