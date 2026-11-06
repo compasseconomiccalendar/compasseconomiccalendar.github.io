@@ -260,21 +260,6 @@ FRED_RELEASES = [
         ),
     },
     {
-        "slug": "durable-goods",
-        # Matched on its own title: the full M3 report ("Factory Orders"
-        # above) is a different release with "(M3)" and an Oxford comma.
-        "match": r"^Advance Report on Durable Goods",
-        "title": "Durable Goods Orders",
-        "time_et": "08:30",
-        "market_impact": "medium",
-        "primary_source": "https://www.census.gov/manufacturing/m3/adv/index.html",
-        "note": (
-            "Census advance report on orders for long-lasting manufactured "
-            "goods. Core orders (ex-transportation) are read as a proxy for "
-            "business investment."
-        ),
-    },
-    {
         "slug": "housing-starts",
         "match": r"^New Residential Construction$",
         "title": "Housing Starts & Building Permits",
