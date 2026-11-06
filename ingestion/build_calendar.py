@@ -371,6 +371,23 @@ def us_federal_holidays(year: int) -> set:
     }
 
 
+MINUTES_LAG_DAYS = 21
+
+
+def expected_minutes_date(meeting_end: date) -> date:
+    """When the minutes of a meeting ending on ``meeting_end`` should appear.
+
+    The Fed releases minutes three weeks after the decision -- every 2026
+    release so far was exactly 21 days later, a Wednesday like the decision.
+    If that day is a weekend or federal holiday (a Christmas or New Year's
+    Wednesday), the next business day is the best guess.
+    """
+    day = meeting_end + timedelta(days=MINUTES_LAG_DAYS)
+    while day.weekday() >= 5 or day in us_federal_holidays(day.year):
+        day += timedelta(days=1)
+    return day
+
+
 def nth_business_day(year: int, month: int, n: int) -> date:
     """The nth weekday of a month that is not a federal holiday."""
     holidays = us_federal_holidays(year)
@@ -639,31 +656,56 @@ def fetch_fomc_events(session: requests.Session, window: Tuple[date, date]) -> L
                     confirmed=presser_confirmed,
                 ))
 
-            # Minutes for a past meeting are released three weeks later at
-            # 2:00pm ET and are themselves a scheduled market event.
-            minutes_match = re.search(r"\(Released\s+([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})\)", row_text)
-            if minutes_match:
-                month_name = minutes_match.group(1).lower()
-                if month_name in MONTHS:
+            # Minutes are a scheduled market event of their own, released at
+            # 2:00pm ET three weeks after the decision. The Fed's page only
+            # prints the date once they are out ("Released October 07, 2026"),
+            # so reading it alone meant upcoming minutes -- the only ones a
+            # calendar needs -- never reached the feed. Released minutes use
+            # the Fed's date; upcoming ones are computed and flagged.
+            # Future meetings have no links yet, so the row text is just the
+            # date; only notation votes (no meeting, no minutes) are skipped.
+            if not is_notation_vote:
+                minutes_match = re.search(
+                    r"\(Released\s+([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})\)", row_text
+                )
+                minutes_day = None
+                if minutes_match and minutes_match.group(1).lower() in MONTHS:
                     minutes_day = date(
-                        int(minutes_match.group(3)), MONTHS[month_name], int(minutes_match.group(2))
+                        int(minutes_match.group(3)),
+                        MONTHS[minutes_match.group(1).lower()],
+                        int(minutes_match.group(2)),
                     )
-                    if start_bound <= minutes_day <= end_bound:
-                        events.append(make_event(
-                            event_id=f"fomc-minutes-{minutes_day.isoformat()}",
-                            event_type="fomc_minutes",
-                            title=f"FOMC Minutes ({meeting_end.strftime('%b %d')} meeting)",
-                            day=minutes_day,
-                            time_et="14:00",
-                            market_impact="medium",
-                            source="federalreserve.gov",
-                            source_url=FOMC_URL,
-                            note=(
-                                "Minutes of the prior FOMC meeting, released at "
-                                "2:00pm ET roughly three weeks after the decision."
-                            ),
-                            meeting_end_date=meeting_end.isoformat(),
-                        ))
+                released = minutes_day is not None
+                if not released:
+                    minutes_day = expected_minutes_date(meeting_end)
+
+                if start_bound <= minutes_day <= end_bound:
+                    events.append(make_event(
+                        # Keyed on the meeting, not the release day, so a
+                        # reminder survives the Fed confirming a different date.
+                        event_id=f"fomc-minutes-{slug}",
+                        event_type="fomc_minutes",
+                        title=f"FOMC Minutes ({meeting_end.strftime('%b')} {meeting_end.day} meeting)",
+                        day=minutes_day,
+                        time_et="14:00",
+                        market_impact="medium",
+                        source="federalreserve.gov",
+                        source_url=FOMC_URL,
+                        note=(
+                            "Minutes of the FOMC meeting that ended "
+                            f"{meeting_end.strftime('%B')} {meeting_end.day}, released at 2:00pm ET. "
+                            "Markets read them for how divided the committee is "
+                            "and what it is weighing for the next decision."
+                            + ("" if released else
+                               " Date expected from the Fed's standing practice of "
+                               "releasing minutes three weeks after the decision; "
+                               "it is confirmed on the Fed's calendar on release.")
+                        ),
+                        meeting_end_date=meeting_end.isoformat(),
+                        confirmed=released,
+                        # Flags the popup's "est." tag on a computed date.
+                        **({} if released else {"approximate": True}),
+                    ))
 
     return events
 
