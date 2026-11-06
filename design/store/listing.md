@@ -65,6 +65,12 @@ Note: desktop notifications need notification permission for your browser in you
 4. `screenshots/4-hours.png`: market hours (light theme)
 5. `screenshots/5-alerts.png`: notification settings with a morning brief
 
+## Store icon (128×128)
+
+`store_icon_128.png`: the logo at 96×96 with a 16px transparent border, as
+the store's image guidelines ask. (The extension's own `extension/icons/`
+PNGs are edge to edge; they ship inside the zip and need no upload.)
+
 ## Promo tile (440×280)
 
 `promo_440x280.png`
