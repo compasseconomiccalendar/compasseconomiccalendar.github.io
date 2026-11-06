@@ -42,6 +42,8 @@ const elements = {
   notifications: document.getElementById("notifications-enabled"),
   allDayEnabled: document.getElementById("allday-enabled"),
   allDayHour: document.getElementById("allday-hour"),
+  briefEnabled: document.getElementById("brief-enabled"),
+  briefHour: document.getElementById("brief-hour"),
   offsets: document.getElementById("offsets"),
   types: document.getElementById("types"),
   openShortcuts: document.getElementById("open-shortcuts"),
@@ -298,6 +300,8 @@ async function load(prefs) {
   elements.notifications.checked = prefs.notificationsEnabled;
   elements.allDayEnabled.checked = prefs.allDayNotifications;
   elements.allDayHour.value = String(prefs.allDayHour);
+  elements.briefEnabled.checked = Boolean(prefs.morningBrief);
+  elements.briefHour.value = String(prefs.morningBriefHour ?? DEFAULT_PREFS.morningBriefHour);
   elements.offsets.value = prefs.alarmOffsets.join(", ");
   await buildTypeCheckboxes(prefs.hiddenTypes);
   updateTimezoneHint();
@@ -378,7 +382,16 @@ elements.save.addEventListener("click", async () => {
     return;
   }
 
+  const briefHour = Number(elements.briefHour.value);
+  if (!Number.isInteger(briefHour) || briefHour < 0 || briefHour > 23) {
+    flash("Morning brief hour must be a whole number from 0 to 23.", true);
+    elements.briefHour.focus();
+    return;
+  }
+
   await setPrefs({
+    morningBrief: elements.briefEnabled.checked,
+    morningBriefHour: briefHour,
     theme: elements.themeLight.checked ? "light" : "dark",
     viewHorizonDays: selectedHorizon(),
     allDayNotifications: elements.allDayEnabled.checked,
@@ -393,7 +406,14 @@ elements.save.addEventListener("click", async () => {
 
   elements.offsets.value = offsets.join(", ");
   const response = await chrome.runtime.sendMessage({ type: "reschedule" });
-  flash(`Saved — ${response?.count ?? 0} warning(s) scheduled.`);
+  const brief = response?.briefAt
+    ? ` Next brief ${new Intl.DateTimeFormat(undefined, {
+        weekday: "short", hour: "numeric", minute: "2-digit",
+        timeZone: resolveTimeZone(elements.timezone.value),
+        hour12: resolveHour12(elements.timeFormat.value),
+      }).format(new Date(response.briefAt))}.`
+    : "";
+  flash(`Saved — ${response?.count ?? 0} warning(s) scheduled.${brief}`);
 });
 
 elements.reset.addEventListener("click", async () => {

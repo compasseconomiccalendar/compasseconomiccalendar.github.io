@@ -168,13 +168,23 @@ export function isStale(fetchedAt, now = Date.now(), thresholdDays = 10) {
  * where that applies. Bucketing must happen in the viewer's zone, not UTC,
  * or an 8:30pm ET event lands on the wrong day.
  */
-export function groupByDay(events, timeZone, now = Date.now()) {
-  const keyFormat = new Intl.DateTimeFormat("en-CA", {
+/**
+ * The calendar date of an instant in `timeZone`, as YYYY-MM-DD.
+ *
+ * The one place days are bucketed, so the agenda, the week strip and the
+ * morning brief can never disagree about which day an event falls on.
+ */
+export function dayKey(instant, timeZone) {
+  return new Intl.DateTimeFormat("en-CA", {
     timeZone,
     year: "numeric",
     month: "2-digit",
-    day: "numeric",
-  });
+    day: "2-digit",
+  }).format(new Date(instant));
+}
+
+export function groupByDay(events, timeZone, now = Date.now()) {
+  const keyFormat = { format: (when) => dayKey(when, timeZone) };
   const labelFormat = new Intl.DateTimeFormat(undefined, {
     timeZone,
     weekday: "long",
@@ -223,14 +233,25 @@ export function plannedNotifications(events, options = {}) {
     allDayHour = 8,
     timeZone = undefined,
     snoozedUntil = {},
+    // Per-event reminders: these notify whatever the type filters, impact
+    // threshold or master switch say, because the user asked for them by name.
+    reminderIds = [],
+    // The master "warn me before events" switch. Off still allows reminders.
+    typeAlerts = true,
   } = options;
 
-  const candidates = upcomingEvents(events, {
-    now,
-    minImpact,
-    hiddenTypes,
-    types,
-    horizonMs,
+  const fromTypes = typeAlerts
+    ? upcomingEvents(events, { now, minImpact, hiddenTypes, types, horizonMs })
+    : [];
+  const pinned = new Set(reminderIds);
+  const fromReminders = pinned.size
+    ? upcomingEvents(events, { now, horizonMs }).filter((event) => pinned.has(event.id))
+    : [];
+  const seen = new Set();
+  const candidates = [...fromTypes, ...fromReminders].filter((event) => {
+    if (seen.has(event.id)) return false;
+    seen.add(event.id);
+    return true;
   });
 
   const planned = [];
@@ -238,9 +259,12 @@ export function plannedNotifications(events, options = {}) {
     if ((snoozedUntil[event.id] ?? 0) > now) continue;
 
     if (event.all_day) {
-      if (allDayHour === null) continue;
+      // A reminder on an all-day event still needs an hour to fire at, even
+      // when the type-based morning nudge is switched off.
+      const hour = allDayHour ?? (pinned.has(event.id) ? 8 : null);
+      if (hour === null) continue;
       const day = event.date_et ?? event.start_utc.slice(0, 10);
-      const fireAt = zonedTimeToUtc(day, allDayHour, 0, timeZone);
+      const fireAt = zonedTimeToUtc(day, hour, 0, timeZone);
       if (Number.isFinite(fireAt) && fireAt > now && fireAt - now <= horizonMs) {
         planned.push({ eventId: event.id, offsetMinutes: null, fireAt });
       }

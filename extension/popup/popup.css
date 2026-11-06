@@ -210,6 +210,55 @@ button:disabled { opacity: .45; cursor: default; }
   font-weight: 600;
 }
 
+/* ---------- Week at a glance ---------- */
+
+.glance {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+  margin: 8px 12px 0;
+}
+.glance:empty { display: none; }
+.glance-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 6px 0 7px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--fg-2);
+}
+.glance-day:not(:disabled):hover { border-color: var(--line-strong); background: var(--hover); }
+/* Nothing major that day: quiet, not greyed out like a broken control. */
+.glance-day:disabled { opacity: 1; cursor: default; }
+.glance-day:disabled .glance-num { color: var(--muted); }
+.glance-day.today { border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+.glance-wd {
+  color: var(--muted);
+  font-size: 9.5px;
+  font-weight: 650;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.glance-day.today .glance-wd { color: var(--accent-fg); }
+.glance-num { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.glance-dots { display: flex; gap: 3px; height: 6px; align-items: center; margin-top: 2px; }
+.glance-dots i { width: 5px; height: 5px; border-radius: 50%; }
+.glance-dots i.high { background: var(--high); }
+.glance-dots i.medium { background: var(--medium); }
+.glance-closed {
+  color: var(--muted);
+  font-size: 8.5px;
+  font-weight: 650;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  line-height: 6px;
+  margin-top: 2px;
+}
+.glance-day.closed .glance-num { color: var(--muted); }
+
 /* ---------- Filter chips ---------- */
 
 .chips {
@@ -326,6 +375,16 @@ button:disabled { opacity: .45; cursor: default; }
   white-space: nowrap;
 }
 .event.in-progress .row { background: var(--high-soft); }
+
+/* Bell on rows with a per-event reminder. Masked so it takes currentColor. */
+.bell {
+  width: 11px;
+  height: 11px;
+  background: var(--accent-fg);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 1.5a4.5 4.5 0 0 0-4.5 4.5v4.6L2 12.5h12l-1.5-1.9V6A4.5 4.5 0 0 0 8 1.5ZM6 13.5a2 2 0 0 0 4 0Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.day { scroll-margin-top: 49px; }
 .event.in-progress .rel { color: var(--high); font-weight: 600; }
 
 .empty, .more {
@@ -373,6 +432,36 @@ button:disabled { opacity: .45; cursor: default; }
 }
 .detail-countdown .unit { font-size: 12px; color: var(--muted); margin: 0 3px 0 1px; }
 .detail-countdown:empty { display: none; }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 14px;
+}
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--fg-2);
+  font-size: 11.5px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+.action .icon { width: 14px; height: 14px; }
+.action:hover { background: var(--hover); color: var(--fg); }
+.action[aria-pressed="true"] {
+  background: var(--accent-soft);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  color: var(--accent-fg);
+}
+.action[hidden] { display: none; }
 
 .rows {
   display: grid;

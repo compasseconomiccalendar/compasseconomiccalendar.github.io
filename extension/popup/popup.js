@@ -8,6 +8,8 @@
 
 import { IN_PROGRESS_GRACE_MS, STALE_AFTER_DAYS } from "../src/config.js";
 import { countdownParts, pickHero, relativeShort } from "../src/countdown.js";
+import { googleCalendarUrl, icsFilename, icsForEvent } from "../src/export.js";
+import { weekGlance } from "../src/glance.js";
 import {
   detailRows,
   formatTimes,
@@ -33,7 +35,7 @@ import {
   sessionStatus,
   upcomingClosures,
 } from "../src/sessions.js";
-import { getCached, getPrefs, setPrefs } from "../src/store.js";
+import { getCached, getPrefs, getReminders, setPrefs, setReminder } from "../src/store.js";
 
 const LIST_LIMIT = 60;
 const IMPACT_LABEL = { high: "High impact", medium: "Medium impact", low: "Low impact" };
@@ -45,6 +47,11 @@ const elements = {
   more: $("more"),
   banner: $("banner"),
   chips: $("chips"),
+  glance: $("glance"),
+  detailRemind: $("detail-remind"),
+  detailRemindLabel: $("detail-remind-label"),
+  detailGcal: $("detail-gcal"),
+  detailIcs: $("detail-ics"),
   status: $("status"),
   refresh: $("refresh"),
   options: $("options"),
@@ -91,6 +98,10 @@ let heroEvent = null;
 let detailEvent = null;
 // Agenda rows whose relative label is refreshed by the ticker.
 let liveRows = [];
+// Event ids with a per-event reminder.
+let reminders = new Set();
+// Object URL behind the detail view's .ics link, revoked when replaced.
+let icsUrl = null;
 
 function el(tag, className, text) {
   const node = document.createElement(tag);
@@ -205,6 +216,45 @@ async function setGroups(groups) {
   await render();
 }
 
+// ---------- Week at a glance ----------
+
+function renderGlance(matching, allEvents, now) {
+  elements.glance.replaceChildren();
+  for (const day of weekGlance(matching, { now, timeZone: activeTimeZone, allEvents })) {
+    const cell = el("button", "glance-day");
+    cell.type = "button";
+    if (day.isToday) cell.classList.add("today");
+    if (day.closed) cell.classList.add("closed");
+
+    const dots = el("span", "glance-dots");
+    if (day.closed) {
+      dots.className = "glance-closed";
+      dots.textContent = "Closed";
+    } else {
+      // A dot per event, capped so a heavy day cannot overflow the cell.
+      for (let i = 0; i < Math.min(day.high, 3); i += 1) dots.append(el("i", "high"));
+      for (let i = 0; i < Math.min(day.medium, 4 - Math.min(day.high, 3)); i += 1) {
+        dots.append(el("i", "medium"));
+      }
+    }
+    cell.append(el("span", "glance-wd", day.weekday), el("span", "glance-num", String(day.day)), dots);
+
+    const parts = [];
+    if (day.high) parts.push(`${day.high} high impact`);
+    if (day.medium) parts.push(`${day.medium} medium`);
+    if (day.closed) parts.push("market closed");
+    else if (day.early) parts.push("early close");
+    cell.title = `${day.weekday} ${day.day}: ${parts.join(", ") || "nothing major"}`;
+
+    const hasEvents = day.high + day.medium > 0;
+    cell.disabled = !hasEvents;
+    cell.addEventListener("click", () => {
+      document.getElementById(`day-${day.key}`)?.scrollIntoView?.({ block: "start", behavior: "smooth" });
+    });
+    elements.glance.append(cell);
+  }
+}
+
 // ---------- Agenda ----------
 
 function renderRow(event, now) {
@@ -228,6 +278,11 @@ function renderRow(event, now) {
   title.title = event.title;
 
   const side = el("span", "row-side");
+  if (reminders.has(event.id)) {
+    const bell = el("span", "bell");
+    bell.title = "Reminder on";
+    side.append(bell);
+  }
   const move = typicalMoveBadge(event);
   if (move) side.append(el("span", "tag move", move.replace(" normal", "")));
   if (event.approximate) side.append(el("span", "tag est", "est."));
@@ -242,8 +297,9 @@ function renderRow(event, now) {
   return item;
 }
 
-function appendDay(label, dateText, events, now, extraClass = "") {
+function appendDay(label, dateText, events, now, extraClass = "", key = "") {
   const heading = el("li", `day ${extraClass}`.trim());
+  if (key) heading.id = `day-${key}`;
   heading.append(el("span", "", label));
   if (dateText) heading.append(el("span", "day-date", dateText));
   elements.events.append(heading);
@@ -307,11 +363,12 @@ function renderStatus(fetchedAt, lastError) {
 
 // ---------- Render ----------
 
-async function render() {
+async function render({ keepView = false } = {}) {
   const [{ calendar, fetchedAt, lastError }, prefs] = await Promise.all([
     getCached(),
     getPrefs(),
   ]);
+  reminders = new Set(await getReminders(calendar?.events ?? null));
 
   activeGroups = new Set(prefs.selectedGroups ?? []);
   const horizonMs = (prefs.viewHorizonDays ?? 90) * 24 * 3600 * 1000;
@@ -322,7 +379,7 @@ async function render() {
   renderHours(calendar);
   // A refresh or filter change can remove whatever the detail view was
   // showing, so always come back to the list from there.
-  if (view === "detail") showView("list");
+  if (view === "detail" && !keepView) showView("list");
 
   elements.events.replaceChildren();
   elements.more.hidden = true;
@@ -330,6 +387,7 @@ async function render() {
 
   if (!calendar?.events?.length) {
     renderHero(null);
+    elements.glance.replaceChildren();
     elements.empty.textContent = "No calendar cached yet. Press refresh to fetch the feed.";
     elements.empty.hidden = false;
     elements.banner.hidden = true;
@@ -349,6 +407,7 @@ async function render() {
   const events = matching.slice(0, LIST_LIMIT);
 
   renderHero(pickHero(matching, now, IN_PROGRESS_GRACE_MS));
+  renderGlance(matching, calendar.events, now);
 
   if (!events.length) {
     elements.empty.textContent = activeGroups.size
@@ -365,7 +424,7 @@ async function render() {
   if (live.length) appendDay("Happening now", "", live, now, "live");
   for (const group of groupByDay(ahead, activeTimeZone, now)) {
     const relative = group.label === "Today" || group.label === "Tomorrow";
-    appendDay(group.label, relative ? dayDate(group.events[0]) : "", group.events, now);
+    appendDay(group.label, relative ? dayDate(group.events[0]) : "", group.events, now, "", group.key);
   }
 
   if (matching.length > events.length) {
@@ -393,6 +452,7 @@ function showDetail(event) {
   elements.detailNote.textContent = event.note ?? "";
   paintDetailCountdown();
 
+  renderDetailActions(event);
   appendPairs(elements.detailTimes, formatTimes(event, activeTimeZone, activeHour12));
   appendPairs(elements.detailRows, detailRows(event));
 
@@ -425,6 +485,47 @@ function showDetail(event) {
   showView("detail");
   detailEvent = event;
   elements.back.focus();
+}
+
+/** Has this event already started (timed) or passed (all-day)? */
+function hasStarted(event, now = Date.now()) {
+  if (event.all_day) {
+    return (event.date_et ?? "") < new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit",
+    }).format(new Date(now));
+  }
+  return Date.parse(event.start_utc) <= now;
+}
+
+function paintRemind(on) {
+  elements.detailRemind.setAttribute("aria-pressed", String(on));
+  elements.detailRemindLabel.textContent = on ? "Reminder on" : "Remind me";
+  elements.detailRemind.title = on
+    ? "You'll be notified before this event. Click to cancel."
+    : "Get a notification before this event, whatever your type settings";
+}
+
+function renderDetailActions(event) {
+  // A reminder for something already under way would never fire.
+  const started = hasStarted(event);
+  elements.detailRemind.hidden = started;
+  if (!started) paintRemind(reminders.has(event.id));
+
+  elements.detailGcal.href = googleCalendarUrl(event);
+  elements.detailGcal.title = "Add this event to Google Calendar";
+
+  // The .ics is built on demand into a Blob; the previous one is released.
+  if (icsUrl && typeof URL.revokeObjectURL === "function") URL.revokeObjectURL(icsUrl);
+  icsUrl = null;
+  if (typeof Blob === "function" && typeof URL.createObjectURL === "function") {
+    icsUrl = URL.createObjectURL(new Blob([icsForEvent(event)], { type: "text/calendar" }));
+    elements.detailIcs.href = icsUrl;
+    elements.detailIcs.download = icsFilename(event);
+    elements.detailIcs.title = "Download for Apple Calendar, Outlook and others";
+    elements.detailIcs.hidden = false;
+  } else {
+    elements.detailIcs.hidden = true;
+  }
 }
 
 function paintDetailCountdown() {
@@ -609,6 +710,22 @@ elements.next.addEventListener("click", () => {
   if (heroEvent) showDetail(heroEvent);
 });
 elements.market.addEventListener("click", () => showView("hours"));
+
+elements.detailRemind.addEventListener("click", async () => {
+  const event = detailEvent;
+  if (!event) return;
+  const on = !reminders.has(event.id);
+  await setReminder(event.id, on);
+  if (on) reminders.add(event.id);
+  else reminders.delete(event.id);
+  paintRemind(on);
+  // Rebuild the alarm schedule now, so the reminder exists even if the
+  // popup closes before anything else would trigger a reschedule.
+  await chrome.runtime.sendMessage({ type: "reschedule" });
+  // Refresh the agenda's bells without leaving the detail view.
+  await render({ keepView: true });
+  detailEvent = event;
+});
 elements.hoursBack.addEventListener("click", () => showView("list"));
 elements.back.addEventListener("click", () => showView("list"));
 

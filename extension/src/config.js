@@ -15,6 +15,9 @@ export const STORAGE_KEYS = {
   lastError: "lastError",
   prefs: "prefs",
   snoozes: "snoozes",
+  // Event ids the user rang the bell on. Sync storage so they follow the
+  // user across machines; ids are short and pruned once the event passes.
+  reminders: "reminders",
 };
 
 export const DEFAULT_PREFS = {
@@ -42,6 +45,10 @@ export const DEFAULT_PREFS = {
   // instead of a "30 minutes before", which would mean 30 min before midnight.
   allDayNotifications: true,
   allDayHour: 8,
+  // One weekday notification summarising the day. Off until asked for: it is
+  // a new interruption, and existing users did not sign up for it.
+  morningBrief: false,
+  morningBriefHour: 7,
 };
 
 // How long an event stays in the list after it starts, so an FOMC statement
@@ -52,6 +59,7 @@ export const MAX_ALARM_OFFSETS = 4;
 
 export const REFRESH_ALARM = "compass:refresh";
 export const BADGE_ALARM = "compass:badge";
+export const BRIEF_ALARM = "compass:brief";
 export const NOTIFY_PREFIX = "compass:notify:";
 
 export const SNOOZE_MINUTES = 60;

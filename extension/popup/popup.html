@@ -51,6 +51,8 @@
       <span id="next-move" class="hero-move" hidden></span>
     </button>
 
+    <div id="glance" class="glance" aria-label="Week at a glance"></div>
+
     <div id="chips" class="chips" role="group" aria-label="Filter by event type"></div>
 
     <ul id="events" class="agenda"></ul>
@@ -90,6 +92,21 @@
     <span id="detail-eyebrow" class="eyebrow"></span>
     <h2 id="detail-title" class="panel-title"></h2>
     <p id="detail-countdown" class="detail-countdown"></p>
+
+    <div class="actions">
+      <button id="detail-remind" class="action" type="button" aria-pressed="false">
+        <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 11.5V7a4 4 0 0 1 8 0v4.5l1 1.2H3Z M6.5 14a1.6 1.6 0 0 0 3 0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/></svg>
+        <span id="detail-remind-label">Remind me</span>
+      </button>
+      <a id="detail-gcal" class="action" target="_blank" rel="noreferrer">
+        <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="2.5" y="3.5" width="11" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 2v3M10.5 2v3M8 7.5v4M6 9.5h4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Google Calendar
+      </a>
+      <a id="detail-ics" class="action">
+        <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5v8M4.8 7.5 8 10.7l3.2-3.2M3 13.5h10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        .ics
+      </a>
+    </div>
     <dl id="detail-times" class="rows times"></dl>
     <p id="detail-note" class="detail-note"></p>
 
