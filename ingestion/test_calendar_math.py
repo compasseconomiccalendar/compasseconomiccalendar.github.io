@@ -24,6 +24,7 @@ from build_calendar import (  # noqa: E402
     build_market_calendar_events,
     enrich_from_bea,
     et_to_utc,
+    fetch_treasury_events,
     first_wednesday,
     good_friday,
     iso_z,
@@ -36,6 +37,8 @@ from build_calendar import (  # noqa: E402
     us_federal_holidays,
     us_market_early_closes,
     us_market_holidays,
+    treasury_auction_day,
+    treasury_close_time,
 )
 
 
@@ -319,6 +322,79 @@ class TestClockParsing(unittest.TestCase):
         self.assertIsNone(parse_clock("noon"))
 
 
+
+
+class _FakeResponse:
+    def __init__(self, payload):
+        self._payload = payload
+
+    def raise_for_status(self):
+        pass
+
+    def json(self):
+        return self._payload
+
+
+class _FakeSession:
+    """Serves canned TreasuryDirect payloads keyed by endpoint name."""
+
+    def __init__(self, upcoming, auctioned=()):
+        self._payloads = {"upcoming": list(upcoming), "auctioned": list(auctioned)}
+
+    def get(self, url, params=None, timeout=None):
+        return _FakeResponse(self._payloads[url.rsplit("/", 1)[-1]])
+
+
+# Trimmed from a live /upcoming record, November 2026 schema.
+CURRENT_RECORD = {
+    "cusip": "91282CRW3",
+    "securityType": "Note",
+    "securityTerm": "3-Year",
+    "announcementDate": "2026-11-04T00:00:00",
+    "competitiveAuctionCloseDate": "2026-11-09T00:00:00",
+    "competitiveAuctionCloseTime": "01:00 PM",
+}
+
+# The same auction as the pre-October-2026 schema described it.
+LEGACY_RECORD = {
+    "cusip": "91282CRW3",
+    "securityType": "Note",
+    "securityTerm": "3-Year",
+    "announcementDate": "2026-11-04T00:00:00",
+    "auctionDate": "2026-11-09T00:00:00",
+    "closingTimeCompetitive": "01:00 PM",
+}
+
+
+class TestTreasuryAuctions(unittest.TestCase):
+    WINDOW = (date(2026, 11, 1), date(2027, 11, 1))
+
+    def test_current_and_legacy_field_names_both_parse(self):
+        for record in (CURRENT_RECORD, LEGACY_RECORD):
+            self.assertEqual(treasury_auction_day(record), date(2026, 11, 9))
+            self.assertEqual(treasury_close_time(record), "13:00")
+
+    def test_empty_new_field_falls_back_to_the_old_one(self):
+        record = {**LEGACY_RECORD, "competitiveAuctionCloseDate": ""}
+        self.assertEqual(treasury_auction_day(record), date(2026, 11, 9))
+
+    def test_current_schema_produces_auction_events(self):
+        events = fetch_treasury_events(_FakeSession([CURRENT_RECORD]), self.WINDOW)
+        auctions = [e for e in events if e["event_type"] == "treasury_auction"]
+        self.assertEqual(len(auctions), 1)
+        self.assertEqual(auctions[0]["date_et"], "2026-11-09")
+        self.assertEqual(auctions[0]["time_et"], "13:00")
+        self.assertEqual(auctions[0]["title"], "Treasury Auction: 3-Year Note")
+
+    def test_records_without_any_readable_date_fail_the_source(self):
+        # The October 2026 failure mode: records arrive, none can be dated.
+        unreadable = {k: v for k, v in CURRENT_RECORD.items() if "Date" not in k}
+        with self.assertRaises(RuntimeError):
+            fetch_treasury_events(_FakeSession([unreadable] * 3), self.WINDOW)
+
+    def test_no_records_at_all_is_not_a_schema_failure(self):
+        events = fetch_treasury_events(_FakeSession([]), self.WINDOW)
+        self.assertFalse([e for e in events if e["event_type"] == "treasury_auction"])
 
 
 class TestMarketCalendar(unittest.TestCase):
