@@ -32,3 +32,10 @@ done
 
 shoot $HERE/promo.html 440 280 $ROOT/design/store/promo_440x280.png
 echo "design/store/promo_440x280.png"
+
+# Store listing icon: Google asks for 96x96 artwork centred in 128x128 with
+# transparent padding, unlike the edge-to-edge icon128.png the extension ships.
+page=$TMP/store-icon.html
+print -r -- "<html><body style='margin:0'><img src='file://$HERE/logo.svg' style='display:block;width:96px;height:96px;margin:16px'></body></html>" > $page
+shoot $page 128 128 $ROOT/design/store/store_icon_128.png
+echo "design/store/store_icon_128.png"
