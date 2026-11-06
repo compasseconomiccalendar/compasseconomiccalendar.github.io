@@ -1,0 +1,163 @@
+<!doctype html>
+<!-- One 1280x800 store screenshot: a headline beside a real render of the
+     extension. render.sh fills it in via the query string:
+       img=<png>  kicker=  headline=  sub=  theme=dark|light  wide=1
+       crop=<top>,<height>   show only that band of the image (raw CSS px)
+       ntitle= nbody=        overlay an OS-style notification -->
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; width: 1280px; height: 800px; overflow: hidden; }
+  body {
+    display: flex;
+    align-items: center;
+    gap: 72px;
+    padding: 0 88px;
+    box-sizing: border-box;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background:
+      radial-gradient(70% 90% at 100% 0%, rgb(255 122 26 / 10%), transparent 60%),
+      radial-gradient(60% 80% at 0% 100%, rgb(255 255 255 / 3%), transparent 60%),
+      #0e0f11;
+    color: #f3f2ef;
+  }
+  body.light {
+    background:
+      radial-gradient(70% 90% at 100% 0%, rgb(226 98 10 / 8%), transparent 60%),
+      #f1efea;
+    color: #16161a;
+  }
+
+  .copy { flex: 1; min-width: 0; }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+  .brand img { width: 36px; height: 36px; border-radius: 9px; }
+  .brand span {
+    font-size: 14px;
+    font-weight: 650;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+  }
+  .kicker {
+    margin: 0 0 14px;
+    color: #ff8a33;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  .light .kicker { color: #c2510a; }
+  h1 {
+    margin: 0 0 20px;
+    font-size: 52px;
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+  .sub {
+    margin: 0;
+    max-width: 460px;
+    color: #b9b8b2;
+    font-size: 21px;
+    line-height: 1.5;
+  }
+  .light .sub { color: #55554f; }
+
+  .shot {
+    flex: none;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 9%),
+      0 30px 80px rgb(0 0 0 / 55%);
+  }
+  .light .shot {
+    box-shadow:
+      0 0 0 1px rgb(0 0 0 / 8%),
+      0 30px 70px rgb(40 30 10 / 18%);
+  }
+  .shot img { display: block; width: 444px; height: auto; }
+  .wide .shot img { width: 620px; }
+  .wide { gap: 56px; }
+  .shot.cropped { position: relative; }
+  .shot.cropped img { position: absolute; left: 0; }
+
+  .stage { position: relative; flex: none; }
+  .notice {
+    position: absolute;
+    z-index: 2;
+    top: -34px;
+    right: -36px;
+    width: 372px;
+    display: flex;
+    gap: 12px;
+    padding: 13px 15px;
+    border-radius: 16px;
+    background: rgb(48 49 54 / 88%);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 10%), 0 18px 50px rgb(0 0 0 / 55%);
+    color: #f3f2ef;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+  .notice[hidden] { display: none; }
+  .notice img { width: 34px; height: 34px; border-radius: 8px; flex: none; }
+  .notice b { display: block; margin-bottom: 2px; font-weight: 650; }
+  .notice small { display: block; margin-bottom: 3px; color: #a9a8a3; font-size: 11px; }
+</style>
+</head>
+<body>
+  <div class="copy">
+    <div class="brand"><img src="../../logo/logo.svg" alt=""><span>Compass</span></div>
+    <p class="kicker" id="kicker"></p>
+    <h1 id="headline"></h1>
+    <p class="sub" id="sub"></p>
+  </div>
+  <div class="stage">
+    <div class="notice" id="notice" hidden>
+      <img src="../../logo/logo.svg" alt="">
+      <div><small>Compass · Morning brief · now</small><b id="ntitle"></b><span id="nbody"></span></div>
+    </div>
+    <div class="shot" id="shot"><img id="img" alt=""></div>
+  </div>
+<script>
+  const q = new URLSearchParams(location.search);
+  document.getElementById("img").src = q.get("img");
+  document.getElementById("kicker").textContent = q.get("kicker") || "";
+  // A literal "|" in the headline marks a line break.
+  const headline = document.getElementById("headline");
+  (q.get("headline") || "").split("|").forEach((line, i) => {
+    if (i) headline.append(document.createElement("br"));
+    headline.append(line);
+  });
+  document.getElementById("sub").textContent = q.get("sub") || "";
+  if (q.get("theme") === "light") document.body.classList.add("light");
+  if (q.get("wide")) document.body.classList.add("wide");
+
+  // Crop to a band of the raw render, scaled the same way as the image.
+  if (q.get("crop")) {
+    const [top, height] = q.get("crop").split(",").map(Number);
+    const img = document.getElementById("img");
+    const shot = document.getElementById("shot");
+    img.addEventListener("load", () => {
+      const scale = img.clientWidth / (img.naturalWidth / 2);  // raw is 2x
+      shot.classList.add("cropped");
+      shot.style.width = `${img.clientWidth}px`;
+      shot.style.height = `${height * scale}px`;
+      img.style.top = `${-top * scale}px`;
+    });
+  }
+  if (q.get("ntitle")) {
+    document.getElementById("ntitle").textContent = q.get("ntitle");
+    document.getElementById("nbody").textContent = q.get("nbody") || "";
+    document.getElementById("notice").hidden = false;
+  }
+</script>
+</body>
+</html>
