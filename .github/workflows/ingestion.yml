@@ -1,0 +1,80 @@
+name: Ingestion checks
+
+# A full, unpublished build of the feed on every PR that touches the builder.
+#
+# Unit tests alone cannot catch the failures that have actually happened:
+# TreasuryDirect renaming fields (Oct 2026), or a FRED release name that does
+# not match the live catalogue -- which fails the whole FRED source and drops
+# every macro release. Building against the live sources before merge does.
+# Nothing here writes to the repo or deploys.
+
+on:
+  pull_request:
+    paths:
+      - "ingestion/**"
+      - "data/**"
+      - "scripts/check_feed.py"
+      - "requirements.txt"
+      - ".github/workflows/ingestion.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        run: |
+          python -m unittest discover -s ingestion -p 'test_*.py'
+          python -m unittest discover -s scripts -p 'test_*.py'
+
+      # PRs from forks do not get secrets; build without FRED there rather
+      # than fail on a missing key.
+      - name: Build the feed against live sources (not published)
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: |
+          if [ -n "$FRED_API_KEY" ]; then
+            python ingestion/build_calendar.py --out "$RUNNER_TEMP/calendar.json"
+          else
+            echo "::warning::No FRED_API_KEY (fork PR?); building without FRED"
+            python ingestion/build_calendar.py --skip-fred --out "$RUNNER_TEMP/calendar.json"
+          fi
+
+      # Strict: unlike the publish gate, an empty source family fails here,
+      # so a broken source is caught before merge rather than after.
+      - name: Check the built feed
+        env:
+          HAS_FRED: ${{ secrets.FRED_API_KEY != '' }}
+        run: |
+          extra=""
+          [ "$HAS_FRED" = "true" ] || extra="--allow-empty-families"
+          python scripts/check_feed.py --file "$RUNNER_TEMP/calendar.json" \
+            --skip-ics --max-age-days 1 $extra
+
+      - name: Summarise new and changed event types
+        run: |
+          python - "$RUNNER_TEMP/calendar.json" <<'EOF'
+          import collections, json, sys
+          feed = json.load(open(sys.argv[1]))
+          counts = collections.Counter(e["event_type"] for e in feed["events"])
+          print("partial_build:", feed.get("partial_build"), feed.get("failed_sources"))
+          for event_type, count in sorted(counts.items()):
+              print(f"{count:4d}  {event_type}")
+          # A source that failed to build is a failed check on a PR, even if
+          # the publish gate would let it through.
+          sys.exit(1 if feed.get("partial_build") else 0)
+          EOF

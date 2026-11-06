@@ -13,6 +13,9 @@ const TYPE_LABELS = {
   fomc_sep: "FOMC projections",
   fomc_minutes: "FOMC minutes",
   fomc_meeting_day_1: "FOMC meeting, day 1",
+  fomc_speech: "Fed Chair remarks",
+  fomc_testimony: "Fed testimony",
+  fomc_beige_book: "Beige Book",
   treasury_auction: "Treasury auction",
   treasury_quarterly_refunding: "Quarterly refunding",
   futures_liquidity_roll: "Futures liquidity roll",
@@ -32,6 +35,7 @@ const GDP_VARIANT_LABELS = {
 const FAMILY_LABELS = {
   fomc: "FOMC",
   macro_releases: "Macro releases",
+  fed_board: "Fed Board calendar",
   ism: "ISM",
   treasury_auctions: "Treasury auctions",
   treasury_refunding: "Treasury refunding",
