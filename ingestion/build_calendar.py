@@ -72,6 +72,14 @@ FOMC_URL = "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
 FRED_API_BASE = "https://api.stlouisfed.org/fred"
 TREASURY_BASE = "https://www.treasurydirect.gov/TA_WS/securities"
 
+# TreasuryDirect renamed these fields in October 2026 (auctionDate became
+# competitiveAuctionCloseDate, closingTimeCompetitive became
+# competitiveAuctionCloseTime) with no notice, and every record silently
+# failed the date filter for three weekly builds. Each tuple is tried in
+# order, newest name first, so a rename back or a partial rollout still works.
+TREASURY_DATE_FIELDS = ("competitiveAuctionCloseDate", "auctionDate")
+TREASURY_CLOSE_FIELDS = ("competitiveAuctionCloseTime", "closingTimeCompetitive")
+
 # Verbatim, required by the FRED API terms of use. Do not reword.
 FRED_ATTRIBUTION = (
     "This product uses the FRED® API but is not endorsed or certified "
@@ -929,6 +937,23 @@ def _treasury_impact(security_type: str, security_term: str) -> str:
     return TREASURY_IMPACT.get(security_type, "low")
 
 
+def _first_field(item: Dict[str, Any], names: Tuple[str, ...]) -> Optional[str]:
+    """The first non-empty value among ``names``, or None."""
+    for name in names:
+        value = item.get(name)
+        if isinstance(value, str) and value.strip():
+            return value
+    return None
+
+
+def treasury_auction_day(item: Dict[str, Any]) -> Optional[date]:
+    return parse_date(_first_field(item, TREASURY_DATE_FIELDS))
+
+
+def treasury_close_time(item: Dict[str, Any]) -> Optional[str]:
+    return parse_clock(_first_field(item, TREASURY_CLOSE_FIELDS))
+
+
 def fetch_treasury_events(
     session: requests.Session, window: Tuple[date, date]
 ) -> List[Dict[str, Any]]:
@@ -940,6 +965,8 @@ def fetch_treasury_events(
     """
     start_bound, end_bound = window
     records: Dict[str, Dict[str, Any]] = {}
+    fetched = 0
+    dated = 0
 
     for endpoint in ("upcoming", "auctioned"):
         try:
@@ -955,12 +982,25 @@ def fetch_treasury_events(
             continue
 
         for item in payload:
-            auction_day = parse_date(item.get("auctionDate"))
+            fetched += 1
+            auction_day = treasury_auction_day(item)
+            if auction_day:
+                dated += 1
             if not auction_day or not (start_bound <= auction_day <= end_bound):
                 continue
             key = f"{item.get('cusip', '')}-{auction_day.isoformat()}"
             records.setdefault(key, item)
         print(f"  treasurydirect /{endpoint}: {len(payload)} records fetched")
+
+    # Records arrived but none carried a date we can read: the schema has
+    # changed again. Fail the source so the build is marked partial and the
+    # popup says so, rather than publishing zero auctions as if that were true.
+    if fetched and not dated:
+        raise RuntimeError(
+            f"TreasuryDirect returned {fetched} records but none had an auction "
+            f"date in {', '.join(TREASURY_DATE_FIELDS)}; the API schema has "
+            "probably changed"
+        )
 
     # The refunding announcement is the first Wednesday of Feb/May/Aug/Nov.
     refunding_days = set()
@@ -970,14 +1010,14 @@ def fetch_treasury_events(
 
     events: List[Dict[str, Any]] = []
     for item in records.values():
-        auction_day = parse_date(item.get("auctionDate"))
+        auction_day = treasury_auction_day(item)
         if auction_day is None:
             continue
         security_type = (item.get("securityType") or "Security").strip()
         security_term = (item.get("securityTerm") or "").strip()
         cusip = (item.get("cusip") or "").strip()
         announcement_day = parse_date(item.get("announcementDate"))
-        close_time = parse_clock(item.get("closingTimeCompetitive")) or "13:00"
+        close_time = treasury_close_time(item) or "13:00"
         label = f"{security_term} {security_type}".strip()
 
         events.append(make_event(

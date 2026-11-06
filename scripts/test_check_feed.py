@@ -39,6 +39,7 @@ class Args:
     min_events = 60
     min_future_events = 20
     min_horizon_days = 45
+    allow_empty_families = False
 
 
 def iso(moment: datetime) -> str:
@@ -80,10 +81,10 @@ def healthy_feed() -> dict:
     }
 
 
-def run_checks(document: dict, max_age_days: int = 9) -> Report:
+def run_checks(document: dict, max_age_days: int = 9, args: object = None) -> Report:
     report = Report()
     check_envelope(report, document, max_age_days, NOW)
-    check_events(report, document, NOW, Args())
+    check_events(report, document, NOW, args or Args())
     return report
 
 
@@ -198,6 +199,37 @@ class BrokenFeedTest(unittest.TestCase):
         feed = healthy_feed()
         del feed["market_hours"]
         self.assert_fails(feed, "missing top-level keys")
+
+
+class EmptyFamilyTest(unittest.TestCase):
+    """A coverage family at zero events means its source broke."""
+
+    @staticmethod
+    def feed_with_empty_family() -> dict:
+        document = healthy_feed()
+        document["coverage"]["families"] = {
+            "fomc": {"horizon": "reported", "event_count": 28},
+            "treasury_auctions": {"horizon": "reported", "event_count": 0},
+        }
+        return document
+
+    def test_empty_family_fails_the_live_check(self) -> None:
+        report = run_checks(self.feed_with_empty_family())
+        self.assertFalse(report.ok)
+        self.assertIn("treasury_auctions", " | ".join(report.failures))
+
+    def test_publish_gate_only_warns(self) -> None:
+        class GateArgs(Args):
+            allow_empty_families = True
+
+        report = run_checks(self.feed_with_empty_family(), args=GateArgs())
+        self.assertTrue(report.ok, report.failures)
+        self.assertIn("treasury_auctions", " | ".join(report.warnings))
+
+    def test_populated_families_pass(self) -> None:
+        document = self.feed_with_empty_family()
+        document["coverage"]["families"]["treasury_auctions"]["event_count"] = 12
+        self.assertTrue(run_checks(document).ok)
 
 
 class LoadDocumentTest(unittest.TestCase):

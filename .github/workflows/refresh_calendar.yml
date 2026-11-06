@@ -66,6 +66,7 @@ jobs:
           --file output/calendar.json
           --skip-ics
           --max-age-days 1
+          --allow-empty-families
 
       - name: Assemble the Pages site
         run: |

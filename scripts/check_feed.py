@@ -328,6 +328,25 @@ def check_events(report: Report, document: Dict[str, Any], now: datetime, args: 
     for warning in (document.get("coverage") or {}).get("warnings") or []:
         report.note(f"coverage: {warning}")
 
+    # A family with zero events means its source broke, not that nothing is
+    # scheduled: every family has events every month. TreasuryDirect renamed
+    # its fields in October 2026 and treasury_auctions sat at zero for three
+    # weeks while this check stayed green, because coverage warnings were
+    # only ever notes.
+    families = (document.get("coverage") or {}).get("families") or {}
+    empty = sorted(
+        name for name, info in families.items()
+        if isinstance(info, dict) and not info.get("event_count")
+    )
+    message = (
+        "coverage families with no events (their source has probably broken): "
+        + ", ".join(empty)
+    )
+    if getattr(args, "allow_empty_families", False):
+        report.warn(not empty, message)
+    else:
+        report.check(not empty, message)
+
 
 def check_ics(report: Report, base: str, timeout: int) -> None:
     """The ICS feeds are subscribed to by URL, so a 404 breaks silently for the subscriber."""
@@ -424,6 +443,13 @@ def main() -> int:
     parser.add_argument("--min-future-events", type=int, default=20, help="minimum events still ahead of now")
     parser.add_argument("--min-horizon-days", type=int, default=45, help="minimum days to the furthest event")
     parser.add_argument("--skip-ics", action="store_true", help="skip the ICS and site page checks")
+    parser.add_argument(
+        "--allow-empty-families",
+        action="store_true",
+        help="warn instead of failing when a coverage family has no events. The "
+        "publish gate uses this so one broken source cannot freeze every other "
+        "update; the daily live check does not, so it still raises an alert.",
+    )
     parser.add_argument("--timeout", type=int, default=30, help="per-request timeout in seconds")
     args = parser.parse_args()
 
