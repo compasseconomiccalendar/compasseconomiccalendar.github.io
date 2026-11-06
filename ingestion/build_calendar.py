@@ -36,6 +36,7 @@ See docs/RESEARCH.md for the sourcing and licensing rationale.
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import os
 import re
@@ -69,6 +70,30 @@ USER_AGENT = (
 HTTP_TIMEOUT = 30
 
 FOMC_URL = "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+
+# The Board's own events calendar as JSON (speeches, testimony, Beige Book,
+# statistical releases). Public domain, like the rest of federalreserve.gov.
+# It reaches about two months ahead, so it is a "reported" family.
+FED_BOARD_CALENDAR_URL = "https://www.federalreserve.gov/json/calendar.json"
+FED_BOARD_PAGE_URL = "https://www.federalreserve.gov/newsevents/calendar.htm"
+
+# Event types sourced from the Board calendar. Prefixed fomc_ / macro_release_
+# so installed extensions group them under the FOMC and Data chips without an
+# update, but kept out of the fomc and macro_releases coverage families so
+# those still describe their own sources.
+FED_BOARD_TYPES = {
+    "fomc_speech",
+    "fomc_testimony",
+    "fomc_beige_book",
+    "macro_release_industrial_production",
+}
+
+# Speech topics that are about the economy or policy rather than bank
+# supervision, payments or the like. Matched on the Board's own description.
+FED_POLICY_TOPIC = re.compile(
+    r"econom|outlook|monetary|policy|framework|inflation|labor|employment|rates?\b|financial stability",
+    re.IGNORECASE,
+)
 FRED_API_BASE = "https://api.stlouisfed.org/fred"
 TREASURY_BASE = "https://www.treasurydirect.gov/TA_WS/securities"
 
@@ -232,6 +257,32 @@ FRED_RELEASES = [
             "BLS survey of job openings, hires and quits, released at 10:00am ET "
             "-- note the later time than most BLS releases. The openings-to-"
             "unemployed ratio is a labour-market tightness gauge the Fed cites."
+        ),
+    },
+    {
+        "slug": "housing-starts",
+        "match": r"^New Residential Construction$",
+        "title": "Housing Starts & Building Permits",
+        "time_et": "08:30",
+        "market_impact": "medium",
+        "primary_source": "https://www.census.gov/construction/nrc/index.html",
+        "note": (
+            "Census report on new homes started and permits issued. The most "
+            "rate-sensitive corner of the economy, so a read on how policy "
+            "is biting."
+        ),
+    },
+    {
+        "slug": "employment-cost-index",
+        "release_id": 11,
+        "match": r"^Employment Cost Index$",
+        "title": "Employment Cost Index (ECI)",
+        "time_et": "08:30",
+        "market_impact": "medium",
+        "primary_source": "https://www.bls.gov/schedule/news_release/eci.htm",
+        "note": (
+            "Quarterly BLS measure of wages and benefits, adjusted for job "
+            "mix. The Fed's preferred gauge of labour-cost inflation."
         ),
     },
 ]
@@ -707,6 +758,157 @@ def fetch_fomc_events(session: requests.Session, window: Tuple[date, date]) -> L
                         **({} if released else {"approximate": True}),
                     ))
 
+    return events
+
+
+# --------------------------------------------------------------------------
+# Source 1b: Federal Reserve Board calendar
+# --------------------------------------------------------------------------
+
+def _board_days(entry: Dict[str, Any]) -> List[date]:
+    """Dates for one calendar entry: ``month`` is YYYY-MM, ``days`` is "13"
+    or "5, 12, 19" for a recurring release."""
+    month_text = str(entry.get("month") or "")
+    match = re.match(r"^(\d{4})-(\d{2})$", month_text)
+    if not match:
+        return []
+    year, month = int(match.group(1)), int(match.group(2))
+    days: List[date] = []
+    for token in re.findall(r"\d{1,2}", str(entry.get("days") or "")):
+        try:
+            days.append(date(year, month, int(token)))
+        except ValueError:
+            continue
+    return days
+
+
+def _official(title: str) -> Tuple[str, str, str]:
+    """Split "Speech - Governor Christopher J. Waller" into
+    ("speech", "Governor", "Waller"). Unknown shapes come back empty."""
+    kind, _, who = title.partition(" - ")
+    who = who.strip()
+    for role in ("Vice Chair for Supervision", "Vice Chair", "Chair", "Governor"):
+        if who.startswith(role + " "):
+            name = who[len(role) + 1:].strip()
+            return kind.strip().lower(), role, name.split()[-1] if name else ""
+    return kind.strip().lower(), "", ""
+
+
+def build_fed_board_events(
+    entries: List[Dict[str, Any]], window: Tuple[date, date]
+) -> List[Dict[str, Any]]:
+    """Turn Board calendar entries into events. Pure, so it is testable."""
+    start_bound, end_bound = window
+    events: List[Dict[str, Any]] = []
+
+    for entry in entries:
+        title = html.unescape(str(entry.get("title") or "")).strip()
+        kind_label = str(entry.get("type") or "")
+        description = re.sub(
+            r"<[^>]+>", "", html.unescape(str(entry.get("description") or ""))
+        ).strip()
+        clock = parse_clock(str(entry.get("time") or "").replace(".", "").upper())
+
+        for day in _board_days(entry):
+            if not (start_bound <= day <= end_bound):
+                continue
+
+            if kind_label == "Beige" or title == "Beige Book":
+                events.append(make_event(
+                    event_id=f"fed-beige-book-{day.isoformat()}",
+                    event_type="fomc_beige_book",
+                    title="Beige Book",
+                    day=day,
+                    time_et=clock or "14:00",
+                    market_impact="medium",
+                    source="federalreserve.gov",
+                    source_url="https://www.federalreserve.gov/monetarypolicy/beige-book-default.htm",
+                    note=(
+                        "The Fed's summary of conditions in each of its twelve "
+                        "districts, published two weeks before each FOMC meeting. "
+                        "Read for early signs of how the committee sees the economy."
+                    ),
+                ))
+                continue
+
+            if kind_label == "Stat" and title.startswith("G.17"):
+                events.append(make_event(
+                    event_id=f"fed-industrial-production-{day.isoformat()}",
+                    event_type="macro_release_industrial_production",
+                    title="Industrial Production & Capacity Utilization",
+                    day=day,
+                    time_et=clock or "09:15",
+                    market_impact="medium",
+                    source="federalreserve.gov",
+                    source_url="https://www.federalreserve.gov/releases/g17/current/default.htm",
+                    note=(
+                        "Monthly output of factories, mines and utilities, and how "
+                        "much spare capacity they have (G.17). A read on the "
+                        "goods economy and on inflation pressure."
+                    ),
+                ))
+                continue
+
+            kind, role, surname = _official(title)
+            is_testimony = "testimony" in kind or "Testimony" in kind_label
+            if not role or not (kind_label == "Speeches" or is_testimony):
+                continue
+            # Only the Chair's appearances and testimony are published for
+            # now. These types group under the FOMC chip, which notifies by
+            # default, so every Governor's talk -- bank supervision included,
+            # at 4am -- would become an alert for existing installs. Governor
+            # speeches need their own opt-in group, which needs an extension
+            # update, not just a feed change.
+            if role != "Chair" and not is_testimony:
+                continue
+
+            policy_topic = bool(FED_POLICY_TOPIC.search(description))
+            # Ceremonial remarks ("Welcoming Remarks", commencement) rarely
+            # move anything; policy topics, testimony and open Q&A do.
+            substantive = policy_topic or is_testimony or kind == "discussion"
+            impact = "high" if role == "Chair" and substantive else "medium"
+
+            verb = "testifies" if is_testimony else "in discussion" if kind == "discussion" else "speaks"
+            topic = f": {description}" if description else ""
+            events.append(make_event(
+                event_id=f"fed-{'testimony' if is_testimony else 'speech'}-"
+                         f"{surname.lower() or 'official'}-{day.isoformat()}"
+                         f"{'-' + clock.replace(':', '') if clock else ''}",
+                event_type="fomc_testimony" if is_testimony else "fomc_speech",
+                title=f"{role} {surname} {verb}{topic}",
+                day=day,
+                time_et=clock,
+                market_impact=impact,
+                source="federalreserve.gov",
+                source_url=FED_BOARD_PAGE_URL,
+                note=(
+                    (f"{title}. " if title else "")
+                    + (f"{html.unescape(str(entry.get('location') or '')).strip()}. "
+                       if entry.get("location") else "")
+                    + ("Remarks from the Chair can move rates and index futures "
+                       "as much as a data release." if role == "Chair" else
+                       "Congressional testimony from a Board member; questions "
+                       "often stray onto rates and the outlook.")
+                ),
+                official_role=role,
+                official_name=surname or None,
+            ))
+
+    return events
+
+
+def fetch_fed_board_events(
+    session: requests.Session, window: Tuple[date, date]
+) -> List[Dict[str, Any]]:
+    response = session.get(FED_BOARD_CALENDAR_URL, timeout=HTTP_TIMEOUT)
+    response.raise_for_status()
+    # The file carries a UTF-8 byte-order mark, which json.loads rejects.
+    payload = json.loads(response.content.decode("utf-8-sig"))
+    entries = payload.get("events") if isinstance(payload, dict) else None
+    if not isinstance(entries, list) or not entries:
+        raise RuntimeError("Fed Board calendar returned no events")
+    events = build_fed_board_events(entries, window)
+    print(f"  fed board calendar: {len(entries)} entries, {len(events)} kept")
     return events
 
 
@@ -1682,8 +1884,12 @@ def build_coverage(events: List[Dict[str, Any]], window: Tuple[date, date]) -> D
     looks like missing data instead of an unpublished schedule.
     """
     families = {
-        "fomc": ("reported", lambda t: t.startswith("fomc_")),
-        "macro_releases": ("reported", lambda t: t.startswith("macro_release_")),
+        "fomc": ("reported", lambda t: t.startswith("fomc_") and t not in FED_BOARD_TYPES),
+        "macro_releases": (
+            "reported",
+            lambda t: t.startswith("macro_release_") and t not in FED_BOARD_TYPES,
+        ),
+        "fed_board": ("reported", lambda t: t in FED_BOARD_TYPES),
         # Computed from ISM's usual pattern, so complete by construction -- but
         # every one is flagged approximate on the event itself.
         "ism": ("computed", lambda t: t.startswith("ism_")),
@@ -1819,6 +2025,7 @@ def main() -> int:
 
     if not args.skip_fomc:
         run_source("FOMC calendar", lambda: fetch_fomc_events(session, window))
+        run_source("Fed Board calendar", lambda: fetch_fed_board_events(session, window))
 
     if not args.skip_fred:
         api_key = os.environ.get("FRED_API_KEY", "").strip()

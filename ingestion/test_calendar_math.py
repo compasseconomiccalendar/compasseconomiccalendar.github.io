@@ -19,6 +19,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_calendar import (  # noqa: E402
     _parse_fomc_row_dates,
     build_coverage,
+    build_fed_board_events,
     build_futures_events,
     build_ism_events,
     build_market_calendar_events,
@@ -484,6 +485,82 @@ class TestFomcMinutes(unittest.TestCase):
             (date(2026, 11, 1), date(2027, 11, 1)),
         )
         self.assertEqual(minutes, {})
+
+
+class TestFedBoardCalendar(unittest.TestCase):
+    WINDOW = (date(2026, 11, 1), date(2027, 11, 1))
+
+    @staticmethod
+    def entry(title, kind, month, days, time="10:00 a.m.", description=""):
+        return {"title": title, "type": kind, "month": month, "days": days,
+                "time": time, "description": description}
+
+    def build(self, *entries):
+        return build_fed_board_events(list(entries), self.WINDOW)
+
+    def test_beige_book_and_industrial_production(self):
+        events = self.build(
+            self.entry("Beige Book", "Beige", "2026-11", "25", "2:00 p.m."),
+            self.entry("G.17 - Industrial Production and Capacity Utilization", "Stat",
+                       "2026-11", "17", "9:15 a.m."),
+        )
+        by_type = {e["event_type"]: e for e in events}
+        beige = by_type["fomc_beige_book"]
+        self.assertEqual((beige["date_et"], beige["time_et"]), ("2026-11-25", "14:00"))
+        ip = by_type["macro_release_industrial_production"]
+        self.assertEqual((ip["date_et"], ip["time_et"]), ("2026-11-17", "09:15"))
+
+    def test_chair_policy_speech_is_high_and_ceremony_is_medium(self):
+        events = self.build(
+            self.entry("Speech - Chair Jerome H. Powell", "Speeches", "2026-11", "20",
+                       "12:30 p.m.", "Economic Outlook and Monetary Policy"),
+            self.entry("Speech - Chair Jerome H. Powell", "Speeches", "2026-11", "21",
+                       "1:30 p.m.", "Welcoming Remarks"),
+        )
+        self.assertEqual([e["market_impact"] for e in events], ["high", "medium"])
+        self.assertEqual(events[0]["title"],
+                         "Chair Powell speaks: Economic Outlook and Monetary Policy")
+        self.assertEqual(events[0]["time_et"], "12:30")
+
+    def test_governor_speeches_are_not_published_yet(self):
+        # They would notify every FOMC-chip user, supervision talks included.
+        events = self.build(
+            self.entry("Speech - Governor Christopher J. Waller", "Speeches",
+                       "2026-11", "10", "4:00 a.m.", "Economic Outlook"),
+            self.entry("Discussion - Vice Chair for Supervision Michelle W. Bowman",
+                       "Speeches", "2026-11", "13", "10:50 a.m.", "Supervision and Regulation"),
+        )
+        self.assertEqual(events, [])
+
+    def test_testimony_by_any_board_member_is_published(self):
+        events = self.build(self.entry(
+            "Testimony - Vice Chair for Supervision Michelle W. Bowman", "Testimony",
+            "2026-12", "2", "10:00 a.m.", "Hearing on Oversight of Prudential Regulators"))
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0]["event_type"], "fomc_testimony")
+        self.assertEqual(events[0]["market_impact"], "medium")
+        self.assertIn("Bowman testifies", events[0]["title"])
+
+    def test_two_appearances_on_one_day_get_distinct_ids(self):
+        events = self.build(
+            self.entry("Speech - Chair Jerome H. Powell", "Speeches", "2026-11", "20",
+                       "9:00 a.m.", "Economic Outlook"),
+            self.entry("Speech - Chair Jerome H. Powell", "Speeches", "2026-11", "20",
+                       "6:30 p.m.", "Economic Outlook"),
+        )
+        self.assertEqual(len({e["id"] for e in events}), 2)
+
+    def test_recurring_days_markup_and_window_are_handled(self):
+        events = self.build(
+            self.entry("G.17 - Industrial Production and Capacity Utilization", "Stat",
+                       "2026-10", "16", "9:15 a.m."),           # before the window
+            self.entry("Beige Book", "Beige", "2026-12", "2, 31", "",
+                       "<p>Release &amp; summary</p>"),          # two days, no time
+            self.entry("H.15 - Selected Interest Rates", "Stat", "2026-11", "2, 3"),
+        )
+        self.assertEqual([e["date_et"] for e in events], ["2026-12-02", "2026-12-31"])
+        # No published time falls back to the usual 2:00pm.
+        self.assertTrue(all(e["time_et"] == "14:00" for e in events))
 
 
 class TestMarketCalendar(unittest.TestCase):
