@@ -24,17 +24,12 @@ cd extension
 node --test 'test/*.test.js'
 ```
 
-Icons and the promo tile are derived from `icons/compass logo 512.png`, which
-is the master artwork and must not be deleted — both generators read it, and
-it is the only full-resolution source if a size or crop ever needs revisiting.
-It is excluded from the packaged zip, so it costs users nothing. It — regenerate with `python icons/generate_icons.py` and
-`python icons/generate_promo.py`. Both need Pillow
-(`python3 -m pip install --user Pillow`); it is a tooling dependency only, and
-the extension itself still ships with none.
-
-The 16px and 32px icons are cropped toward the compass. The artwork carries
-about 30% padding, which reads well at 128px and reduces the needle to an
-illegible sliver in the toolbar.
+Icons and the store promo tile are rendered from the sources in
+`design/logo/` at the repo root: `logo.svg` is the master, `logo-16.svg` is a
+hand-tuned variant for the 16px toolbar size (the master's needle is too thin
+to read there), and `promo.html` is the 440×280 tile. Regenerate everything
+with `design/logo/render.sh`; it needs only Google Chrome, which it drives
+headless. The popup and settings headers inline the same mark as SVG.
 
 ## What works
 
@@ -182,15 +177,15 @@ python scripts/package_extension.py           # writes dist/compass-economic-cal
 python scripts/package_extension.py --check   # validate only; also runs in CI
 ```
 
-Development files are excluded — `package.json`, `test/`, the icon generators
-and the promo tile. Before zipping it checks that every file the manifest
+Development files are excluded — `package.json` and `test/`. Design sources
+live outside `extension/`, in `design/`. Before zipping it checks that every file the manifest
 references is present, that every relative import resolves to a packaged file,
 and that no HTML loads a remote script or stylesheet (MV3 forbids remote code,
 and it is a known rejection reason).
 
-The 440×280 promo tile is at `icons/promo_440x280.png`, regenerated with
-`python icons/generate_promo.py`. It is uploaded to the listing separately,
-not bundled in the extension.
+The 440×280 promo tile is at `design/store/promo_440x280.png`, regenerated
+with `design/logo/render.sh`. It is uploaded to the listing separately, not
+bundled in the extension.
 
 ### Not done yet
 

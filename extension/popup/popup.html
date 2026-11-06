@@ -2,101 +2,123 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<link rel="stylesheet" href="../styles/tokens.css">
 <link rel="stylesheet" href="popup.css">
 <title>Compass Economic Calendar</title>
 </head>
 <body>
-  <header>
-    <h1 id="title">Compass Economic Calendar</h1>
-    <div class="controls">
-      <label class="sr-only" for="horizon">Time frame</label>
-      <select id="horizon" title="How far ahead to show">
-        <option value="7">7d</option>
-        <option value="30">30d</option>
-        <option value="90">90d</option>
-        <option value="365">12mo</option>
-      </select>
-      <button id="theme" title="Toggle light or dark" aria-label="Toggle light or dark">◐</button>
-      <button id="refresh" title="Refresh feed" aria-label="Refresh feed">↻</button>
-      <button id="options" title="Settings" aria-label="Settings">⚙</button>
+  <header class="bar">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 24 24" aria-hidden="true">
+        <rect x=".25" y=".25" width="23.5" height="23.5" rx="5.3" fill="#f4f3f0" stroke="var(--line-strong)" stroke-width=".5"/>
+        <g transform="translate(2.4 2.6) scale(.8)">
+          <rect x="3.5" y="5" width="17" height="15.5" rx="4" fill="none" stroke="#141517" stroke-width="1.7"/>
+          <path d="M8.5 3v4M15.5 3v4" stroke="#141517" stroke-width="1.7" stroke-linecap="round"/>
+          <path d="M15.9 10.6 12.95 15.55 11.05 13.65Z" fill="#ff7a1a"/>
+          <path d="M8.1 18.6 11.05 13.65 12.95 15.55Z" fill="#141517"/>
+        </g>
+      </svg>
+      <span class="wordmark">Compass</span>
     </div>
+
+    <button id="market" class="market" type="button"
+            title="Market hours" aria-label="Market hours">
+      <span id="market-dot" class="dot"></span>
+      <span id="market-label">NYSE</span>
+      <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="m6 4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <button id="refresh" class="icon-btn" type="button"
+            title="Refresh feed" aria-label="Refresh feed">
+      <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 8a5.5 5.5 0 1 1-1.6-3.9M13.5 2.5v3h-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button id="options" class="icon-btn" type="button"
+            title="Settings" aria-label="Settings">
+      <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4.5h7M12.5 4.5h1M2.5 11.5h1M6.5 11.5h7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="11" cy="4.5" r="1.6" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="5" cy="11.5" r="1.6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+    </button>
   </header>
 
-  <nav class="tabs" role="tablist">
-    <button id="tab-events" class="tab on" role="tab" aria-selected="true">Events</button>
-    <button id="tab-hours" class="tab" role="tab" aria-selected="false">Hours</button>
-    <button id="tab-coverage" class="tab" role="tab" aria-selected="false">Coverage</button>
-  </nav>
+  <div id="banner" class="banner" role="status" hidden></div>
 
-  <div id="coverage-view" hidden>
-    <dl id="coverage-meta" class="rows hours-rows"></dl>
-    <h3 class="hours-heading">By source</h3>
-    <ul id="coverage-families" class="coverage-list"></ul>
-    <div id="coverage-warnings" class="coverage-warnings"></div>
-    <p class="hours-note">
-      <strong>Computed</strong> schedules follow published rules, so they run to
-      the end of the window. <strong>Reported</strong> ones only reach as far as
-      the agency has published — a later month is unpublished, not empty.
-    </p>
-  </div>
+  <main id="list-view">
+    <button id="next" class="hero" type="button" hidden>
+      <span id="next-eyebrow" class="eyebrow"></span>
+      <span id="next-title" class="hero-title"></span>
+      <span class="hero-row">
+        <span id="next-countdown" class="countdown"></span>
+        <span id="next-when" class="hero-when"></span>
+      </span>
+      <span id="next-move" class="hero-move" hidden></span>
+    </button>
 
-  <div id="hours-view" hidden>
-    <h3 class="hours-heading first">Equities — NYSE / Nasdaq</h3>
-    <div id="session" class="session"></div>
-    <dl id="hours-rows" class="rows hours-rows"></dl>
-    <h3 class="hours-heading">Futures — CME equity index</h3>
-    <div id="futures-session" class="session sub"></div>
-    <dl id="futures-rows" class="rows hours-rows"></dl>
+    <div id="chips" class="chips" role="group" aria-label="Filter by event type"></div>
 
-    <h3 class="hours-heading">Upcoming closures</h3>
-    <ul id="closures" class="closures"></ul>
-    <p class="hours-note" id="futures-note"></p>
-  </div>
-
-  <div id="list-view">
-    <div class="filterbar">
-      <details id="type-filter" class="dropdown">
-        <summary id="type-summary">All event types</summary>
-        <div id="chips" class="dropdown-menu" role="group"
-             aria-label="Filter by event type"></div>
-      </details>
-    </div>
-    <div id="banner" class="banner" hidden></div>
-    <ul id="events" class="events"></ul>
+    <ul id="events" class="agenda"></ul>
     <p id="empty" class="empty" hidden></p>
     <p id="more" class="more" hidden></p>
-  </div>
+  </main>
 
-  <section id="detail-view" class="detail" hidden>
-    <button id="back" class="back">← All events</button>
-    <h2 id="detail-title"></h2>
-    <dl id="detail-times" class="times"></dl>
+  <section id="hours-view" class="panel" hidden>
+    <button id="hours-back" class="back" type="button">
+      <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="m10 4-4 4 4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Agenda
+    </button>
+    <h2 class="panel-title">Market hours</h2>
+
+    <div class="card">
+      <h3 class="card-label">Equities · NYSE / Nasdaq</h3>
+      <div id="session" class="session"></div>
+      <dl id="hours-rows" class="rows"></dl>
+    </div>
+
+    <div class="card">
+      <h3 class="card-label">Futures · CME equity index</h3>
+      <div id="futures-session" class="session"></div>
+      <dl id="futures-rows" class="rows"></dl>
+    </div>
+
+    <h3 class="section-label">Upcoming closures</h3>
+    <ul id="closures" class="closures"></ul>
+    <p class="fine" id="futures-note"></p>
+  </section>
+
+  <section id="detail-view" class="panel" hidden>
+    <button id="back" class="back" type="button">
+      <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="m10 4-4 4 4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Agenda
+    </button>
+    <span id="detail-eyebrow" class="eyebrow"></span>
+    <h2 id="detail-title" class="panel-title"></h2>
+    <p id="detail-countdown" class="detail-countdown"></p>
+    <dl id="detail-times" class="rows times"></dl>
     <p id="detail-note" class="detail-note"></p>
-    <section id="detail-move" class="move" hidden>
-      <h3 class="move-title">Typical move</h3>
+
+    <section id="detail-move" class="card move" hidden>
+      <h3 class="card-label">Typical move</h3>
       <dl id="move-rows" class="rows"></dl>
-      <p id="move-window" class="move-window"></p>
-      <p class="move-caveat">
+      <p id="move-window" class="fine"></p>
+      <p class="fine">
         Past behaviour over a limited sample, measured against how much the
         index moves on an ordinary day. Not a forecast and no indication of
         direction.
       </p>
     </section>
+
     <dl id="detail-rows" class="rows"></dl>
-    <a id="detail-source" class="verify" target="_blank" rel="noreferrer"></a>
-    <a id="detail-primary" class="verify secondary" target="_blank" rel="noreferrer" hidden></a>
-    <p id="detail-attribution" class="legal" hidden></p>
+    <div class="links">
+      <a id="detail-source" class="button primary" target="_blank" rel="noreferrer"></a>
+      <a id="detail-primary" class="button" target="_blank" rel="noreferrer" hidden></a>
+    </div>
+    <p id="detail-attribution" class="fine" hidden></p>
   </section>
 
-  <footer>
+  <footer class="foot">
     <p id="status" class="status"></p>
-    <p class="legal">
-      For informational and educational purposes only. Not investment advice.
-      Verify times against official sources before trading.
-    </p>
-    <p class="legal">
-      This product uses the FRED® API but is not endorsed or certified by the
-      Federal Reserve Bank of St. Louis.
+    <p class="fine">
+      For informational and educational purposes only. Not investment
+      advice. Verify times against official sources before trading.
+      This product uses the FRED® API but is not endorsed or
+      certified by the Federal Reserve Bank of St. Louis.
     </p>
   </footer>
 

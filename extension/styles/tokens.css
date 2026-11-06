@@ -1,0 +1,94 @@
+/* Design tokens shared by the popup and the settings page.
+ *
+ * Dark is the default. The theme setting writes data-theme on <html>, so the
+ * choice sticks rather than following the OS.
+ *
+ * Impact colours carry meaning everywhere they appear (dot, hero eyebrow,
+ * badge), so they are defined once here and never restated in a component.
+ */
+:root {
+  color-scheme: dark;
+
+  --bg: #0e0f11;
+  --surface: #16171a;
+  --raised: #1d1e22;
+  --hover: #23252a;
+  --line: #26282d;
+  --line-strong: #34363c;
+
+  --fg: #f3f2ef;
+  --fg-2: #c9c8c3;
+  --muted: #8d8c87;
+
+  /* Brand: the needle orange from the logo. */
+  --accent: #ff7a1a;
+  --accent-soft: rgb(255 122 26 / 14%);
+  --accent-fg: #ff9a4d;
+
+  --high: #ff5c39;
+  --high-soft: rgb(255 92 57 / 14%);
+  --medium: #f0b232;
+  --medium-soft: rgb(240 178 50 / 13%);
+  --low: #6e7178;
+
+  --good: #34c77b;
+  --warn-bg: #2a2114;
+  --warn-line: #5a4320;
+
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 8px 24px rgb(0 0 0 / 35%);
+
+  --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #f7f6f3;
+  --surface: #ffffff;
+  --raised: #ffffff;
+  --hover: #f0efea;
+  --line: #e6e4de;
+  --line-strong: #d6d3cb;
+
+  --fg: #16161a;
+  --fg-2: #3d3d42;
+  --muted: #74736d;
+
+  --accent: #e2620a;
+  --accent-soft: rgb(226 98 10 / 10%);
+  --accent-fg: #c2510a;
+
+  --high: #d93a1a;
+  --high-soft: rgb(217 58 26 / 9%);
+  --medium: #b7790b;
+  --medium-soft: rgb(183 121 11 / 10%);
+  --low: #a3a29c;
+
+  --good: #15924f;
+  --warn-bg: #fdf4e3;
+  --warn-line: #f0d9a8;
+
+  --shadow: 0 6px 20px rgb(30 25 15 / 10%);
+}
+
+* { box-sizing: border-box; }
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Icon buttons use inline SVG that inherits currentColor. */
+.icon { width: 16px; height: 16px; flex: none; display: block; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
