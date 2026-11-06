@@ -167,22 +167,10 @@ per-permission justifications the review asks for. Source lives in
 
 ### Listing copy
 
-**Short description** (132 char limit — comes from `manifest.json`):
-
-> Never get caught off guard by a market-moving event. FOMC, CPI, jobs,
-> Treasury auctions, and futures rolls — in your timezone.
-
-**Detailed description** (paste into the dashboard; the manifest cannot hold
-this length):
-
-> Never get caught off guard by a market-moving event. Compass tracks FOMC
-> meetings, CPI, jobs reports, Treasury auctions, and futures contract rolls —
-> all in your local timezone with advance notifications. Not investment advice.
->
-> Note: desktop notifications require notification permission for your browser
-> in your operating system settings. Some Chromium-based browsers do not
-> deliver system notifications on macOS; the toolbar countdown works
-> regardless.
+The full listing for the current release, including the detailed description,
+screenshot order and privacy-tab answers, is in
+[`design/store/listing.md`](../design/store/listing.md). The short description
+comes from `manifest.json`.
 
 Data-handling disclosures to tick in the developer dashboard: **no** data
 collected in any category, **no** sale or transfer to third parties, **no**
@@ -203,14 +191,12 @@ and that no HTML loads a remote script or stylesheet (MV3 forbids remote code,
 and it is a known rejection reason).
 
 The 440×280 promo tile is at `design/store/promo_440x280.png`, regenerated
-with `design/logo/render.sh`. It is uploaded to the listing separately, not
-bundled in the extension.
+with `design/logo/render.sh`. The five 1280×800 screenshots are in
+`design/store/screenshots/`, regenerated with
+`design/store/screenshots/render.sh`, which renders the real extension against
+a frozen feed snapshot and a fixed clock. Both are uploaded to the listing
+separately, not bundled in the extension.
 
-### Not done yet
-
-- Screenshots (1280×800 or 640×400) — needs a human at a browser
-- $5 developer registration
-- Paste the permission justifications into the dashboard
 ### Verified in a real browser
 
 Loaded unpacked 2026-07-28. The service worker logged

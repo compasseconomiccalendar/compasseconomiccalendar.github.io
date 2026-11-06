@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Compass Economic Calendar",
   "version": "1.1.0",
-  "description": "Never get caught off guard by a market-moving event. FOMC, CPI, jobs, Treasury auctions, and futures rolls — in your timezone.",
+  "description": "Market-moving events, counted down: FOMC, CPI, jobs, Fed Chair remarks and Treasury auctions, with alerts in your time zone.",
   "minimum_chrome_version": "120",
   "permissions": [
     "alarms",
