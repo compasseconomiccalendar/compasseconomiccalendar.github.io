@@ -24,6 +24,8 @@ from build_calendar import (  # noqa: E402
     build_market_calendar_events,
     enrich_from_bea,
     et_to_utc,
+    expected_minutes_date,
+    fetch_fomc_events,
     fetch_treasury_events,
     first_wednesday,
     good_friday,
@@ -395,6 +397,93 @@ class TestTreasuryAuctions(unittest.TestCase):
     def test_no_records_at_all_is_not_a_schema_failure(self):
         events = fetch_treasury_events(_FakeSession([]), self.WINDOW)
         self.assertFalse([e for e in events if e["event_type"] == "treasury_auction"])
+
+
+def _fomc_page(year, rows):
+    """A minimal FOMC calendar page: one year panel of (month, date, text) rows."""
+    body = "".join(
+        f'<div class="row fomc-meeting"><div class="fomc-meeting__month">{month}</div>'
+        f'<div class="fomc-meeting__date">{dates}</div><div>{extra}</div></div>'
+        for month, dates, extra in rows
+    )
+    return (
+        f'<div class="panel panel-default"><div class="panel-heading">'
+        f"<h4>{year} FOMC Meetings</h4></div>{body}</div>"
+    )
+
+
+class _HtmlSession:
+    def __init__(self, html):
+        self.html = html
+
+    def get(self, url, params=None, timeout=None, headers=None):
+        html = self.html
+
+        class Response:
+            text = html
+            content = html.encode()
+            status_code = 200
+
+            def raise_for_status(self):
+                pass
+
+        return Response()
+
+
+class TestFomcMinutes(unittest.TestCase):
+    def test_minutes_are_three_weeks_after_the_decision(self):
+        # Every 2026 release: decision Wednesday + 21 days.
+        self.assertEqual(expected_minutes_date(date(2026, 10, 28)), date(2026, 11, 18))
+        self.assertEqual(expected_minutes_date(date(2026, 12, 9)), date(2026, 12, 30))
+
+    def test_a_holiday_pushes_minutes_to_the_next_business_day(self):
+        # Dec 4 2024 + 21 = Christmas Day.
+        self.assertEqual(expected_minutes_date(date(2024, 12, 4)), date(2024, 12, 26))
+        # Dec 11 2024 + 21 = New Year's Day 2025.
+        self.assertEqual(expected_minutes_date(date(2024, 12, 11)), date(2025, 1, 2))
+
+    def _minutes(self, rows, window):
+        events = fetch_fomc_events(_HtmlSession(_fomc_page(2026, rows)), window)
+        return {e["id"]: e for e in events if e["event_type"] == "fomc_minutes"}
+
+    def test_released_minutes_use_the_feds_date(self):
+        minutes = self._minutes(
+            [("September", "15-16*", "Statement: PDF | HTML Minutes: PDF | HTML (Released October 07, 2026)")],
+            (date(2026, 9, 1), date(2026, 12, 31)),
+        )
+        event = minutes["fomc-minutes-2026-09-16"]
+        self.assertEqual(event["date_et"], "2026-10-07")
+        self.assertTrue(event["confirmed"])
+        self.assertNotIn("approximate", event)
+
+    def test_upcoming_minutes_are_computed_and_flagged(self):
+        # The October 2026 failure: a held meeting with no minutes line yet,
+        # and a future meeting whose row is only a date.
+        minutes = self._minutes(
+            [("October", "27-28", "Statement: PDF | HTML Press Conference"),
+             ("December", "8-9*", "")],
+            (date(2026, 11, 6), date(2027, 11, 6)),
+        )
+        self.assertEqual(sorted(minutes), ["fomc-minutes-2026-10-28", "fomc-minutes-2026-12-09"])
+        october = minutes["fomc-minutes-2026-10-28"]
+        self.assertEqual((october["date_et"], october["time_et"]), ("2026-11-18", "14:00"))
+        self.assertFalse(october["confirmed"])
+        self.assertTrue(october["approximate"])
+        self.assertEqual(minutes["fomc-minutes-2026-12-09"]["date_et"], "2026-12-30")
+
+    def test_minutes_inside_the_window_appear_even_when_the_meeting_is_not(self):
+        minutes = self._minutes(
+            [("October", "27-28", "Statement: PDF | HTML")],
+            (date(2026, 11, 6), date(2027, 11, 6)),
+        )
+        self.assertIn("fomc-minutes-2026-10-28", minutes)
+
+    def test_notation_votes_get_no_minutes(self):
+        minutes = self._minutes(
+            [("November", "15 (notation vote)", "Statement: PDF | HTML")],
+            (date(2026, 11, 1), date(2027, 11, 1)),
+        )
+        self.assertEqual(minutes, {})
 
 
 class TestMarketCalendar(unittest.TestCase):
