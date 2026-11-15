@@ -12,245 +12,16 @@ REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
 X-WR-TIMEZONE:UTC
 BEGIN:VEVENT
-SUMMARY:Treasury Auction: 26-Week Bill
-DTSTART:20261109T163000Z
-DTEND:20261109T170000Z
-DTSTAMP:20261108T180824Z
-UID:treasury-auction-912797UX3-2026-11-09@compasseconomiccalendar.github.i
- o
-CATEGORIES:treasury_auction,impact-low
-DESCRIPTION:Competitive bidding for the 26-Week Bill closes at 11:30 ET. A
-  weak auction (low bid-to-cover\, high tail) pushes yields up and typicall
- y pressures index futures.\n\nMarket impact: LOW\nScheduled: 11:30 ET on 2
- 026-11-09\nSecurity: 26-Week Bill\nCUSIP: 912797UX3\n\nVerify: https://www
- .treasurydirect.gov/auctions/announcements-data-results/\n\nFor informatio
- nal and educational purposes only. Not investment advice. Times are subjec
- t to change\; verify against official sources before trading.
-STATUS:CONFIRMED
-TRANSP:TRANSPARENT
-URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
-END:VEVENT
-BEGIN:VEVENT
 SUMMARY:Treasury Auction: 13-Week Bill
-DTSTART:20261109T163000Z
-DTEND:20261109T170000Z
-DTSTAMP:20261108T180824Z
-UID:treasury-auction-912797WB9-2026-11-09@compasseconomiccalendar.github.i
+DTSTART:20261116T163000Z
+DTEND:20261116T170000Z
+DTSTAMP:20261115T191027Z
+UID:treasury-auction-912797TV9-2026-11-16@compasseconomiccalendar.github.i
  o
 CATEGORIES:treasury_auction,impact-low
 DESCRIPTION:Competitive bidding for the 13-Week Bill closes at 11:30 ET. A
   weak auction (low bid-to-cover\, high tail) pushes yields up and typicall
  y pressures index futures.\n\nMarket impact: LOW\nScheduled: 11:30 ET on 2
- 026-11-09\nSecurity: 13-Week Bill\nCUSIP: 912797WB9\n\nVerify: https://www
- .treasurydirect.gov/auctions/announcements-data-results/\n\nFor informatio
- nal and educational purposes only. Not investment advice. Times are subjec
- t to change\; verify against official sources before trading.
-STATUS:CONFIRMED
-TRANSP:TRANSPARENT
-URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Treasury Auction: 6-Week Bill
-DTSTART:20261109T180000Z
-DTEND:20261109T183000Z
-DTSTAMP:20261108T180824Z
-UID:treasury-auction-912797TC1-2026-11-09@compasseconomiccalendar.github.i
- o
-CATEGORIES:treasury_auction,impact-low
-DESCRIPTION:Competitive bidding for the 6-Week Bill closes at 13:00 ET. A 
- weak auction (low bid-to-cover\, high tail) pushes yields up and typically
-  pressures index futures.\n\nMarket impact: LOW\nScheduled: 13:00 ET on 20
- 26-11-09\nSecurity: 6-Week Bill\nCUSIP: 912797TC1\n\nVerify: https://www.t
- reasurydirect.gov/auctions/announcements-data-results/\n\nFor informationa
- l and educational purposes only. Not investment advice. Times are subject 
- to change\; verify against official sources before trading.
-STATUS:CONFIRMED
-TRANSP:TRANSPARENT
-URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Treasury Auction: 3-Year Note
-DTSTART:20261109T180000Z
-DTEND:20261109T183000Z
-DTSTAMP:20261108T180824Z
-UID:treasury-auction-91282CRW3-2026-11-09@compasseconomiccalendar.github.i
- o
-CATEGORIES:treasury_auction,impact-medium
-DESCRIPTION:Competitive bidding for the 3-Year Note closes at 13:00 ET. A 
- weak auction (low bid-to-cover\, high tail) pushes yields up and typically
-  pressures index futures.\n\nMarket impact: MEDIUM\nScheduled: 13:00 ET on
-  2026-11-09\nSecurity: 3-Year Note\nCUSIP: 91282CRW3\n\nVerify: https://ww
- w.treasurydirect.gov/auctions/announcements-data-results/\n\nFor informati
- onal and educational purposes only. Not investment advice. Times are subje
- ct to change\; verify against official sources before trading.
-STATUS:CONFIRMED
-TRANSP:TRANSPARENT
-URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Consumer Price Index (CPI)
-DTSTART:20261110T133000Z
-DTEND:20261110T140000Z
-DTSTAMP:20261108T180824Z
-UID:fred-cpi-2026-11-10@compasseconomiccalendar.github.io
-CATEGORIES:macro_release_cpi,impact-high
-DESCRIPTION:Headline and core consumer inflation from the BLS. The core mo
- nth-over-month print drives the immediate rates and equity reaction.\n\nMa
- rket impact: HIGH\nScheduled: 08:30 ET on 2026-11-10\n\nVerify: https://fr
- ed.stlouisfed.org/releases/10\nPrimary source: https://www.bls.gov/schedul
- e/news_release/cpi.htm\n\nThis product uses the FRED® API but is not endo
- rsed or certified by the Federal Reserve Bank of St. Louis.\n\nFor informa
- tional and educational purposes only. Not investment advice. Times are sub
- ject to change\; verify against official sources before trading.
-STATUS:CONFIRMED
-TRANSP:TRANSPARENT
-URL:https://fred.stlouisfed.org/releases/10
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Treasury Auction: 10-Year Note
-DTSTART:20261110T180000Z
-DTEND:20261110T183000Z
-DTSTAMP:20261108T180824Z
-UID:treasury-auction-91282CRX1-2026-11-10@compasseconomiccalendar.github.i
- o
-CATEGORIES:treasury_auction,impact-high
-DESCRIPTION:Competitive bidding for the 10-Year Note closes at 13:00 ET. A
-  weak auction (low bid-to-cover\, high tail) pushes yields up and typicall
- y pressures index futures.\n\nMarket impact: HIGH\nScheduled: 13:00 ET on 
- 2026-11-10\nSecurity: 10-Year Note\nCUSIP: 91282CRX1\n\nVerify: https://ww
- w.treasurydirect.gov/auctions/announcements-data-results/\n\nFor informati
- onal and educational purposes only. Not investment advice. Times are subje
- ct to change\; verify against official sources before trading.
-STATUS:CONFIRMED
-TRANSP:TRANSPARENT
-URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Initial Jobless Claims
-DTSTART:20261112T133000Z
-DTEND:20261112T140000Z
-DTSTAMP:20261108T180824Z
-UID:fred-jobless-claims-2026-11-12@compasseconomiccalendar.github.io
-CATEGORIES:macro_release_jobless_claims,impact-medium
-DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
- very Thursday at 8:30am ET. The highest-frequency read on the labour marke
- t\; the four-week average is what traders watch for a trend.\n\nMarket imp
- act: MEDIUM\nScheduled: 08:30 ET on 2026-11-12\n\nVerify: https://fred.stl
- ouisfed.org/releases/180\nPrimary source: https://www.dol.gov/ui/data.pdf\
- n\nThis product uses the FRED® API but is not endorsed or certified by th
- e Federal Reserve Bank of St. Louis.\n\nFor informational and educational 
- purposes only. Not investment advice. Times are subject to change\; verify
-  against official sources before trading.
-STATUS:CONFIRMED
-TRANSP:TRANSPARENT
-URL:https://fred.stlouisfed.org/releases/180
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Treasury Auction: 4-Week Bill
-DTSTART:20261112T180000Z
-DTEND:20261112T183000Z
-DTSTAMP:20261108T180824Z
-UID:treasury-auction-912797WF0-2026-11-12@compasseconomiccalendar.github.i
- o
-CATEGORIES:treasury_auction,impact-low
-DESCRIPTION:Competitive bidding for the 4-Week Bill closes at 13:00 ET. A 
- weak auction (low bid-to-cover\, high tail) pushes yields up and typically
-  pressures index futures.\n\nMarket impact: LOW\nScheduled: 13:00 ET on 20
- 26-11-12\nSecurity: 4-Week Bill\nCUSIP: 912797WF0\n\nVerify: https://www.t
- reasurydirect.gov/auctions/announcements-data-results/\n\nFor informationa
- l and educational purposes only. Not investment advice. Times are subject 
- to change\; verify against official sources before trading.
-STATUS:CONFIRMED
-TRANSP:TRANSPARENT
-URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Treasury Auction: 8-Week Bill
-DTSTART:20261112T180000Z
-DTEND:20261112T183000Z
-DTSTAMP:20261108T180824Z
-UID:treasury-auction-912797WP8-2026-11-12@compasseconomiccalendar.github.i
- o
-CATEGORIES:treasury_auction,impact-low
-DESCRIPTION:Competitive bidding for the 8-Week Bill closes at 13:00 ET. A 
- weak auction (low bid-to-cover\, high tail) pushes yields up and typically
-  pressures index futures.\n\nMarket impact: LOW\nScheduled: 13:00 ET on 20
- 26-11-12\nSecurity: 8-Week Bill\nCUSIP: 912797WP8\n\nVerify: https://www.t
- reasurydirect.gov/auctions/announcements-data-results/\n\nFor informationa
- l and educational purposes only. Not investment advice. Times are subject 
- to change\; verify against official sources before trading.
-STATUS:CONFIRMED
-TRANSP:TRANSPARENT
-URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Treasury Auction: 17-Week Bill
-DTSTART:20261112T180000Z
-DTEND:20261112T183000Z
-DTSTAMP:20261108T180824Z
-UID:treasury-auction-912797XH5-2026-11-12@compasseconomiccalendar.github.i
- o
-CATEGORIES:treasury_auction,impact-low
-DESCRIPTION:Competitive bidding for the 17-Week Bill closes at 13:00 ET. A
-  weak auction (low bid-to-cover\, high tail) pushes yields up and typicall
- y pressures index futures.\n\nMarket impact: LOW\nScheduled: 13:00 ET on 2
- 026-11-12\nSecurity: 17-Week Bill\nCUSIP: 912797XH5\n\nVerify: https://www
- .treasurydirect.gov/auctions/announcements-data-results/\n\nFor informatio
- nal and educational purposes only. Not investment advice. Times are subjec
- t to change\; verify against official sources before trading.
-STATUS:CONFIRMED
-TRANSP:TRANSPARENT
-URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Treasury Auction: 30-Year Bond
-DTSTART:20261112T180000Z
-DTEND:20261112T183000Z
-DTSTAMP:20261108T180824Z
-UID:treasury-auction-912810UY2-2026-11-12@compasseconomiccalendar.github.i
- o
-CATEGORIES:treasury_auction,impact-high
-DESCRIPTION:Competitive bidding for the 30-Year Bond closes at 13:00 ET. A
-  weak auction (low bid-to-cover\, high tail) pushes yields up and typicall
- y pressures index futures.\n\nMarket impact: HIGH\nScheduled: 13:00 ET on 
- 2026-11-12\nSecurity: 30-Year Bond\nCUSIP: 912810UY2\n\nVerify: https://ww
- w.treasurydirect.gov/auctions/announcements-data-results/\n\nFor informati
- onal and educational purposes only. Not investment advice. Times are subje
- ct to change\; verify against official sources before trading.
-STATUS:CONFIRMED
-TRANSP:TRANSPARENT
-URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Producer Price Index (PPI)
-DTSTART:20261113T133000Z
-DTEND:20261113T140000Z
-DTSTAMP:20261108T180824Z
-UID:fred-ppi-2026-11-13@compasseconomiccalendar.github.io
-CATEGORIES:macro_release_ppi,impact-medium
-DESCRIPTION:Wholesale/producer inflation from the BLS. Watched as a lead-i
- n to CPI and for the PPI components that feed the PCE calculation.\n\nMark
- et impact: MEDIUM\nScheduled: 08:30 ET on 2026-11-13\n\nVerify: https://fr
- ed.stlouisfed.org/releases/46\nPrimary source: https://www.bls.gov/schedul
- e/news_release/ppi.htm\n\nThis product uses the FRED® API but is not endo
- rsed or certified by the Federal Reserve Bank of St. Louis.\n\nFor informa
- tional and educational purposes only. Not investment advice. Times are sub
- ject to change\; verify against official sources before trading.
-STATUS:CONFIRMED
-TRANSP:TRANSPARENT
-URL:https://fred.stlouisfed.org/releases/46
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Treasury Auction: 13-Week Bill
-DTSTART:20261116T180000Z
-DTEND:20261116T183000Z
-DTSTAMP:20261108T180824Z
-UID:treasury-auction-912797TV9-2026-11-16@compasseconomiccalendar.github.i
- o
-CATEGORIES:treasury_auction,impact-low
-DESCRIPTION:Competitive bidding for the 13-Week Bill closes at 13:00 ET. A
-  weak auction (low bid-to-cover\, high tail) pushes yields up and typicall
- y pressures index futures.\n\nMarket impact: LOW\nScheduled: 13:00 ET on 2
  026-11-16\nSecurity: 13-Week Bill\nCUSIP: 912797TV9\n\nVerify: https://www
  .treasurydirect.gov/auctions/announcements-data-results/\n\nFor informatio
  nal and educational purposes only. Not investment advice. Times are subjec
@@ -261,15 +32,15 @@ URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Treasury Auction: 26-Week Bill
-DTSTART:20261116T180000Z
-DTEND:20261116T183000Z
-DTSTAMP:20261108T180824Z
+DTSTART:20261116T163000Z
+DTEND:20261116T170000Z
+DTSTAMP:20261115T191027Z
 UID:treasury-auction-912797XD4-2026-11-16@compasseconomiccalendar.github.i
  o
 CATEGORIES:treasury_auction,impact-low
-DESCRIPTION:Competitive bidding for the 26-Week Bill closes at 13:00 ET. A
+DESCRIPTION:Competitive bidding for the 26-Week Bill closes at 11:30 ET. A
   weak auction (low bid-to-cover\, high tail) pushes yields up and typicall
- y pressures index futures.\n\nMarket impact: LOW\nScheduled: 13:00 ET on 2
+ y pressures index futures.\n\nMarket impact: LOW\nScheduled: 11:30 ET on 2
  026-11-16\nSecurity: 26-Week Bill\nCUSIP: 912797XD4\n\nVerify: https://www
  .treasurydirect.gov/auctions/announcements-data-results/\n\nFor informatio
  nal and educational purposes only. Not investment advice. Times are subjec
@@ -282,7 +53,7 @@ BEGIN:VEVENT
 SUMMARY:Retail Sales (Advance)
 DTSTART:20261117T133000Z
 DTEND:20261117T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-retail-sales-2026-11-17@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_retail_sales,impact-high
 DESCRIPTION:Census Bureau advance estimate of monthly retail and food serv
@@ -302,7 +73,7 @@ BEGIN:VEVENT
 SUMMARY:Industrial Production & Capacity Utilization
 DTSTART:20261117T141500Z
 DTEND:20261117T144500Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fed-industrial-production-2026-11-17@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_industrial_production,impact-medium
 DESCRIPTION:Monthly output of factories\, mines and utilities\, and how mu
@@ -318,15 +89,15 @@ URL:https://www.federalreserve.gov/releases/g17/current/default.htm
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Treasury Auction: 6-Week Bill
-DTSTART:20261117T180000Z
-DTEND:20261117T183000Z
-DTSTAMP:20261108T180824Z
+DTSTART:20261117T163000Z
+DTEND:20261117T170000Z
+DTSTAMP:20261115T191027Z
 UID:treasury-auction-912797VJ3-2026-11-17@compasseconomiccalendar.github.i
  o
 CATEGORIES:treasury_auction,impact-low
-DESCRIPTION:Competitive bidding for the 6-Week Bill closes at 13:00 ET. A 
+DESCRIPTION:Competitive bidding for the 6-Week Bill closes at 11:30 ET. A 
  weak auction (low bid-to-cover\, high tail) pushes yields up and typically
-  pressures index futures.\n\nMarket impact: LOW\nScheduled: 13:00 ET on 20
+  pressures index futures.\n\nMarket impact: LOW\nScheduled: 11:30 ET on 20
  26-11-17\nSecurity: 6-Week Bill\nCUSIP: 912797VJ3\n\nVerify: https://www.t
  reasurydirect.gov/auctions/announcements-data-results/\n\nFor informationa
  l and educational purposes only. Not investment advice. Times are subject 
@@ -339,7 +110,7 @@ BEGIN:VEVENT
 SUMMARY:Housing Starts & Building Permits
 DTSTART:20261118T133000Z
 DTEND:20261118T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-housing-starts-2026-11-18@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_housing_starts,impact-medium
 DESCRIPTION:Census report on new homes started and permits issued. The mos
@@ -355,10 +126,29 @@ TRANSP:TRANSPARENT
 URL:https://fred.stlouisfed.org/releases/27
 END:VEVENT
 BEGIN:VEVENT
+SUMMARY:Treasury Auction: 17-Week Bill
+DTSTART:20261118T180000Z
+DTEND:20261118T183000Z
+DTSTAMP:20261115T191027Z
+UID:treasury-auction-912797XJ1-2026-11-18@compasseconomiccalendar.github.i
+ o
+CATEGORIES:treasury_auction,impact-low
+DESCRIPTION:Competitive bidding for the 17-Week Bill closes at 13:00 ET. A
+  weak auction (low bid-to-cover\, high tail) pushes yields up and typicall
+ y pressures index futures.\n\nMarket impact: LOW\nScheduled: 13:00 ET on 2
+ 026-11-18\nSecurity: 17-Week Bill\nCUSIP: 912797XJ1\n\nVerify: https://www
+ .treasurydirect.gov/auctions/announcements-data-results/\n\nFor informatio
+ nal and educational purposes only. Not investment advice. Times are subjec
+ t to change\; verify against official sources before trading.
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
+END:VEVENT
+BEGIN:VEVENT
 SUMMARY:Treasury Auction: 20-Year Bond
 DTSTART:20261118T180000Z
 DTEND:20261118T183000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:treasury-auction-912810UZ9-2026-11-18@compasseconomiccalendar.github.i
  o
 CATEGORIES:treasury_auction,impact-high
@@ -377,7 +167,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Minutes (Oct 28 meeting)
 DTSTART:20261118T190000Z
 DTEND:20261118T193000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-minutes-2026-10-28@compasseconomiccalendar.github.io
 CATEGORIES:fomc_minutes,impact-medium
 DESCRIPTION:Minutes of the FOMC meeting that ended October 28\, released a
@@ -397,7 +187,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261119T133000Z
 DTEND:20261119T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-jobless-claims-2026-11-19@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -414,10 +204,48 @@ TRANSP:TRANSPARENT
 URL:https://fred.stlouisfed.org/releases/180
 END:VEVENT
 BEGIN:VEVENT
+SUMMARY:Treasury Auction: 4-Week Bill
+DTSTART:20261119T180000Z
+DTEND:20261119T183000Z
+DTSTAMP:20261115T191027Z
+UID:treasury-auction-912797WG8-2026-11-19@compasseconomiccalendar.github.i
+ o
+CATEGORIES:treasury_auction,impact-low
+DESCRIPTION:Competitive bidding for the 4-Week Bill closes at 13:00 ET. A 
+ weak auction (low bid-to-cover\, high tail) pushes yields up and typically
+  pressures index futures.\n\nMarket impact: LOW\nScheduled: 13:00 ET on 20
+ 26-11-19\nSecurity: 4-Week Bill\nCUSIP: 912797WG8\n\nVerify: https://www.t
+ reasurydirect.gov/auctions/announcements-data-results/\n\nFor informationa
+ l and educational purposes only. Not investment advice. Times are subject 
+ to change\; verify against official sources before trading.
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Treasury Auction: 8-Week Bill
+DTSTART:20261119T180000Z
+DTEND:20261119T183000Z
+DTSTAMP:20261115T191027Z
+UID:treasury-auction-912797WQ6-2026-11-19@compasseconomiccalendar.github.i
+ o
+CATEGORIES:treasury_auction,impact-low
+DESCRIPTION:Competitive bidding for the 8-Week Bill closes at 13:00 ET. A 
+ weak auction (low bid-to-cover\, high tail) pushes yields up and typically
+  pressures index futures.\n\nMarket impact: LOW\nScheduled: 13:00 ET on 20
+ 26-11-19\nSecurity: 8-Week Bill\nCUSIP: 912797WQ6\n\nVerify: https://www.t
+ reasurydirect.gov/auctions/announcements-data-results/\n\nFor informationa
+ l and educational purposes only. Not investment advice. Times are subject 
+ to change\; verify against official sources before trading.
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
+END:VEVENT
+BEGIN:VEVENT
 SUMMARY:Treasury Auction: 9-Year 8-Month Note
 DTSTART:20261119T180000Z
 DTEND:20261119T183000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:treasury-auction-91282CRE3-2026-11-19@compasseconomiccalendar.github.i
  o
 CATEGORIES:treasury_auction,impact-medium
@@ -437,7 +265,7 @@ BEGIN:VEVENT
 SUMMARY:Monthly Options Expiration (OPEX)
 DTSTART:20261120T210000Z
 DTEND:20261120T213000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:monthly-opex-2026-11@compasseconomiccalendar.github.io
 CATEGORIES:monthly_opex,impact-medium
 DESCRIPTION:Monthly equity and index options expire on the third Friday. D
@@ -451,10 +279,144 @@ TRANSP:TRANSPARENT
 URL:https://www.cmegroup.com/trading/equity-index/rolldates.html
 END:VEVENT
 BEGIN:VEVENT
+SUMMARY:Treasury Auction: 13-Week Bill
+DTSTART:20261123T180000Z
+DTEND:20261123T183000Z
+DTSTAMP:20261115T191027Z
+UID:treasury-auction-912797WC7-2026-11-23@compasseconomiccalendar.github.i
+ o
+CATEGORIES:treasury_auction,impact-low
+DESCRIPTION:Competitive bidding for the 13-Week Bill closes at 13:00 ET. A
+  weak auction (low bid-to-cover\, high tail) pushes yields up and typicall
+ y pressures index futures.\n\nMarket impact: LOW\nScheduled: 13:00 ET on 2
+ 026-11-23\nSecurity: 13-Week Bill\nCUSIP: 912797WC7\n\nVerify: https://www
+ .treasurydirect.gov/auctions/announcements-data-results/\n\nFor informatio
+ nal and educational purposes only. Not investment advice. Times are subjec
+ t to change\; verify against official sources before trading.
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Treasury Auction: 26-Week Bill
+DTSTART:20261123T180000Z
+DTEND:20261123T183000Z
+DTSTAMP:20261115T191027Z
+UID:treasury-auction-912797XE2-2026-11-23@compasseconomiccalendar.github.i
+ o
+CATEGORIES:treasury_auction,impact-low
+DESCRIPTION:Competitive bidding for the 26-Week Bill closes at 13:00 ET. A
+  weak auction (low bid-to-cover\, high tail) pushes yields up and typicall
+ y pressures index futures.\n\nMarket impact: LOW\nScheduled: 13:00 ET on 2
+ 026-11-23\nSecurity: 26-Week Bill\nCUSIP: 912797XE2\n\nVerify: https://www
+ .treasurydirect.gov/auctions/announcements-data-results/\n\nFor informatio
+ nal and educational purposes only. Not investment advice. Times are subjec
+ t to change\; verify against official sources before trading.
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Treasury Auction: 2-Year Note
+DTSTART:20261123T180000Z
+DTEND:20261123T183000Z
+DTSTAMP:20261115T191027Z
+UID:treasury-auction-91282CRY9-2026-11-23@compasseconomiccalendar.github.i
+ o
+CATEGORIES:treasury_auction,impact-medium
+DESCRIPTION:Competitive bidding for the 2-Year Note closes at 13:00 ET. A 
+ weak auction (low bid-to-cover\, high tail) pushes yields up and typically
+  pressures index futures.\n\nMarket impact: MEDIUM\nScheduled: 13:00 ET on
+  2026-11-23\nSecurity: 2-Year Note\nCUSIP: 91282CRY9\n\nVerify: https://ww
+ w.treasurydirect.gov/auctions/announcements-data-results/\n\nFor informati
+ onal and educational purposes only. Not investment advice. Times are subje
+ ct to change\; verify against official sources before trading.
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Treasury Auction: 6-Week Bill
+DTSTART:20261124T180000Z
+DTEND:20261124T183000Z
+DTSTAMP:20261115T191027Z
+UID:treasury-auction-912797VS3-2026-11-24@compasseconomiccalendar.github.i
+ o
+CATEGORIES:treasury_auction,impact-low
+DESCRIPTION:Competitive bidding for the 6-Week Bill closes at 13:00 ET. A 
+ weak auction (low bid-to-cover\, high tail) pushes yields up and typically
+  pressures index futures.\n\nMarket impact: LOW\nScheduled: 13:00 ET on 20
+ 26-11-24\nSecurity: 6-Week Bill\nCUSIP: 912797VS3\n\nVerify: https://www.t
+ reasurydirect.gov/auctions/announcements-data-results/\n\nFor informationa
+ l and educational purposes only. Not investment advice. Times are subject 
+ to change\; verify against official sources before trading.
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Treasury Auction: 52-Week Bill
+DTSTART:20261124T180000Z
+DTEND:20261124T183000Z
+DTSTAMP:20261115T191027Z
+UID:treasury-auction-912797XC6-2026-11-24@compasseconomiccalendar.github.i
+ o
+CATEGORIES:treasury_auction,impact-low
+DESCRIPTION:Competitive bidding for the 52-Week Bill closes at 13:00 ET. A
+  weak auction (low bid-to-cover\, high tail) pushes yields up and typicall
+ y pressures index futures.\n\nMarket impact: LOW\nScheduled: 13:00 ET on 2
+ 026-11-24\nSecurity: 52-Week Bill\nCUSIP: 912797XC6\n\nVerify: https://www
+ .treasurydirect.gov/auctions/announcements-data-results/\n\nFor informatio
+ nal and educational purposes only. Not investment advice. Times are subjec
+ t to change\; verify against official sources before trading.
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Treasury Auction: 1-Year 11-Month Note
+DTSTART:20261124T180000Z
+DTEND:20261124T183000Z
+DTSTAMP:20261115T191027Z
+UID:treasury-auction-91282CRS2-2026-11-24@compasseconomiccalendar.github.i
+ o
+CATEGORIES:treasury_auction,impact-medium
+DESCRIPTION:Competitive bidding for the 1-Year 11-Month Note closes at 13:
+ 00 ET. A weak auction (low bid-to-cover\, high tail) pushes yields up and 
+ typically pressures index futures.\n\nMarket impact: MEDIUM\nScheduled: 13
+ :00 ET on 2026-11-24\nSecurity: 1-Year 11-Month Note\nCUSIP: 91282CRS2\n\n
+ Verify: https://www.treasurydirect.gov/auctions/announcements-data-results
+ /\n\nFor informational and educational purposes only. Not investment advic
+ e. Times are subject to change\; verify against official sources before tr
+ ading.
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Treasury Auction: 5-Year Note
+DTSTART:20261124T180000Z
+DTEND:20261124T183000Z
+DTSTAMP:20261115T191027Z
+UID:treasury-auction-91282CRZ6-2026-11-24@compasseconomiccalendar.github.i
+ o
+CATEGORIES:treasury_auction,impact-medium
+DESCRIPTION:Competitive bidding for the 5-Year Note closes at 13:00 ET. A 
+ weak auction (low bid-to-cover\, high tail) pushes yields up and typically
+  pressures index futures.\n\nMarket impact: MEDIUM\nScheduled: 13:00 ET on
+  2026-11-24\nSecurity: 5-Year Note\nCUSIP: 91282CRZ6\n\nVerify: https://ww
+ w.treasurydirect.gov/auctions/announcements-data-results/\n\nFor informati
+ onal and educational purposes only. Not investment advice. Times are subje
+ ct to change\; verify against official sources before trading.
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
+END:VEVENT
+BEGIN:VEVENT
 SUMMARY:GDP (Second Estimate)
 DTSTART:20261125T133000Z
 DTEND:20261125T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-gdp-2026-11-25@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_gdp,impact-medium
 DESCRIPTION:Second estimate of quarterly GDP\, incorporating more complete
@@ -473,7 +435,7 @@ BEGIN:VEVENT
 SUMMARY:Housing Starts & Building Permits
 DTSTART:20261125T133000Z
 DTEND:20261125T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-housing-starts-2026-11-25@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_housing_starts,impact-medium
 DESCRIPTION:Census report on new homes started and permits issued. The mos
@@ -492,7 +454,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261125T133000Z
 DTEND:20261125T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-jobless-claims-2026-11-25@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -512,7 +474,7 @@ BEGIN:VEVENT
 SUMMARY:Personal Income & Outlays (PCE)
 DTSTART:20261125T133000Z
 DTEND:20261125T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-pce-2026-11-25@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_pce,impact-high
 DESCRIPTION:BEA report containing core PCE\, the Fed's preferred inflation
@@ -531,7 +493,7 @@ BEGIN:VEVENT
 SUMMARY:Factory Orders (M3)
 DTSTART:20261125T150000Z
 DTEND:20261125T153000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-factory-orders-2026-11-25@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_factory_orders,impact-medium
 DESCRIPTION:Census Bureau M3 survey: shipments\, inventories and new order
@@ -549,10 +511,29 @@ TRANSP:TRANSPARENT
 URL:https://fred.stlouisfed.org/releases/95
 END:VEVENT
 BEGIN:VEVENT
+SUMMARY:Treasury Auction: 7-Year Note
+DTSTART:20261125T180000Z
+DTEND:20261125T183000Z
+DTSTAMP:20261115T191027Z
+UID:treasury-auction-91282CSA0-2026-11-25@compasseconomiccalendar.github.i
+ o
+CATEGORIES:treasury_auction,impact-medium
+DESCRIPTION:Competitive bidding for the 7-Year Note closes at 13:00 ET. A 
+ weak auction (low bid-to-cover\, high tail) pushes yields up and typically
+  pressures index futures.\n\nMarket impact: MEDIUM\nScheduled: 13:00 ET on
+  2026-11-25\nSecurity: 7-Year Note\nCUSIP: 91282CSA0\n\nVerify: https://ww
+ w.treasurydirect.gov/auctions/announcements-data-results/\n\nFor informati
+ onal and educational purposes only. Not investment advice. Times are subje
+ ct to change\; verify against official sources before trading.
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+URL:https://www.treasurydirect.gov/auctions/announcements-data-results/
+END:VEVENT
+BEGIN:VEVENT
 SUMMARY:Beige Book
 DTSTART:20261125T190000Z
 DTEND:20261125T193000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fed-beige-book-2026-11-25@compasseconomiccalendar.github.io
 CATEGORIES:fomc_beige_book,impact-medium
 DESCRIPTION:The Fed's summary of conditions in each of its twelve district
@@ -570,7 +551,7 @@ BEGIN:VEVENT
 SUMMARY:Market Closed — Thanksgiving Day
 DTSTART;VALUE=DATE:20261126
 DTEND;VALUE=DATE:20261127
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:market-holiday-2026-11-26@compasseconomiccalendar.github.io
 CATEGORIES:market_holiday,impact-low
 DESCRIPTION:US equity markets are closed for Thanksgiving Day. CME equity 
@@ -587,7 +568,7 @@ BEGIN:VEVENT
 SUMMARY:Early Close (1:00pm ET) — Day after Thanksgiving
 DTSTART:20261127T180000Z
 DTEND:20261127T183000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:market-early-close-2026-11-27@compasseconomiccalendar.github.io
 CATEGORIES:market_early_close,impact-low
 DESCRIPTION:US equity markets close at 1:00pm ET for Day after Thanksgivin
@@ -604,7 +585,7 @@ BEGIN:VEVENT
 SUMMARY:JOLTS Job Openings
 DTSTART:20261201T150000Z
 DTEND:20261201T153000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-jolts-2026-12-01@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jolts,impact-medium
 DESCRIPTION:BLS survey of job openings\, hires and quits\, released at 10:
@@ -624,7 +605,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20261201T150000Z
 DTEND:20261201T153000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-manufacturing-pmi-2026-12-01@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -644,7 +625,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261203T133000Z
 DTEND:20261203T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-jobless-claims-2026-12-03@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -664,7 +645,7 @@ BEGIN:VEVENT
 SUMMARY:Factory Orders (M3)
 DTSTART:20261203T150000Z
 DTEND:20261203T153000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-factory-orders-2026-12-03@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_factory_orders,impact-medium
 DESCRIPTION:Census Bureau M3 survey: shipments\, inventories and new order
@@ -685,7 +666,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20261203T150000Z
 DTEND:20261203T153000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-services-pmi-2026-12-03@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -706,7 +687,7 @@ BEGIN:VEVENT
 SUMMARY:Employment Situation (Nonfarm Payrolls)
 DTSTART:20261204T133000Z
 DTEND:20261204T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-employment-situation-2026-12-04@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_employment_situation,impact-high
 DESCRIPTION:Monthly jobs report from the BLS: nonfarm payrolls\, unemploym
@@ -726,7 +707,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Meeting Begins (Day 1)
 DTSTART;VALUE=DATE:20261208
 DTEND;VALUE=DATE:20261209
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-meeting-day1-2026-12-08@compasseconomiccalendar.github.io
 CATEGORIES:fomc_meeting_day_1,impact-low
 DESCRIPTION:First day of the two-day FOMC meeting. No statement is release
@@ -743,7 +724,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Summary of Economic Projections (Dot Plot)
 DTSTART:20261209T190000Z
 DTEND:20261209T193000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-sep-2026-12-09@compasseconomiccalendar.github.io
 CATEGORIES:fomc_sep,impact-high
 DESCRIPTION:Quarterly Summary of Economic Projections\, including the dot 
@@ -761,7 +742,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20261209T190000Z
 DTEND:20261209T193000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-statement-2026-12-09@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -780,7 +761,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20261209T193000Z
 DTEND:20261209T203000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-presser-2026-12-09@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -798,7 +779,7 @@ BEGIN:VEVENT
 SUMMARY:Futures Liquidity Roll (/ES\, /NQ\, /MES\, /MNQ) → Z6 back month
 DTSTART;VALUE=DATE:20261210
 DTEND;VALUE=DATE:20261211
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:futures-liquidity-roll-2026-12@compasseconomiccalendar.github.io
 CATEGORIES:futures_liquidity_roll,impact-medium
 DESCRIPTION:Volume and open interest migrate to the back-month contract ar
@@ -816,7 +797,7 @@ BEGIN:VEVENT
 SUMMARY:Consumer Price Index (CPI)
 DTSTART:20261210T133000Z
 DTEND:20261210T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-cpi-2026-12-10@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_cpi,impact-high
 DESCRIPTION:Headline and core consumer inflation from the BLS. The core mo
@@ -835,7 +816,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261210T133000Z
 DTEND:20261210T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-jobless-claims-2026-12-10@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -855,7 +836,7 @@ BEGIN:VEVENT
 SUMMARY:CME Official Roll Date (/ES\, /NQ\, /MES\, /MNQ)
 DTSTART;VALUE=DATE:20261214
 DTEND;VALUE=DATE:20261215
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:futures-official-roll-2026-12@compasseconomiccalendar.github.io
 CATEGORIES:futures_official_roll,impact-low
 DESCRIPTION:CME's stated roll date for equity index products: the Monday p
@@ -873,7 +854,7 @@ BEGIN:VEVENT
 SUMMARY:Producer Price Index (PPI)
 DTSTART:20261215T133000Z
 DTEND:20261215T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-ppi-2026-12-15@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_ppi,impact-medium
 DESCRIPTION:Wholesale/producer inflation from the BLS. Watched as a lead-i
@@ -892,7 +873,7 @@ BEGIN:VEVENT
 SUMMARY:Retail Sales (Advance)
 DTSTART:20261216T133000Z
 DTEND:20261216T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-retail-sales-2026-12-16@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_retail_sales,impact-high
 DESCRIPTION:Census Bureau advance estimate of monthly retail and food serv
@@ -912,7 +893,7 @@ BEGIN:VEVENT
 SUMMARY:Industrial Production & Capacity Utilization
 DTSTART:20261216T141500Z
 DTEND:20261216T144500Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fed-industrial-production-2026-12-16@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_industrial_production,impact-medium
 DESCRIPTION:Monthly output of factories\, mines and utilities\, and how mu
@@ -930,7 +911,7 @@ BEGIN:VEVENT
 SUMMARY:Housing Starts & Building Permits
 DTSTART:20261217T133000Z
 DTEND:20261217T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-housing-starts-2026-12-17@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_housing_starts,impact-medium
 DESCRIPTION:Census report on new homes started and permits issued. The mos
@@ -949,7 +930,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261217T133000Z
 DTEND:20261217T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-jobless-claims-2026-12-17@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -969,7 +950,7 @@ BEGIN:VEVENT
 SUMMARY:Futures Expiration (/ES\, /NQ\, /MES\, /MNQ) — Z6
 DTSTART:20261218T143000Z
 DTEND:20261218T150000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:futures-expiration-2026-12@compasseconomiccalendar.github.io
 CATEGORIES:futures_expiration,impact-medium
 DESCRIPTION:Front-month contract expires\, settling to the Special Opening
@@ -986,7 +967,7 @@ BEGIN:VEVENT
 SUMMARY:Quad Witching
 DTSTART:20261218T210000Z
 DTEND:20261218T213000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:quad-witching-2026-12@compasseconomiccalendar.github.io
 CATEGORIES:quad_witching,impact-high
 DESCRIPTION:Index futures\, index options\, single-stock options and singl
@@ -1004,7 +985,7 @@ BEGIN:VEVENT
 SUMMARY:GDP (Third Estimate)
 DTSTART:20261223T133000Z
 DTEND:20261223T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-gdp-2026-12-23@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_gdp,impact-low
 DESCRIPTION:Third estimate of quarterly GDP. The quarter is three months s
@@ -1023,7 +1004,7 @@ BEGIN:VEVENT
 SUMMARY:Housing Starts & Building Permits
 DTSTART:20261223T133000Z
 DTEND:20261223T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-housing-starts-2026-12-23@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_housing_starts,impact-medium
 DESCRIPTION:Census report on new homes started and permits issued. The mos
@@ -1042,7 +1023,7 @@ BEGIN:VEVENT
 SUMMARY:Personal Income & Outlays (PCE)
 DTSTART:20261223T133000Z
 DTEND:20261223T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-pce-2026-12-23@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_pce,impact-high
 DESCRIPTION:BEA report containing core PCE\, the Fed's preferred inflation
@@ -1061,7 +1042,7 @@ BEGIN:VEVENT
 SUMMARY:Factory Orders (M3)
 DTSTART:20261223T150000Z
 DTEND:20261223T153000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-factory-orders-2026-12-23@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_factory_orders,impact-medium
 DESCRIPTION:Census Bureau M3 survey: shipments\, inventories and new order
@@ -1082,7 +1063,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261224T133000Z
 DTEND:20261224T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-jobless-claims-2026-12-24@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -1102,7 +1083,7 @@ BEGIN:VEVENT
 SUMMARY:Early Close (1:00pm ET) — Christmas Eve
 DTSTART:20261224T180000Z
 DTEND:20261224T183000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:market-early-close-2026-12-24@compasseconomiccalendar.github.io
 CATEGORIES:market_early_close,impact-low
 DESCRIPTION:US equity markets close at 1:00pm ET for Christmas Eve. Volume
@@ -1119,7 +1100,7 @@ BEGIN:VEVENT
 SUMMARY:Market Closed — Christmas Day
 DTSTART;VALUE=DATE:20261225
 DTEND;VALUE=DATE:20261226
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:market-holiday-2026-12-25@compasseconomiccalendar.github.io
 CATEGORIES:market_holiday,impact-low
 DESCRIPTION:US equity markets are closed for Christmas Day. CME equity ind
@@ -1136,7 +1117,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Minutes (Dec 9 meeting)
 DTSTART:20261230T190000Z
 DTEND:20261230T193000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-minutes-2026-12-09@compasseconomiccalendar.github.io
 CATEGORIES:fomc_minutes,impact-medium
 DESCRIPTION:Minutes of the FOMC meeting that ended December 9\, released a
@@ -1156,7 +1137,7 @@ BEGIN:VEVENT
 SUMMARY:Initial Jobless Claims
 DTSTART:20261231T133000Z
 DTEND:20261231T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fred-jobless-claims-2026-12-31@compasseconomiccalendar.github.io
 CATEGORIES:macro_release_jobless_claims,impact-medium
 DESCRIPTION:Weekly initial and continuing unemployment claims\, released e
@@ -1176,7 +1157,7 @@ BEGIN:VEVENT
 SUMMARY:Market Closed — New Year's Day
 DTSTART;VALUE=DATE:20270101
 DTEND;VALUE=DATE:20270102
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:market-holiday-2027-01-01@compasseconomiccalendar.github.io
 CATEGORIES:market_holiday,impact-low
 DESCRIPTION:US equity markets are closed for New Year's Day. CME equity in
@@ -1193,7 +1174,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270104T150000Z
 DTEND:20270104T153000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-manufacturing-pmi-2027-01-04@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -1213,7 +1194,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270106T150000Z
 DTEND:20270106T153000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-services-pmi-2027-01-06@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -1234,7 +1215,7 @@ BEGIN:VEVENT
 SUMMARY:Monthly Options Expiration (OPEX)
 DTSTART:20270115T210000Z
 DTEND:20270115T213000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:monthly-opex-2027-01@compasseconomiccalendar.github.io
 CATEGORIES:monthly_opex,impact-medium
 DESCRIPTION:Monthly equity and index options expire on the third Friday. D
@@ -1251,7 +1232,7 @@ BEGIN:VEVENT
 SUMMARY:Market Closed — Martin Luther King Jr. Day
 DTSTART;VALUE=DATE:20270118
 DTEND;VALUE=DATE:20270119
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:market-holiday-2027-01-18@compasseconomiccalendar.github.io
 CATEGORIES:market_holiday,impact-low
 DESCRIPTION:US equity markets are closed for Martin Luther King Jr. Day. C
@@ -1268,7 +1249,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Meeting Begins (Day 1)
 DTSTART;VALUE=DATE:20270126
 DTEND;VALUE=DATE:20270127
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-meeting-day1-2027-01-26@compasseconomiccalendar.github.io
 CATEGORIES:fomc_meeting_day_1,impact-low
 DESCRIPTION:First day of the two-day FOMC meeting. No statement is release
@@ -1285,7 +1266,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270127T190000Z
 DTEND:20270127T193000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-statement-2027-01-27@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -1303,7 +1284,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270127T193000Z
 DTEND:20270127T203000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-presser-2027-01-27@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -1321,7 +1302,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270201T150000Z
 DTEND:20270201T153000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-manufacturing-pmi-2027-02-01@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -1341,7 +1322,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Quarterly Refunding Announcement
 DTSTART:20270203T133000Z
 DTEND:20270203T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:treasury-refunding-2027-02-03@compasseconomiccalendar.github.io
 CATEGORIES:treasury_quarterly_refunding,impact-high
 DESCRIPTION:Treasury announces the size and composition of the coming quar
@@ -1360,7 +1341,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270203T150000Z
 DTEND:20270203T153000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-services-pmi-2027-02-03@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -1381,7 +1362,7 @@ BEGIN:VEVENT
 SUMMARY:Market Closed — Presidents' Day
 DTSTART;VALUE=DATE:20270215
 DTEND;VALUE=DATE:20270216
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:market-holiday-2027-02-15@compasseconomiccalendar.github.io
 CATEGORIES:market_holiday,impact-low
 DESCRIPTION:US equity markets are closed for Presidents' Day. CME equity i
@@ -1398,7 +1379,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Minutes (Jan 27 meeting)
 DTSTART:20270217T190000Z
 DTEND:20270217T193000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-minutes-2027-01-27@compasseconomiccalendar.github.io
 CATEGORIES:fomc_minutes,impact-medium
 DESCRIPTION:Minutes of the FOMC meeting that ended January 27\, released a
@@ -1418,7 +1399,7 @@ BEGIN:VEVENT
 SUMMARY:Monthly Options Expiration (OPEX)
 DTSTART:20270219T210000Z
 DTEND:20270219T213000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:monthly-opex-2027-02@compasseconomiccalendar.github.io
 CATEGORIES:monthly_opex,impact-medium
 DESCRIPTION:Monthly equity and index options expire on the third Friday. D
@@ -1435,7 +1416,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270301T150000Z
 DTEND:20270301T153000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-manufacturing-pmi-2027-03-01@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -1455,7 +1436,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270303T150000Z
 DTEND:20270303T153000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-services-pmi-2027-03-03@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -1476,7 +1457,7 @@ BEGIN:VEVENT
 SUMMARY:Futures Liquidity Roll (/ES\, /NQ\, /MES\, /MNQ) → H7 back month
 DTSTART;VALUE=DATE:20270311
 DTEND;VALUE=DATE:20270312
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:futures-liquidity-roll-2027-03@compasseconomiccalendar.github.io
 CATEGORIES:futures_liquidity_roll,impact-medium
 DESCRIPTION:Volume and open interest migrate to the back-month contract ar
@@ -1494,7 +1475,7 @@ BEGIN:VEVENT
 SUMMARY:CME Official Roll Date (/ES\, /NQ\, /MES\, /MNQ)
 DTSTART;VALUE=DATE:20270315
 DTEND;VALUE=DATE:20270316
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:futures-official-roll-2027-03@compasseconomiccalendar.github.io
 CATEGORIES:futures_official_roll,impact-low
 DESCRIPTION:CME's stated roll date for equity index products: the Monday p
@@ -1512,7 +1493,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Meeting Begins (Day 1)
 DTSTART;VALUE=DATE:20270316
 DTEND;VALUE=DATE:20270317
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-meeting-day1-2027-03-16@compasseconomiccalendar.github.io
 CATEGORIES:fomc_meeting_day_1,impact-low
 DESCRIPTION:First day of the two-day FOMC meeting. No statement is release
@@ -1529,7 +1510,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Summary of Economic Projections (Dot Plot)
 DTSTART:20270317T180000Z
 DTEND:20270317T183000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-sep-2027-03-17@compasseconomiccalendar.github.io
 CATEGORIES:fomc_sep,impact-high
 DESCRIPTION:Quarterly Summary of Economic Projections\, including the dot 
@@ -1547,7 +1528,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270317T180000Z
 DTEND:20270317T183000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-statement-2027-03-17@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -1566,7 +1547,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270317T183000Z
 DTEND:20270317T193000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-presser-2027-03-17@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -1584,7 +1565,7 @@ BEGIN:VEVENT
 SUMMARY:Futures Expiration (/ES\, /NQ\, /MES\, /MNQ) — H7
 DTSTART:20270319T133000Z
 DTEND:20270319T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:futures-expiration-2027-03@compasseconomiccalendar.github.io
 CATEGORIES:futures_expiration,impact-medium
 DESCRIPTION:Front-month contract expires\, settling to the Special Opening
@@ -1601,7 +1582,7 @@ BEGIN:VEVENT
 SUMMARY:Quad Witching
 DTSTART:20270319T200000Z
 DTEND:20270319T203000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:quad-witching-2027-03@compasseconomiccalendar.github.io
 CATEGORIES:quad_witching,impact-high
 DESCRIPTION:Index futures\, index options\, single-stock options and singl
@@ -1619,7 +1600,7 @@ BEGIN:VEVENT
 SUMMARY:Market Closed — Good Friday
 DTSTART;VALUE=DATE:20270326
 DTEND;VALUE=DATE:20270327
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:market-holiday-2027-03-26@compasseconomiccalendar.github.io
 CATEGORIES:market_holiday,impact-low
 DESCRIPTION:US equity markets are closed for Good Friday. CME equity index
@@ -1636,7 +1617,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270401T140000Z
 DTEND:20270401T143000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-manufacturing-pmi-2027-04-01@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -1656,7 +1637,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270405T140000Z
 DTEND:20270405T143000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-services-pmi-2027-04-05@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -1677,7 +1658,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Minutes (Mar 17 meeting)
 DTSTART:20270407T180000Z
 DTEND:20270407T183000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-minutes-2027-03-17@compasseconomiccalendar.github.io
 CATEGORIES:fomc_minutes,impact-medium
 DESCRIPTION:Minutes of the FOMC meeting that ended March 17\, released at 
@@ -1697,7 +1678,7 @@ BEGIN:VEVENT
 SUMMARY:Monthly Options Expiration (OPEX)
 DTSTART:20270416T200000Z
 DTEND:20270416T203000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:monthly-opex-2027-04@compasseconomiccalendar.github.io
 CATEGORIES:monthly_opex,impact-medium
 DESCRIPTION:Monthly equity and index options expire on the third Friday. D
@@ -1714,7 +1695,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Meeting Begins (Day 1)
 DTSTART;VALUE=DATE:20270427
 DTEND;VALUE=DATE:20270428
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-meeting-day1-2027-04-27@compasseconomiccalendar.github.io
 CATEGORIES:fomc_meeting_day_1,impact-low
 DESCRIPTION:First day of the two-day FOMC meeting. No statement is release
@@ -1731,7 +1712,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270428T180000Z
 DTEND:20270428T183000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-statement-2027-04-28@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -1749,7 +1730,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270428T183000Z
 DTEND:20270428T193000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-presser-2027-04-28@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -1767,7 +1748,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270503T140000Z
 DTEND:20270503T143000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-manufacturing-pmi-2027-05-03@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -1787,7 +1768,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Quarterly Refunding Announcement
 DTSTART:20270505T123000Z
 DTEND:20270505T130000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:treasury-refunding-2027-05-05@compasseconomiccalendar.github.io
 CATEGORIES:treasury_quarterly_refunding,impact-high
 DESCRIPTION:Treasury announces the size and composition of the coming quar
@@ -1806,7 +1787,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270505T140000Z
 DTEND:20270505T143000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-services-pmi-2027-05-05@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -1827,7 +1808,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Minutes (Apr 28 meeting)
 DTSTART:20270519T180000Z
 DTEND:20270519T183000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-minutes-2027-04-28@compasseconomiccalendar.github.io
 CATEGORIES:fomc_minutes,impact-medium
 DESCRIPTION:Minutes of the FOMC meeting that ended April 28\, released at 
@@ -1847,7 +1828,7 @@ BEGIN:VEVENT
 SUMMARY:Monthly Options Expiration (OPEX)
 DTSTART:20270521T200000Z
 DTEND:20270521T203000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:monthly-opex-2027-05@compasseconomiccalendar.github.io
 CATEGORIES:monthly_opex,impact-medium
 DESCRIPTION:Monthly equity and index options expire on the third Friday. D
@@ -1864,7 +1845,7 @@ BEGIN:VEVENT
 SUMMARY:Market Closed — Memorial Day
 DTSTART;VALUE=DATE:20270531
 DTEND;VALUE=DATE:20270601
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:market-holiday-2027-05-31@compasseconomiccalendar.github.io
 CATEGORIES:market_holiday,impact-low
 DESCRIPTION:US equity markets are closed for Memorial Day. CME equity inde
@@ -1881,7 +1862,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270601T140000Z
 DTEND:20270601T143000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-manufacturing-pmi-2027-06-01@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -1901,7 +1882,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270603T140000Z
 DTEND:20270603T143000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-services-pmi-2027-06-03@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -1922,7 +1903,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Meeting Begins (Day 1)
 DTSTART;VALUE=DATE:20270608
 DTEND;VALUE=DATE:20270609
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-meeting-day1-2027-06-08@compasseconomiccalendar.github.io
 CATEGORIES:fomc_meeting_day_1,impact-low
 DESCRIPTION:First day of the two-day FOMC meeting. No statement is release
@@ -1939,7 +1920,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Summary of Economic Projections (Dot Plot)
 DTSTART:20270609T180000Z
 DTEND:20270609T183000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-sep-2027-06-09@compasseconomiccalendar.github.io
 CATEGORIES:fomc_sep,impact-high
 DESCRIPTION:Quarterly Summary of Economic Projections\, including the dot 
@@ -1957,7 +1938,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270609T180000Z
 DTEND:20270609T183000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-statement-2027-06-09@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -1976,7 +1957,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270609T183000Z
 DTEND:20270609T193000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-presser-2027-06-09@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -1994,7 +1975,7 @@ BEGIN:VEVENT
 SUMMARY:Futures Liquidity Roll (/ES\, /NQ\, /MES\, /MNQ) → M7 back month
 DTSTART;VALUE=DATE:20270610
 DTEND;VALUE=DATE:20270611
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:futures-liquidity-roll-2027-06@compasseconomiccalendar.github.io
 CATEGORIES:futures_liquidity_roll,impact-medium
 DESCRIPTION:Volume and open interest migrate to the back-month contract ar
@@ -2012,7 +1993,7 @@ BEGIN:VEVENT
 SUMMARY:CME Official Roll Date (/ES\, /NQ\, /MES\, /MNQ)
 DTSTART;VALUE=DATE:20270614
 DTEND;VALUE=DATE:20270615
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:futures-official-roll-2027-06@compasseconomiccalendar.github.io
 CATEGORIES:futures_official_roll,impact-low
 DESCRIPTION:CME's stated roll date for equity index products: the Monday p
@@ -2030,7 +2011,7 @@ BEGIN:VEVENT
 SUMMARY:Market Closed — Juneteenth
 DTSTART;VALUE=DATE:20270618
 DTEND;VALUE=DATE:20270619
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:market-holiday-2027-06-18@compasseconomiccalendar.github.io
 CATEGORIES:market_holiday,impact-low
 DESCRIPTION:US equity markets are closed for Juneteenth. CME equity index 
@@ -2047,7 +2028,7 @@ BEGIN:VEVENT
 SUMMARY:Futures Expiration (/ES\, /NQ\, /MES\, /MNQ) — M7
 DTSTART:20270618T133000Z
 DTEND:20270618T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:futures-expiration-2027-06@compasseconomiccalendar.github.io
 CATEGORIES:futures_expiration,impact-medium
 DESCRIPTION:Front-month contract expires\, settling to the Special Opening
@@ -2064,7 +2045,7 @@ BEGIN:VEVENT
 SUMMARY:Quad Witching
 DTSTART:20270618T200000Z
 DTEND:20270618T203000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:quad-witching-2027-06@compasseconomiccalendar.github.io
 CATEGORIES:quad_witching,impact-high
 DESCRIPTION:Index futures\, index options\, single-stock options and singl
@@ -2082,7 +2063,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Minutes (Jun 9 meeting)
 DTSTART:20270630T180000Z
 DTEND:20270630T183000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-minutes-2027-06-09@compasseconomiccalendar.github.io
 CATEGORIES:fomc_minutes,impact-medium
 DESCRIPTION:Minutes of the FOMC meeting that ended June 9\, released at 2:
@@ -2102,7 +2083,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270701T140000Z
 DTEND:20270701T143000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-manufacturing-pmi-2027-07-01@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -2122,7 +2103,7 @@ BEGIN:VEVENT
 SUMMARY:Market Closed — Independence Day
 DTSTART;VALUE=DATE:20270705
 DTEND;VALUE=DATE:20270706
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:market-holiday-2027-07-05@compasseconomiccalendar.github.io
 CATEGORIES:market_holiday,impact-low
 DESCRIPTION:US equity markets are closed for Independence Day. CME equity 
@@ -2139,7 +2120,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270706T140000Z
 DTEND:20270706T143000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-services-pmi-2027-07-06@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -2160,7 +2141,7 @@ BEGIN:VEVENT
 SUMMARY:Monthly Options Expiration (OPEX)
 DTSTART:20270716T200000Z
 DTEND:20270716T203000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:monthly-opex-2027-07@compasseconomiccalendar.github.io
 CATEGORIES:monthly_opex,impact-medium
 DESCRIPTION:Monthly equity and index options expire on the third Friday. D
@@ -2177,7 +2158,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Meeting Begins (Day 1)
 DTSTART;VALUE=DATE:20270727
 DTEND;VALUE=DATE:20270728
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-meeting-day1-2027-07-27@compasseconomiccalendar.github.io
 CATEGORIES:fomc_meeting_day_1,impact-low
 DESCRIPTION:First day of the two-day FOMC meeting. No statement is release
@@ -2194,7 +2175,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270728T180000Z
 DTEND:20270728T183000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-statement-2027-07-28@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -2212,7 +2193,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270728T183000Z
 DTEND:20270728T193000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-presser-2027-07-28@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -2230,7 +2211,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270802T140000Z
 DTEND:20270802T143000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-manufacturing-pmi-2027-08-02@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -2250,7 +2231,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Quarterly Refunding Announcement
 DTSTART:20270804T123000Z
 DTEND:20270804T130000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:treasury-refunding-2027-08-04@compasseconomiccalendar.github.io
 CATEGORIES:treasury_quarterly_refunding,impact-high
 DESCRIPTION:Treasury announces the size and composition of the coming quar
@@ -2269,7 +2250,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270804T140000Z
 DTEND:20270804T143000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-services-pmi-2027-08-04@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -2290,7 +2271,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Minutes (Jul 28 meeting)
 DTSTART:20270818T180000Z
 DTEND:20270818T183000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-minutes-2027-07-28@compasseconomiccalendar.github.io
 CATEGORIES:fomc_minutes,impact-medium
 DESCRIPTION:Minutes of the FOMC meeting that ended July 28\, released at 2
@@ -2310,7 +2291,7 @@ BEGIN:VEVENT
 SUMMARY:Monthly Options Expiration (OPEX)
 DTSTART:20270820T200000Z
 DTEND:20270820T203000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:monthly-opex-2027-08@compasseconomiccalendar.github.io
 CATEGORIES:monthly_opex,impact-medium
 DESCRIPTION:Monthly equity and index options expire on the third Friday. D
@@ -2327,7 +2308,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20270901T140000Z
 DTEND:20270901T143000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-manufacturing-pmi-2027-09-01@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -2347,7 +2328,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20270903T140000Z
 DTEND:20270903T143000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-services-pmi-2027-09-03@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -2368,7 +2349,7 @@ BEGIN:VEVENT
 SUMMARY:Market Closed — Labor Day
 DTSTART;VALUE=DATE:20270906
 DTEND;VALUE=DATE:20270907
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:market-holiday-2027-09-06@compasseconomiccalendar.github.io
 CATEGORIES:market_holiday,impact-low
 DESCRIPTION:US equity markets are closed for Labor Day. CME equity index f
@@ -2385,7 +2366,7 @@ BEGIN:VEVENT
 SUMMARY:Futures Liquidity Roll (/ES\, /NQ\, /MES\, /MNQ) → U7 back month
 DTSTART;VALUE=DATE:20270909
 DTEND;VALUE=DATE:20270910
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:futures-liquidity-roll-2027-09@compasseconomiccalendar.github.io
 CATEGORIES:futures_liquidity_roll,impact-medium
 DESCRIPTION:Volume and open interest migrate to the back-month contract ar
@@ -2403,7 +2384,7 @@ BEGIN:VEVENT
 SUMMARY:CME Official Roll Date (/ES\, /NQ\, /MES\, /MNQ)
 DTSTART;VALUE=DATE:20270913
 DTEND;VALUE=DATE:20270914
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:futures-official-roll-2027-09@compasseconomiccalendar.github.io
 CATEGORIES:futures_official_roll,impact-low
 DESCRIPTION:CME's stated roll date for equity index products: the Monday p
@@ -2421,7 +2402,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Meeting Begins (Day 1)
 DTSTART;VALUE=DATE:20270914
 DTEND;VALUE=DATE:20270915
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-meeting-day1-2027-09-14@compasseconomiccalendar.github.io
 CATEGORIES:fomc_meeting_day_1,impact-low
 DESCRIPTION:First day of the two-day FOMC meeting. No statement is release
@@ -2438,7 +2419,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Summary of Economic Projections (Dot Plot)
 DTSTART:20270915T180000Z
 DTEND:20270915T183000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-sep-2027-09-15@compasseconomiccalendar.github.io
 CATEGORIES:fomc_sep,impact-high
 DESCRIPTION:Quarterly Summary of Economic Projections\, including the dot 
@@ -2456,7 +2437,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20270915T180000Z
 DTEND:20270915T183000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-statement-2027-09-15@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -2475,7 +2456,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20270915T183000Z
 DTEND:20270915T193000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-presser-2027-09-15@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -2493,7 +2474,7 @@ BEGIN:VEVENT
 SUMMARY:Futures Expiration (/ES\, /NQ\, /MES\, /MNQ) — U7
 DTSTART:20270917T133000Z
 DTEND:20270917T140000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:futures-expiration-2027-09@compasseconomiccalendar.github.io
 CATEGORIES:futures_expiration,impact-medium
 DESCRIPTION:Front-month contract expires\, settling to the Special Opening
@@ -2510,7 +2491,7 @@ BEGIN:VEVENT
 SUMMARY:Quad Witching
 DTSTART:20270917T200000Z
 DTEND:20270917T203000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:quad-witching-2027-09@compasseconomiccalendar.github.io
 CATEGORIES:quad_witching,impact-high
 DESCRIPTION:Index futures\, index options\, single-stock options and singl
@@ -2528,7 +2509,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20271001T140000Z
 DTEND:20271001T143000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-manufacturing-pmi-2027-10-01@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -2548,7 +2529,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20271005T140000Z
 DTEND:20271005T143000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-services-pmi-2027-10-05@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -2569,7 +2550,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Minutes (Sep 15 meeting)
 DTSTART:20271006T180000Z
 DTEND:20271006T183000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-minutes-2027-09-15@compasseconomiccalendar.github.io
 CATEGORIES:fomc_minutes,impact-medium
 DESCRIPTION:Minutes of the FOMC meeting that ended September 15\, released
@@ -2589,7 +2570,7 @@ BEGIN:VEVENT
 SUMMARY:Monthly Options Expiration (OPEX)
 DTSTART:20271015T200000Z
 DTEND:20271015T203000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:monthly-opex-2027-10@compasseconomiccalendar.github.io
 CATEGORIES:monthly_opex,impact-medium
 DESCRIPTION:Monthly equity and index options expire on the third Friday. D
@@ -2606,7 +2587,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Meeting Begins (Day 1)
 DTSTART;VALUE=DATE:20271026
 DTEND;VALUE=DATE:20271027
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-meeting-day1-2027-10-26@compasseconomiccalendar.github.io
 CATEGORIES:fomc_meeting_day_1,impact-low
 DESCRIPTION:First day of the two-day FOMC meeting. No statement is release
@@ -2623,7 +2604,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Statement & Rate Decision
 DTSTART:20271027T180000Z
 DTEND:20271027T183000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-statement-2027-10-27@compasseconomiccalendar.github.io
 CATEGORIES:fomc_statement,impact-high
 DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
@@ -2641,7 +2622,7 @@ BEGIN:VEVENT
 SUMMARY:FOMC Chair Press Conference
 DTSTART:20271027T183000Z
 DTEND:20271027T193000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-presser-2027-10-27@compasseconomiccalendar.github.io
 CATEGORIES:fomc_press_conference,impact-high
 DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
@@ -2659,7 +2640,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20271101T140000Z
 DTEND:20271101T143000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-manufacturing-pmi-2027-11-01@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -2679,7 +2660,7 @@ BEGIN:VEVENT
 SUMMARY:Treasury Quarterly Refunding Announcement
 DTSTART:20271103T123000Z
 DTEND:20271103T130000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:treasury-refunding-2027-11-03@compasseconomiccalendar.github.io
 CATEGORIES:treasury_quarterly_refunding,impact-high
 DESCRIPTION:Treasury announces the size and composition of the coming quar
@@ -2698,7 +2679,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20271103T140000Z
 DTEND:20271103T143000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-services-pmi-2027-11-03@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -2716,10 +2697,27 @@ URL:https://www.ismworld.org/supply-management-news-and-reports/reports/is
  m-report-on-business/
 END:VEVENT
 BEGIN:VEVENT
+SUMMARY:FOMC Meeting Begins (Day 1)
+DTSTART;VALUE=DATE:20271116
+DTEND;VALUE=DATE:20271117
+DTSTAMP:20261115T191027Z
+UID:fomc-meeting-day1-2027-11-16@compasseconomiccalendar.github.io
+CATEGORIES:fomc_meeting_day_1,impact-low
+DESCRIPTION:First day of the two-day FOMC meeting. No statement is release
+ d today\; the decision comes tomorrow at 2:00pm ET.\n\nMarket impact: LOW\
+ n\nVerify: https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm
+ \n\nFor informational and educational purposes only. Not investment advice
+ . Times are subject to change\; verify against official sources before tra
+ ding.
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+URL:https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm
+END:VEVENT
+BEGIN:VEVENT
 SUMMARY:FOMC Minutes (Oct 27 meeting)
 DTSTART:20271117T190000Z
 DTEND:20271117T193000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:fomc-minutes-2027-10-27@compasseconomiccalendar.github.io
 CATEGORIES:fomc_minutes,impact-medium
 DESCRIPTION:Minutes of the FOMC meeting that ended October 27\, released a
@@ -2736,10 +2734,46 @@ TRANSP:TRANSPARENT
 URL:https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm
 END:VEVENT
 BEGIN:VEVENT
+SUMMARY:FOMC Statement & Rate Decision
+DTSTART:20271117T190000Z
+DTEND:20271117T193000Z
+DTSTAMP:20261115T191027Z
+UID:fomc-statement-2027-11-17@compasseconomiccalendar.github.io
+CATEGORIES:fomc_statement,impact-high
+DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
+  ET. Expect a sharp repricing in index futures on the release and again du
+ ring the 2:30pm press conference.\n\nMarket impact: HIGH\nScheduled: 14:00
+  ET on 2027-11-17\n\nVerify: https://www.federalreserve.gov/monetarypolicy
+ /fomccalendars.htm\n\nFor informational and educational purposes only. Not
+  investment advice. Times are subject to change\; verify against official 
+ sources before trading.
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+URL:https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:FOMC Chair Press Conference
+DTSTART:20271117T193000Z
+DTEND:20271117T203000Z
+DTSTAMP:20261115T191027Z
+UID:fomc-presser-2027-11-17@compasseconomiccalendar.github.io
+CATEGORIES:fomc_press_conference,impact-high
+DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
+ y moves markets more than the statement itself. Not yet confirmed on the F
+ ed's calendar\; a presser has followed every meeting since 2019.\n\nMarket
+  impact: HIGH\nScheduled: 14:30 ET on 2027-11-17\n\nVerify: https://www.fe
+ deralreserve.gov/monetarypolicy/fomccalendars.htm\n\nFor informational and
+  educational purposes only. Not investment advice. Times are subject to ch
+ ange\; verify against official sources before trading.
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+URL:https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm
+END:VEVENT
+BEGIN:VEVENT
 SUMMARY:Monthly Options Expiration (OPEX)
 DTSTART:20271119T210000Z
 DTEND:20271119T213000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:monthly-opex-2027-11@compasseconomiccalendar.github.io
 CATEGORIES:monthly_opex,impact-medium
 DESCRIPTION:Monthly equity and index options expire on the third Friday. D
@@ -2756,7 +2790,7 @@ BEGIN:VEVENT
 SUMMARY:Market Closed — Thanksgiving Day
 DTSTART;VALUE=DATE:20271125
 DTEND;VALUE=DATE:20271126
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:market-holiday-2027-11-25@compasseconomiccalendar.github.io
 CATEGORIES:market_holiday,impact-low
 DESCRIPTION:US equity markets are closed for Thanksgiving Day. CME equity 
@@ -2773,7 +2807,7 @@ BEGIN:VEVENT
 SUMMARY:Early Close (1:00pm ET) — Day after Thanksgiving
 DTSTART:20271126T180000Z
 DTEND:20271126T183000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:market-early-close-2027-11-26@compasseconomiccalendar.github.io
 CATEGORIES:market_early_close,impact-low
 DESCRIPTION:US equity markets close at 1:00pm ET for Day after Thanksgivin
@@ -2790,7 +2824,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Manufacturing PMI (estimated)
 DTSTART:20271201T150000Z
 DTEND:20271201T153000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-manufacturing-pmi-2027-12-01@compasseconomiccalendar.github.io
 CATEGORIES:ism_manufacturing_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for manufacturing\, normally releas
@@ -2810,7 +2844,7 @@ BEGIN:VEVENT
 SUMMARY:ISM Services PMI (estimated)
 DTSTART:20271203T150000Z
 DTEND:20271203T153000Z
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:ism-services-pmi-2027-12-03@compasseconomiccalendar.github.io
 CATEGORIES:ism_services_pmi,impact-high
 DESCRIPTION:Purchasing managers' index for services\, normally released on
@@ -2828,73 +2862,21 @@ URL:https://www.ismworld.org/supply-management-news-and-reports/reports/is
  m-report-on-business/
 END:VEVENT
 BEGIN:VEVENT
-SUMMARY:FOMC Meeting Begins (Day 1)
-DTSTART;VALUE=DATE:20271207
-DTEND;VALUE=DATE:20271208
-DTSTAMP:20261108T180824Z
-UID:fomc-meeting-day1-2027-12-07@compasseconomiccalendar.github.io
-CATEGORIES:fomc_meeting_day_1,impact-low
-DESCRIPTION:First day of the two-day FOMC meeting. No statement is release
- d today\; the decision comes tomorrow at 2:00pm ET.\n\nMarket impact: LOW\
- n\nVerify: https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm
- \n\nFor informational and educational purposes only. Not investment advice
- . Times are subject to change\; verify against official sources before tra
- ding.
-STATUS:CONFIRMED
-TRANSP:TRANSPARENT
-URL:https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:FOMC Summary of Economic Projections (Dot Plot)
+SUMMARY:FOMC Minutes (Nov 17 meeting)
 DTSTART:20271208T190000Z
 DTEND:20271208T193000Z
-DTSTAMP:20261108T180824Z
-UID:fomc-sep-2027-12-08@compasseconomiccalendar.github.io
-CATEGORIES:fomc_sep,impact-high
-DESCRIPTION:Quarterly Summary of Economic Projections\, including the dot 
- plot of participants' rate expectations\, published alongside the 2:00pm E
- T statement.\n\nMarket impact: HIGH\nScheduled: 14:00 ET on 2027-12-08\n\n
- Verify: https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm\n\
- nFor informational and educational purposes only. Not investment advice. T
- imes are subject to change\; verify against official sources before tradin
- g.
-STATUS:CONFIRMED
-TRANSP:TRANSPARENT
-URL:https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:FOMC Statement & Rate Decision
-DTSTART:20271208T190000Z
-DTEND:20271208T193000Z
-DTSTAMP:20261108T180824Z
-UID:fomc-statement-2027-12-08@compasseconomiccalendar.github.io
-CATEGORIES:fomc_statement,impact-high
-DESCRIPTION:Interest rate decision and policy statement released at 2:00pm
-  ET. Expect a sharp repricing in index futures on the release and again du
- ring the 2:30pm press conference.\n\nMarket impact: HIGH\nScheduled: 14:00
-  ET on 2027-12-08\nIncludes the Summary of Economic Projections (dot plot)
- .\n\nVerify: https://www.federalreserve.gov/monetarypolicy/fomccalendars.h
- tm\n\nFor informational and educational purposes only. Not investment advi
- ce. Times are subject to change\; verify against official sources before t
- rading.
-STATUS:CONFIRMED
-TRANSP:TRANSPARENT
-URL:https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:FOMC Chair Press Conference
-DTSTART:20271208T193000Z
-DTEND:20271208T203000Z
-DTSTAMP:20261108T180824Z
-UID:fomc-presser-2027-12-08@compasseconomiccalendar.github.io
-CATEGORIES:fomc_press_conference,impact-high
-DESCRIPTION:Chair's press conference begins at 2:30pm ET. The Q&A regularl
- y moves markets more than the statement itself. Not yet confirmed on the F
- ed's calendar\; a presser has followed every meeting since 2019.\n\nMarket
-  impact: HIGH\nScheduled: 14:30 ET on 2027-12-08\n\nVerify: https://www.fe
- deralreserve.gov/monetarypolicy/fomccalendars.htm\n\nFor informational and
-  educational purposes only. Not investment advice. Times are subject to ch
- ange\; verify against official sources before trading.
+DTSTAMP:20261115T191027Z
+UID:fomc-minutes-2027-11-17@compasseconomiccalendar.github.io
+CATEGORIES:fomc_minutes,impact-medium
+DESCRIPTION:Minutes of the FOMC meeting that ended November 17\, released 
+ at 2:00pm ET. Markets read them for how divided the committee is and what 
+ it is weighing for the next decision. Date expected from the Fed's standin
+ g practice of releasing minutes three weeks after the decision\; it is con
+ firmed on the Fed's calendar on release.\n\nMarket impact: MEDIUM\nSchedul
+ ed: 14:00 ET on 2027-12-08\n\nVerify: https://www.federalreserve.gov/monet
+ arypolicy/fomccalendars.htm\n\nFor informational and educational purposes 
+ only. Not investment advice. Times are subject to change\; verify against 
+ official sources before trading.
 STATUS:CONFIRMED
 TRANSP:TRANSPARENT
 URL:https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm
@@ -2903,7 +2885,7 @@ BEGIN:VEVENT
 SUMMARY:Futures Liquidity Roll (/ES\, /NQ\, /MES\, /MNQ) → Z7 back month
 DTSTART;VALUE=DATE:20271209
 DTEND;VALUE=DATE:20271210
-DTSTAMP:20261108T180824Z
+DTSTAMP:20261115T191027Z
 UID:futures-liquidity-roll-2027-12@compasseconomiccalendar.github.io
 CATEGORIES:futures_liquidity_roll,impact-medium
 DESCRIPTION:Volume and open interest migrate to the back-month contract ar
@@ -2913,6 +2895,24 @@ DESCRIPTION:Volume and open interest migrate to the back-month contract ar
  ps://www.cmegroup.com/trading/equity-index/rolldates.html\n\nFor informati
  onal and educational purposes only. Not investment advice. Times are subje
  ct to change\; verify against official sources before trading.
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+URL:https://www.cmegroup.com/trading/equity-index/rolldates.html
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:CME Official Roll Date (/ES\, /NQ\, /MES\, /MNQ)
+DTSTART;VALUE=DATE:20271213
+DTEND;VALUE=DATE:20271214
+DTSTAMP:20261115T191027Z
+UID:futures-official-roll-2027-12@compasseconomiccalendar.github.io
+CATEGORIES:futures_official_roll,impact-low
+DESCRIPTION:CME's stated roll date for equity index products: the Monday p
+ rior to the third Friday. Most traders have already rolled by now -- see t
+ he liquidity roll the preceding Thursday.\n\nMarket impact: LOW\nContract:
+  Z7 (/ES\, /NQ\, /MES\, /MNQ)\n\nVerify: https://www.cmegroup.com/trading/
+ equity-index/rolldates.html\n\nFor informational and educational purposes 
+ only. Not investment advice. Times are subject to change\; verify against 
+ official sources before trading.
 STATUS:CONFIRMED
 TRANSP:TRANSPARENT
 URL:https://www.cmegroup.com/trading/equity-index/rolldates.html
